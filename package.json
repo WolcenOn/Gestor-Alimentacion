@@ -1,0 +1,13 @@
+{
+  "name": "gestor-menu-semanal",
+  "version": "1.0.0",
+  "description": "MVP modular, seguro y escalable para planificar menús, stock, compra e impresión.",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 5173",
+    "test": "node --test app/tests/*.test.js"
+  },
+  "keywords": ["menu", "shopping", "stock", "meal-planner"],
+  "author": "Virginia Esteban Muñoz",
+  "license": "MIT"
+}

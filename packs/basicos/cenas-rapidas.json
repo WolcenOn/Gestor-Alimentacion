@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "type": "meal-pack",
+  "id": "pack_cenas_rapidas",
+  "name": "Cenas rápidas",
+  "description": "Platos sencillos para días laborables.",
+  "tags": ["rápido", "familia", "cena"],
+  "ingredients": [
+    {
+      "id": "ingredient_pasta",
+      "name": "Pasta",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0.002,
+      "products": [],
+      "createdAt": "2026-06-06T00:00:00.000Z",
+      "updatedAt": "2026-06-06T00:00:00.000Z",
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_salsa_tomate",
+      "name": "Salsa de tomate",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0.004,
+      "products": [],
+      "createdAt": "2026-06-06T00:00:00.000Z",
+      "updatedAt": "2026-06-06T00:00:00.000Z",
+      "schemaVersion": 1
+    }
+  ],
+  "dishes": [
+    {
+      "id": "dish_pasta_tomate",
+      "name": "Pasta con tomate",
+      "servings": 2,
+      "unit": "raciones",
+      "category": "Cena rápida",
+      "tags": ["rápido", "niños"],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "approxPrice": 2.5,
+      "notes": "Añadir queso si se desea.",
+      "recipe": [
+        { "ingredientId": "ingredient_pasta", "qty": 200, "unit": "g" },
+        { "ingredientId": "ingredient_salsa_tomate", "qty": 150, "unit": "g" }
+      ],
+      "packId": "pack_cenas_rapidas",
+      "createdAt": "2026-06-06T00:00:00.000Z",
+      "updatedAt": "2026-06-06T00:00:00.000Z",
+      "schemaVersion": 1
+    }
+  ]
+}
