@@ -3,7 +3,7 @@ import { normalizeUnit, stripDangerousText } from "../utils.js";
 
 export const PACK_SOURCE = Object.freeze({
   owner: "WolcenOn",
-  repo: "GestorMenuSemanal",
+  repo: "Gestor-Almentacion",
   branch: "main",
   basePath: "packs"
 });
@@ -104,7 +104,7 @@ function normalizePackDish(dish) {
     tags: Array.isArray(dish.tags) ? dish.tags.map(t => stripDangerousText(t)).filter(Boolean) : [],
     prepTime: stripDangerousText(dish.prepTime || ""),
     difficulty: stripDangerousText(dish.difficulty || ""),
-    approxPrice: Number(dish.approxPrice) || 0,
+    approxPrice: Number(dish.approxPrice) ? Number(dish.approxPrice) / originalServings : 0,
     notes: stripDangerousText(dish.notes || ""),
     instructions: steps.map(s => stripDangerousText(s)).map(s => s.trim()).filter(Boolean),
     recipe,
