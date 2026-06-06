@@ -46,6 +46,9 @@ export function migrateData(data) {
   data.mealTypes ||= [];
   data.wasteEntries ||= [];
   data.recyclingEntries ||= [];
+  data.settings ||= {};
+  data.ingredients ||= [];
+  data.ingredients.forEach(ingredient => { ingredient.products ||= []; ingredient.packagingType ||= ingredient.products.find(p => p.packagingType)?.packagingType || "otro"; });
   if (!data.familyMembers.length) data.familyMembers.push({ id: "member_all", name: "Todos", nutritionTargetId: null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), schemaVersion: SCHEMA_VERSION });
   if (!data.mealTypes.length) data.mealTypes.push({ id: "meal_lunch", name: "Comida", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), schemaVersion: SCHEMA_VERSION });
   return data;

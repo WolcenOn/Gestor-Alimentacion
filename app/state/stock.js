@@ -87,6 +87,7 @@ export function registerPurchase(state, input) {
         packageUnit: normalizeUnit(purchased.unit),
         price: Number(input.price) || 0,
         source: input.productSource || "manual",
+        packagingType: input.packagingType || "otro",
         createdAt: nowIso(),
         updatedAt: nowIso()
       });

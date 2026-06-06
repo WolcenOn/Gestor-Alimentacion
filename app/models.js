@@ -18,9 +18,9 @@ export function createDefaultState() {
   ].map(f => withMeta(f, "family"));
 
   const ingredients = [
-    { id: "ingredient_huevo", name: "Huevos", familyId: "family_protein", qty: 4, unit: "unidades", available: true, storageType: "fridge", expiryDate: "", dateType: "expiry", approxPrice: 0.25, products: [] },
-    { id: "ingredient_tomate", name: "Tomate", familyId: "family_veg", qty: 250, unit: "g", available: true, storageType: "fridge", expiryDate: "", dateType: "expiry", approxPrice: 0.003, products: [] },
-    { id: "ingredient_atun", name: "Atún en lata", familyId: "family_protein", qty: 0, unit: "g", available: false, storageType: "pantry", expiryDate: "", dateType: "bestBefore", approxPrice: 0.015, products: [] }
+    { id: "ingredient_huevo", name: "Huevos", familyId: "family_protein", qty: 4, unit: "unidades", available: true, storageType: "fridge", expiryDate: "", dateType: "expiry", approxPrice: 0.25, packagingType: "cartón/papel", products: [] },
+    { id: "ingredient_tomate", name: "Tomate", familyId: "family_veg", qty: 250, unit: "g", available: true, storageType: "fridge", expiryDate: "", dateType: "expiry", approxPrice: 0.003, packagingType: "orgánico", products: [] },
+    { id: "ingredient_atun", name: "Atún en lata", familyId: "family_protein", qty: 0, unit: "g", available: false, storageType: "pantry", expiryDate: "", dateType: "bestBefore", approxPrice: 0.015, packagingType: "metal", products: [] }
   ].map(i => withMeta(i, "ingredient"));
 
   const dishes = [

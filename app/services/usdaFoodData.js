@@ -1,13 +1,16 @@
 export async function searchUsdaFoodData({ query, apiKey }) {
-  if (!apiKey) throw new Error("Introduce una API key manual para pruebas. En producción debe usarse backend/proxy.");
+  const key = apiKey || "DEMO_KEY";
   if (!query?.trim()) throw new Error("Introduce un alimento para buscar.");
   const url = new URL("https://api.nal.usda.gov/fdc/v1/foods/search");
-  url.searchParams.set("api_key", apiKey);
+  url.searchParams.set("api_key", key);
   url.searchParams.set("query", query.trim());
   url.searchParams.set("pageSize", "12");
   url.searchParams.set("dataType", "Foundation,SR Legacy,Survey (FNDDS),Branded");
   const response = await fetch(url, { headers: { "Accept": "application/json" } });
-  if (!response.ok) throw new Error("No se pudo consultar USDA FoodData Central.");
+  if (!response.ok) {
+    if (response.status === 429) throw new Error("USDA ha limitado temporalmente la API key o DEMO_KEY. Prueba más tarde o usa una clave propia en Ajustes.");
+    throw new Error("No se pudo consultar USDA FoodData Central.");
+  }
   return response.json();
 }
 
