@@ -3,10 +3,21 @@ import { escapeHtml } from "../utils.js";
 export function renderIngredients(state) {
   const familyOptions = state.ingredientFamilies.map(f => `<option value="${escapeHtml(f.id)}">${escapeHtml(f.name)}</option>`).join("");
   return `
+    <div class="card-header">
+      <div>
+        <p class="eyebrow">Stock y datos externos</p>
+        <h2>Ingredientes</h2>
+        <p class="muted">Añade alimentos manualmente, escanea códigos o importa datos de Open Food Facts y USDA.</p>
+      </div>
+      <div class="header-actions compact-actions">
+        <button class="secondary" data-action="open-off-search">Buscar Open Food Facts</button>
+        <button class="secondary" data-action="open-usda-search">Buscar USDA</button>
+      </div>
+    </div>
+
     <div class="grid cols-2">
       <article class="card">
-        <h2>Ingredientes</h2>
-        <p class="muted">Stock lógico, no marcas concretas. Los códigos de barras se asocian como productos.</p>
+        <h3>Nuevo ingrediente manual</h3>
         <form data-form="ingredient">
           <div class="form-grid">
             <label>Nombre<input name="name" required placeholder="Ej. Huevos"></label>
@@ -22,8 +33,8 @@ export function renderIngredients(state) {
         </form>
       </article>
       <article class="card">
-        <h2>Stock actual</h2>
-        <div class="list">
+        <h3>Stock actual</h3>
+        <div class="list ingredient-list">
           ${state.ingredients.map(i => renderIngredientItem(state, i)).join("")}
         </div>
       </article>
@@ -33,15 +44,23 @@ export function renderIngredients(state) {
 
 function renderIngredientItem(state, i) {
   const family = state.ingredientFamilies.find(f => f.id === i.familyId)?.name || "Sin familia";
+  const nutrition = state.nutritionProfiles.find(n => n.ingredientId === i.id);
   return `
-    <div class="item">
+    <div class="item ingredient-item">
       <div class="item-title">
         <div><strong>${escapeHtml(i.name)}</strong><p class="qty-line">${Number(i.qty).toLocaleString("es-ES")} ${escapeHtml(i.unit)} · ${escapeHtml(family)}</p></div>
         ${i.expiryDate ? `<span class="badge warning">${escapeHtml(i.expiryDate)}</span>` : `<span class="badge">sin fecha</span>`}
       </div>
-      <p class="small muted">Productos asociados: ${(i.products || []).length}</p>
-      <div class="row-actions">
-        <button class="secondary" data-action="edit-stock" data-ingredient-id="${escapeHtml(i.id)}">Ajustar stock</button>
+      <div class="mini-facts">
+        <span>Productos: ${(i.products || []).length}</span>
+        <span>Nutrición: ${nutrition ? "sí" : "pendiente"}</span>
+      </div>
+      <div class="row-actions wrap">
+        <button class="secondary" data-action="edit-stock" data-ingredient-id="${escapeHtml(i.id)}">Stock</button>
+        <button class="secondary" data-action="scan-ingredient-product" data-ingredient-id="${escapeHtml(i.id)}">Escanear</button>
+        <button class="secondary" data-action="open-off-search" data-ingredient-id="${escapeHtml(i.id)}">OFF</button>
+        <button class="secondary" data-action="open-usda-search" data-ingredient-id="${escapeHtml(i.id)}">USDA</button>
+        <button class="secondary" data-action="open-waste-modal" data-ingredient-id="${escapeHtml(i.id)}">Tirar</button>
         <button class="danger" data-action="delete-ingredient" data-ingredient-id="${escapeHtml(i.id)}">Eliminar</button>
       </div>
     </div>`;

@@ -1,4 +1,4 @@
-import { getState, updateState, setState, subscribe, resetDemoData } from "./store.js";
+import { getState, updateState, setState, subscribe, resetDemoData, migrateData } from "./store.js";
 import { withMeta } from "./models.js";
 import { escapeHtml, stripDangerousText, parseNumber, downloadTextFile, readFileAsText, safeJsonParse, normalizeUnit } from "./utils.js";
 import { validateState, validatePack } from "./validation.js";
@@ -10,15 +10,17 @@ import { renderShopping } from "./render/shopping.js";
 import { renderPacks } from "./render/packs.js";
 import { renderHelp } from "./render/help.js";
 import { renderSettings } from "./render/settings.js";
-import { showAlert, openModal, closeModal, renderPurchaseModal, formToObject, getSubmitterValue } from "./render/ui.js";
+import { showAlert, openModal, closeModal, renderPurchaseModal, renderBarcodeScannerModal, formToObject, getSubmitterValue } from "./render/ui.js";
 import { printShopping } from "./print/printShopping.js";
 import { printWeek } from "./print/printWeek.js";
 import { registerPurchase } from "./state/stock.js";
 import { computeShoppingListWithProgress } from "./state/shoppingProgress.js";
 import { createWeeklySnapshot } from "./state/history.js";
-import { lookupOpenFoodFacts } from "./services/openFoodFacts.js";
-import { scanBarcodeOnce } from "./services/barcodeScanner.js";
+import { lookupOpenFoodFacts, searchOpenFoodFacts, nutritionProfileFromOpenFoodFacts } from "./services/openFoodFacts.js";
+import { scanBarcodeOnce, scanBarcodeWithPreview } from "./services/barcodeScanner.js";
 import { listRemotePacks, loadRemotePack, mergePackIntoState } from "./services/packLoader.js";
+import { searchUsdaFoodData, nutritionProfileFromUsdaFood } from "./services/usdaFoodData.js";
+import { registerWaste, registerRecycling, normalizePackagingType } from "./state/wasteRecycling.js";
 
 let activeTab = "dashboard";
 const viewRoot = document.getElementById("viewRoot");
@@ -83,6 +85,17 @@ document.addEventListener("click", guarded(async event => {
   if (action === "edit-stock") openEditStockModal(button.dataset.ingredientId);
   if (action === "remove-dish-from-slot") removeDishFromSlot(button.dataset.slot, button.dataset.dishId);
   if (action === "scan-now") await scanIntoPurchaseForm();
+  if (action === "open-purchase-scanner") openInlinePurchaseScanner();
+  if (action === "start-preview-scan") await startPreviewScanner();
+  if (action === "scan-ingredient-product") openModal(renderBarcodeScannerModal({ title: "Escanear producto", target: "ingredient", ingredientId: button.dataset.ingredientId }));
+  if (action === "open-off-search") openOpenFoodFactsModal(button.dataset.ingredientId || "");
+  if (action === "import-off-product") importOffProduct(Number(button.dataset.index), button.dataset.ingredientId || "");
+  if (action === "search-off-products") await searchOffIntoModal();
+  if (action === "open-usda-search") openUsdaModal(button.dataset.ingredientId || "");
+  if (action === "search-usda-foods") await searchUsdaIntoModal();
+  if (action === "import-usda-food") importUsdaFood(Number(button.dataset.index), button.dataset.ingredientId || "");
+  if (action === "open-waste-modal") openWasteModal(button.dataset.ingredientId);
+  if (action === "open-recycling-modal") openRecyclingModal();
   if (action === "list-remote-packs") await listPacksIntoUi();
   if (action === "install-remote-pack") await installRemotePack(button.dataset.index);
 }));
@@ -112,6 +125,8 @@ document.addEventListener("submit", guarded(async event => {
   if (form.dataset.form === "dish") addDish(form);
   if (form.dataset.form === "purchase") await savePurchase(form, event);
   if (form.dataset.form === "stock-adjust") saveStockAdjust(form);
+  if (form.dataset.form === "waste") saveWaste(form);
+  if (form.dataset.form === "recycling") saveRecycling(form);
   if (form.dataset.form === "family-member") addFamilyMember(form);
   if (form.dataset.form === "meal-type") addMealType(form);
 }));
@@ -257,7 +272,9 @@ async function savePurchase(form, event) {
     dateType: data.dateType,
     storageType: data.storageType,
     isPartial: mode !== "complete",
-    source: "shopping-list"
+    source: "shopping-list",
+    packagingType: data.packagingType || "otro",
+    packagingQty: parseNumber(data.packagingQty)
   }), "purchase");
   closeModal();
   showAlert(mode === "complete" ? "Compra completa guardada y stock actualizado." : "Compra parcial guardada y stock actualizado.");
@@ -286,7 +303,7 @@ function exportData(state) {
 
 async function importDataFile(file) {
   const text = await readFileAsText(file);
-  const data = safeJsonParse(text);
+  const data = migrateData(safeJsonParse(text));
   validateState(data);
   setState(data, "import");
   showAlert("Datos importados correctamente.");
@@ -406,3 +423,261 @@ async function installRemotePack(index) {
 }
 
 window.__gestorMenuDebug = { getState, resetDemoData };
+
+let offResults = [];
+let usdaResults = [];
+let lastUsdaApiKey = "";
+
+async function startPreviewScanner() {
+  const box = document.querySelector(".scanner-box");
+  const video = document.getElementById("barcodeVideo");
+  const status = document.getElementById("scannerStatus");
+  if (!box || !video) return;
+  const barcode = await scanBarcodeWithPreview(video, status);
+  if (status) status.textContent = `Código detectado: ${barcode}`;
+
+  if (box.dataset.scannerTarget === "purchase") {
+    const form = document.querySelector('form[data-form="purchase"]');
+    if (!form) return;
+    form.elements.barcode.value = barcode;
+    const product = await lookupOpenFoodFacts(barcode);
+    fillPurchaseFormFromProduct(form, product);
+    showAlert(product ? "Producto encontrado y formulario rellenado." : "Código detectado. No se encontró en Open Food Facts.");
+    box.remove();
+    return;
+  }
+
+  if (box.dataset.scannerTarget === "ingredient") {
+    const product = await lookupOpenFoodFacts(barcode);
+    if (!product) throw new Error("Código detectado, pero no encontrado en Open Food Facts.");
+    offResults = [product];
+    importOffProduct(0, box.dataset.ingredientId);
+    closeModal();
+  }
+}
+
+function fillPurchaseFormFromProduct(form, product) {
+  if (!product) return;
+  form.elements.brand.value = product.brand || "";
+  form.elements.productName.value = product.productName || "";
+  if (product.packageQty) form.elements.purchasedQty.value = product.packageQty;
+  if (product.packageUnit) form.elements.unit.value = normalizeUnit(product.packageUnit);
+  if (form.elements.packagingType) form.elements.packagingType.value = normalizePackagingType(product.packaging || "");
+}
+
+function openInlinePurchaseScanner() {
+  const form = document.querySelector('form[data-form="purchase"]');
+  if (!form) return;
+  if (document.querySelector(".scanner-box")) return;
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = renderBarcodeScannerModal({ title: "Escanear compra", target: "purchase" });
+  const box = wrapper.querySelector(".scanner-box");
+  form.prepend(box);
+}
+
+function openOpenFoodFactsModal(ingredientId = "") {
+  const ingredient = getState().ingredients.find(i => i.id === ingredientId);
+  openModal(`
+    <header>
+      <div><h2>Buscar en Open Food Facts</h2><p class="muted">${ingredient ? `Asociar producto a ${escapeHtml(ingredient.name)}` : "Importar alimento como nuevo ingrediente"}</p></div>
+      <button class="secondary" data-action="close-modal">×</button>
+    </header>
+    <div class="search-panel" data-ingredient-id="${escapeHtml(ingredientId)}">
+      <label>Alimento o marca<input id="offSearchQuery" placeholder="Ej. yogur natural, atún, tomate"></label>
+      <div class="actions"><button type="button" data-action="search-off-products">Buscar</button></div>
+      <div id="offSearchResults" class="list results-list"><p class="muted">Busca un producto para importarlo.</p></div>
+    </div>
+  `);
+}
+
+async function searchOffIntoModal() {
+  const q = document.getElementById("offSearchQuery")?.value || "";
+  const root = document.getElementById("offSearchResults");
+  const ingredientId = document.querySelector(".search-panel")?.dataset.ingredientId || "";
+  root.innerHTML = `<p class="muted">Buscando...</p>`;
+  offResults = await searchOpenFoodFacts(q);
+  root.innerHTML = offResults.length ? offResults.map((p, index) => renderOffResult(p, index, ingredientId)).join("") : `<p class="muted">No se han encontrado productos.</p>`;
+}
+
+function renderOffResult(product, index, ingredientId) {
+  return `
+    <div class="item product-result">
+      ${product.imageUrl ? `<img src="${escapeHtml(product.imageUrl)}" alt="" loading="lazy">` : ""}
+      <div class="result-body">
+        <strong>${escapeHtml(product.productName)}</strong>
+        <p class="qty-line">${escapeHtml(product.brand || "Sin marca")} · ${escapeHtml(product.quantity || "sin cantidad")} · ${escapeHtml(product.barcode)}</p>
+        <p class="small muted">Nutri-Score: ${escapeHtml(product.nutriscore || "n/d")} · Envase: ${escapeHtml(product.packaging || "n/d")}</p>
+        <button data-action="import-off-product" data-index="${index}" data-ingredient-id="${escapeHtml(ingredientId)}">${ingredientId ? "Asociar a ingrediente" : "Crear ingrediente"}</button>
+      </div>
+    </div>`;
+}
+
+function importOffProduct(index, ingredientId = "") {
+  const product = offResults[index];
+  if (!product) throw new Error("Producto no encontrado.");
+  updateState(draft => {
+    let ingredient = ingredientId ? draft.ingredients.find(i => i.id === ingredientId) : null;
+    if (!ingredient) {
+      ingredient = withMeta({
+        name: stripDangerousText(product.productName),
+        familyId: draft.ingredientFamilies[0]?.id || "family_other",
+        qty: 0,
+        unit: normalizeUnit(product.packageUnit || "g"),
+        available: false,
+        storageType: "pantry",
+        expiryDate: "",
+        dateType: "none",
+        approxPrice: 0,
+        products: []
+      }, "ingredient");
+      draft.ingredients.push(ingredient);
+    }
+    ingredient.products ||= [];
+    if (!ingredient.products.some(p => p.barcode === product.barcode)) {
+      ingredient.products.push({
+        barcode: product.barcode,
+        brand: stripDangerousText(product.brand || ""),
+        productName: stripDangerousText(product.productName || ingredient.name),
+        packageQty: Number(product.packageQty) || 0,
+        packageUnit: normalizeUnit(product.packageUnit || ingredient.unit),
+        price: 0,
+        source: "openfoodfacts",
+        packaging: stripDangerousText(product.packaging || ""),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+    }
+    const nutrition = nutritionProfileFromOpenFoodFacts(product, ingredient.id);
+    if ([nutrition.kcal, nutrition.carbs, nutrition.protein, nutrition.fat].some(Boolean)) {
+      draft.nutritionProfiles = draft.nutritionProfiles.filter(n => n.ingredientId !== ingredient.id || n.source !== "openfoodfacts");
+      draft.nutritionProfiles.push(withMeta(nutrition, "nutrition"));
+    }
+  }, "off-import");
+  showAlert(ingredientId ? "Producto asociado al ingrediente." : "Ingrediente creado desde Open Food Facts.");
+  closeModal();
+}
+
+function openUsdaModal(ingredientId = "") {
+  const ingredient = getState().ingredients.find(i => i.id === ingredientId);
+  openModal(`
+    <header>
+      <div><h2>Buscar en USDA FoodData Central</h2><p class="muted">${ingredient ? `Guardar nutrición para ${escapeHtml(ingredient.name)}` : "Crear ingrediente con perfil nutricional"}. La API key solo se usa en esta sesión.</p></div>
+      <button class="secondary" data-action="close-modal">×</button>
+    </header>
+    <div class="search-panel" data-ingredient-id="${escapeHtml(ingredientId)}">
+      <div class="form-grid">
+        <label>API key USDA<input id="usdaApiKey" type="password" autocomplete="off" value="${escapeHtml(lastUsdaApiKey)}" placeholder="api_key"></label>
+        <label>Alimento<input id="usdaSearchQuery" value="${escapeHtml(ingredient?.name || "")}" placeholder="Ej. tomato, egg, tuna"></label>
+      </div>
+      <div class="actions"><button type="button" data-action="search-usda-foods">Buscar nutrición</button></div>
+      <div id="usdaSearchResults" class="list results-list"><p class="muted">Busca un alimento para importar nutrientes por 100 g/ml.</p></div>
+    </div>
+  `);
+}
+
+async function searchUsdaIntoModal() {
+  const query = document.getElementById("usdaSearchQuery")?.value || "";
+  lastUsdaApiKey = document.getElementById("usdaApiKey")?.value || "";
+  const root = document.getElementById("usdaSearchResults");
+  const ingredientId = document.querySelector(".search-panel")?.dataset.ingredientId || "";
+  root.innerHTML = `<p class="muted">Buscando...</p>`;
+  const data = await searchUsdaFoodData({ query, apiKey: lastUsdaApiKey });
+  usdaResults = data.foods || [];
+  root.innerHTML = usdaResults.length ? usdaResults.map((food, index) => renderUsdaResult(food, index, ingredientId)).join("") : `<p class="muted">No se encontraron alimentos.</p>`;
+}
+
+function renderUsdaResult(food, index, ingredientId) {
+  const kcal = (food.foodNutrients || []).find(n => String(n.nutrientName || "").toLowerCase().includes("energy"))?.value;
+  return `
+    <div class="item">
+      <strong>${escapeHtml(food.description || "Alimento")}</strong>
+      <p class="qty-line">FDC ${escapeHtml(String(food.fdcId || ""))} · ${escapeHtml(food.dataType || "")} · kcal: ${escapeHtml(String(kcal ?? "n/d"))}</p>
+      <button data-action="import-usda-food" data-index="${index}" data-ingredient-id="${escapeHtml(ingredientId)}">${ingredientId ? "Guardar nutrición" : "Crear ingrediente"}</button>
+    </div>`;
+}
+
+function importUsdaFood(index, ingredientId = "") {
+  const food = usdaResults[index];
+  if (!food) throw new Error("Resultado USDA no encontrado.");
+  updateState(draft => {
+    let ingredient = ingredientId ? draft.ingredients.find(i => i.id === ingredientId) : null;
+    if (!ingredient) {
+      ingredient = withMeta({
+        name: stripDangerousText(food.description || "Alimento USDA"),
+        familyId: draft.ingredientFamilies[0]?.id || "family_other",
+        qty: 0,
+        unit: "g",
+        available: false,
+        storageType: "pantry",
+        expiryDate: "",
+        dateType: "none",
+        approxPrice: 0,
+        products: []
+      }, "ingredient");
+      draft.ingredients.push(ingredient);
+    }
+    const profile = nutritionProfileFromUsdaFood(food, ingredient.id);
+    draft.nutritionProfiles = draft.nutritionProfiles.filter(n => n.ingredientId !== ingredient.id || n.source !== "usda-fooddata-central");
+    draft.nutritionProfiles.push(withMeta(profile, "nutrition"));
+  }, "usda-import");
+  closeModal();
+  showAlert("Perfil nutricional importado desde USDA.");
+}
+
+function openWasteModal(ingredientId) {
+  const ingredient = getState().ingredients.find(i => i.id === ingredientId);
+  if (!ingredient) return;
+  openModal(`
+    <header><div><h2>Registrar desperdicio</h2><p class="muted">${escapeHtml(ingredient.name)} · stock actual: ${escapeHtml(String(ingredient.qty))} ${escapeHtml(ingredient.unit)}</p></div><button class="secondary" data-action="close-modal">×</button></header>
+    <form data-form="waste" data-ingredient-id="${escapeHtml(ingredient.id)}">
+      <div class="form-grid">
+        <label>Cantidad tirada<input name="qty" type="number" min="0.01" step="0.01" value="1" required></label>
+        <label>Unidad<select name="unit"><option ${ingredient.unit === "g" ? "selected" : ""}>g</option><option ${ingredient.unit === "kg" ? "selected" : ""}>kg</option><option ${ingredient.unit === "ml" ? "selected" : ""}>ml</option><option ${ingredient.unit === "l" ? "selected" : ""}>l</option><option ${ingredient.unit === "unidades" ? "selected" : ""}>unidades</option></select></label>
+        <label>Fecha<input name="date" type="date" value="${new Date().toISOString().slice(0, 10)}"></label>
+        <label>Valor estimado €<input name="estimatedValue" type="number" min="0" step="0.01" placeholder="opcional"></label>
+      </div>
+      <label>Motivo<textarea name="reason" placeholder="Caducado, mal estado, sobras..."></textarea></label>
+      <button>Guardar desperdicio</button>
+    </form>`);
+}
+
+function saveWaste(form) {
+  const data = formToObject(form);
+  updateState(draft => registerWaste(draft, {
+    ingredientId: form.dataset.ingredientId,
+    qty: parseNumber(data.qty),
+    unit: normalizeUnit(data.unit),
+    date: data.date,
+    estimatedValue: parseNumber(data.estimatedValue),
+    reason: stripDangerousText(data.reason || "")
+  }), "waste");
+  closeModal();
+  showAlert("Desperdicio registrado y stock actualizado.");
+}
+
+function openRecyclingModal() {
+  openModal(`
+    <header><div><h2>Registrar reciclaje</h2><p class="muted">Añade envases pendientes o reciclados por tipo.</p></div><button class="secondary" data-action="close-modal">×</button></header>
+    <form data-form="recycling">
+      <div class="form-grid">
+        <label>Tipo de envase<select name="packagingType"><option>plástico</option><option>cartón/papel</option><option>vidrio</option><option>metal</option><option>brik</option><option>orgánico</option><option>otro</option></select></label>
+        <label>Nº de envases<input name="packagingQty" type="number" min="1" step="1" value="1"></label>
+        <label>Fecha<input name="date" type="date" value="${new Date().toISOString().slice(0, 10)}"></label>
+      </div>
+      <label>Notas<textarea name="notes"></textarea></label>
+      <button>Guardar envases</button>
+    </form>`);
+}
+
+function saveRecycling(form) {
+  const data = formToObject(form);
+  updateState(draft => registerRecycling(draft, {
+    packagingType: data.packagingType,
+    packagingQty: parseNumber(data.packagingQty),
+    date: data.date,
+    notes: stripDangerousText(data.notes || ""),
+    source: "manual"
+  }), "recycling");
+  closeModal();
+  showAlert("Envases registrados.");
+}

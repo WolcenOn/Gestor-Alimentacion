@@ -24,12 +24,16 @@ Este ZIP implementa una base funcional del MVP descrito en el prompt maestro:
 - La nutrición está preparada en el modelo, pero no desarrolla aún un dashboard nutricional completo.
 - La sincronización cloud, usuarios e IA quedan como evolución posterior.
 
-## Actualización: planificación familiar avanzada
+## Extensión: escáner, datos externos, desperdicio y reciclaje
 
-- Añadida pestaña **Ajustes** para configurar miembros/personas/grupos de la familia.
-- Añadida configuración dinámica de **tipos de comida**.
-- La pestaña **Semana** ahora planifica por día → comida → miembro.
-- Cada miembro puede tener varios platos asignados en una misma comida.
-- Al eliminar un miembro o tipo de comida, se limpia su planificación asociada para evitar referencias huérfanas.
-- La impresión semanal agrupa los platos por miembro dentro de cada comida.
-- CSS renovado con diseño mobile-first, tarjetas compactas, controles táctiles grandes y navegación sticky en móvil.
+Se incorporan estas funciones adicionales:
+
+1. Escáner con vista previa de cámara para compras e ingredientes.
+2. Asociación de productos por código de barras a ingredientes existentes.
+3. Búsqueda manual en Open Food Facts y creación/importación de ingredientes.
+4. Importación de perfil nutricional desde Open Food Facts cuando existe información de nutrimentos.
+5. Búsqueda en USDA FoodData Central con API key manual no persistida.
+6. Registro de alimentos tirados con descuento de stock y valor estimado.
+7. Puntuación anti-desperdicio basada en valor comprado frente a valor tirado.
+8. Registro de envases por tipo: plástico, cartón/papel, vidrio, metal, brik, orgánico u otro.
+9. Contador de reciclaje en dashboard y registro automático de envases desde compras.

@@ -1,6 +1,7 @@
 import { uid, nowIso, toBaseQty, normalizeUnit } from "../utils.js";
 import { getWeekProgress, setWeekProgress } from "./shoppingProgress.js";
 import { validatePurchaseInput } from "../validation.js";
+import { registerRecycling } from "./wasteRecycling.js";
 
 export function registerPurchase(state, input) {
   validatePurchaseInput(input);
@@ -44,6 +45,8 @@ export function registerPurchase(state, input) {
     brand: input.brand || "",
     price: Number(input.price) || 0,
     isPartial: Boolean(input.isPartial),
+    packagingType: input.packagingType || "",
+    packagingQty: Number(input.packagingQty) || 0,
     createdAt: nowIso(),
     schemaVersion: 1
   });
@@ -60,6 +63,17 @@ export function registerPurchase(state, input) {
     status: totalPurchased >= (Number(input.requiredQty) || requiredBase.qty) ? "done" : "partial"
   };
   setWeekProgress(state, input.weekId, progress);
+
+  if (Number(input.packagingQty) > 0) {
+    registerRecycling(state, {
+      packagingType: input.packagingType || "otro",
+      packagingQty: Number(input.packagingQty) || 0,
+      source: "purchase",
+      ingredientId: ingredient.id,
+      ingredientName: ingredient.name,
+      date: input.purchaseDate
+    });
+  }
 
   if (input.barcode) {
     ingredient.products ||= [];

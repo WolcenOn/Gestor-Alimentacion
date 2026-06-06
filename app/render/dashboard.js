@@ -1,6 +1,7 @@
 import { computeShoppingListWithProgress } from "../state/shoppingProgress.js";
 import { getExpiringIngredients } from "../state/history.js";
 import { DAYS, escapeHtml, formatMoney } from "../utils.js";
+import { getWasteScore, getRecyclingSummary } from "../state/wasteRecycling.js";
 
 export function renderDashboard(state) {
   const week = state.weeks.find(w => w.id === state.activeWeekId);
@@ -15,6 +16,9 @@ export function renderDashboard(state) {
     return sum + item.remainingQty * (Number(ingredient?.approxPrice) || 0);
   }, 0);
   const expiring = getExpiringIngredients(state, 7);
+  const wasteScore = getWasteScore(state);
+  const recycling = getRecyclingSummary(state);
+  const recyclingRows = Object.entries(recycling);
 
   return `
     <div class="card-header">
@@ -23,7 +27,7 @@ export function renderDashboard(state) {
         <h2>${escapeHtml(week?.name || "Sin semana activa")}</h2>
         <p class="muted">Prioriza planificación, compra, caducidades y coste.</p>
       </div>
-      <button data-action="create-snapshot" class="secondary">Guardar snapshot</button>
+      <div class="header-actions compact-actions"><button data-action="open-recycling-modal" class="secondary">Registrar reciclaje</button><button data-action="create-snapshot" class="secondary">Guardar snapshot</button></div>
     </div>
 
     <div class="grid cols-3">
@@ -44,7 +48,16 @@ export function renderDashboard(state) {
       </article>
     </div>
 
-    <div class="grid cols-2" style="margin-top:1rem">
+    <div class="grid cols-3" style="margin-top:1rem">
+      <article class="card score-card">
+        <h3>Puntuación anti-desperdicio</h3>
+        <p class="metric">${wasteScore.score}/100</p>
+        <p class="muted">Comprado: ${formatMoney(wasteScore.purchasedValue)} · Tirado: ${formatMoney(wasteScore.wastedValue)}</p>
+      </article>
+      <article class="card">
+        <h3>Envases para reciclar</h3>
+        ${recyclingRows.length ? `<div class="recycling-bars">${recyclingRows.map(([type, qty]) => `<div><span>${escapeHtml(type)}</span><strong>${qty}</strong></div>`).join("")}</div>` : `<p class="muted">Aún no hay envases registrados.</p>`}
+      </article>
       <article class="card">
         <h3>Caduca pronto</h3>
         ${expiring.length ? `<div class="list">${expiring.map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><span class="badge warning">${escapeHtml(i.expiryDate)}</span></div>`).join("")}</div>` : `<p class="muted">No hay ingredientes con caducidad en los próximos 7 días.</p>`}

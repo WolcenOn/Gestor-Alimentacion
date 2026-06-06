@@ -73,6 +73,8 @@ export function createDefaultState() {
     favoriteIds: [],
     purchaseLots: [],
     purchaseEntries: [],
+    wasteEntries: [],
+    recyclingEntries: [],
     shoppingProgress: {},
     nutritionProfiles: [],
     historySnapshots: [],

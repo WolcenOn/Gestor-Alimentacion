@@ -8,7 +8,7 @@ export function validateNoDangerousText(value, label = "texto") {
 
 export function validateState(data) {
   if (!data || typeof data !== "object") throw new Error("El archivo no contiene un objeto válido.");
-  const requiredArrays = ["ingredientFamilies", "ingredients", "dishes", "weeks", "familyMembers", "mealTypes", "purchaseLots", "purchaseEntries", "nutritionProfiles", "historySnapshots"];
+  const requiredArrays = ["ingredientFamilies", "ingredients", "dishes", "weeks", "familyMembers", "mealTypes", "purchaseLots", "purchaseEntries", "wasteEntries", "recyclingEntries", "nutritionProfiles", "historySnapshots"];
   for (const key of requiredArrays) {
     if (!Array.isArray(data[key])) throw new Error(`Falta la colección ${key}.`);
   }
@@ -76,7 +76,7 @@ export function validatePurchaseInput(input) {
   if (input.dateType && !DATE_TYPES.includes(input.dateType)) throw new Error("Tipo de fecha no válido.");
   if (input.storageType && !STORAGE_TYPES.includes(input.storageType)) throw new Error("Conservación no válida.");
   if (input.barcode && !/^\d{6,18}$/.test(String(input.barcode))) throw new Error("Código de barras no válido.");
-  [input.brand, input.notes].forEach(v => validateNoDangerousText(v || "", "Campo de compra"));
+  [input.brand, input.notes, input.packagingType].forEach(v => validateNoDangerousText(v || "", "Campo de compra"));
 }
 
 export function validatePack(pack) {

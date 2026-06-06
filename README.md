@@ -67,11 +67,13 @@ Abre `http://localhost:5173`.
 4. Añadir autenticación y sincronización cloud.
 5. Incorporar recomendador por reglas y luego IA.
 
+## Cambios de la versión con escáner, datos externos y sostenibilidad
 
-## Novedades de esta versión
+- El escáner de código de barras ahora muestra una vista previa real de la cámara en móvil mediante `BarcodeDetector` cuando el navegador lo soporta.
+- En **Ingredientes** se puede escanear un producto, buscar manualmente en Open Food Facts y asociar el resultado al ingrediente existente o crear uno nuevo.
+- Se añadió búsqueda nutricional con USDA FoodData Central. La API key se introduce manualmente y no se guarda en `localStorage`; para producción se recomienda backend/proxy.
+- Las compras permiten registrar tipo y número de envases para llevar contador de reciclaje.
+- Cada ingrediente permite registrar desperdicio: se descuenta del stock, se guarda el motivo y se estima el valor tirado.
+- El dashboard incluye puntuación anti-desperdicio y resumen de envases por tipo.
 
-- Pestaña **Ajustes** para crear o quitar miembros de la familia y tipos de comida.
-- Planificación semanal por día, comida y persona/grupo.
-- Cada persona puede tener tantos platos como necesite en cada comida.
-- Impresión semanal con el desglose por miembros.
-- Interfaz renovada, más moderna y adaptada a móvil.
+Nota móvil: para usar cámara, la página debe estar servida por HTTPS o `localhost`, y el navegador debe soportar `BarcodeDetector`. Si no lo soporta, se mantiene la entrada manual de código.

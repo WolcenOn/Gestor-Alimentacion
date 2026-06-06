@@ -33,6 +33,8 @@ export function migrateData(data) {
     data.purchaseLots ||= [];
     data.purchaseEntries ||= [];
     data.shoppingProgress ||= {};
+    data.wasteEntries ||= [];
+    data.recyclingEntries ||= [];
     data.nutritionProfiles ||= [];
     data.historySnapshots ||= [];
     data.dishPacks ||= [];
@@ -42,6 +44,8 @@ export function migrateData(data) {
   }
   data.familyMembers ||= [];
   data.mealTypes ||= [];
+  data.wasteEntries ||= [];
+  data.recyclingEntries ||= [];
   if (!data.familyMembers.length) data.familyMembers.push({ id: "member_all", name: "Todos", nutritionTargetId: null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), schemaVersion: SCHEMA_VERSION });
   if (!data.mealTypes.length) data.mealTypes.push({ id: "meal_lunch", name: "Comida", createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), schemaVersion: SCHEMA_VERSION });
   return data;

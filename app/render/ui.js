@@ -40,12 +40,14 @@ export function renderPurchaseModal(state, ingredientId, mode = "manual") {
         <label>Fecha alimento<input name="expiryDate" type="date"></label>
         <label>Conservación<select name="storageType"><option value="pantry">Despensa</option><option value="fridge">Nevera</option><option value="freezer">Congelador</option></select></label>
         <label>Nombre producto<input name="productName" placeholder="opcional"></label>
+        <label>Tipo de envase<select name="packagingType"><option>plástico</option><option>cartón/papel</option><option>vidrio</option><option>metal</option><option>brik</option><option>orgánico</option><option>otro</option></select></label>
+        <label>Nº de envases para reciclar<input name="packagingQty" type="number" min="0" step="1" value="1"></label>
       </div>
       <label>Notas<textarea name="notes"></textarea></label>
       <div class="actions">
         <button name="purchaseMode" value="partial">Guardar compra parcial</button>
         <button name="purchaseMode" value="complete" class="secondary">Guardar compra completa</button>
-        ${mode === "scan" ? `<button type="button" class="secondary" data-action="scan-now">Usar cámara</button>` : ""}
+        ${mode === "scan" ? `<button type="button" class="secondary" data-action="open-purchase-scanner">Abrir cámara</button>` : ""}
       </div>
     </form>
   `;
@@ -60,3 +62,24 @@ export function getSubmitterValue(event, name) {
 }
 
 export { parseNumber };
+
+
+export function renderBarcodeScannerModal({ title = "Escanear código", target = "purchase", ingredientId = "" } = {}) {
+  return `
+    <header>
+      <div><h2>${escapeHtml(title)}</h2><p class="muted">En móvil verás la cámara para apuntar al código. Si tu navegador no soporta BarcodeDetector, usa entrada manual.</p></div>
+      <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
+    </header>
+    <div class="scanner-box" data-scanner-target="${escapeHtml(target)}" data-ingredient-id="${escapeHtml(ingredientId)}">
+      <div class="scanner-frame">
+        <video id="barcodeVideo" autoplay muted playsinline></video>
+        <div class="scanner-reticle" aria-hidden="true"></div>
+      </div>
+      <p id="scannerStatus" class="small muted">Pulsa “Activar cámara”.</p>
+      <div class="actions">
+        <button type="button" data-action="start-preview-scan">Activar cámara</button>
+        <button type="button" class="secondary" data-action="close-modal">Cancelar</button>
+      </div>
+    </div>
+  `;
+}
