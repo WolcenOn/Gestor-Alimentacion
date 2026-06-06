@@ -1,4 +1,4 @@
-const CACHE_KEY = "gestorMenuSemanal.openFoodFacts.cache.v2";
+const CACHE_KEY = "gestorMenuSemanal.openFoodFacts.cache.v3";
 
 function getCache() {
   try { return JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); }
@@ -7,22 +7,76 @@ function getCache() {
 
 function setCache(cache) { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); }
 
-function normalizeProduct(barcode, p = {}) {
+const LOCALIZED_NAME_FIELDS = ["product_name", "generic_name", "abbreviated_product_name"];
+
+function localizedValue(product = {}, base, lang = "es") {
+  return product[`${base}_${lang}`] || product[base] || product[`${base}_es`] || product[`${base}_en`] || "";
+}
+
+function firstNonEmpty(...values) {
+  return values.find(value => String(value || "").trim()) || "";
+}
+
+function normalizeProduct(barcode, p = {}, lang = "es") {
   const nutriments = p.nutriments || {};
+  const quantity = p.quantity || "";
+  const extracted = extractQtyFromQuantity(quantity);
+  const productName = firstNonEmpty(
+    ...LOCALIZED_NAME_FIELDS.map(field => localizedValue(p, field, lang)),
+    p.product_name,
+    p.generic_name,
+    "Producto sin nombre"
+  );
+  const packageQty = Number(p.product_quantity) || extracted.qty || Number(p.serving_quantity) || 0;
+  const packageUnit = normalizeOffUnit(p.product_quantity_unit || extracted.unit || p.serving_quantity_unit || "g");
+
   return {
     barcode: String(barcode || p.code || ""),
-    productName: p.product_name || p.product_name_es || p.generic_name || "Producto sin nombre",
+    productName,
+    genericName: firstNonEmpty(localizedValue(p, "generic_name", lang), p.generic_name),
     brand: p.brands || "",
-    quantity: p.quantity || "",
-    packageQty: Number(p.product_quantity) || extractQtyFromQuantity(p.quantity).qty || 0,
-    packageUnit: p.product_quantity_unit || extractQtyFromQuantity(p.quantity).unit || "g",
+    quantity,
+    packageQty,
+    packageUnit,
+    servingQty: Number(p.serving_quantity) || 0,
+    servingUnit: normalizeOffUnit(p.serving_quantity_unit || "g"),
     imageUrl: p.image_url || p.image_front_url || "",
     nutriments,
     nutriscore: p.nutriscore_grade || p.nutrition_grades || "",
+    novaGroup: p.nova_group || "",
+    ecoscore: p.ecoscore_grade || "",
     categories: p.categories || "",
-    packaging: p.packaging || "",
-    source: "openfoodfacts"
+    categoriesTags: p.categories_tags || [],
+    labels: p.labels || "",
+    labelsTags: p.labels_tags || [],
+    allergens: p.allergens || "",
+    allergensTags: p.allergens_tags || [],
+    ingredientsText: localizedValue(p, "ingredients_text", lang) || p.ingredients_text || "",
+    packaging: p.packaging || p.packaging_text || "",
+    packagingText: p.packaging_text || p.packaging || "",
+    packagingType: inferPackagingType(p.packaging || p.packaging_text || ""),
+    lang,
+    source: "openfoodfacts",
+    rawImportedAt: new Date().toISOString()
   };
+}
+
+function inferPackagingType(packaging = "") {
+  const value = String(packaging).toLowerCase();
+  if (/vidrio|glass|bocal|jar/.test(value)) return "vidrio";
+  if (/cart[oó]n|paper|papel|cardboard|box/.test(value)) return "cartón/papel";
+  if (/metal|aluminio|aluminium|steel|lata|can/.test(value)) return "metal";
+  if (/brik|tetra/.test(value)) return "brik";
+  if (/pl[aá]stico|plastic|pet|film|bolsa|bag/.test(value)) return "plástico";
+  return "otro";
+}
+
+function normalizeOffUnit(unit = "") {
+  const value = String(unit || "").toLowerCase().trim();
+  if (["kg", "g", "ml", "l"].includes(value)) return value;
+  if (["cl"].includes(value)) return "ml";
+  if (["unidad", "unidades", "ud", "uds", "piece", "pieces"].includes(value)) return "unidades";
+  return value || "g";
 }
 
 function extractQtyFromQuantity(quantity = "") {
@@ -47,45 +101,89 @@ export function nutritionProfileFromOpenFoodFacts(product, ingredientId) {
     carbs: Number(n.carbohydrates_100g ?? 0) || 0,
     protein: Number(n.proteins_100g ?? 0) || 0,
     fat: Number(n.fat_100g ?? 0) || 0,
+    saturatedFat: Number(n["saturated-fat_100g"] ?? 0) || 0,
     fiber: Number(n.fiber_100g ?? 0) || 0,
     sugar: Number(n.sugars_100g ?? 0) || 0,
+    salt: Number(n.salt_100g ?? 0) || 0,
     sodium: Number(n.sodium_100g ?? 0) || 0,
-    source: "openfoodfacts"
+    source: "openfoodfacts",
+    sourceId: product?.barcode || "",
+    sourceName: product?.productName || ""
   };
 }
 
-export async function lookupOpenFoodFacts(barcode) {
+const OFF_FIELDS = [
+  "code",
+  "product_name",
+  "product_name_es",
+  "product_name_en",
+  "product_name_fr",
+  "product_name_ca",
+  "generic_name",
+  "generic_name_es",
+  "generic_name_en",
+  "abbreviated_product_name",
+  "brands",
+  "quantity",
+  "product_quantity",
+  "product_quantity_unit",
+  "serving_quantity",
+  "serving_quantity_unit",
+  "nutriments",
+  "nutriscore_grade",
+  "nutrition_grades",
+  "nova_group",
+  "ecoscore_grade",
+  "image_url",
+  "image_front_url",
+  "categories",
+  "categories_tags",
+  "labels",
+  "labels_tags",
+  "allergens",
+  "allergens_tags",
+  "ingredients_text",
+  "ingredients_text_es",
+  "ingredients_text_en",
+  "packaging",
+  "packaging_text"
+].join(",");
+
+export async function lookupOpenFoodFacts(barcode, { lang = "es" } = {}) {
   if (!/^\d{6,18}$/.test(String(barcode))) throw new Error("Código de barras no válido.");
   const cache = getCache();
-  if (cache[`barcode:${barcode}`]) return cache[`barcode:${barcode}`];
-  const url = `https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(barcode)}.json?fields=code,product_name,product_name_es,generic_name,brands,quantity,product_quantity,product_quantity_unit,nutriments,nutriscore_grade,nutrition_grades,image_url,image_front_url,categories,packaging`;
+  const key = `barcode:${lang}:${barcode}`;
+  if (cache[key]) return cache[key];
+  const url = `https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(barcode)}.json?fields=${encodeURIComponent(OFF_FIELDS)}`;
   const response = await fetch(url, { headers: { "Accept": "application/json" } });
   if (!response.ok) throw new Error("No se pudo consultar Open Food Facts.");
   const data = await response.json();
   if (data.status !== 1 || !data.product) return null;
-  const normalized = normalizeProduct(barcode, data.product);
-  cache[`barcode:${barcode}`] = normalized;
+  const normalized = normalizeProduct(barcode, data.product, lang);
+  cache[key] = normalized;
   setCache(cache);
   return normalized;
 }
 
-export async function searchOpenFoodFacts(query) {
+export async function searchOpenFoodFacts(query, { lang = "es" } = {}) {
   const q = String(query || "").trim();
   if (q.length < 2) throw new Error("Escribe al menos 2 caracteres para buscar en Open Food Facts.");
   const cache = getCache();
-  if (cache[`search:${q.toLowerCase()}`]) return cache[`search:${q.toLowerCase()}`];
-  const url = new URL("https://world.openfoodfacts.org/cgi/search.pl");
+  const key = `search:${lang}:${q.toLowerCase()}`;
+  if (cache[key]) return cache[key];
+  const hostname = /^[a-z]{2,3}$/.test(lang) ? `${lang}.openfoodfacts.org` : "world.openfoodfacts.org";
+  const url = new URL(`https://${hostname}/cgi/search.pl`);
   url.searchParams.set("search_terms", q);
   url.searchParams.set("search_simple", "1");
   url.searchParams.set("action", "process");
   url.searchParams.set("json", "1");
   url.searchParams.set("page_size", "12");
-  url.searchParams.set("fields", "code,product_name,product_name_es,generic_name,brands,quantity,product_quantity,product_quantity_unit,nutriments,nutriscore_grade,nutrition_grades,image_url,image_front_url,categories,packaging");
+  url.searchParams.set("fields", OFF_FIELDS);
   const response = await fetch(url, { headers: { "Accept": "application/json" } });
   if (!response.ok) throw new Error("No se pudo buscar en Open Food Facts.");
   const data = await response.json();
-  const products = (data.products || []).filter(p => p.code).map(p => normalizeProduct(p.code, p));
-  cache[`search:${q.toLowerCase()}`] = products;
+  const products = (data.products || []).filter(p => p.code).map(p => normalizeProduct(p.code, p, lang));
+  cache[key] = products;
   setCache(cache);
   return products;
 }
