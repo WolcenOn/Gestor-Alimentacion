@@ -89,11 +89,14 @@ function normalizePackDish(dish) {
     note: stripDangerousText(line.note || "")
   })).filter(line => line.ingredientId && line.qty > 0) : [];
 
-  const steps = Array.isArray(dish.instructions)
+  const rawSteps = Array.isArray(dish.instructions)
     ? dish.instructions
     : Array.isArray(dish.steps)
       ? dish.steps
       : String(dish.instructions || dish.elaboration || dish.method || "").split(/\n+/g);
+
+  const instructions = rawSteps.map(s => stripDangerousText(s)).map(s => s.trim()).filter(Boolean);
+  if (!instructions.length) instructions.push(...buildFallbackInstructions(dish, recipe));
 
   return {
     id: dish.id || slugId(dish.name || "dish"),
@@ -106,7 +109,7 @@ function normalizePackDish(dish) {
     difficulty: stripDangerousText(dish.difficulty || ""),
     approxPrice: Number(dish.approxPrice) ? Number(dish.approxPrice) / originalServings : 0,
     notes: stripDangerousText(dish.notes || ""),
-    instructions: steps.map(s => stripDangerousText(s)).map(s => s.trim()).filter(Boolean),
+    instructions,
     recipe,
     packId: dish.packId || "",
     normalizedToServing: true,
@@ -115,6 +118,37 @@ function normalizePackDish(dish) {
     updatedAt: dish.updatedAt || new Date().toISOString(),
     schemaVersion: 1
   };
+}
+
+function buildFallbackInstructions(dish, recipe) {
+  const name = stripDangerousText(dish.name || "el plato");
+  const category = String(dish.category || "").toLowerCase();
+  const tags = Array.isArray(dish.tags) ? dish.tags.join(" ").toLowerCase() : "";
+  const isSalad = category.includes("ensalada") || tags.includes("ensalada") || name.toLowerCase().includes("ensalada");
+  const isCold = isSalad || tags.includes("frío") || tags.includes("fria") || tags.includes("rápido");
+
+  if (isSalad) {
+    return [
+      "Lava y prepara los ingredientes frescos.",
+      "Escurre los ingredientes en conserva si los hay.",
+      "Corta los ingredientes en trozos adecuados para una ración.",
+      "Mezcla todo en un bol y aliña al gusto antes de servir."
+    ];
+  }
+
+  if (isCold) {
+    return [
+      "Prepara y pesa los ingredientes indicados para una ración.",
+      "Corta o mezcla los ingredientes según corresponda.",
+      "Ajusta el aliño o condimento al gusto y sirve."
+    ];
+  }
+
+  return [
+    "Prepara y pesa los ingredientes indicados para una ración.",
+    "Cocina o mezcla los ingredientes según el tipo de receta.",
+    "Comprueba el punto, ajusta el condimento y sirve."
+  ];
 }
 
 export function summarizePack(pack) {
