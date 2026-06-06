@@ -35,6 +35,7 @@ export function validateMealType(meal) {
 export function validateIngredient(ingredient) {
   if (!ingredient.id) throw new Error("Hay un ingrediente sin id.");
   validateNoDangerousText(ingredient.name, "Nombre de ingrediente");
+  validateNoDangerousText(ingredient.packagingType || "", "Tipo de envase");
   if (!ingredient.name?.trim()) throw new Error("Hay un ingrediente sin nombre.");
   if (Number(ingredient.qty) < 0) throw new Error(`El ingrediente ${ingredient.name} tiene cantidad negativa.`);
   if (!VALID_UNITS.includes(normalizeUnit(ingredient.unit))) throw new Error(`Unidad no válida en ${ingredient.name}.`);
@@ -45,11 +46,14 @@ export function validateIngredient(ingredient) {
 export function validateProduct(product) {
   validateNoDangerousText(product.productName || "", "Nombre de producto");
   validateNoDangerousText(product.brand || "", "Marca");
+  validateNoDangerousText(product.packagingType || product.packaging || "", "Envase de producto");
   if (product.barcode && !/^\d{6,18}$/.test(String(product.barcode))) throw new Error("Código de barras no válido.");
 }
 
 export function validateDish(dish, ingredients = []) {
   validateNoDangerousText(dish.name, "Nombre de plato");
+  validateNoDangerousText(dish.notes || "", "Notas del plato");
+  (dish.instructions || []).forEach(step => validateNoDangerousText(step, "Paso de elaboración"));
   if (!dish.name?.trim()) throw new Error("Hay un plato sin nombre.");
   if (!Array.isArray(dish.recipe)) throw new Error(`La receta de ${dish.name} no es válida.`);
   const ids = new Set(ingredients.map(i => i.id));
@@ -82,11 +86,16 @@ export function validatePurchaseInput(input) {
 export function validatePack(pack) {
   if (!pack || typeof pack !== "object") throw new Error("Pack inválido.");
   if (pack.type !== "meal-pack") throw new Error("El pack no es de tipo meal-pack.");
-  if (Number(pack.schemaVersion) !== 1) throw new Error("Versión de pack no soportada.");
+  if (![1, 2].includes(Number(pack.schemaVersion))) throw new Error("Versión de pack no soportada.");
   validateNoDangerousText(pack.name, "Nombre del pack");
   if (!Array.isArray(pack.ingredients) || !Array.isArray(pack.dishes)) throw new Error("El pack debe contener arrays ingredients y dishes.");
   pack.ingredients.forEach(validateIngredient);
-  pack.dishes.forEach(d => validateDish(d, pack.ingredients));
+  pack.dishes.forEach(d => {
+    validateDish(d, pack.ingredients);
+    if (Number(pack.schemaVersion) >= 2 && (!Array.isArray(d.instructions) || !d.instructions.length)) {
+      throw new Error(`El plato ${d.name} debe incluir pautas de elaboración.`);
+    }
+  });
   return true;
 }
 
