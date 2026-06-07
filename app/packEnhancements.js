@@ -34,6 +34,18 @@ document.addEventListener("click", async event => {
       await previewRemotePack(button.dataset.index);
     }
 
+    if (action === "select-all-pack-dishes") {
+      stop(event);
+      document.querySelectorAll('form[data-form="install-pack"] input[name="dishIds"]').forEach(input => { input.checked = true; });
+      showAlert("Todas las recetas del pack están seleccionadas.");
+    }
+
+    if (action === "clear-pack-dishes") {
+      stop(event);
+      document.querySelectorAll('form[data-form="install-pack"] input[name="dishIds"]').forEach(input => { input.checked = false; });
+      showAlert("Recetas desmarcadas. Marca las que quieras importar.");
+    }
+
     if (action === "copy-pack-prompt") {
       stop(event);
       await copyPackPrompt();
@@ -98,6 +110,7 @@ async function previewRemotePack(index) {
   const pack = await loadRemotePack(file);
   pendingPackPreview = pack;
   openModal(renderPackPreview(pack, index));
+  showAlert(`Pack cargado: ${pack.dishes.length} receta(s) disponibles.`);
 }
 
 async function importLocalPackPreview(file) {
@@ -107,11 +120,12 @@ async function importLocalPackPreview(file) {
   validatePack(pack);
   pendingPackPreview = pack;
   openModal(renderPackPreview(pack, "local"));
+  showAlert(`Pack local cargado: ${pack.dishes.length} receta(s) disponibles.`);
 }
 
 function installPreviewedPack(form, event) {
   if (!pendingPackPreview) throw new Error("No hay pack cargado para instalar.");
-  const mode = getSubmitterValue(event, "installMode") || "selected";
+  const mode = getSubmitterValue(event, "installMode") || "all";
   const selectedDishIds = mode === "all"
     ? pendingPackPreview.dishes.map(dish => dish.id)
     : Array.from(form.querySelectorAll('input[name="dishIds"]:checked')).map(input => input.value);
@@ -119,9 +133,10 @@ function installPreviewedPack(form, event) {
 
   updateState(draft => mergePackIntoState(draft, pendingPackPreview, { selectedDishIds }), "pack-install-selected");
   const installedName = pendingPackPreview.name;
+  const total = selectedDishIds.length;
   pendingPackPreview = null;
   closeModal();
-  showAlert(`Pack ${installedName} instalado con ${selectedDishIds.length} receta(s).`);
+  showAlert(`Pack ${installedName} instalado con ${total} receta(s).`);
 }
 
 function generatePackPrompt(form) {
