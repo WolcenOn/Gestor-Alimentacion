@@ -1,3 +1,5 @@
+import { cacheFood, cacheSearch, getCachedSearch, cacheKey } from "./foodCache.js";
+
 const CACHE_KEY = "gestorMenuSemanal.openFoodFacts.cache.v3";
 
 function getCache() {
@@ -31,6 +33,7 @@ function normalizeProduct(barcode, p = {}, lang = "es") {
   const packageUnit = normalizeOffUnit(p.product_quantity_unit || extracted.unit || p.serving_quantity_unit || "g");
 
   return {
+    id: String(barcode || p.code || ""),
     barcode: String(barcode || p.code || ""),
     productName,
     genericName: firstNonEmpty(localizedValue(p, "generic_name", lang), p.generic_name),
@@ -93,17 +96,20 @@ function extractQtyFromQuantity(quantity = "") {
 
 export function nutritionProfileFromOpenFoodFacts(product, ingredientId) {
   const n = product?.nutriments || {};
+  const carbs = Number(n.carbohydrates_100g ?? 0) || 0;
+  const sugar = Math.min(Number(n.sugars_100g ?? 0) || 0, carbs);
   return {
     ingredientId,
     per: 100,
     unit: "g",
     kcal: Number(n["energy-kcal_100g"] ?? n["energy-kcal"] ?? 0) || 0,
-    carbs: Number(n.carbohydrates_100g ?? 0) || 0,
+    carbs,
+    complexCarbs: Math.max(0, carbs - sugar),
     protein: Number(n.proteins_100g ?? 0) || 0,
     fat: Number(n.fat_100g ?? 0) || 0,
     saturatedFat: Number(n["saturated-fat_100g"] ?? 0) || 0,
     fiber: Number(n.fiber_100g ?? 0) || 0,
-    sugar: Number(n.sugars_100g ?? 0) || 0,
+    sugar,
     salt: Number(n.salt_100g ?? 0) || 0,
     sodium: Number(n.sodium_100g ?? 0) || 0,
     source: "openfoodfacts",
@@ -154,6 +160,8 @@ export async function lookupOpenFoodFacts(barcode, { lang = "es" } = {}) {
   const cache = getCache();
   const key = `barcode:${lang}:${barcode}`;
   if (cache[key]) return cache[key];
+  const cached = await getCachedSearch(cacheKey("off-barcode", lang, barcode));
+  if (cached?.[0]) return cached[0];
   const url = `https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(barcode)}.json?fields=${encodeURIComponent(OFF_FIELDS)}`;
   const response = await fetch(url, { headers: { "Accept": "application/json" } });
   if (!response.ok) throw new Error("No se pudo consultar Open Food Facts.");
@@ -162,6 +170,8 @@ export async function lookupOpenFoodFacts(barcode, { lang = "es" } = {}) {
   const normalized = normalizeProduct(barcode, data.product, lang);
   cache[key] = normalized;
   setCache(cache);
+  await cacheFood(normalized);
+  await cacheSearch(cacheKey("off-barcode", lang, barcode), [normalized.id]);
   return normalized;
 }
 
@@ -171,6 +181,9 @@ export async function searchOpenFoodFacts(query, { lang = "es" } = {}) {
   const cache = getCache();
   const key = `search:${lang}:${q.toLowerCase()}`;
   if (cache[key]) return cache[key];
+  const idbKey = cacheKey("off-search", lang, q);
+  const cached = await getCachedSearch(idbKey);
+  if (cached?.length) return cached;
   const hostname = /^[a-z]{2,3}$/.test(lang) ? `${lang}.openfoodfacts.org` : "world.openfoodfacts.org";
   const url = new URL(`https://${hostname}/cgi/search.pl`);
   url.searchParams.set("search_terms", q);
@@ -185,5 +198,7 @@ export async function searchOpenFoodFacts(query, { lang = "es" } = {}) {
   const products = (data.products || []).filter(p => p.code).map(p => normalizeProduct(p.code, p, lang));
   cache[key] = products;
   setCache(cache);
+  await Promise.all(products.map(product => cacheFood(product)));
+  await cacheSearch(idbKey, products.map(product => product.id));
   return products;
 }
