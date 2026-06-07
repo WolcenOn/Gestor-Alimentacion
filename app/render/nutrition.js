@@ -1,8 +1,10 @@
 import { escapeHtml } from "../utils.js";
 import { computeDishNutrition, computeWeekNutrition, formatNutritionValue, missingIngredientNames, NUTRIENTS } from "../state/nutritionCalculator.js";
+import { computeDishGlycemicProfile, computeWeekGlycemicSummary, splitCarbs } from "../state/glycemicCalculator.js";
 
 export function renderNutrition(state) {
   const weekNutrition = computeWeekNutrition(state);
+  const glycemicSummary = computeWeekGlycemicSummary(state);
   const profilesByIngredient = new Map(state.nutritionProfiles.map(profile => [profile.ingredientId, profile]));
   const missingNames = missingIngredientNames(state, weekNutrition.missingIngredientIds);
 
@@ -10,8 +12,8 @@ export function renderNutrition(state) {
     <div class="card-header">
       <div>
         <p class="eyebrow">Nutrición</p>
-        <h2>Valores nutricionales y cálculo por persona</h2>
-        <p class="muted">Calcula a partir de las recetas planificadas. Los resultados dependen de que cada ingrediente tenga perfil nutricional y de que las recetas estén en cantidades por ración.</p>
+        <h2>Valores nutricionales, diabetes e impacto glucémico</h2>
+        <p class="muted">Calcula a partir de las recetas planificadas. El impacto glucémico es una estimación educativa basada en azúcares, hidratos complejos, proteína y grasa; no recomienda insulina.</p>
       </div>
     </div>
 
@@ -26,10 +28,10 @@ export function renderNutrition(state) {
         <p class="metric">${Math.round(weekNutrition.totals.kcal).toLocaleString("es-ES")}</p>
         <p class="muted">Suma de todos los miembros y platos asignados.</p>
       </article>
-      <article class="card">
-        <h3>Ingredientes pendientes en semana</h3>
-        <p class="metric">${weekNutrition.missingIngredientIds.size}</p>
-        <p class="muted">Sin perfil nutricional para calcular con precisión.</p>
+      <article class="card glycemic-level-${glycemicSummary.impact?.level || "bajo"}">
+        <h3>Impacto glucémico semanal</h3>
+        <p class="metric">${escapeHtml(glycemicSummary.impact?.level || "bajo")}</p>
+        <p class="muted">Equiv. HC: ${glycemicSummary.impact?.carbEquivalent || 0} g · subida teórica ${glycemicSummary.impact?.estimatedRise || 0} mg/dL.</p>
       </article>
     </div>
 
@@ -39,16 +41,16 @@ export function renderNutrition(state) {
       <div class="section-title-row">
         <div>
           <h3>Resumen por persona</h3>
-          <p class="muted">Total semanal, media diaria y estimación mensual si se repite esta semana.</p>
+          <p class="muted">Total semanal, media diaria, estimación mensual y desglose de hidratos para diabetes.</p>
         </div>
       </div>
       <div class="table-wrap">
         <table class="week-grid nutrition-table">
           <thead>
-            <tr><th>Persona</th><th>Periodo</th>${NUTRIENTS.slice(0, 6).map(([, label]) => `<th>${escapeHtml(label)}</th>`).join("")}</tr>
+            <tr><th>Persona</th><th>Periodo</th>${NUTRIENTS.slice(0, 6).map(([, label]) => `<th>${escapeHtml(label)}</th>`).join("")}<th>Azúcares</th><th>HC complejos</th><th>Impacto</th></tr>
           </thead>
           <tbody>
-            ${Object.values(weekNutrition.byMember).map(bucket => renderMemberRows(bucket)).join("")}
+            ${Object.values(weekNutrition.byMember).map(bucket => renderMemberRows(bucket, glycemicSummary.byMember[bucket.member.id])).join("")}
           </tbody>
         </table>
       </div>
@@ -64,8 +66,8 @@ export function renderNutrition(state) {
     <article class="card">
       <div class="section-title-row">
         <div>
-          <h3>Nutrición por plato</h3>
-          <p class="muted">Busca por plato para ver valores calculados por 1 ración.</p>
+          <h3>Nutrición e impacto por plato</h3>
+          <p class="muted">Busca por plato para ver valores calculados por 1 ración, azúcares simples, HC complejos e impacto estimado.</p>
         </div>
         <span class="badge">${state.dishes.length} platos</span>
       </div>
@@ -96,17 +98,19 @@ export function renderNutrition(state) {
   `;
 }
 
-function renderMemberRows(bucket) {
+function renderMemberRows(bucket, glycemicBucket) {
   const daily = Object.fromEntries(Object.entries(bucket.total).map(([key, value]) => [key, value / 7]));
+  const month = bucket.monthEstimate;
   return [
-    renderNutritionRow(bucket.member.name, "Semana", bucket.total),
-    renderNutritionRow(bucket.member.name, "Media diaria", daily),
-    renderNutritionRow(bucket.member.name, "Mes estimado", bucket.monthEstimate)
+    renderNutritionRow(bucket.member.name, "Semana", bucket.total, glycemicBucket?.impact),
+    renderNutritionRow(bucket.member.name, "Media diaria", daily, glycemicBucket ? { ...glycemicBucket.impact, sugar: glycemicBucket.impact.sugar / 7, complexCarbs: glycemicBucket.impact.complexCarbs / 7 } : null),
+    renderNutritionRow(bucket.member.name, "Mes estimado", month, glycemicBucket ? { ...glycemicBucket.impact, sugar: glycemicBucket.impact.sugar * 30 / 7, complexCarbs: glycemicBucket.impact.complexCarbs * 30 / 7 } : null)
   ].join("");
 }
 
-function renderNutritionRow(name, period, total) {
-  return `<tr><td>${escapeHtml(name)}</td><td>${escapeHtml(period)}</td>${NUTRIENTS.slice(0, 6).map(([key]) => `<td>${formatNutritionValue(key, total[key])}</td>`).join("")}</tr>`;
+function renderNutritionRow(name, period, total, impact) {
+  const split = splitCarbs(total);
+  return `<tr><td>${escapeHtml(name)}</td><td>${escapeHtml(period)}</td>${NUTRIENTS.slice(0, 6).map(([key]) => `<td>${formatNutritionValue(key, total[key])}</td>`).join("")}<td>${formatNutritionValue("sugar", impact?.sugar ?? split.sugar)}</td><td>${formatNutritionValue("carbs", impact?.complexCarbs ?? split.complexCarbs)}</td><td><span class="badge ${impact?.level === "alto" ? "danger" : impact?.level === "medio" ? "warning" : ""}">${escapeHtml(impact?.level || "bajo")}</span></td></tr>`;
 }
 
 function renderMemberDailyCard(bucket) {
@@ -114,27 +118,48 @@ function renderMemberDailyCard(bucket) {
   return `
     <div class="item">
       <strong>${escapeHtml(bucket.member.name)}</strong>
-      ${days.length ? days.map(([day, total]) => `<p class="qty-line"><strong>${escapeHtml(day)}:</strong> ${formatNutritionValue("kcal", total.kcal)} · proteína ${formatNutritionValue("protein", total.protein)} · fibra ${formatNutritionValue("fiber", total.fiber)}</p>`).join("") : `<p class="muted">Sin platos planificados.</p>`}
+      ${days.length ? days.map(([day, total]) => {
+        const split = splitCarbs(total);
+        return `<p class="qty-line"><strong>${escapeHtml(day)}:</strong> ${formatNutritionValue("kcal", total.kcal)} · HC ${formatNutritionValue("carbs", total.carbs)} · azúcares ${formatNutritionValue("sugar", split.sugar)} · fibra ${formatNutritionValue("fiber", total.fiber)}</p>`;
+      }).join("") : `<p class="muted">Sin platos planificados.</p>`}
     </div>
   `;
 }
 
 function renderDishNutritionItem(state, dish) {
   const data = computeDishNutrition(state, dish.id);
+  const glycemic = computeDishGlycemicProfile(state, dish.id);
   const missingNames = missingIngredientNames(state, new Set(data.missing));
   const searchText = [dish.name, dish.category, dish.tags?.join(" "), dish.recipe?.map(line => state.ingredients.find(i => i.id === line.ingredientId)?.name).join(" ")].join(" ");
   return `
-    <div class="item nutrition-dish-item" data-search="${escapeHtml(searchText)}">
+    <div class="item nutrition-dish-item glycemic-level-${glycemic.impact.level}" data-search="${escapeHtml(searchText)}">
       <div class="item-title">
         <div>
           <strong>${escapeHtml(dish.name)}</strong>
           <p class="qty-line">${formatNutritionValue("kcal", data.total.kcal)} · proteína ${formatNutritionValue("protein", data.total.protein)} · hidratos ${formatNutritionValue("carbs", data.total.carbs)} · grasa ${formatNutritionValue("fat", data.total.fat)}</p>
         </div>
-        <span class="badge ${missingNames.length ? "warning" : ""}">${missingNames.length ? "incompleto" : "calculado"}</span>
+        <span class="badge ${missingNames.length ? "warning" : glycemic.impact.level === "alto" ? "danger" : glycemic.impact.level === "medio" ? "warning" : ""}">${missingNames.length ? "incompleto" : `impacto ${glycemic.impact.level}`}</span>
       </div>
+      <div class="mini-facts">
+        <span>Azúcares ${formatNutritionValue("sugar", glycemic.impact.sugar)}</span>
+        <span>HC complejos ${formatNutritionValue("carbs", glycemic.impact.complexCarbs)}</span>
+        <span>Equiv. HC ${glycemic.impact.carbEquivalent} g</span>
+        <span>Subida teórica ${glycemic.impact.estimatedRise} mg/dL</span>
+      </div>
+      <details class="recipe-steps">
+        <summary>Ver curva de absorción estimada</summary>
+        <div class="absorption-bars">${renderAbsorptionBars(glycemic.curve)}</div>
+        <p class="small muted">Estimación educativa inspirada en el modelo de GlucosaTrack: azúcares rápidos, HC complejos más lentos y retraso por grasa/proteína. No sustituye criterios sanitarios ni calcula dosis.</p>
+      </details>
       ${missingNames.length ? `<p class="small muted">Faltan perfiles: ${escapeHtml(missingNames.join(", "))}</p>` : ""}
     </div>
   `;
+}
+
+function renderAbsorptionBars(curve) {
+  const points = curve.filter((_, index) => index % 4 === 0 || index === curve.length - 1);
+  const max = Math.max(...points.map(p => p.total), 1);
+  return points.map(point => `<div class="absorption-point"><span>${Math.round(point.time / 60)}h</span><div><i style="width:${Math.max(3, point.total / max * 100)}%"></i></div><strong>${point.total}g</strong></div>`).join("");
 }
 
 function renderIngredientNutritionItem(ingredient, profile) {
@@ -142,6 +167,7 @@ function renderIngredientNutritionItem(ingredient, profile) {
   if (!profile) {
     return `<div class="item nutrition-ingredient-item" data-search="${escapeHtml(searchText)}"><strong>${escapeHtml(ingredient.name)}</strong><p class="muted">Sin perfil nutricional.</p></div>`;
   }
+  const split = splitCarbs(profile);
   return `
     <div class="item nutrition-ingredient-item" data-search="${escapeHtml(searchText)}">
       <div class="item-title">
@@ -155,6 +181,8 @@ function renderIngredientNutritionItem(ingredient, profile) {
         <span>${formatNutritionValue("kcal", profile.kcal)}</span>
         <span>Proteína ${formatNutritionValue("protein", profile.protein)}</span>
         <span>HC ${formatNutritionValue("carbs", profile.carbs)}</span>
+        <span>Azúcares ${formatNutritionValue("sugar", split.sugar)}</span>
+        <span>HC complejos ${formatNutritionValue("carbs", split.complexCarbs)}</span>
         <span>Grasa ${formatNutritionValue("fat", profile.fat)}</span>
         <span>Fibra ${formatNutritionValue("fiber", profile.fiber)}</span>
       </div>
