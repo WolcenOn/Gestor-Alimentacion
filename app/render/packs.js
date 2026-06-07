@@ -11,42 +11,60 @@ export function renderPacks(state) {
           <strong>${PACK_SOURCE.owner}/${PACK_SOURCE.repo}</strong>
           <p class="qty-line">Branch: ${PACK_SOURCE.branch} · Ruta: ${PACK_SOURCE.basePath}/</p>
         </div>
+        <label class="quick-search-label">Búsqueda rápida de packs remotos
+          <input type="search" class="quick-search" placeholder="Ej. verano, Huelva, vegano, andalucía..." data-search-target="#remotePackList .pack-file-item" data-empty-target="remotePackSearchEmpty">
+        </label>
         <div class="actions" style="margin-top:1rem">
           <button data-action="list-remote-packs">Buscar packs remotos</button>
           <label class="button secondary file-button">Importar pack local<input id="packFile" type="file" accept="application/json,.json" hidden></label>
         </div>
+        <div id="remotePackSearchEmpty" class="search-empty muted" hidden>No hay packs remotos que coincidan con la búsqueda.</div>
         <div id="remotePackList" class="list" style="margin-top:1rem"></div>
       </article>
 
       <article class="card">
-        <h2>Packs instalados</h2>
-        <div class="list">
-          ${state.dishPacks.length ? state.dishPacks.map(p => `<div class="item"><strong>${escapeHtml(p.name)}</strong><p class="qty-line">${escapeHtml(p.description || "")}</p></div>`).join("") : `<p class="muted">No hay packs instalados.</p>`}
+        <div class="section-title-row">
+          <div>
+            <h2>Packs instalados</h2>
+            <p class="muted">Busca los packs que ya has añadido al recetario.</p>
+          </div>
+          <span class="badge">${state.dishPacks.length} packs</span>
+        </div>
+        <label class="quick-search-label">Búsqueda rápida de packs instalados
+          <input type="search" class="quick-search" placeholder="Ej. temporada, vegano, cenas..." data-search-target=".installed-pack-list .installed-pack-item" data-empty-target="installedPackSearchEmpty">
+        </label>
+        <div id="installedPackSearchEmpty" class="search-empty muted" hidden>No hay packs instalados que coincidan con la búsqueda.</div>
+        <div class="list installed-pack-list">
+          ${state.dishPacks.length ? state.dishPacks.map(p => `<div class="item installed-pack-item" data-search="${escapeHtml([p.name, p.description, p.tags?.join(" ")].join(" "))}"><strong>${escapeHtml(p.name)}</strong><p class="qty-line">${escapeHtml(p.description || "")}</p></div>`).join("") : `<p class="muted">No hay packs instalados.</p>`}
         </div>
       </article>
     </div>
 
-    <article class="card pack-prompt-card">
-      <div class="section-title-row">
-        <div>
-          <h2>Generador de prompt para packs con IA</h2>
-          <p class="muted">Rellena el formulario y genera un prompt que obliga a la IA a devolver JSON válido, con recetas a 1 ración y pautas de elaboración.</p>
-        </div>
+    <details class="card collapsible-card pack-prompt-card">
+      <summary class="collapsible-summary">
+        <span>
+          <strong>Generador de prompt para packs con IA</strong>
+          <small>Desplegar solo cuando quieras crear un pack nuevo</small>
+        </span>
+        <span class="summary-hint">Desplegar</span>
+      </summary>
+      <div class="collapsible-body">
+        <p class="muted">Rellena el formulario y genera un prompt que obliga a la IA a devolver JSON válido, con recetas a 1 ración y pautas de elaboración.</p>
+        <form data-form="pack-prompt" class="pack-prompt-form">
+          <div class="form-grid">
+            <label>Tipo de cocina<input name="cuisine" placeholder="Mediterránea, vegetariana, infantil..."></label>
+            <label>Número de recetas<input name="count" type="number" min="1" max="30" value="6"></label>
+            <label>Uso del pack<input name="meals" placeholder="Cenas rápidas, comidas de tupper..."></label>
+            <label>Raciones<input name="servings" value="1 ración por plato"></label>
+          </div>
+          <label>Restricciones, alergias o alimentos excluidos<textarea name="restrictions" placeholder="Sin frutos secos, sin lactosa, bajo en sal..."></textarea></label>
+          <label>Preferencias e instrucciones<textarea name="preferences" placeholder="Barato, batch cooking, ingredientes de temporada, preparación sencilla..."></textarea></label>
+          <button>Generar prompt</button>
+        </form>
+        <label>Prompt generado<textarea id="packPromptOutput" class="code-output" rows="12" readonly placeholder="Aquí aparecerá el prompt para copiarlo en una IA."></textarea></label>
+        <div class="actions"><button class="secondary" type="button" data-action="copy-pack-prompt">Copiar prompt</button></div>
       </div>
-      <form data-form="pack-prompt" class="pack-prompt-form">
-        <div class="form-grid">
-          <label>Tipo de cocina<input name="cuisine" placeholder="Mediterránea, vegetariana, infantil..."></label>
-          <label>Número de recetas<input name="count" type="number" min="1" max="30" value="6"></label>
-          <label>Uso del pack<input name="meals" placeholder="Cenas rápidas, comidas de tupper..."></label>
-          <label>Raciones<input name="servings" value="1 ración por plato"></label>
-        </div>
-        <label>Restricciones, alergias o alimentos excluidos<textarea name="restrictions" placeholder="Sin frutos secos, sin lactosa, bajo en sal..."></textarea></label>
-        <label>Preferencias e instrucciones<textarea name="preferences" placeholder="Barato, batch cooking, ingredientes de temporada, preparación sencilla..."></textarea></label>
-        <button>Generar prompt</button>
-      </form>
-      <label>Prompt generado<textarea id="packPromptOutput" class="code-output" rows="12" readonly placeholder="Aquí aparecerá el prompt para copiarlo en una IA."></textarea></label>
-      <div class="actions"><button class="secondary" type="button" data-action="copy-pack-prompt">Copiar prompt</button></div>
-    </article>
+    </details>
   `;
 }
 
@@ -66,6 +84,10 @@ export function renderPackPreview(pack, sourceIndex = "local") {
         <strong>Pack cargado correctamente</strong>
         <p class="qty-line">Se han detectado ${dishCount} receta(s). El botón principal instala el pack completo.</p>
       </div>
+      <label class="quick-search-label">Buscar recetas dentro del pack
+        <input type="search" class="quick-search" placeholder="Ej. gazpacho, pollo, tupper..." data-search-target=".pack-preview-list .pack-dish-preview" data-empty-target="packPreviewSearchEmpty">
+      </label>
+      <div id="packPreviewSearchEmpty" class="search-empty muted" hidden>No hay recetas del pack que coincidan con la búsqueda.</div>
       <div class="actions wrap">
         <button type="button" class="secondary" data-action="select-all-pack-dishes">Seleccionar todas</button>
         <button type="button" class="secondary" data-action="clear-pack-dishes">Desmarcar todas</button>
@@ -88,9 +110,11 @@ function renderPackDishPreview(dish, ingredientsById, index) {
     const ingredient = ingredientsById.get(line.ingredientId);
     return `<li>${escapeHtml(ingredient?.name || line.ingredientId)}: ${Number(line.qty).toLocaleString("es-ES")} ${escapeHtml(line.unit)}</li>`;
   }).join("");
+  const ingredientNames = (dish.recipe || []).map(line => ingredientsById.get(line.ingredientId)?.name || line.ingredientId).join(" ");
   const steps = (dish.instructions || []).map((step, i) => `<li><strong>${i + 1}.</strong> ${escapeHtml(step)}</li>`).join("");
+  const searchText = [dish.name, dish.category, dish.tags?.join(" "), dish.prepTime, dish.notes, ingredientNames, (dish.instructions || []).join(" ")].join(" ");
   return `
-    <article class="item pack-dish-preview">
+    <article class="item pack-dish-preview" data-search="${escapeHtml(searchText)}">
       <label class="check-row">
         <input type="checkbox" name="dishIds" value="${escapeHtml(dish.id)}" checked>
         <span><strong>${index + 1}. ${escapeHtml(dish.name)}</strong><small>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</small></span>
