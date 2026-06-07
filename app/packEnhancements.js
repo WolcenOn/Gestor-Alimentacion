@@ -95,12 +95,15 @@ async function listPacksIntoUi() {
   container.innerHTML = `<p class="muted">Buscando packs...</p>`;
   remotePackFiles = await listRemotePacks();
   container.innerHTML = remotePackFiles.length
-    ? remotePackFiles.map((file, index) => `
-      <div class="item">
+    ? remotePackFiles.map((file, index) => {
+      const searchText = [file.name, file.path, file.path.replaceAll("/", " ").replaceAll("-", " ")].join(" ");
+      return `
+      <div class="item pack-file-item" data-search="${escapeText(searchText)}">
         <strong>${escapeText(file.name)}</strong>
         <p class="qty-line">${escapeText(file.path)}</p>
         <button data-action="preview-remote-pack" data-index="${index}">Previsualizar</button>
-      </div>`).join("")
+      </div>`;
+    }).join("")
     : `<p class="muted">No se encontraron packs.</p>`;
 }
 
