@@ -52,29 +52,38 @@ export function renderPacks(state) {
 
 export function renderPackPreview(pack, sourceIndex = "local") {
   const ingredientsById = new Map((pack.ingredients || []).map(i => [i.id, i]));
+  const dishCount = pack.dishes?.length || 0;
   return `
     <header>
       <div>
         <h2>Previsualizar pack</h2>
-        <p class="muted">${escapeHtml(pack.name)} · ${pack.dishes.length} recetas · ${pack.ingredients.length} ingredientes</p>
+        <p class="muted">${escapeHtml(pack.name)} · <strong>${dishCount} recetas</strong> · ${pack.ingredients.length} ingredientes</p>
       </div>
       <button class="secondary" data-action="close-modal">×</button>
     </header>
     <form data-form="install-pack" data-pack-index="${escapeHtml(String(sourceIndex))}">
-      <p class="muted">Elige qué recetas quieres añadir. Solo se importarán los ingredientes necesarios para esas recetas. Todas las cantidades están normalizadas a <strong>1 ración</strong>.</p>
+      <div class="item success">
+        <strong>Pack cargado correctamente</strong>
+        <p class="qty-line">Se han detectado ${dishCount} receta(s). El botón principal instala el pack completo.</p>
+      </div>
+      <div class="actions wrap">
+        <button type="button" class="secondary" data-action="select-all-pack-dishes">Seleccionar todas</button>
+        <button type="button" class="secondary" data-action="clear-pack-dishes">Desmarcar todas</button>
+      </div>
+      <p class="muted">Puedes revisar las recetas y desmarcar alguna si no quieres importarla. Todas las cantidades están normalizadas a <strong>1 ración</strong>.</p>
       <div class="list pack-preview-list">
-        ${pack.dishes.map(dish => renderPackDishPreview(dish, ingredientsById)).join("")}
+        ${pack.dishes.map((dish, index) => renderPackDishPreview(dish, ingredientsById, index)).join("")}
       </div>
       <div class="actions sticky-actions">
-        <button name="installMode" value="selected">Instalar recetas seleccionadas</button>
-        <button class="secondary" name="installMode" value="all">Instalar todo</button>
+        <button name="installMode" value="all">Instalar todo el pack (${dishCount})</button>
+        <button class="secondary" name="installMode" value="selected">Instalar solo seleccionadas</button>
         <button type="button" class="secondary" data-action="close-modal">Cancelar</button>
       </div>
     </form>
   `;
 }
 
-function renderPackDishPreview(dish, ingredientsById) {
+function renderPackDishPreview(dish, ingredientsById, index) {
   const recipe = (dish.recipe || []).map(line => {
     const ingredient = ingredientsById.get(line.ingredientId);
     return `<li>${escapeHtml(ingredient?.name || line.ingredientId)}: ${Number(line.qty).toLocaleString("es-ES")} ${escapeHtml(line.unit)}</li>`;
@@ -84,12 +93,15 @@ function renderPackDishPreview(dish, ingredientsById) {
     <article class="item pack-dish-preview">
       <label class="check-row">
         <input type="checkbox" name="dishIds" value="${escapeHtml(dish.id)}" checked>
-        <span><strong>${escapeHtml(dish.name)}</strong><small>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</small></span>
+        <span><strong>${index + 1}. ${escapeHtml(dish.name)}</strong><small>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</small></span>
       </label>
-      <div class="preview-columns">
-        <div><p class="small muted">Ingredientes por 1 ración</p><ul>${recipe}</ul></div>
-        <div><p class="small muted">Pautas de elaboración</p><ol>${steps || "<li>Sin pautas.</li>"}</ol></div>
-      </div>
+      <details>
+        <summary>Ver ingredientes y elaboración</summary>
+        <div class="preview-columns">
+          <div><p class="small muted">Ingredientes por 1 ración</p><ul>${recipe}</ul></div>
+          <div><p class="small muted">Pautas de elaboración</p><ol>${steps || "<li>Sin pautas.</li>"}</ol></div>
+        </div>
+      </details>
     </article>
   `;
 }
