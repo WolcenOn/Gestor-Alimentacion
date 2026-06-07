@@ -1,6 +1,10 @@
 import { escapeHtml } from "../utils.js";
 
 export function renderSettings(state) {
+  const ingredientsWithNutrition = new Set(state.nutritionProfiles.map(profile => profile.ingredientId));
+  const pendingNutrition = state.ingredients.filter(ingredient => !ingredientsWithNutrition.has(ingredient.id)).length;
+  const offLinked = state.ingredients.filter(ingredient => (ingredient.products || []).some(product => product.source === "openfoodfacts" || product.barcode)).length;
+
   return `
     <div class="card-header settings-header">
       <div>
@@ -87,11 +91,38 @@ export function renderSettings(state) {
         </div>
       </article>
 
-      <article class="card tips-card">
-        <h3>Cómo funciona ahora la semana</h3>
-        <p>En la pestaña <strong>Semana</strong>, cada día muestra todas las comidas configuradas y, dentro de cada comida, todos los miembros. Puedes añadir tantos platos como quieras a cada persona.</p>
-        <p class="muted">Al quitar un miembro o una comida, se limpia automáticamente su planificación asociada para mantener el estado consistente.</p>
+      <article class="card">
+        <div class="section-title-row">
+          <div>
+            <h3>Enriquecimiento nutricional por lotes</h3>
+            <p class="muted">Completa ingredientes pendientes usando primero productos asociados de Open Food Facts y después USDA para alimentos a granel.</p>
+          </div>
+          <span class="badge warning">${pendingNutrition} pendientes</span>
+        </div>
+        <div class="mini-facts">
+          <span>Ingredientes: ${state.ingredients.length}</span>
+          <span>Con nutrición: ${ingredientsWithNutrition.size}</span>
+          <span>Con producto/código: ${offLinked}</span>
+        </div>
+        <div class="help-note">
+          <p><strong>Flujo recomendado:</strong> primero personaliza nombres e ingredientes. Después lanza la búsqueda por lotes. La app guarda candidaturas y solo aplica las marcadas como suficientemente fiables.</p>
+          <p class="muted">Para resolver traducciones, se usa una tabla interna español→inglés y varios sinónimos antes de consultar USDA. Si la coincidencia no es clara, queda en revisión y no se aplica automáticamente.</p>
+        </div>
+        <div class="actions wrap">
+          <button type="button" data-action="scan-bulk-nutrition">Buscar nutrición pendiente</button>
+          <button type="button" class="secondary" data-action="apply-bulk-nutrition">Aplicar candidaturas fiables</button>
+          <button type="button" class="secondary" data-action="clear-bulk-nutrition-cache">Borrar candidaturas</button>
+        </div>
+        <div id="nutritionBatchResults" class="list nutrition-batch-results">
+          <p class="muted">Todavía no hay candidaturas. Lanza una búsqueda por lotes para generarlas.</p>
+        </div>
       </article>
     </div>
+
+    <article class="card tips-card">
+      <h3>Cómo funciona ahora la semana</h3>
+      <p>En la pestaña <strong>Semana</strong>, cada día muestra todas las comidas configuradas y, dentro de cada comida, todos los miembros. Puedes añadir tantos platos como quieras a cada persona.</p>
+      <p class="muted">Al quitar un miembro o una comida, se limpia automáticamente su planificación asociada para mantener el estado consistente.</p>
+    </article>
   `;
 }
