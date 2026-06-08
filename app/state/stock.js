@@ -1,4 +1,4 @@
-import { uid, nowIso, toBaseQty, normalizeUnit } from "../utils.js";
+import { uid, nowIso, toBaseQty, normalizeUnit, formatQty } from "../utils.js";
 import { getWeekProgress, setWeekProgress } from "./shoppingProgress.js";
 import { validatePurchaseInput } from "../validation.js";
 import { registerRecycling } from "./wasteRecycling.js";
@@ -93,4 +93,100 @@ export function registerPurchase(state, input) {
       });
     }
   }
+}
+
+export function getDishConsumptionKey(slot, dishId) {
+  return `${slot}__${dishId}`;
+}
+
+export function getDishConsumptionRecords(state, weekId = state.activeWeekId) {
+  state.mealConsumptions ||= [];
+  return state.mealConsumptions.filter(entry => entry.weekId === weekId);
+}
+
+export function isPlannedDishConsumed(state, slot, dishId, weekId = state.activeWeekId) {
+  const key = getDishConsumptionKey(slot, dishId);
+  return getDishConsumptionRecords(state, weekId).some(entry => entry.key === key && entry.status === "consumed");
+}
+
+export function consumePlannedDish(state, { weekId = state.activeWeekId, slot, dishId }) {
+  state.mealConsumptions ||= [];
+  const key = getDishConsumptionKey(slot, dishId);
+  const existing = state.mealConsumptions.find(entry => entry.weekId === weekId && entry.key === key && entry.status === "consumed");
+  if (existing) return { alreadyConsumed: true, warnings: [] };
+
+  const dish = state.dishes.find(item => item.id === dishId);
+  if (!dish) throw new Error("Plato no encontrado.");
+
+  const consumedLines = [];
+  const warnings = [];
+  for (const line of dish.recipe || []) {
+    const ingredient = state.ingredients.find(item => item.id === line.ingredientId);
+    if (!ingredient) {
+      warnings.push(`Ingrediente eliminado: ${line.ingredientId}`);
+      continue;
+    }
+    const required = toBaseQty(line.qty, line.unit);
+    const stock = toBaseQty(ingredient.qty, ingredient.unit);
+    if (required.unit !== stock.unit) {
+      warnings.push(`${ingredient.name}: unidad incompatible (${formatQty(line.qty, line.unit)} frente a ${formatQty(ingredient.qty, ingredient.unit)}).`);
+      continue;
+    }
+    const beforeQty = stock.qty;
+    const consumedQty = Math.min(stock.qty, required.qty);
+    const shortageQty = Math.max(0, required.qty - stock.qty);
+    ingredient.qty = Math.max(0, stock.qty - required.qty);
+    ingredient.unit = stock.unit;
+    ingredient.available = ingredient.qty > 0;
+    ingredient.updatedAt = nowIso();
+    if (shortageQty > 0) warnings.push(`${ingredient.name}: faltaban ${formatQty(shortageQty, stock.unit)} en stock.`);
+    consumedLines.push({
+      ingredientId: ingredient.id,
+      ingredientName: ingredient.name,
+      requiredQty: required.qty,
+      consumedQty,
+      beforeQty,
+      afterQty: ingredient.qty,
+      shortageQty,
+      unit: stock.unit
+    });
+  }
+
+  state.mealConsumptions.push({
+    id: uid("meal_consumption"),
+    key,
+    weekId,
+    slot,
+    dishId,
+    dishName: dish.name,
+    status: "consumed",
+    consumedAt: nowIso(),
+    ingredients: consumedLines,
+    warnings,
+    schemaVersion: 1
+  });
+
+  return { alreadyConsumed: false, warnings };
+}
+
+export function undoPlannedDishConsumption(state, { weekId = state.activeWeekId, slot, dishId }) {
+  state.mealConsumptions ||= [];
+  const key = getDishConsumptionKey(slot, dishId);
+  const record = [...state.mealConsumptions].reverse().find(entry => entry.weekId === weekId && entry.key === key && entry.status === "consumed");
+  if (!record) return { restored: false };
+
+  for (const line of record.ingredients || []) {
+    const ingredient = state.ingredients.find(item => item.id === line.ingredientId);
+    if (!ingredient) continue;
+    const stock = toBaseQty(ingredient.qty, ingredient.unit);
+    if (stock.unit !== line.unit) continue;
+    ingredient.qty = stock.qty + Number(line.consumedQty || 0);
+    ingredient.unit = stock.unit;
+    ingredient.available = ingredient.qty > 0;
+    ingredient.updatedAt = nowIso();
+  }
+
+  record.status = "undone";
+  record.undoneAt = nowIso();
+  return { restored: true };
 }
