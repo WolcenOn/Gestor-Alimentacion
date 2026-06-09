@@ -12,6 +12,10 @@ export function registerPurchase(state, input) {
   const ingredientBase = toBaseQty(ingredient.qty, ingredient.unit);
   if (ingredientBase.unit !== purchased.unit) throw new Error("No se pueden sumar unidades incompatibles al stock.");
 
+  const packageCount = Number(input.packagingQty) || 0;
+  const packageSizeQty = Number(input.packageSizeQty) || (packageCount > 0 ? purchased.qty / packageCount : purchased.qty);
+  const packageSizeUnit = normalizeUnit(input.packageSizeUnit || purchased.unit);
+
   ingredient.qty = ingredientBase.qty + purchased.qty;
   ingredient.unit = ingredientBase.unit;
   ingredient.available = ingredient.qty > 0;
@@ -22,6 +26,9 @@ export function registerPurchase(state, input) {
     ingredientId: ingredient.id,
     qty: purchased.qty,
     unit: purchased.unit,
+    packageCount,
+    packageSizeQty,
+    packageSizeUnit,
     barcode: input.barcode || "",
     brand: input.brand || "",
     purchaseDate: input.purchaseDate || new Date().toISOString().slice(0, 10),
@@ -30,7 +37,7 @@ export function registerPurchase(state, input) {
     storageType: input.storageType || ingredient.storageType || "pantry",
     source: input.source || "shopping-list",
     createdAt: nowIso(),
-    schemaVersion: 1
+    schemaVersion: 2
   });
 
   state.purchaseEntries.push({
@@ -41,14 +48,17 @@ export function registerPurchase(state, input) {
     requiredQty: Number(input.requiredQty) || 0,
     purchasedQty: purchased.qty,
     unit: purchased.unit,
+    packageCount,
+    packageSizeQty,
+    packageSizeUnit,
     barcode: input.barcode || "",
     brand: input.brand || "",
     price: Number(input.price) || 0,
     isPartial: Boolean(input.isPartial),
     packagingType: input.packagingType || "",
-    packagingQty: Number(input.packagingQty) || 0,
+    packagingQty: packageCount,
     createdAt: nowIso(),
-    schemaVersion: 1
+    schemaVersion: 2
   });
 
   const progress = getWeekProgress(state, input.weekId);
@@ -64,10 +74,10 @@ export function registerPurchase(state, input) {
   };
   setWeekProgress(state, input.weekId, progress);
 
-  if (Number(input.packagingQty) > 0) {
+  if (packageCount > 0) {
     registerRecycling(state, {
       packagingType: input.packagingType || "otro",
-      packagingQty: Number(input.packagingQty) || 0,
+      packagingQty: packageCount,
       source: "purchase",
       ingredientId: ingredient.id,
       ingredientName: ingredient.name,
@@ -77,19 +87,27 @@ export function registerPurchase(state, input) {
 
   if (input.barcode) {
     ingredient.products ||= [];
-    const exists = ingredient.products.some(p => p.barcode === input.barcode);
-    if (!exists) {
+    const existing = ingredient.products.find(p => p.barcode === input.barcode);
+    const productPayload = {
+      barcode: input.barcode,
+      brand: input.brand || "",
+      productName: input.productName || ingredient.name,
+      packageQty: packageSizeQty,
+      packageUnit: normalizeUnit(packageSizeUnit),
+      packageCount,
+      lastPurchasedQty: purchased.qty,
+      lastPurchasedUnit: purchased.unit,
+      price: Number(input.price) || 0,
+      source: input.productSource || "manual",
+      packagingType: input.packagingType || "otro",
+      updatedAt: nowIso()
+    };
+    if (existing) {
+      Object.assign(existing, productPayload);
+    } else {
       ingredient.products.push({
-        barcode: input.barcode,
-        brand: input.brand || "",
-        productName: input.productName || ingredient.name,
-        packageQty: purchased.qty,
-        packageUnit: normalizeUnit(purchased.unit),
-        price: Number(input.price) || 0,
-        source: input.productSource || "manual",
-        packagingType: input.packagingType || "otro",
-        createdAt: nowIso(),
-        updatedAt: nowIso()
+        ...productPayload,
+        createdAt: nowIso()
       });
     }
   }
