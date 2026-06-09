@@ -2,7 +2,7 @@ import { computeShoppingListWithProgress } from "../state/shoppingProgress.js";
 import { getExpiringIngredients } from "../state/history.js";
 import { DAYS, escapeHtml, formatMoney, formatQty } from "../utils.js";
 import { getWasteScore, getRecyclingSummary } from "../state/wasteRecycling.js";
-import { isPlannedDishConsumed } from "../state/stock.js";
+import { getPlannedDishStatus } from "../state/stock.js";
 
 export function renderDashboard(state) {
   const week = state.weeks.find(w => w.id === state.activeWeekId);
@@ -21,7 +21,8 @@ export function renderDashboard(state) {
   const recycling = getRecyclingSummary(state);
   const recyclingRows = Object.entries(recycling);
   const plannedDishes = buildPlannedDishRows(state, week);
-  const consumedCount = plannedDishes.filter(row => row.consumed).length;
+  const consumedCount = plannedDishes.filter(row => row.status === "consumed").length;
+  const skippedCount = plannedDishes.filter(row => row.status === "skipped").length;
 
   return `
     <div class="card-header">
@@ -45,9 +46,9 @@ export function renderDashboard(state) {
         <p class="muted">${partial} ingredientes están parcialmente comprados.</p>
       </article>
       <article class="card">
-        <h3>Platos cumplidos</h3>
-        <p class="metric">${consumedCount}/${plannedDishes.length}</p>
-        <p class="muted">Al marcarlos, se descuentan automáticamente sus ingredientes del stock.</p>
+        <h3>Platos revisados</h3>
+        <p class="metric">${consumedCount + skippedCount}/${plannedDishes.length}</p>
+        <p class="muted">Consumidos: ${consumedCount} · No consumidos: ${skippedCount}</p>
       </article>
     </div>
 
@@ -55,7 +56,7 @@ export function renderDashboard(state) {
       <div class="section-title-row">
         <div>
           <h3>Seguimiento del menú planificado</h3>
-          <p class="muted">Marca los platos que se han comido. La app descontará una vez los ingredientes de la receta. Si desmarcas, restaura lo consumido.</p>
+          <p class="muted">Pulsa <strong>Consumido</strong> para descontar ingredientes del stock. Pulsa <strong>No consumido</strong> si se comió fuera o se cambió el plato; no toca el stock.</p>
         </div>
         <span class="badge">${plannedDishes.length} platos</span>
       </div>
@@ -105,7 +106,7 @@ function buildPlannedDishRows(state, week) {
             member,
             slot,
             dish,
-            consumed: isPlannedDishConsumed(state, slot, dishId, week.id),
+            status: getPlannedDishStatus(state, slot, dishId, week.id),
             ingredients: (dish.recipe || []).map(line => {
               const ingredient = state.ingredients.find(item => item.id === line.ingredientId);
               return `${ingredient?.name || "Ingrediente eliminado"}: ${formatQty(line.qty, line.unit)}`;
@@ -119,17 +120,24 @@ function buildPlannedDishRows(state, week) {
 }
 
 function renderPlannedDishRow(row) {
+  const statusLabel = row.status === "consumed" ? "Consumido" : row.status === "skipped" ? "No consumido" : "Pendiente";
+  const statusClass = row.status === "consumed" ? "" : row.status === "skipped" ? "warning" : "";
   return `
-    <div class="item planned-dish-item ${row.consumed ? "consumed" : ""}">
-      <label class="check-row planning-check-row">
-        <input type="checkbox" data-action="toggle-planned-dish-consumed" data-slot="${escapeHtml(row.slot)}" data-dish-id="${escapeHtml(row.dish.id)}" ${row.consumed ? "checked" : ""}>
-        <span>
+    <div class="item planned-dish-item ${escapeHtml(row.status)}">
+      <div class="planned-dish-main">
+        <div>
           <strong>${escapeHtml(row.dish.name)}</strong>
-          <small>${escapeHtml(row.day)} · ${escapeHtml(row.meal.name)} · ${escapeHtml(row.member.name)}</small>
-        </span>
-      </label>
+          <p class="qty-line">${escapeHtml(row.day)} · ${escapeHtml(row.meal.name)} · ${escapeHtml(row.member.name)}</p>
+        </div>
+        <span class="badge ${statusClass}">${statusLabel}</span>
+      </div>
+      <div class="actions wrap compact-actions planned-dish-actions">
+        <button type="button" data-action="mark-planned-dish-consumed" data-slot="${escapeHtml(row.slot)}" data-dish-id="${escapeHtml(row.dish.id)}" ${row.status === "consumed" ? "disabled" : ""}>Consumido</button>
+        <button type="button" class="secondary" data-action="mark-planned-dish-skipped" data-slot="${escapeHtml(row.slot)}" data-dish-id="${escapeHtml(row.dish.id)}" ${row.status === "skipped" ? "disabled" : ""}>No consumido</button>
+        ${row.status !== "pending" ? `<button type="button" class="ghost" data-action="reopen-planned-dish" data-slot="${escapeHtml(row.slot)}" data-dish-id="${escapeHtml(row.dish.id)}">Reabrir</button>` : ""}
+      </div>
       <details>
-        <summary>Ver ingredientes que se descontarán</summary>
+        <summary>Ver ingredientes que se descontarán si marcas Consumido</summary>
         <ul>${row.ingredients.map(text => `<li>${escapeHtml(text)}</li>`).join("")}</ul>
       </details>
     </div>
