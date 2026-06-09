@@ -146,7 +146,15 @@ details[open] > .collapsible-summary .summary-hint::before { content: "Cerrar ·
 .modal-root:empty { display: none; }
 .modal-root { position: fixed; inset: 0; background: rgba(15,23,42,.42); display: grid; place-items: center; padding: 1rem; z-index: 20; }
 .modal { background: var(--surface-strong); border-radius: 24px; padding: 1rem; width: min(720px, 100%); max-height: 92vh; overflow: auto; box-shadow: 0 28px 90px rgba(15,23,42,.32); }
+.modal:has(.compact-scanner) { width: min(520px, calc(100vw - 1.5rem)); overflow: hidden; }
 .modal header { display: flex; align-items: start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.scanner-box { display: grid; gap: .8rem; }
+.scanner-frame { position: relative; overflow: hidden; border-radius: 18px; border: 1px solid var(--border); background: #0f172a; width: 100%; }
+.scanner-frame video { display: block; width: 100%; max-width: 100%; height: auto; object-fit: cover; }
+.compact-scanner { max-width: 100%; }
+.compact-scanner-frame { aspect-ratio: 4 / 3; max-height: min(52vh, 420px); }
+.compact-scanner-frame video { height: 100%; max-height: min(52vh, 420px); }
+.scanner-reticle { position: absolute; inset: 16%; border: 3px solid rgba(245, 158, 11, .85); border-radius: 16px; box-shadow: 0 0 0 999px rgba(15, 23, 42, .22); pointer-events: none; }
 .print-view { display: none; }
 .small { font-size: .9rem; }
 .tips-card { margin-top: 1rem; }
@@ -167,6 +175,17 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
   .collapsible-summary { align-items: flex-start; }
   .summary-hint { align-self: flex-start; }
   .quick-search-label { position: sticky; top: 3.85rem; z-index: 6; background: rgba(245,247,251,.92); padding: .45rem 0; margin: .55rem 0 .8rem; backdrop-filter: blur(10px); }
+  .modal-root { align-items: start; padding: .5rem; overflow-y: auto; }
+  .modal { max-height: calc(100dvh - 1rem); border-radius: 20px; }
+  .modal:has(.compact-scanner) { width: min(100%, 430px); }
+  .compact-scanner-frame { aspect-ratio: 3 / 4; max-height: min(56dvh, 390px); }
+  .compact-scanner-frame video { height: 100%; max-height: min(56dvh, 390px); }
+  .scanner-reticle { inset: 24% 12%; }
+}
+@media (max-width: 420px) {
+  .modal:has(.compact-scanner) { width: 100%; }
+  .compact-scanner-frame { max-height: 48dvh; }
+  .compact-scanner-frame video { max-height: 48dvh; }
 }
 @media print {
   body { background: white; }
