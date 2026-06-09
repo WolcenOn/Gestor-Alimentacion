@@ -1,6 +1,6 @@
 import { escapeHtml } from "../utils.js";
 import { computeDishNutrition, computeWeekNutrition, formatNutritionValue, missingIngredientNames, NUTRIENTS } from "../state/nutritionCalculator.js";
-import { computeDishGlycemicProfile, computeWeekGlycemicSummary, splitCarbs } from "../state/glycemicCalculator.js";
+import { computeWeekGlycemicSummary, estimateGlycemicImpactFromNutrition, splitCarbs } from "../state/glycemicCalculator.js";
 
 export function renderNutrition(state) {
   const weekNutrition = computeWeekNutrition(state);
@@ -67,7 +67,7 @@ export function renderNutrition(state) {
       <div class="section-title-row">
         <div>
           <h3>Nutrición e impacto por plato</h3>
-          <p class="muted">Busca por plato para ver valores calculados por 1 ración, azúcares simples, HC complejos e impacto estimado.</p>
+          <p class="muted">Busca por plato para ver valores calculados por 1 ración, azúcares simples, HC complejos e impacto estimado. La curva se calcula solo al desplegar el plato para evitar bloqueos.</p>
         </div>
         <span class="badge">${state.dishes.length} platos</span>
       </div>
@@ -128,38 +128,32 @@ function renderMemberDailyCard(bucket) {
 
 function renderDishNutritionItem(state, dish) {
   const data = computeDishNutrition(state, dish.id);
-  const glycemic = computeDishGlycemicProfile(state, dish.id);
+  const impact = estimateGlycemicImpactFromNutrition(data.total);
   const missingNames = missingIngredientNames(state, new Set(data.missing));
   const searchText = [dish.name, dish.category, dish.tags?.join(" "), dish.recipe?.map(line => state.ingredients.find(i => i.id === line.ingredientId)?.name).join(" ")].join(" ");
   return `
-    <div class="item nutrition-dish-item glycemic-level-${glycemic.impact.level}" data-search="${escapeHtml(searchText)}">
+    <div class="item nutrition-dish-item glycemic-level-${impact.level}" data-search="${escapeHtml(searchText)}">
       <div class="item-title">
         <div>
           <strong>${escapeHtml(dish.name)}</strong>
           <p class="qty-line">${formatNutritionValue("kcal", data.total.kcal)} · proteína ${formatNutritionValue("protein", data.total.protein)} · hidratos ${formatNutritionValue("carbs", data.total.carbs)} · grasa ${formatNutritionValue("fat", data.total.fat)}</p>
         </div>
-        <span class="badge ${missingNames.length ? "warning" : glycemic.impact.level === "alto" ? "danger" : glycemic.impact.level === "medio" ? "warning" : ""}">${missingNames.length ? "incompleto" : `impacto ${glycemic.impact.level}`}</span>
+        <span class="badge ${missingNames.length ? "warning" : impact.level === "alto" ? "danger" : impact.level === "medio" ? "warning" : ""}">${missingNames.length ? "incompleto" : `impacto ${impact.level}`}</span>
       </div>
       <div class="mini-facts">
-        <span>Azúcares ${formatNutritionValue("sugar", glycemic.impact.sugar)}</span>
-        <span>HC complejos ${formatNutritionValue("carbs", glycemic.impact.complexCarbs)}</span>
-        <span>Equiv. HC ${glycemic.impact.carbEquivalent} g</span>
-        <span>Subida teórica ${glycemic.impact.estimatedRise} mg/dL</span>
+        <span>Azúcares ${formatNutritionValue("sugar", impact.sugar)}</span>
+        <span>HC complejos ${formatNutritionValue("carbs", impact.complexCarbs)}</span>
+        <span>Equiv. HC ${impact.carbEquivalent} g</span>
+        <span>Subida teórica ${impact.estimatedRise} mg/dL</span>
       </div>
-      <details class="recipe-steps">
+      <details class="recipe-steps absorption-details" data-dish-id="${escapeHtml(dish.id)}">
         <summary>Ver curva de absorción estimada</summary>
-        <div class="absorption-bars">${renderAbsorptionBars(glycemic.curve)}</div>
+        <div class="absorption-bars" data-absorption-target><p class="small muted">Abre el desplegable para calcular la curva de este plato.</p></div>
         <p class="small muted">Estimación educativa inspirada en el modelo de GlucosaTrack: azúcares rápidos, HC complejos más lentos y retraso por grasa/proteína. No sustituye criterios sanitarios ni calcula dosis.</p>
       </details>
       ${missingNames.length ? `<p class="small muted">Faltan perfiles: ${escapeHtml(missingNames.join(", "))}</p>` : ""}
     </div>
   `;
-}
-
-function renderAbsorptionBars(curve) {
-  const points = curve.filter((_, index) => index % 4 === 0 || index === curve.length - 1);
-  const max = Math.max(...points.map(p => p.total), 1);
-  return points.map(point => `<div class="absorption-point"><span>${Math.round(point.time / 60)}h</span><div><i style="width:${Math.max(3, point.total / max * 100)}%"></i></div><strong>${point.total}g</strong></div>`).join("");
 }
 
 function renderIngredientNutritionItem(ingredient, profile) {
