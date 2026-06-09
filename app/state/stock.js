@@ -104,16 +104,36 @@ export function getDishConsumptionRecords(state, weekId = state.activeWeekId) {
   return state.mealConsumptions.filter(entry => entry.weekId === weekId);
 }
 
-export function isPlannedDishConsumed(state, slot, dishId, weekId = state.activeWeekId) {
+export function getPlannedDishStatus(state, slot, dishId, weekId = state.activeWeekId) {
   const key = getDishConsumptionKey(slot, dishId);
-  return getDishConsumptionRecords(state, weekId).some(entry => entry.key === key && entry.status === "consumed");
+  const active = [...getDishConsumptionRecords(state, weekId)].reverse().find(entry => entry.key === key && ["consumed", "skipped"].includes(entry.status));
+  return active?.status || "pending";
+}
+
+export function isPlannedDishConsumed(state, slot, dishId, weekId = state.activeWeekId) {
+  return getPlannedDishStatus(state, slot, dishId, weekId) === "consumed";
+}
+
+export function isPlannedDishSkipped(state, slot, dishId, weekId = state.activeWeekId) {
+  return getPlannedDishStatus(state, slot, dishId, weekId) === "skipped";
+}
+
+function markActiveRecordsAs(state, weekId, key, nextStatus) {
+  state.mealConsumptions ||= [];
+  for (const entry of state.mealConsumptions) {
+    if (entry.weekId === weekId && entry.key === key && ["consumed", "skipped"].includes(entry.status)) {
+      entry.status = nextStatus;
+      entry.updatedAt = nowIso();
+    }
+  }
 }
 
 export function consumePlannedDish(state, { weekId = state.activeWeekId, slot, dishId }) {
   state.mealConsumptions ||= [];
   const key = getDishConsumptionKey(slot, dishId);
-  const existing = state.mealConsumptions.find(entry => entry.weekId === weekId && entry.key === key && entry.status === "consumed");
-  if (existing) return { alreadyConsumed: true, warnings: [] };
+  const currentStatus = getPlannedDishStatus(state, slot, dishId, weekId);
+  if (currentStatus === "consumed") return { alreadyConsumed: true, warnings: [] };
+  if (currentStatus === "skipped") markActiveRecordsAs(state, weekId, key, "reopened");
 
   const dish = state.dishes.find(item => item.id === dishId);
   if (!dish) throw new Error("Plato no encontrado.");
@@ -167,6 +187,49 @@ export function consumePlannedDish(state, { weekId = state.activeWeekId, slot, d
   });
 
   return { alreadyConsumed: false, warnings };
+}
+
+export function skipPlannedDish(state, { weekId = state.activeWeekId, slot, dishId, reason = "not-eaten" }) {
+  state.mealConsumptions ||= [];
+  const key = getDishConsumptionKey(slot, dishId);
+  const currentStatus = getPlannedDishStatus(state, slot, dishId, weekId);
+  if (currentStatus === "skipped") return { alreadySkipped: true, restored: false };
+
+  let restored = false;
+  if (currentStatus === "consumed") restored = undoPlannedDishConsumption(state, { weekId, slot, dishId }).restored;
+
+  const dish = state.dishes.find(item => item.id === dishId);
+  if (!dish) throw new Error("Plato no encontrado.");
+  state.mealConsumptions.push({
+    id: uid("meal_skip"),
+    key,
+    weekId,
+    slot,
+    dishId,
+    dishName: dish.name,
+    status: "skipped",
+    reason,
+    skippedAt: nowIso(),
+    ingredients: [],
+    warnings: [],
+    schemaVersion: 1
+  });
+
+  return { alreadySkipped: false, restored };
+}
+
+export function reopenPlannedDish(state, { weekId = state.activeWeekId, slot, dishId }) {
+  const key = getDishConsumptionKey(slot, dishId);
+  const currentStatus = getPlannedDishStatus(state, slot, dishId, weekId);
+  if (currentStatus === "consumed") {
+    const result = undoPlannedDishConsumption(state, { weekId, slot, dishId });
+    return { reopened: result.restored, restored: result.restored };
+  }
+  if (currentStatus === "skipped") {
+    markActiveRecordsAs(state, weekId, key, "reopened");
+    return { reopened: true, restored: false };
+  }
+  return { reopened: false, restored: false };
 }
 
 export function undoPlannedDishConsumption(state, { weekId = state.activeWeekId, slot, dishId }) {
