@@ -66,9 +66,9 @@ function renderMiniCurve(curve) {
   const max = Math.max(...sampled.map(point => Number(point.total) || 0), 1);
   return `
     <div class="metabolic-curve-wrap">
-      <svg class="metabolic-curve" viewBox="0 0 320 120" role="img" aria-label="Curva estimada de absorción">
-        <path d="M0,112 L320,112" class="metabolic-axis"></path>
-        <path d="${path}" class="metabolic-line"></path>
+      <svg class="metabolic-curve" viewBox="0 0 320 120" role="img" aria-label="Curva estimada de absorción" style="width:100%;max-width:520px;height:auto;display:block">
+        <path d="M0,112 L320,112" stroke="currentColor" opacity="0.18" fill="none"></path>
+        <path d="${path}" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
       </svg>
       <div class="mini-facts">
         <span>Pico estimado: ${Math.round(max)} g eq.</span>
@@ -100,29 +100,30 @@ function renderMemberBadge(member) {
   return `<span class="badge">premium</span>`;
 }
 
-function renderMetabolicPanel(state = getState()) {
-  const members = state.familyMembers || [];
-  const premiumMembers = members.filter(member => metabolicSettings(member).enabled);
-  const selectedMember = premiumMembers[0] || members[0];
-  const selectedDish = state.dishes?.[0];
-  const nutrition = selectedDish ? computeDishNutrition(state, selectedDish.id) : null;
-  const memberSettings = metabolicSettings(selectedMember);
-  const impact = nutrition ? estimateGlycemicImpactFromNutrition(nutrition.total, memberSettings) : null;
-  const split = nutrition ? splitCarbs(nutrition.total) : null;
-
+function renderMetabolicView(state = getState()) {
+  const premiumMembers = state.familyMembers.filter(member => metabolicSettings(member).enabled);
+  const selectedMember = premiumMembers[0] || state.familyMembers[0];
+  const selectedDish = state.dishes[0];
   return `
+    <div class="card-header settings-header">
+      <div>
+        <p class="eyebrow">Premium experimental</p>
+        <h2>Simulación metabólica avanzada</h2>
+        <p class="muted">Módulo inspirado en GlucosaTrack. Recibe platos del gestor, usa ajustes por miembro y permite evolucionar hacia perfiles de diabetes, deporte, nutrición profesional, alergias y celiaquía.</p>
+      </div>
+    </div>
+
     <article class="card metabolic-premium-card" data-metabolic-premium>
       <div class="section-title-row">
         <div>
-          <p class="eyebrow">Premium experimental</p>
-          <h3>Simulación metabólica avanzada</h3>
-          <p class="muted">Módulo inspirado en GlucosaTrack. Usa platos del gestor y ajustes por miembro. Es una herramienta educativa, no médica.</p>
+          <h3>Simulación por plato y miembro</h3>
+          <p class="muted">Selecciona un miembro y un plato. Si el miembro tiene perfil avanzado, se aplican sus ajustes personalizados.</p>
         </div>
-        <span class="badge ${premiumMembers.length ? "warning" : ""}">${premiumMembers.length} perfil(es)</span>
+        <span class="badge ${premiumMembers.length ? "warning" : ""}">${premiumMembers.length} perfil(es) avanzado(s)</span>
       </div>
       <div class="warning-card">
         <span style="font-size:18px;flex-shrink:0;margin-top:1px">⚠️</span>
-        <div class="warning-text"><strong>Aviso:</strong> simulación no validada clínicamente. No sirve para decidir dosis, tratamientos ni cambios médicos sin profesional sanitario.</div>
+        <div class="warning-text"><strong>Aviso:</strong> simulación educativa no validada clínicamente. No sirve para decidir dosis, tratamientos ni cambios médicos sin profesional sanitario.</div>
       </div>
       <div class="form-grid">
         <label>Miembro
@@ -135,6 +136,24 @@ function renderMetabolicPanel(state = getState()) {
       <div data-metabolic-result>${renderMetabolicResult(state, selectedMember?.id, selectedDish?.id)}</div>
       <div class="actions wrap">
         <button type="button" data-action="open-member-metabolic-profile" data-member-id="${escapeHtml(selectedMember?.id || "")}">Editar perfil metabólico</button>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>Perfiles familiares</h3>
+      <p class="muted">Activa perfiles avanzados para diabetes/glucosa, deporte, nutrición profesional o restricciones alimentarias.</p>
+      <div class="list compact-list">
+        ${state.familyMembers.map(member => {
+          const settings = metabolicSettings(member);
+          return `<div class="item member-row">
+            <div>
+              <strong>${escapeHtml(member.name)}</strong>
+              <p class="qty-line">${settings.enabled ? `${escapeHtml(settings.profileType)} · ${settings.diabetes ? "glucosa" : "metabólico"}` : "Perfil básico"}</p>
+              ${renderMemberBadge(member)}
+            </div>
+            <button type="button" class="secondary" data-action="open-member-metabolic-profile" data-member-id="${escapeHtml(member.id)}">${settings.enabled ? "Editar" : "Activar"}</button>
+          </div>`;
+        }).join("")}
       </div>
     </article>
   `;
@@ -151,7 +170,7 @@ function renderMetabolicResult(state, memberId, dishId) {
   const split = splitCarbs(nutrition.total);
   return `
     <div class="grid cols-3 metabolic-summary-grid">
-      <div class="item"><strong>${escapeHtml(member.name)}</strong><p class="qty-line">${settings.enabled ? "Perfil avanzado activo" : "Perfil básico"} · ${settings.diabetes ? "diabetes/glucosa" : settings.profileType}</p></div>
+      <div class="item"><strong>${escapeHtml(member.name)}</strong><p class="qty-line">${settings.enabled ? "Perfil avanzado activo" : "Perfil básico"} · ${settings.diabetes ? "diabetes/glucosa" : escapeHtml(settings.profileType)}</p></div>
       <div class="item"><strong>${escapeHtml(dish.name)}</strong><p class="qty-line">${formatNutritionValue("kcal", nutrition.total.kcal)} · HC ${formatNutritionValue("carbs", nutrition.total.carbs)}</p></div>
       <div class="item glycemic-level-${impact.level}"><strong>Impacto ${levelLabel(impact.level)}</strong><p class="qty-line">Subida teórica ${impact.estimatedRise} mg/dL · equiv. ${impact.carbEquivalent} g</p></div>
     </div>
@@ -239,46 +258,45 @@ function saveMetabolicProfile(form) {
   }, "metabolic-profile");
   closeModal();
   showAlert("Perfil avanzado guardado.");
+  renderMetabolicTab();
 }
 
-function injectSettingsButtons(state = getState()) {
-  document.querySelectorAll(".member-row").forEach(row => {
-    const removeButton = row.querySelector("[data-member-id]");
-    const memberId = removeButton?.dataset.memberId;
-    if (!memberId || row.querySelector("[data-action='open-member-metabolic-profile']")) return;
-    const member = state.familyMembers.find(item => item.id === memberId);
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "secondary";
-    button.dataset.action = "open-member-metabolic-profile";
-    button.dataset.memberId = memberId;
-    button.textContent = metabolicSettings(member).enabled ? "Perfil avanzado" : "Activar premium";
-    removeButton.before(button);
-    const badge = document.createElement("span");
-    badge.innerHTML = renderMemberBadge(member);
-    row.querySelector(".qty-line")?.after(badge.firstElementChild);
-  });
+function ensureMetabolicTabButton() {
+  const tabs = document.querySelector(".tabs");
+  if (!tabs || tabs.querySelector("[data-metabolic-tab]")) return;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.dataset.metabolicTab = "true";
+  button.textContent = "Metabólico";
+  const nutritionButton = tabs.querySelector('[data-tab="nutrition"]');
+  nutritionButton?.after(button) || tabs.append(button);
 }
 
-function injectMetabolicPanel(state = getState()) {
-  const nutritionList = document.querySelector(".nutrition-dish-list");
-  if (!nutritionList || document.querySelector("[data-metabolic-premium]")) return;
-  const wrapper = document.createElement("div");
-  wrapper.innerHTML = renderMetabolicPanel(state);
-  nutritionList.closest("article.card")?.before(wrapper.firstElementChild);
+function renderMetabolicTab() {
+  const root = document.getElementById("viewRoot");
+  if (!root) return;
+  document.querySelectorAll("[data-tab], [data-metabolic-tab]").forEach(button => button.classList.remove("active"));
+  document.querySelector("[data-metabolic-tab]")?.classList.add("active");
+  root.innerHTML = renderMetabolicView(getState());
 }
 
-function refreshInjections() {
-  const state = getState();
-  injectSettingsButtons(state);
-  injectMetabolicPanel(state);
+function refresh() {
+  ensureMetabolicTabButton();
 }
 
-subscribe(() => queueMicrotask(refreshInjections));
-document.addEventListener("DOMContentLoaded", refreshInjections);
-setTimeout(refreshInjections, 0);
+subscribe(() => queueMicrotask(refresh));
+document.addEventListener("DOMContentLoaded", refresh);
+setTimeout(refresh, 0);
 
 document.addEventListener("click", event => {
+  const tab = event.target.closest("[data-metabolic-tab]");
+  if (tab) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    renderMetabolicTab();
+    return;
+  }
+
   const button = event.target.closest("[data-action]");
   if (!button) return;
   if (button.dataset.action === "open-member-metabolic-profile") {
@@ -304,5 +322,7 @@ document.addEventListener("change", event => {
   const memberId = panel.querySelector("[data-metabolic-member]")?.value;
   const dishId = panel.querySelector("[data-metabolic-dish]")?.value;
   const target = panel.querySelector("[data-metabolic-result]");
+  const editButton = panel.querySelector("[data-action='open-member-metabolic-profile']");
+  if (editButton) editButton.dataset.memberId = memberId || "";
   if (target) target.innerHTML = renderMetabolicResult(getState(), memberId, dishId);
 }, true);
