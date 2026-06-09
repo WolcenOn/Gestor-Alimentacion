@@ -17,37 +17,41 @@ export function openModal(html) {
 
 export function closeModal() { document.getElementById("modalRoot").innerHTML = ""; }
 
-export function renderPurchaseModal(state, ingredientId, mode = "manual") {
+export function renderPurchaseModal(state, ingredientId, mode = "manual", prefill = {}) {
   const item = computeShoppingListWithProgress(state).find(i => i.ingredientId === ingredientId);
   const ingredient = state.ingredients.find(i => i.id === ingredientId);
   if (!ingredient) return "";
-  const suggestedQty = item?.remainingQty || 1;
-  const unit = item?.unit || ingredient.unit;
+  const suggestedQty = prefill.purchasedQty || item?.remainingQty || 1;
+  const unit = prefill.unit || item?.unit || ingredient.unit;
+  const title = mode === "scan" ? "Compra escaneada" : "Añadir compra";
+  const subtitle = mode === "scan" && prefill.barcode
+    ? `${ingredient.name} · código ${prefill.barcode}`
+    : `${ingredient.name} · sugerido: ${formatQty(suggestedQty, unit)}`;
   return `
     <header>
-      <div><h2>${mode === "scan" ? "Escanear compra" : "Añadir compra"}</h2><p class="muted">${escapeHtml(ingredient.name)} · sugerido: ${formatQty(suggestedQty, unit)}</p></div>
+      <div><h2>${escapeHtml(title)}</h2><p class="muted">${escapeHtml(subtitle)}</p></div>
       <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
     </header>
     <form data-form="purchase" data-ingredient-id="${escapeHtml(ingredientId)}" data-required-qty="${escapeHtml(String(item?.missingQty || suggestedQty))}" data-unit="${escapeHtml(unit)}">
       <div class="form-grid">
         <label>Cantidad comprada<input name="purchasedQty" type="number" step="0.01" min="0.01" value="${escapeHtml(String(suggestedQty))}" required></label>
         <label>Unidad<select name="unit"><option ${unit === "g" ? "selected" : ""}>g</option><option ${unit === "kg" ? "selected" : ""}>kg</option><option ${unit === "ml" ? "selected" : ""}>ml</option><option ${unit === "l" ? "selected" : ""}>l</option><option ${unit === "unidades" ? "selected" : ""}>unidades</option></select></label>
-        <label>Código de barras<input name="barcode" inputmode="numeric" pattern="[0-9]*" placeholder="opcional"></label>
-        <label>Marca<input name="brand" placeholder="opcional"></label>
-        <label>Precio<input name="price" type="number" step="0.01" min="0" placeholder="opcional"></label>
-        <label>Fecha compra<input name="purchaseDate" type="date" value="${todayIsoDate()}"></label>
-        <label>Tipo de fecha<select name="dateType"><option value="expiry">Caducidad</option><option value="bestBefore">Consumo preferente</option><option value="none">Sin fecha</option></select></label>
-        <label>Fecha alimento<input name="expiryDate" type="date"></label>
-        <label>Conservación<select name="storageType"><option value="pantry">Despensa</option><option value="fridge">Nevera</option><option value="freezer">Congelador</option></select></label>
-        <label>Nombre producto<input name="productName" placeholder="opcional"></label>
-        <label>Tipo de envase<select name="packagingType"><option>plástico</option><option>cartón/papel</option><option>vidrio</option><option>metal</option><option>brik</option><option>orgánico</option><option>otro</option></select></label>
-        <label>Nº de envases para reciclar<input name="packagingQty" type="number" min="0" step="1" value="1"></label>
+        <label>Código de barras<input name="barcode" inputmode="numeric" pattern="[0-9]*" placeholder="opcional" value="${escapeHtml(prefill.barcode || "")}"></label>
+        <label>Marca<input name="brand" placeholder="opcional" value="${escapeHtml(prefill.brand || "")}"></label>
+        <label>Precio<input name="price" type="number" step="0.01" min="0" placeholder="opcional" value="${escapeHtml(String(prefill.price || ""))}"></label>
+        <label>Fecha compra<input name="purchaseDate" type="date" value="${escapeHtml(prefill.purchaseDate || todayIsoDate())}"></label>
+        <label>Tipo de fecha<select name="dateType"><option value="expiry" ${prefill.dateType === "expiry" ? "selected" : ""}>Caducidad</option><option value="bestBefore" ${prefill.dateType === "bestBefore" ? "selected" : ""}>Consumo preferente</option><option value="none" ${prefill.dateType === "none" ? "selected" : ""}>Sin fecha</option></select></label>
+        <label>Fecha alimento<input name="expiryDate" type="date" value="${escapeHtml(prefill.expiryDate || "")}"></label>
+        <label>Conservación<select name="storageType"><option value="pantry" ${prefill.storageType === "pantry" ? "selected" : ""}>Despensa</option><option value="fridge" ${prefill.storageType === "fridge" ? "selected" : ""}>Nevera</option><option value="freezer" ${prefill.storageType === "freezer" ? "selected" : ""}>Congelador</option></select></label>
+        <label>Nombre producto<input name="productName" placeholder="opcional" value="${escapeHtml(prefill.productName || ingredient.name || "")}"></label>
+        <label>Tipo de envase<select name="packagingType">${["plástico", "cartón/papel", "vidrio", "metal", "brik", "orgánico", "otro"].map(type => `<option ${String(prefill.packagingType || "otro") === type ? "selected" : ""}>${escapeHtml(type)}</option>`).join("")}</select></label>
+        <label>Nº de envases para reciclar<input name="packagingQty" type="number" min="0" step="1" value="${escapeHtml(String(prefill.packagingQty ?? 1))}"></label>
       </div>
-      <label>Notas<textarea name="notes"></textarea></label>
+      ${mode === "scan" ? `<p class="small muted">Se han rellenado los datos encontrados. Completa cantidad, caducidad o ubicación si faltan.</p>` : ""}
+      <label>Notas<textarea name="notes">${escapeHtml(prefill.notes || "")}</textarea></label>
       <div class="actions">
         <button name="purchaseMode" value="partial">Guardar compra parcial</button>
         <button name="purchaseMode" value="complete" class="secondary">Guardar compra completa</button>
-        ${mode === "scan" ? `<button type="button" class="secondary" data-action="open-purchase-scanner">Abrir cámara</button>` : ""}
       </div>
     </form>
   `;
@@ -64,20 +68,20 @@ export function getSubmitterValue(event, name) {
 export { parseNumber };
 
 
-export function renderBarcodeScannerModal({ title = "Escanear código", target = "purchase", ingredientId = "" } = {}) {
+export function renderBarcodeScannerModal({ title = "Escanear código", target = "purchase", ingredientId = "", autoStart = false } = {}) {
   return `
     <header>
-      <div><h2>${escapeHtml(title)}</h2><p class="muted">En móvil verás la cámara para apuntar al código. Si tu navegador no soporta BarcodeDetector, usa entrada manual.</p></div>
+      <div><h2>${escapeHtml(title)}</h2><p class="muted">Apunta al código de barras. Después se abrirá el formulario con los datos encontrados.</p></div>
       <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
     </header>
-    <div class="scanner-box" data-scanner-target="${escapeHtml(target)}" data-ingredient-id="${escapeHtml(ingredientId)}">
-      <div class="scanner-frame">
+    <div class="scanner-box compact-scanner" data-scanner-target="${escapeHtml(target)}" data-ingredient-id="${escapeHtml(ingredientId)}" data-auto-start="${autoStart ? "true" : "false"}">
+      <div class="scanner-frame compact-scanner-frame">
         <video id="barcodeVideo" autoplay muted playsinline></video>
         <div class="scanner-reticle" aria-hidden="true"></div>
       </div>
-      <p id="scannerStatus" class="small muted">Pulsa “Activar cámara”.</p>
+      <p id="scannerStatus" class="small muted">${autoStart ? "Activando cámara..." : "Pulsa “Activar cámara”."}</p>
       <div class="actions">
-        <button type="button" data-action="start-preview-scan">Activar cámara</button>
+        ${autoStart ? "" : `<button type="button" data-action="start-preview-scan">Activar cámara</button>`}
         <button type="button" class="secondary" data-action="close-modal">Cancelar</button>
       </div>
     </div>
