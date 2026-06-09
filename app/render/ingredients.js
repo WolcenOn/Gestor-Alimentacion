@@ -75,17 +75,41 @@ export function renderIngredients(state) {
   `;
 }
 
+function formatNumber(value) {
+  return Number(value || 0).toLocaleString("es-ES", { maximumFractionDigits: 3 });
+}
+
+function latestPackageInfo(state, ingredient) {
+  const lots = (state.purchaseLots || [])
+    .filter(lot => lot.ingredientId === ingredient.id && Number(lot.packageCount) > 0 && Number(lot.packageSizeQty) > 0)
+    .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+  const lot = lots[0];
+  if (lot) {
+    return `${formatNumber(lot.packageCount)} envase(s) × ${formatNumber(lot.packageSizeQty)} ${lot.packageSizeUnit || lot.unit} = ${formatNumber(lot.qty)} ${lot.unit}`;
+  }
+  const product = (ingredient.products || []).find(p => Number(p.packageCount) > 0 && Number(p.packageQty) > 0) || (ingredient.products || []).find(p => Number(p.packageQty) > 0);
+  if (!product) return "";
+  const count = Number(product.packageCount || 1);
+  const total = Number(product.lastPurchasedQty || (Number(product.packageQty || 0) * count));
+  return `${formatNumber(count)} envase(s) × ${formatNumber(product.packageQty)} ${product.packageUnit || ingredient.unit} = ${formatNumber(total)} ${product.lastPurchasedUnit || product.packageUnit || ingredient.unit}`;
+}
+
 function renderIngredientItem(state, i) {
   const family = state.ingredientFamilies.find(f => f.id === i.familyId)?.name || "Sin familia";
   const nutrition = state.nutritionProfiles.find(n => n.ingredientId === i.id);
   const productCount = (i.products || []).length;
-  const productText = (i.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging].filter(Boolean).join(" ")).join(" ");
+  const productText = (i.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit].filter(Boolean).join(" ")).join(" ");
   const packaging = i.packagingType || i.products?.find(p => p.packagingType || p.packaging)?.packagingType || i.products?.find(p => p.packaging)?.packaging || "sin envase";
-  const searchText = [i.name, family, i.qty, i.unit, i.expiryDate || "sin fecha", i.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", productText].join(" ");
+  const packageInfo = latestPackageInfo(state, i);
+  const searchText = [i.name, family, i.qty, i.unit, packageInfo, i.expiryDate || "sin fecha", i.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", productText].join(" ");
   return `
     <div class="item ingredient-item" data-search="${escapeHtml(searchText)}">
       <div class="item-title">
-        <div><strong>${escapeHtml(i.name)}</strong><p class="qty-line">${Number(i.qty).toLocaleString("es-ES")} ${escapeHtml(i.unit)} · ${escapeHtml(family)}</p></div>
+        <div>
+          <strong>${escapeHtml(i.name)}</strong>
+          <p class="qty-line">Stock total: ${formatNumber(i.qty)} ${escapeHtml(i.unit)} · ${escapeHtml(family)}</p>
+          ${packageInfo ? `<p class="small muted">Última compra: ${escapeHtml(packageInfo)}</p>` : ""}
+        </div>
         ${i.expiryDate ? `<span class="badge warning">${escapeHtml(i.expiryDate)}</span>` : `<span class="badge">sin fecha</span>`}
       </div>
       <div class="mini-facts">
