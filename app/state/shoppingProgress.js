@@ -47,8 +47,9 @@ export function computeShoppingListWithProgress(state, weekId = state.activeWeek
     const missingQty = Math.max(item.neededQty - stockBase, 0);
     const progressLine = progress[item.ingredientId] || { purchasedQty: 0, unit: item.unit, status: "pending" };
     const purchasedBase = areCompatibleUnits(progressLine.unit, item.unit) ? toBaseQty(progressLine.purchasedQty, progressLine.unit).qty : 0;
-    const remainingQty = Math.max(missingQty - purchasedBase, 0);
-    const status = remainingQty === 0 ? "done" : purchasedBase > 0 ? "partial" : "pending";
+    const skipped = progressLine.status === "skipped";
+    const remainingQty = skipped ? 0 : Math.max(missingQty - purchasedBase, 0);
+    const status = skipped ? "skipped" : remainingQty === 0 ? "done" : purchasedBase > 0 ? "partial" : "pending";
     return {
       ...item,
       stockQty: stockBase,
@@ -56,6 +57,7 @@ export function computeShoppingListWithProgress(state, weekId = state.activeWeek
       purchasedQty: purchasedBase,
       remainingQty,
       status,
+      skipped,
       display: {
         needed: formatQty(item.neededQty, item.unit),
         stock: formatQty(stockBase, item.unit),
@@ -65,4 +67,19 @@ export function computeShoppingListWithProgress(state, weekId = state.activeWeek
       }
     };
   });
+}
+
+export function skipShoppingItem(state, ingredientId, weekId = state.activeWeekId) {
+  const progress = getWeekProgress(state, weekId);
+  const existing = progress[ingredientId] || { requiredQty: 0, purchasedQty: 0, unit: "g", status: "pending" };
+  progress[ingredientId] = { ...existing, status: "skipped", skippedAt: new Date().toISOString() };
+  setWeekProgress(state, weekId, progress);
+}
+
+export function reopenShoppingItem(state, ingredientId, weekId = state.activeWeekId) {
+  const progress = getWeekProgress(state, weekId);
+  const existing = progress[ingredientId];
+  if (!existing) return;
+  progress[ingredientId] = { ...existing, status: Number(existing.purchasedQty || 0) > 0 ? "partial" : "pending", reopenedAt: new Date().toISOString() };
+  setWeekProgress(state, weekId, progress);
 }
