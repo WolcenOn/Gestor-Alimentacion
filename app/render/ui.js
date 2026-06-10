@@ -27,6 +27,7 @@ export function renderPurchaseModal(state, ingredientId, mode = "manual", prefil
   const calculatedQty = packageSizeQty ? Number(packageSizeQty) * packageCount : "";
   const suggestedQty = prefill.purchasedQty || calculatedQty || item?.remainingQty || 1;
   const unit = prefill.unit || packageSizeUnit || item?.unit || ingredient.unit;
+  const trustedChecked = prefill.trustedProduct || prefill.isTrusted || prefill.trusted || false;
   const title = mode === "scan" ? "Compra escaneada" : "Añadir compra";
   const subtitle = mode === "scan" && prefill.barcode
     ? `${ingredient.name} · código ${prefill.barcode}`
@@ -54,6 +55,7 @@ export function renderPurchaseModal(state, ingredientId, mode = "manual", prefil
         <label>Nombre producto<input name="productName" placeholder="opcional" value="${escapeHtml(prefill.productName || ingredient.name || "")}"></label>
         <label>Tipo de envase<select name="packagingType">${["plástico", "cartón/papel", "vidrio", "metal", "brik", "orgánico", "otro"].map(type => `<option ${String(prefill.packagingType || "otro") === type ? "selected" : ""}>${escapeHtml(type)}</option>`).join("")}</select></label>
       </div>
+      <label class="check-row"><input type="checkbox" name="trustedProduct" value="true" ${trustedChecked ? "checked" : ""}> <span>Marcar como producto de confianza para futuras compras rápidas</span></label>
       ${mode === "scan" ? `<p class="small muted">Se han rellenado los datos encontrados. Ajusta el nº de envases si compras más de una unidad.</p>` : ""}
       <label>Notas<textarea name="notes">${escapeHtml(prefill.notes || "")}</textarea></label>
       <div class="actions">
