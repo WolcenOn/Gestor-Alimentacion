@@ -1,6 +1,7 @@
 import { escapeHtml } from "../utils.js";
 
 const PACKAGING_OPTIONS = ["plástico", "cartón/papel", "vidrio", "metal", "brik", "orgánico", "otro"];
+const UNIT_OPTIONS = ["g", "kg", "ml", "l", "unidades"];
 
 export function renderIngredients(state) {
   const familyOptions = state.ingredientFamilies.map(f => `<option value="${escapeHtml(f.id)}">${escapeHtml(f.name)}</option>`).join("");
@@ -79,6 +80,12 @@ function formatNumber(value) {
   return Number(value || 0).toLocaleString("es-ES", { maximumFractionDigits: 3 });
 }
 
+function primaryFastProduct(ingredient) {
+  return (ingredient.products || []).find(p => p.barcode && Number(p.packageQty || p.packageQuantity || 0) > 0 && (p.packageUnit || p.unit || p.lastPurchasedUnit))
+    || (ingredient.products || [])[0]
+    || {};
+}
+
 function latestPackageInfo(state, ingredient) {
   const lots = (state.purchaseLots || [])
     .filter(lot => lot.ingredientId === ingredient.id && Number(lot.packageCount) > 0 && Number(lot.packageSizeQty) > 0)
@@ -87,19 +94,55 @@ function latestPackageInfo(state, ingredient) {
   if (lot) {
     return `${formatNumber(lot.packageCount)} envase(s) × ${formatNumber(lot.packageSizeQty)} ${lot.packageSizeUnit || lot.unit} = ${formatNumber(lot.qty)} ${lot.unit}`;
   }
-  const product = (ingredient.products || []).find(p => Number(p.packageCount) > 0 && Number(p.packageQty) > 0) || (ingredient.products || []).find(p => Number(p.packageQty) > 0);
-  if (!product) return "";
+  const product = primaryFastProduct(ingredient);
+  if (!product.packageQty) return "";
   const count = Number(product.packageCount || 1);
   const total = Number(product.lastPurchasedQty || (Number(product.packageQty || 0) * count));
   return `${formatNumber(count)} envase(s) × ${formatNumber(product.packageQty)} ${product.packageUnit || ingredient.unit} = ${formatNumber(total)} ${product.lastPurchasedUnit || product.packageUnit || ingredient.unit}`;
 }
 
 function hasFastPurchaseData(ingredient) {
-  return (ingredient.products || []).some(product => product.barcode && Number(product.packageQty || product.packageQuantity || 0) > 0 && (product.packageUnit || product.unit || product.lastPurchasedUnit));
+  const product = primaryFastProduct(ingredient);
+  return Boolean(product.barcode && Number(product.packageQty || product.packageQuantity || 0) > 0 && (product.packageUnit || product.unit || product.lastPurchasedUnit));
 }
 
 function isFastPurchaseEnabled(ingredient) {
   return Boolean(ingredient.trustedPurchase || ingredient.quickPurchaseTrusted || ingredient.trustedPurchaseEnabled);
+}
+
+function optionList(values, selected) {
+  return values.map(value => `<option value="${escapeHtml(value)}" ${String(selected || "") === value ? "selected" : ""}>${escapeHtml(value)}</option>`).join("");
+}
+
+function renderFastPurchasePanel(ingredient) {
+  const product = primaryFastProduct(ingredient);
+  const enabled = isFastPurchaseEnabled(ingredient);
+  const packageQty = Number(product.packageQty || product.packageQuantity || 0) || "";
+  const packageUnit = product.packageUnit || product.unit || product.lastPurchasedUnit || ingredient.unit || "g";
+  const packageCount = Number(product.packageCount || 1) || 1;
+  const total = packageQty ? Number(packageQty) * packageCount : 0;
+  return `
+    <details class="fast-purchase-panel">
+      <summary>${enabled ? "Compra rápida activa" : "Configurar compra rápida"}</summary>
+      <form data-form="fast-purchase-settings" data-ingredient-id="${escapeHtml(ingredient.id)}">
+        <label class="check-row">
+          <input type="checkbox" name="trustedPurchase" value="true" ${enabled ? "checked" : ""}>
+          <span><strong>Activar compra rápida en Compra</strong><small>Al escanear, solo pedirá nº de envases y calculará el total.</small></span>
+        </label>
+        <div class="form-grid">
+          <label>Código de barras<input name="barcode" inputmode="numeric" pattern="[0-9]*" value="${escapeHtml(product.barcode || "")}" placeholder="Ej. 8412345678901"></label>
+          <label>Marca<input name="brand" value="${escapeHtml(product.brand || "")}" placeholder="opcional"></label>
+          <label>Nombre producto<input name="productName" value="${escapeHtml(product.productName || ingredient.name || "")}" placeholder="Ej. Leche entera"></label>
+          <label>Cantidad por envase<input name="packageQty" type="number" step="0.01" min="0" value="${escapeHtml(String(packageQty))}" placeholder="Ej. 1"></label>
+          <label>Unidad envase<select name="packageUnit">${optionList(UNIT_OPTIONS, packageUnit)}</select></label>
+          <label>Envases habituales<input name="packageCount" type="number" step="1" min="1" value="${escapeHtml(String(packageCount))}"></label>
+          <label>Tipo de envase<select name="packagingType">${optionList(PACKAGING_OPTIONS, product.packagingType || ingredient.packagingType || "otro")}</select></label>
+        </div>
+        <p class="small muted">Total habitual: ${total ? `${formatNumber(total)} ${escapeHtml(packageUnit)}` : "rellena cantidad y unidad"}. En Compra se recalculará según los envases comprados.</p>
+        <div class="actions"><button type="submit" class="secondary">Guardar compra rápida</button></div>
+      </form>
+    </details>
+  `;
 }
 
 function renderIngredientItem(state, i) {
@@ -126,14 +169,13 @@ function renderIngredientItem(state, i) {
         <span>Productos asociados: ${productCount}</span>
         <span>Nutrición: ${nutrition ? "sí" : "pendiente"}</span>
         <span>Envase: ${escapeHtml(packaging)}</span>
-        <span>Compra rápida: ${fastEnabled ? "activa" : "no"}${fastReady ? "" : " · faltan envases"}</span>
+        <span>Compra rápida: ${fastEnabled ? "activa" : "no"}${fastReady ? "" : " · incompleta"}</span>
       </div>
+      ${renderFastPurchasePanel(i)}
       <div class="row-actions wrap">
         <button class="secondary" data-action="edit-stock" data-ingredient-id="${escapeHtml(i.id)}">Editar stock</button>
-        <button class="secondary" data-action="toggle-trusted-ingredient" data-ingredient-id="${escapeHtml(i.id)}" data-next-trusted="${fastEnabled ? "false" : "true"}" ${fastReady ? "" : "disabled"}>${fastEnabled ? "Desactivar compra rápida" : "Activar compra rápida"}</button>
         <button class="secondary" data-action="open-waste-modal" data-ingredient-id="${escapeHtml(i.id)}">Tirar</button>
         <button class="danger" data-action="delete-ingredient" data-ingredient-id="${escapeHtml(i.id)}">Eliminar</button>
       </div>
-      ${fastReady ? "" : `<p class="small muted">Para activar compra rápida, asocia un producto con código de barras, cantidad de envase y unidad.</p>`}
     </div>`;
 }
