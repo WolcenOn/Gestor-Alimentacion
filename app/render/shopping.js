@@ -48,12 +48,15 @@ export function renderShopping(state) {
 
 function groupShoppingItems(state, items) {
   const familyMap = new Map(state.ingredientFamilies.map(family => [family.id, family.name]));
+  const ingredientMap = new Map(state.ingredients.map(ingredient => [ingredient.id, ingredient]));
   const groups = {};
   for (const item of items) {
     const family = familyMap.get(item.familyId) || "Otros";
     const zone = supermarketZoneForFamily(family);
+    const ingredient = ingredientMap.get(item.ingredientId);
+    const fastPurchase = Boolean(ingredient?.trustedPurchase || ingredient?.quickPurchaseTrusted || ingredient?.trustedPurchaseEnabled);
     groups[zone] ||= { zone, items: [] };
-    groups[zone].items.push({ ...item, family, zone });
+    groups[zone].items.push({ ...item, family, zone, fastPurchase });
   }
   return groups;
 }
@@ -82,6 +85,7 @@ function renderShoppingGroup(group) {
 
 function renderShoppingItem(item) {
   const icon = item.status === "done" ? "✓" : item.status === "partial" ? "◐" : item.status === "skipped" ? "–" : "☐";
+  const fastIcon = item.fastPurchase ? "⚡ " : "";
   const statusText = item.status === "done"
     ? "Comprado completo"
     : item.status === "partial"
@@ -90,7 +94,7 @@ function renderShoppingItem(item) {
         ? `Omitido en esta compra · Necesario originalmente: ${item.display.missing}`
         : `Faltan: ${item.display.missing} · Tengo: ${item.display.stock}`;
   const badgeClass = item.status === "partial" || item.status === "skipped" ? "warning" : "";
-  const searchText = [item.name, item.family, item.zone, item.status, statusLabel(item.status), statusText, item.display?.missing, item.display?.stock, item.display?.remaining].join(" ");
+  const searchText = [item.name, item.family, item.zone, item.status, statusLabel(item.status), statusText, item.display?.missing, item.display?.stock, item.display?.remaining, item.fastPurchase ? "compra rápida" : ""].join(" ");
   return `
     <article class="item shopping-item supermarket-item ${escapeHtml(item.status)}" data-search="${escapeHtml(searchText)}">
       <div>
@@ -99,10 +103,10 @@ function renderShoppingItem(item) {
       </div>
       <div class="row-actions no-print supermarket-actions">
         ${item.status !== "done" && item.status !== "skipped" ? `
-          <button data-action="scan-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">Escanear</button>
-          <button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">Añadir manual</button>
+          <button data-action="scan-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Escanear</button>
+          <button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Añadir manual</button>
           <button class="ghost" data-action="skip-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">No comprar</button>` : ""}
-        ${item.status === "done" ? `<button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">Añadir más</button>` : ""}
+        ${item.status === "done" ? `<button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Añadir más</button>` : ""}
         ${item.status === "skipped" ? `<button class="secondary" data-action="reopen-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">Reactivar</button>` : ""}
       </div>
     </article>`;
