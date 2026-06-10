@@ -98,13 +98,17 @@ function hasFastPurchaseData(ingredient) {
   return (ingredient.products || []).some(product => product.barcode && Number(product.packageQty || product.packageQuantity || 0) > 0 && (product.packageUnit || product.unit || product.lastPurchasedUnit));
 }
 
+function isFastPurchaseEnabled(ingredient) {
+  return Boolean(ingredient.trustedPurchase || ingredient.quickPurchaseTrusted || ingredient.trustedPurchaseEnabled);
+}
+
 function renderIngredientItem(state, i) {
   const family = state.ingredientFamilies.find(f => f.id === i.familyId)?.name || "Sin familia";
   const nutrition = state.nutritionProfiles.find(n => n.ingredientId === i.id);
   const productCount = (i.products || []).length;
   const fastReady = hasFastPurchaseData(i);
-  const fastEnabled = Boolean(i.trustedPurchaseEnabled);
-  const productText = (i.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit, p.trustedProduct ? "confianza" : ""].filter(Boolean).join(" ")).join(" ");
+  const fastEnabled = isFastPurchaseEnabled(i);
+  const productText = (i.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit].filter(Boolean).join(" ")).join(" ");
   const packaging = i.packagingType || i.products?.find(p => p.packagingType || p.packaging)?.packagingType || i.products?.find(p => p.packaging)?.packaging || "sin envase";
   const packageInfo = latestPackageInfo(state, i);
   const searchText = [i.name, family, i.qty, i.unit, packageInfo, i.expiryDate || "sin fecha", i.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", fastEnabled ? "compra rápida confianza" : "compra normal", productText].join(" ");
@@ -126,7 +130,7 @@ function renderIngredientItem(state, i) {
       </div>
       <div class="row-actions wrap">
         <button class="secondary" data-action="edit-stock" data-ingredient-id="${escapeHtml(i.id)}">Editar stock</button>
-        <button class="secondary" data-action="toggle-ingredient-fast-purchase" data-ingredient-id="${escapeHtml(i.id)}" ${fastReady ? "" : "disabled"}>${fastEnabled ? "Desactivar compra rápida" : "Activar compra rápida"}</button>
+        <button class="secondary" data-action="toggle-trusted-ingredient" data-ingredient-id="${escapeHtml(i.id)}" data-next-trusted="${fastEnabled ? "false" : "true"}" ${fastReady ? "" : "disabled"}>${fastEnabled ? "Desactivar compra rápida" : "Activar compra rápida"}</button>
         <button class="secondary" data-action="open-waste-modal" data-ingredient-id="${escapeHtml(i.id)}">Tirar</button>
         <button class="danger" data-action="delete-ingredient" data-ingredient-id="${escapeHtml(i.id)}">Eliminar</button>
       </div>
