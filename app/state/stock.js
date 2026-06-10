@@ -95,6 +95,8 @@ export function registerPurchase(state, input) {
       packageQty: packageSizeQty,
       packageUnit: normalizeUnit(packageSizeUnit),
       packageCount,
+      trustedProduct: Boolean(input.trustedProduct || existing?.trustedProduct),
+      trustedAt: input.trustedProduct ? nowIso() : existing?.trustedAt,
       lastPurchasedQty: purchased.qty,
       lastPurchasedUnit: purchased.unit,
       price: Number(input.price) || 0,
