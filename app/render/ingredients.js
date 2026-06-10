@@ -64,7 +64,7 @@ export function renderIngredients(state) {
           <span class="badge">${state.ingredients.length} ingredientes</span>
         </div>
         <label class="quick-search-label">Búsqueda rápida de ingredientes
-          <input type="search" class="quick-search" placeholder="Ej. tomate, nevera, vidrio, sin fecha..." data-search-target=".ingredient-list .ingredient-item" data-empty-target="ingredientSearchEmpty">
+          <input type="search" class="quick-search" placeholder="Ej. tomate, nevera, vidrio, compra rápida..." data-search-target=".ingredient-list .ingredient-item" data-empty-target="ingredientSearchEmpty">
         </label>
         <div id="ingredientSearchEmpty" class="search-empty muted" hidden>No hay ingredientes que coincidan con la búsqueda.</div>
         <div class="list ingredient-list">
@@ -94,21 +94,27 @@ function latestPackageInfo(state, ingredient) {
   return `${formatNumber(count)} envase(s) × ${formatNumber(product.packageQty)} ${product.packageUnit || ingredient.unit} = ${formatNumber(total)} ${product.lastPurchasedUnit || product.packageUnit || ingredient.unit}`;
 }
 
+function hasFastPurchaseData(ingredient) {
+  return (ingredient.products || []).some(product => product.barcode && Number(product.packageQty || product.packageQuantity || 0) > 0 && (product.packageUnit || product.unit || product.lastPurchasedUnit));
+}
+
 function renderIngredientItem(state, i) {
   const family = state.ingredientFamilies.find(f => f.id === i.familyId)?.name || "Sin familia";
   const nutrition = state.nutritionProfiles.find(n => n.ingredientId === i.id);
   const productCount = (i.products || []).length;
-  const productText = (i.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit].filter(Boolean).join(" ")).join(" ");
+  const fastReady = hasFastPurchaseData(i);
+  const fastEnabled = Boolean(i.trustedPurchaseEnabled);
+  const productText = (i.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit, p.trustedProduct ? "confianza" : ""].filter(Boolean).join(" ")).join(" ");
   const packaging = i.packagingType || i.products?.find(p => p.packagingType || p.packaging)?.packagingType || i.products?.find(p => p.packaging)?.packaging || "sin envase";
   const packageInfo = latestPackageInfo(state, i);
-  const searchText = [i.name, family, i.qty, i.unit, packageInfo, i.expiryDate || "sin fecha", i.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", productText].join(" ");
+  const searchText = [i.name, family, i.qty, i.unit, packageInfo, i.expiryDate || "sin fecha", i.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", fastEnabled ? "compra rápida confianza" : "compra normal", productText].join(" ");
   return `
     <div class="item ingredient-item" data-search="${escapeHtml(searchText)}">
       <div class="item-title">
         <div>
           <strong>${escapeHtml(i.name)}</strong>
           <p class="qty-line">Stock total: ${formatNumber(i.qty)} ${escapeHtml(i.unit)} · ${escapeHtml(family)}</p>
-          ${packageInfo ? `<p class="small muted">Última compra: ${escapeHtml(packageInfo)}</p>` : ""}
+          ${packageInfo ? `<p class="small muted">Última compra/envase: ${escapeHtml(packageInfo)}</p>` : ""}
         </div>
         ${i.expiryDate ? `<span class="badge warning">${escapeHtml(i.expiryDate)}</span>` : `<span class="badge">sin fecha</span>`}
       </div>
@@ -116,11 +122,14 @@ function renderIngredientItem(state, i) {
         <span>Productos asociados: ${productCount}</span>
         <span>Nutrición: ${nutrition ? "sí" : "pendiente"}</span>
         <span>Envase: ${escapeHtml(packaging)}</span>
+        <span>Compra rápida: ${fastEnabled ? "activa" : "no"}${fastReady ? "" : " · faltan envases"}</span>
       </div>
       <div class="row-actions wrap">
         <button class="secondary" data-action="edit-stock" data-ingredient-id="${escapeHtml(i.id)}">Editar stock</button>
+        <button class="secondary" data-action="toggle-ingredient-fast-purchase" data-ingredient-id="${escapeHtml(i.id)}" ${fastReady ? "" : "disabled"}>${fastEnabled ? "Desactivar compra rápida" : "Activar compra rápida"}</button>
         <button class="secondary" data-action="open-waste-modal" data-ingredient-id="${escapeHtml(i.id)}">Tirar</button>
         <button class="danger" data-action="delete-ingredient" data-ingredient-id="${escapeHtml(i.id)}">Eliminar</button>
       </div>
+      ${fastReady ? "" : `<p class="small muted">Para activar compra rápida, asocia un producto con código de barras, cantidad de envase y unidad.</p>`}
     </div>`;
 }
