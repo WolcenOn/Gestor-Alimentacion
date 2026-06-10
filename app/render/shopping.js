@@ -35,6 +35,10 @@ export function renderShopping(state) {
         </div>
         <span class="badge">${items.length} líneas</span>
       </div>
+      <label class="quick-search-label">Buscar en la compra
+        <input type="search" class="quick-search" placeholder="Ej. tomate, lácteos, pendiente, comprado..." data-search-target=".supermarket-list .supermarket-item" data-empty-target="shoppingSearchEmpty">
+      </label>
+      <div id="shoppingSearchEmpty" class="search-empty muted" hidden>No hay líneas de compra que coincidan.</div>
       ${items.length ? Object.values(groups).map(renderShoppingGroup).join("") : `<p class="muted">Añade platos a la semana para generar la lista de compra.</p>`}
     </section>
 
@@ -49,7 +53,7 @@ function groupShoppingItems(state, items) {
     const family = familyMap.get(item.familyId) || "Otros";
     const zone = supermarketZoneForFamily(family);
     groups[zone] ||= { zone, items: [] };
-    groups[zone].items.push(item);
+    groups[zone].items.push({ ...item, family, zone });
   }
   return groups;
 }
@@ -86,8 +90,9 @@ function renderShoppingItem(item) {
         ? `Omitido en esta compra · Necesario originalmente: ${item.display.missing}`
         : `Faltan: ${item.display.missing} · Tengo: ${item.display.stock}`;
   const badgeClass = item.status === "partial" || item.status === "skipped" ? "warning" : "";
+  const searchText = [item.name, item.family, item.zone, item.status, statusLabel(item.status), statusText, item.display?.missing, item.display?.stock, item.display?.remaining].join(" ");
   return `
-    <article class="item shopping-item supermarket-item ${escapeHtml(item.status)}">
+    <article class="item shopping-item supermarket-item ${escapeHtml(item.status)}" data-search="${escapeHtml(searchText)}">
       <div>
         <div class="item-title"><strong>${icon} ${escapeHtml(item.name)}</strong><span class="badge ${badgeClass}">${escapeHtml(statusLabel(item.status))}</span></div>
         <p class="qty-line">${statusText}</p>
