@@ -1,7 +1,7 @@
 import { getState } from "./store.js";
 import { openModal, closeModal, renderBarcodeScannerModal, renderPurchaseModal, showAlert } from "./render/ui.js";
 import { scanBarcodeWithPreview } from "./services/barcodeScanner.js";
-import { lookupOpenFoodFacts, nutritionProfileFromOpenFoodFacts } from "./services/openFoodFacts.js";
+import { lookupOpenFoodFacts } from "./services/openFoodFacts.js";
 import { normalizePackagingType } from "./state/wasteRecycling.js";
 import { normalizeUnit, escapeHtml } from "./utils.js";
 
@@ -21,12 +21,12 @@ function getPackageUnit(product) {
   return normalizeUnit(product?.packageUnit || product?.unit || product?.lastPurchasedUnit || "");
 }
 
-function hasCompleteTrustedData(product) {
+function hasFastPurchaseData(product) {
   return Boolean(product?.barcode && getPackageQty(product) && getPackageUnit(product));
 }
 
-function isTrustedProduct(product) {
-  return Boolean(product?.trustedProduct || product?.trusted || hasCompleteTrustedData(product));
+function ingredientHasFastPurchaseEnabled(ingredient) {
+  return Boolean(ingredient?.trustedPurchase || ingredient?.quickPurchaseTrusted || ingredient?.trustedPurchaseEnabled);
 }
 
 function productToPurchasePrefill(product, barcode = "") {
@@ -41,7 +41,6 @@ function productToPurchasePrefill(product, barcode = "") {
     packageSizeQty,
     packageSizeUnit,
     packageCount,
-    trustedProduct: isTrustedProduct(product),
     purchasedQty: packageSizeQty ? Number(packageSizeQty) * packageCount : "",
     unit: packageSizeUnit,
     packagingType: normalizePackagingType(product.packaging || product.packagingType || ""),
@@ -66,11 +65,11 @@ function updatePackageTotal(form) {
   }
 }
 
-function openPurchaseFormWithPrefill(ingredientId, prefill = {}) {
+function openPurchaseFormWithPrefill(ingredientId, prefill = {}, { fastPurchase = false } = {}) {
   const state = getState();
   const mode = prefill.barcode ? "scan" : "manual";
-  if (prefill.trustedProduct && prefill.packageSizeQty && prefill.packageSizeUnit) {
-    openModal(renderTrustedPurchaseModal(state, ingredientId, prefill));
+  if (fastPurchase && prefill.packageSizeQty && prefill.packageSizeUnit) {
+    openModal(renderFastPurchaseModal(state, ingredientId, prefill));
   } else {
     openModal(renderPurchaseModal(state, ingredientId, mode, prefill));
   }
@@ -78,7 +77,7 @@ function openPurchaseFormWithPrefill(ingredientId, prefill = {}) {
   if (form) updatePackageTotal(form);
 }
 
-function renderTrustedPurchaseModal(state, ingredientId, prefill = {}) {
+function renderFastPurchaseModal(state, ingredientId, prefill = {}) {
   const ingredient = state.ingredients.find(i => i.id === ingredientId);
   if (!ingredient) return "";
   const packageSizeQty = Number(prefill.packageSizeQty || 0) || 0;
@@ -87,10 +86,10 @@ function renderTrustedPurchaseModal(state, ingredientId, prefill = {}) {
   const total = packageSizeQty * packageCount;
   return `
     <header>
-      <div><h2>Compra rápida</h2><p class="muted">${escapeHtml(prefill.productName || ingredient.name)} · producto de confianza</p></div>
+      <div><h2>Compra rápida</h2><p class="muted">${escapeHtml(prefill.productName || ingredient.name)} · activada desde Ingredientes</p></div>
       <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
     </header>
-    <form data-form="purchase" data-trusted-purchase="true" data-ingredient-id="${escapeHtml(ingredientId)}" data-required-qty="${escapeHtml(String(total || 1))}" data-unit="${escapeHtml(packageSizeUnit)}">
+    <form data-form="purchase" data-fast-purchase="true" data-ingredient-id="${escapeHtml(ingredientId)}" data-required-qty="${escapeHtml(String(total || 1))}" data-unit="${escapeHtml(packageSizeUnit)}">
       <div class="item success">
         <strong>${escapeHtml(ingredient.name)}</strong>
         <p class="qty-line">Cada envase aporta ${packageSizeQty.toLocaleString("es-ES")} ${escapeHtml(packageSizeUnit)} al stock.</p>
@@ -105,7 +104,6 @@ function renderTrustedPurchaseModal(state, ingredientId, prefill = {}) {
         <input type="hidden" name="brand" value="${escapeHtml(prefill.brand || "")}">
         <input type="hidden" name="productName" value="${escapeHtml(prefill.productName || ingredient.name)}">
         <input type="hidden" name="packagingType" value="${escapeHtml(prefill.packagingType || "otro")}">
-        <input type="hidden" name="trustedProduct" value="true">
         <input type="hidden" name="purchaseDate" value="${new Date().toISOString().slice(0, 10)}">
         <input type="hidden" name="dateType" value="none">
         <input type="hidden" name="storageType" value="${escapeHtml(ingredient.storageType || "pantry")}">
@@ -116,8 +114,8 @@ function renderTrustedPurchaseModal(state, ingredientId, prefill = {}) {
         <button name="purchaseMode" value="partial">Guardar compra</button>
         <button name="purchaseMode" value="complete" class="secondary">Cubrir pendiente</button>
       </div>
-      <details class="small"><summary>Editar ficha completa si algo ha cambiado</summary>
-        <p class="muted">Cierra esta ventana y usa “Añadir manual” para corregir tamaño de envase, unidad, marca o caducidad.</p>
+      <details class="small"><summary>Necesito editar la ficha completa</summary>
+        <p class="muted">Cierra esta ventana y desactiva o corrige Compra rápida desde Ingredientes → Editar stock/productos asociados.</p>
       </details>
     </form>
   `;
@@ -155,7 +153,6 @@ function renderScannedIngredientModal(product = {}, barcode = "") {
         <label>Marca<input name="brand" value="${escapeHtml(prefill.brand || "")}"></label>
         <label>Nombre del producto<input name="productName" value="${escapeHtml(prefill.productName || name)}"></label>
       </div>
-      <label class="check-row"><input type="checkbox" name="trustedProduct" value="true" ${hasCompleteTrustedData(prefill) ? "checked" : ""}> <span>Marcar como producto de confianza</span></label>
       <button>Añadir ingrediente</button>
     </form>
   `;
@@ -178,8 +175,9 @@ async function openDirectPurchaseScanner(ingredientId) {
   const local = findLocalProduct(state, barcode);
   if (local?.product) {
     closeModal();
-    openPurchaseFormWithPrefill(ingredientId, productToPurchasePrefill(local.product, barcode));
-    showAlert(isTrustedProduct(local.product) ? "Producto de confianza: solo indica cuántos envases has comprado." : "Producto encontrado en tu base local.");
+    const fastPurchase = ingredientHasFastPurchaseEnabled(local.ingredient) && hasFastPurchaseData(local.product);
+    openPurchaseFormWithPrefill(ingredientId, productToPurchasePrefill(local.product, barcode), { fastPurchase });
+    showAlert(fastPurchase ? "Compra rápida activada para este ingrediente: indica cuántos envases has comprado." : "Producto encontrado en tu base local.");
     return;
   }
   let offProduct = null;
