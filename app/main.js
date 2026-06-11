@@ -1,6 +1,6 @@
-import { getState, updateState, setState, subscribe, resetDemoData, migrateData } from "./store.js";
+import { getState, updateState, setState, subscribe, migrateData } from "./store.js";
 import { withMeta } from "./models.js";
-import { escapeHtml, stripDangerousText, parseNumber, downloadTextFile, readFileAsText, safeJsonParse, normalizeUnit } from "./utils.js";
+import { stripDangerousText, parseNumber, downloadTextFile, readFileAsText, safeJsonParse, normalizeUnit } from "./utils.js";
 import { validateState, validatePack } from "./validation.js";
 import { renderDashboard } from "./render/dashboard.js";
 import { renderIngredients } from "./render/ingredients.js";
@@ -11,17 +11,36 @@ import { renderPacks } from "./render/packs.js";
 import { renderNutrition } from "./render/nutrition.js";
 import { renderHelp } from "./render/help.js";
 import { renderSettings } from "./render/settings.js";
-import { showAlert, openModal, closeModal, renderPurchaseModal, renderBarcodeScannerModal, formToObject, getSubmitterValue } from "./render/ui.js";
+import { showAlert, closeModal, formToObject, getSubmitterValue } from "./render/ui.js";
 import { printShopping } from "./print/printShopping.js";
 import { printWeek } from "./print/printWeek.js";
 import { registerPurchase } from "./state/stock.js";
 import { computeShoppingListWithProgress } from "./state/shoppingProgress.js";
 import { createWeeklySnapshot } from "./state/history.js";
-import { lookupOpenFoodFacts, searchOpenFoodFacts, nutritionProfileFromOpenFoodFacts } from "./services/openFoodFacts.js";
-import { scanBarcodeOnce, scanBarcodeWithPreview } from "./services/barcodeScanner.js";
-import { listRemotePacks, loadRemotePack, mergePackIntoState } from "./services/packLoader.js";
-import { searchUsdaFoodData, nutritionProfileFromUsdaFood } from "./services/usdaFoodData.js";
-import { registerWaste, registerRecycling, normalizePackagingType } from "./state/wasteRecycling.js";
+import { lookupOpenFoodFacts } from "./services/openFoodFacts.js";
+import { scanBarcodeOnce } from "./services/barcodeScanner.js";
+import { mergePackIntoState } from "./services/packLoader.js";
+import {
+  newWeek,
+  duplicateWeek,
+  clearWeek,
+  removeDishFromSlot,
+  deleteIngredient,
+  deleteDish,
+  openEditStockModal,
+  listPacksIntoUi,
+  previewRemotePack,
+  openInlinePurchaseScanner,
+  openOpenFoodFactsModal,
+  searchOffIntoModal,
+  importOffProduct,
+  openUsdaModal,
+  searchUsdaIntoModal,
+  importUsdaFood,
+  openWasteModal,
+  openRecyclingModal,
+  startPreviewScanner
+} from "./mainActions.js";
 
 let activeTab = "dashboard";
 const viewRoot = document.getElementById("viewRoot");
@@ -40,12 +59,13 @@ function render() {
     settings: renderSettings,
     help: () => renderHelp()
   };
-  viewRoot.innerHTML = views[activeTab](state);
+  viewRoot.innerHTML = views[activeTab]?.(state) || `<p class="alert">Sección no disponible todavía.</p>`;
 }
 
 subscribe(render);
 render();
 window.onafterprint = () => delete document.body.dataset.printMode;
+window.__gestorMenuDebug = { getState };
 
 function guarded(fn) {
   return async (...args) => {
@@ -57,18 +77,23 @@ function guarded(fn) {
 document.addEventListener("click", guarded(async event => {
   const tab = event.target.closest("[data-tab]");
   if (tab) {
+    if (tab.dataset.tab === "metabolic") {
+      const metabolicTab = document.querySelector("[data-metabolic-tab]");
+      if (metabolicTab) metabolicTab.click();
+      else showAlert("El módulo metabólico se está cargando. Recarga la página si no aparece.", "error");
+      return;
+    }
     activeTab = tab.dataset.tab;
     render();
     return;
   }
+
   const button = event.target.closest("[data-action]");
   if (!button) return;
   const action = button.dataset.action;
   const state = getState();
 
   if (action === "close-modal") closeModal();
-  if (action === "manual-shopping-item") openModal(renderPurchaseModal(state, button.dataset.ingredientId, "manual"));
-  if (action === "scan-shopping-item") openModal(renderPurchaseModal(state, button.dataset.ingredientId, "scan"));
   if (action === "print-shopping") printShopping(state);
   if (action === "print-week") printWeek(state);
   if (action === "export-data") exportData(state);
@@ -89,17 +114,16 @@ document.addEventListener("click", guarded(async event => {
   if (action === "scan-now") await scanIntoPurchaseForm();
   if (action === "open-purchase-scanner") openInlinePurchaseScanner();
   if (action === "start-preview-scan") await startPreviewScanner();
-  if (action === "scan-new-ingredient") openModal(renderBarcodeScannerModal({ title: "Escanear nuevo alimento", target: "ingredient", ingredientId: "" }));
   if (action === "open-off-search") openOpenFoodFactsModal(button.dataset.ingredientId || "");
-  if (action === "import-off-product") importOffProduct(Number(button.dataset.index), button.dataset.ingredientId || "");
   if (action === "search-off-products") await searchOffIntoModal();
+  if (action === "import-off-product") importOffProduct(Number(button.dataset.index), button.dataset.ingredientId || "");
   if (action === "open-usda-search") openUsdaModal(button.dataset.ingredientId || "");
   if (action === "search-usda-foods") await searchUsdaIntoModal();
   if (action === "import-usda-food") importUsdaFood(Number(button.dataset.index), button.dataset.ingredientId || "");
   if (action === "open-waste-modal") openWasteModal(button.dataset.ingredientId);
   if (action === "open-recycling-modal") openRecyclingModal();
   if (action === "list-remote-packs") await listPacksIntoUi();
-  if (action === "install-remote-pack") await installRemotePack(button.dataset.index);
+  if (action === "install-remote-pack") await previewRemotePack(button.dataset.index);
 }));
 
 document.addEventListener("change", guarded(async event => {
@@ -114,7 +138,6 @@ document.addEventListener("change", guarded(async event => {
     }, "plan-add");
     showAlert("Plato añadido a la semana.");
   }
-
   if (event.target.id === "importFile") await importDataFile(event.target.files[0]);
   if (event.target.id === "packFile") await importLocalPack(event.target.files[0]);
 }));
@@ -126,12 +149,8 @@ document.addEventListener("submit", guarded(async event => {
   if (form.dataset.form === "ingredient") addIngredient(form);
   if (form.dataset.form === "dish") addDish(form);
   if (form.dataset.form === "purchase") await savePurchase(form, event);
-  if (form.dataset.form === "stock-adjust") saveStockAdjust(form);
-  if (form.dataset.form === "waste") saveWaste(form);
-  if (form.dataset.form === "recycling") saveRecycling(form);
   if (form.dataset.form === "family-member") addFamilyMember(form);
   if (form.dataset.form === "meal-type") addMealType(form);
-  if (form.dataset.form === "usda-settings") saveUsdaSettings(form);
 }));
 
 function addIngredient(form) {
@@ -220,12 +239,6 @@ function addMealType(form) {
   }, "meal-add");
   form.reset();
   showAlert("Comida añadida. Ya aparece en la semana.");
-}
-
-function saveUsdaSettings(form) {
-  const data = formToObject(form);
-  setSessionUsdaApiKey(data.usdaApiKey || "");
-  showAlert(data.usdaApiKey ? "API key de USDA guardada solo para esta sesión." : "API key de USDA borrada de esta sesión. Se usará DEMO_KEY para pruebas.");
 }
 
 function deleteFamilyMember(memberId) {
