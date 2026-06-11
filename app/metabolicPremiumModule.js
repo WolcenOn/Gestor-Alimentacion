@@ -1,4 +1,4 @@
-import { getState, updateState, subscribe } from "./store.js";
+import { getState, updateState } from "./store.js";
 import { computeDishNutrition, formatNutritionValue } from "./state/nutritionCalculator.js";
 import { estimateGlycemicImpactFromNutrition, buildAbsorptionCurve, splitCarbs } from "./state/glycemicCalculator.js";
 import { escapeHtml, stripDangerousText, parseNumber } from "./utils.js";
@@ -109,7 +109,7 @@ function renderMetabolicView(state = getState()) {
       <div>
         <p class="eyebrow">Premium experimental</p>
         <h2>Simulación metabólica avanzada</h2>
-        <p class="muted">Módulo inspirado en GlucosaTrack. Recibe platos del gestor, usa ajustes por miembro y permite evolucionar hacia perfiles de diabetes, deporte, nutrición profesional, alergias y celiaquía.</p>
+        <p class="muted">Módulo educativo. Usa platos del gestor, ajustes por miembro y permite perfiles de glucosa, deporte, restricciones y celiaquía.</p>
       </div>
     </div>
 
@@ -141,7 +141,7 @@ function renderMetabolicView(state = getState()) {
 
     <article class="card">
       <h3>Perfiles familiares</h3>
-      <p class="muted">Activa perfiles avanzados para diabetes/glucosa, deporte, nutrición profesional o restricciones alimentarias.</p>
+      <p class="muted">Activa perfiles avanzados para glucosa, deporte, nutrición profesional o restricciones alimentarias.</p>
       <div class="list compact-list">
         ${state.familyMembers.map(member => {
           const settings = metabolicSettings(member);
@@ -167,7 +167,6 @@ function renderMetabolicResult(state, memberId, dishId) {
   const nutrition = computeDishNutrition(state, dish.id);
   const impact = estimateGlycemicImpactFromNutrition(nutrition.total, settings);
   const curve = buildAbsorptionCurve(nutrition.total, settings);
-  const split = splitCarbs(nutrition.total);
   return `
     <div class="grid cols-3 metabolic-summary-grid">
       <div class="item"><strong>${escapeHtml(member.name)}</strong><p class="qty-line">${settings.enabled ? "Perfil avanzado activo" : "Perfil básico"} · ${settings.diabetes ? "diabetes/glucosa" : escapeHtml(settings.profileType)}</p></div>
@@ -261,35 +260,15 @@ function saveMetabolicProfile(form) {
   renderMetabolicTab();
 }
 
-function ensureMetabolicTabButton() {
-  const tabs = document.querySelector(".tabs");
-  if (!tabs || tabs.querySelector("[data-metabolic-tab]")) return;
-  const button = document.createElement("button");
-  button.type = "button";
-  button.dataset.metabolicTab = "true";
-  button.textContent = "Metabólico";
-  const nutritionButton = tabs.querySelector('[data-tab="nutrition"]');
-  nutritionButton?.after(button) || tabs.append(button);
-}
-
 function renderMetabolicTab() {
   const root = document.getElementById("viewRoot");
   if (!root) return;
-  document.querySelectorAll("[data-tab], [data-metabolic-tab]").forEach(button => button.classList.remove("active"));
-  document.querySelector("[data-metabolic-tab]")?.classList.add("active");
+  document.querySelectorAll("[data-tab]").forEach(button => button.classList.toggle("active", button.dataset.tab === "metabolic"));
   root.innerHTML = renderMetabolicView(getState());
 }
 
-function refresh() {
-  ensureMetabolicTabButton();
-}
-
-subscribe(() => queueMicrotask(refresh));
-document.addEventListener("DOMContentLoaded", refresh);
-setTimeout(refresh, 0);
-
 document.addEventListener("click", event => {
-  const tab = event.target.closest("[data-metabolic-tab]");
+  const tab = event.target.closest('[data-tab="metabolic"]');
   if (tab) {
     event.preventDefault();
     event.stopImmediatePropagation();
