@@ -1,11 +1,8 @@
 import { updateState } from "./store.js";
 import { formToObject, showAlert } from "./render/ui.js";
 import { normalizeUnit, parseNumber, stripDangerousText } from "./utils.js";
+import { productHasFastPurchaseData } from "./fastPurchase.js";
 import { normalizePackagingType } from "./state/wasteRecycling.js";
-
-function productHasFastPurchaseData(product = {}) {
-  return Boolean(Number(product.packageQty || product.packageQuantity || 0) > 0 && (product.packageUnit || product.unit || product.lastPurchasedUnit));
-}
 
 function productFromFastPurchaseForm(data, ingredientName = "") {
   return {
@@ -75,8 +72,6 @@ document.addEventListener("submit", event => {
       }
 
       ingredient.trustedPurchase = enabled;
-      ingredient.trustedPurchaseEnabled = enabled;
-      ingredient.quickPurchaseTrusted = enabled;
       ingredient.trustedPurchaseUpdatedAt = new Date().toISOString();
       ingredient.updatedAt = new Date().toISOString();
       savedEnabled = enabled;
