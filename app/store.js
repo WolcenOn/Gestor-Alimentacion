@@ -50,6 +50,32 @@ function migrateTrustedPurchaseFlags(data) {
   });
 }
 
+function snapshotFromNutritionProfile(profile) {
+  if (!profile) return null;
+  const { id, ingredientId, createdAt, updatedAt, schemaVersion, ...snapshot } = profile;
+  return { ...snapshot };
+}
+
+function migrateProductNutritionSnapshots(data) {
+  const profilesByIngredient = new Map((data.nutritionProfiles || []).map(profile => [profile.ingredientId, profile]));
+
+  data.ingredients.forEach(ingredient => {
+    ingredient.products ||= [];
+    ingredient.products.forEach(product => {
+      if (!("nutritionSnapshot" in product)) product.nutritionSnapshot = null;
+      product.activeNutrition = Boolean(product.activeNutrition);
+    });
+
+    const barcodeProducts = ingredient.products.filter(product => product.barcode);
+    const profile = profilesByIngredient.get(ingredient.id);
+    if (profile && barcodeProducts.length === 1) {
+      const product = barcodeProducts[0];
+      if (!product.nutritionSnapshot) product.nutritionSnapshot = snapshotFromNutritionProfile(profile);
+      ingredient.products.forEach(item => { item.activeNutrition = item === product; });
+    }
+  });
+}
+
 export function migrateData(data) {
   if (!data.meta) data.meta = { schemaVersion: 0, lastMigrationAt: new Date().toISOString() };
   ensureBaseCollections(data);
@@ -59,14 +85,15 @@ export function migrateData(data) {
     data.meta.lastMigrationAt = new Date().toISOString();
   }
 
-  // Patrón para próximas versiones:
-  // if (data.meta.schemaVersion < 2) {
-  //   aplicar cambios incrementales de v2;
-  //   data.meta.schemaVersion = 2;
-  //   data.meta.lastMigrationAt = new Date().toISOString();
-  // }
+  if (data.meta.schemaVersion < 2) {
+    migrateTrustedPurchaseFlags(data);
+    migrateProductNutritionSnapshots(data);
+    data.meta.schemaVersion = 2;
+    data.meta.lastMigrationAt = new Date().toISOString();
+  }
 
   migrateTrustedPurchaseFlags(data);
+  migrateProductNutritionSnapshots(data);
   data.meta.schemaVersion = SCHEMA_VERSION;
 
   if (!data.familyMembers.length) data.familyMembers.push({ id: "member_all", name: "Todos", nutritionTargetId: null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), schemaVersion: SCHEMA_VERSION });
