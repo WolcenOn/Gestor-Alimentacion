@@ -1,8 +1,7 @@
 import { escapeHtml } from "../utils.js";
-import { getFastPurchaseProduct, getPackageQty, getPackageUnit, ingredientHasFastPurchaseData, isTrustedPurchaseEnabled } from "../fastPurchase.js";
+import { renderIngredientCard } from "./ingredientCard.js";
 
 const PACKAGING_OPTIONS = ["plástico", "cartón/papel", "vidrio", "metal", "brik", "orgánico", "otro"];
-const UNIT_OPTIONS = ["g", "kg", "ml", "l", "unidades"];
 
 export function renderIngredients(state) {
   const familyOptions = state.ingredientFamilies.map(f => `<option value="${escapeHtml(f.id)}">${escapeHtml(f.name)}</option>`).join("");
@@ -70,104 +69,9 @@ export function renderIngredients(state) {
         </label>
         <div id="ingredientSearchEmpty" class="search-empty muted" hidden>No hay ingredientes que coincidan con la búsqueda.</div>
         <div class="list ingredient-list">
-          ${state.ingredients.map(i => renderIngredientItem(state, i)).join("")}
+          ${state.ingredients.map(ingredient => renderIngredientCard(state, ingredient, { mode: "manage" })).join("")}
         </div>
       </article>
     </div>
   `;
-}
-
-function formatNumber(value) {
-  return Number(value || 0).toLocaleString("es-ES", { maximumFractionDigits: 3 });
-}
-
-function primaryFastProduct(ingredient) {
-  return getFastPurchaseProduct(ingredient) || (ingredient.products || [])[0] || {};
-}
-
-function optionList(values, selected) {
-  return values.map(value => `<option value="${escapeHtml(value)}" ${String(selected || "") === value ? "selected" : ""}>${escapeHtml(value)}</option>`).join("");
-}
-
-function latestPackageInfo(state, ingredient) {
-  const lots = (state.purchaseLots || [])
-    .filter(lot => lot.ingredientId === ingredient.id && Number(lot.packageCount) > 0 && Number(lot.packageSizeQty) > 0)
-    .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
-  const lot = lots[0];
-  if (lot) {
-    return `${formatNumber(lot.packageCount)} envase(s) × ${formatNumber(lot.packageSizeQty)} ${lot.packageSizeUnit || lot.unit} = ${formatNumber(lot.qty)} ${lot.unit}`;
-  }
-  const product = primaryFastProduct(ingredient);
-  const packageQty = getPackageQty(product);
-  if (!packageQty) return "";
-  const count = Number(product.packageCount || 1);
-  const total = Number(product.lastPurchasedQty || (packageQty * count));
-  const packageUnit = getPackageUnit(product) || ingredient.unit;
-  return `${formatNumber(count)} envase(s) × ${formatNumber(packageQty)} ${packageUnit} = ${formatNumber(total)} ${product.lastPurchasedUnit || packageUnit || ingredient.unit}`;
-}
-
-function renderFastPurchasePanel(ingredient) {
-  const product = primaryFastProduct(ingredient);
-  const enabled = isTrustedPurchaseEnabled(ingredient);
-  const packageQty = getPackageQty(product) || "";
-  const packageUnit = getPackageUnit(product) || ingredient.unit || "g";
-  const packageCount = Number(product.packageCount || 1) || 1;
-  const total = packageQty ? Number(packageQty) * packageCount : 0;
-  return `
-    <details class="fast-purchase-panel">
-      <summary>${enabled ? "Compra rápida activa" : "Configurar compra rápida"}</summary>
-      <form data-form="fast-purchase-settings" data-ingredient-id="${escapeHtml(ingredient.id)}">
-        <label class="check-row">
-          <input type="checkbox" name="trustedPurchase" value="true" ${enabled ? "checked" : ""}>
-          <span><strong>Activar compra rápida en Compra</strong><small>Al escanear, solo pedirá nº de envases y calculará el total.</small></span>
-        </label>
-        <div class="form-grid">
-          <label>Código de barras<input name="barcode" inputmode="numeric" pattern="[0-9]*" value="${escapeHtml(product.barcode || "")}" placeholder="Ej. 8412345678901"></label>
-          <label>Marca<input name="brand" value="${escapeHtml(product.brand || "")}" placeholder="opcional"></label>
-          <label>Nombre producto<input name="productName" value="${escapeHtml(product.productName || ingredient.name || "")}" placeholder="Ej. Leche entera"></label>
-          <label>Cantidad por envase<input name="packageQty" type="number" step="0.01" min="0" value="${escapeHtml(String(packageQty))}" placeholder="Ej. 1"></label>
-          <label>Unidad envase<select name="packageUnit">${optionList(UNIT_OPTIONS, packageUnit)}</select></label>
-          <label>Envases habituales<input name="packageCount" type="number" step="1" min="1" value="${escapeHtml(String(packageCount))}"></label>
-          <label>Tipo de envase<select name="packagingType">${optionList(PACKAGING_OPTIONS, product.packagingType || ingredient.packagingType || "otro")}</select></label>
-        </div>
-        <p class="small muted">Total habitual: ${total ? `${formatNumber(total)} ${escapeHtml(packageUnit)}` : "rellena cantidad y unidad"}. En Compra se recalculará según los envases comprados.</p>
-        <div class="actions"><button type="submit" class="secondary">Guardar compra rápida</button></div>
-      </form>
-    </details>
-  `;
-}
-
-function renderIngredientItem(state, i) {
-  const family = state.ingredientFamilies.find(f => f.id === i.familyId)?.name || "Sin familia";
-  const nutrition = state.nutritionProfiles.find(n => n.ingredientId === i.id);
-  const productCount = (i.products || []).length;
-  const fastReady = ingredientHasFastPurchaseData(i);
-  const fastEnabled = isTrustedPurchaseEnabled(i);
-  const productText = (i.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit].filter(Boolean).join(" ")).join(" ");
-  const packaging = i.packagingType || i.products?.find(p => p.packagingType || p.packaging)?.packagingType || i.products?.find(p => p.packaging)?.packaging || "sin envase";
-  const packageInfo = latestPackageInfo(state, i);
-  const searchText = [i.name, family, i.qty, i.unit, packageInfo, i.expiryDate || "sin fecha", i.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", fastEnabled ? "compra rápida confianza" : "compra normal", productText].join(" ");
-  return `
-    <div class="item ingredient-item" data-search="${escapeHtml(searchText)}">
-      <div class="item-title">
-        <div>
-          <strong>${escapeHtml(i.name)}</strong>
-          <p class="qty-line">Stock total: ${formatNumber(i.qty)} ${escapeHtml(i.unit)} · ${escapeHtml(family)}</p>
-          ${packageInfo ? `<p class="small muted">Última compra/envase: ${escapeHtml(packageInfo)}</p>` : ""}
-        </div>
-        ${i.expiryDate ? `<span class="badge warning">${escapeHtml(i.expiryDate)}</span>` : `<span class="badge">sin fecha</span>`}
-      </div>
-      <div class="mini-facts">
-        <span>Productos asociados: ${productCount}</span>
-        <span>Nutrición: ${nutrition ? "sí" : "pendiente"}</span>
-        <span>Envase: ${escapeHtml(packaging)}</span>
-        <span>Compra rápida: ${fastEnabled ? "activa" : "no"}${fastReady ? "" : " · incompleta"}</span>
-      </div>
-      ${renderFastPurchasePanel(i)}
-      <div class="row-actions wrap">
-        <button class="secondary" data-action="edit-stock" data-ingredient-id="${escapeHtml(i.id)}">Editar stock</button>
-        <button class="secondary" data-action="open-waste-modal" data-ingredient-id="${escapeHtml(i.id)}">Tirar</button>
-        <button class="danger" data-action="delete-ingredient" data-ingredient-id="${escapeHtml(i.id)}">Eliminar</button>
-      </div>
-    </div>`;
 }
