@@ -1,4 +1,5 @@
 import { escapeHtml } from "../utils.js";
+import { getFastPurchaseProduct, getPackageQty, getPackageUnit, ingredientHasFastPurchaseData, isTrustedPurchaseEnabled } from "../fastPurchase.js";
 
 const PACKAGING_OPTIONS = ["plástico", "cartón/papel", "vidrio", "metal", "brik", "orgánico", "otro"];
 const UNIT_OPTIONS = ["g", "kg", "ml", "l", "unidades"];
@@ -81,9 +82,11 @@ function formatNumber(value) {
 }
 
 function primaryFastProduct(ingredient) {
-  return (ingredient.products || []).find(p => p.barcode && Number(p.packageQty || p.packageQuantity || 0) > 0 && (p.packageUnit || p.unit || p.lastPurchasedUnit))
-    || (ingredient.products || [])[0]
-    || {};
+  return getFastPurchaseProduct(ingredient) || (ingredient.products || [])[0] || {};
+}
+
+function optionList(values, selected) {
+  return values.map(value => `<option value="${escapeHtml(value)}" ${String(selected || "") === value ? "selected" : ""}>${escapeHtml(value)}</option>`).join("");
 }
 
 function latestPackageInfo(state, ingredient) {
@@ -95,30 +98,19 @@ function latestPackageInfo(state, ingredient) {
     return `${formatNumber(lot.packageCount)} envase(s) × ${formatNumber(lot.packageSizeQty)} ${lot.packageSizeUnit || lot.unit} = ${formatNumber(lot.qty)} ${lot.unit}`;
   }
   const product = primaryFastProduct(ingredient);
-  if (!product.packageQty) return "";
+  const packageQty = getPackageQty(product);
+  if (!packageQty) return "";
   const count = Number(product.packageCount || 1);
-  const total = Number(product.lastPurchasedQty || (Number(product.packageQty || 0) * count));
-  return `${formatNumber(count)} envase(s) × ${formatNumber(product.packageQty)} ${product.packageUnit || ingredient.unit} = ${formatNumber(total)} ${product.lastPurchasedUnit || product.packageUnit || ingredient.unit}`;
-}
-
-function hasFastPurchaseData(ingredient) {
-  const product = primaryFastProduct(ingredient);
-  return Boolean(product.barcode && Number(product.packageQty || product.packageQuantity || 0) > 0 && (product.packageUnit || product.unit || product.lastPurchasedUnit));
-}
-
-function isFastPurchaseEnabled(ingredient) {
-  return Boolean(ingredient.trustedPurchase || ingredient.quickPurchaseTrusted || ingredient.trustedPurchaseEnabled);
-}
-
-function optionList(values, selected) {
-  return values.map(value => `<option value="${escapeHtml(value)}" ${String(selected || "") === value ? "selected" : ""}>${escapeHtml(value)}</option>`).join("");
+  const total = Number(product.lastPurchasedQty || (packageQty * count));
+  const packageUnit = getPackageUnit(product) || ingredient.unit;
+  return `${formatNumber(count)} envase(s) × ${formatNumber(packageQty)} ${packageUnit} = ${formatNumber(total)} ${product.lastPurchasedUnit || packageUnit || ingredient.unit}`;
 }
 
 function renderFastPurchasePanel(ingredient) {
   const product = primaryFastProduct(ingredient);
-  const enabled = isFastPurchaseEnabled(ingredient);
-  const packageQty = Number(product.packageQty || product.packageQuantity || 0) || "";
-  const packageUnit = product.packageUnit || product.unit || product.lastPurchasedUnit || ingredient.unit || "g";
+  const enabled = isTrustedPurchaseEnabled(ingredient);
+  const packageQty = getPackageQty(product) || "";
+  const packageUnit = getPackageUnit(product) || ingredient.unit || "g";
   const packageCount = Number(product.packageCount || 1) || 1;
   const total = packageQty ? Number(packageQty) * packageCount : 0;
   return `
@@ -149,8 +141,8 @@ function renderIngredientItem(state, i) {
   const family = state.ingredientFamilies.find(f => f.id === i.familyId)?.name || "Sin familia";
   const nutrition = state.nutritionProfiles.find(n => n.ingredientId === i.id);
   const productCount = (i.products || []).length;
-  const fastReady = hasFastPurchaseData(i);
-  const fastEnabled = isFastPurchaseEnabled(i);
+  const fastReady = ingredientHasFastPurchaseData(i);
+  const fastEnabled = isTrustedPurchaseEnabled(i);
   const productText = (i.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit].filter(Boolean).join(" ")).join(" ");
   const packaging = i.packagingType || i.products?.find(p => p.packagingType || p.packaging)?.packagingType || i.products?.find(p => p.packaging)?.packaging || "sin envase";
   const packageInfo = latestPackageInfo(state, i);
