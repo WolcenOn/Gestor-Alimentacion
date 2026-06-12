@@ -1,6 +1,7 @@
 import { computeShoppingListWithProgress } from "../state/shoppingProgress.js";
 import { escapeHtml } from "../utils.js";
 import { isTrustedPurchaseEnabled } from "../fastPurchase.js";
+import { renderIngredientCard } from "./ingredientCard.js";
 
 export function renderShopping(state) {
   const items = computeShoppingListWithProgress(state);
@@ -40,7 +41,7 @@ export function renderShopping(state) {
         <input type="search" class="quick-search" placeholder="Ej. tomate, lácteos, pendiente, comprado..." data-search-target=".supermarket-list .supermarket-item" data-empty-target="shoppingSearchEmpty">
       </label>
       <div id="shoppingSearchEmpty" class="search-empty muted" hidden>No hay líneas de compra que coincidan.</div>
-      ${items.length ? Object.values(groups).map(renderShoppingGroup).join("") : `<p class="muted">Añade platos a la semana para generar la lista de compra.</p>`}
+      ${items.length ? Object.values(groups).map(group => renderShoppingGroup(state, group)).join("") : `<p class="muted">Añade platos a la semana para generar la lista de compra.</p>`}
     </section>
 
     ${pendingItems.length ? "" : `<p class="alert">No queda nada pendiente de compra para esta semana.</p>`}
@@ -57,7 +58,7 @@ function groupShoppingItems(state, items) {
     const ingredient = ingredientMap.get(item.ingredientId);
     const fastPurchase = isTrustedPurchaseEnabled(ingredient);
     groups[zone] ||= { zone, items: [] };
-    groups[zone].items.push({ ...item, family, zone, fastPurchase });
+    groups[zone].items.push({ ...item, ingredient, family, zone, fastPurchase });
   }
   return groups;
 }
@@ -72,50 +73,14 @@ function supermarketZoneForFamily(name = "") {
   return name || "Otros";
 }
 
-function renderShoppingGroup(group) {
+function renderShoppingGroup(state, group) {
   const active = group.items.filter(item => item.status !== "done" && item.status !== "skipped").length;
   return `
     <details class="shopping-zone" open>
       <summary><strong>${escapeHtml(group.zone)}</strong><span class="badge">${active}/${group.items.length}</span></summary>
       <div class="list supermarket-list">
-        ${group.items.map(renderShoppingItem).join("")}
+        ${group.items.map(item => renderIngredientCard(state, item.ingredient || {}, { mode: "shop", shoppingItem: item })).join("")}
       </div>
     </details>
   `;
-}
-
-function renderShoppingItem(item) {
-  const icon = item.status === "done" ? "✓" : item.status === "partial" ? "◐" : item.status === "skipped" ? "–" : "☐";
-  const fastIcon = item.fastPurchase ? "⚡ " : "";
-  const statusText = item.status === "done"
-    ? "Comprado completo"
-    : item.status === "partial"
-      ? `Necesario: ${item.display.missing} · Comprado: ${item.display.purchased} · Falta: ${item.display.remaining}`
-      : item.status === "skipped"
-        ? `Omitido en esta compra · Necesario originalmente: ${item.display.missing}`
-        : `Faltan: ${item.display.missing} · Tengo: ${item.display.stock}`;
-  const badgeClass = item.status === "partial" || item.status === "skipped" ? "warning" : "";
-  const searchText = [item.name, item.family, item.zone, item.status, statusLabel(item.status), statusText, item.display?.missing, item.display?.stock, item.display?.remaining, item.fastPurchase ? "compra rápida" : ""].join(" ");
-  return `
-    <article class="item shopping-item supermarket-item ${escapeHtml(item.status)}" data-search="${escapeHtml(searchText)}">
-      <div>
-        <div class="item-title"><strong>${icon} ${escapeHtml(item.name)}</strong><span class="badge ${badgeClass}">${escapeHtml(statusLabel(item.status))}</span></div>
-        <p class="qty-line">${statusText}</p>
-      </div>
-      <div class="row-actions no-print supermarket-actions">
-        ${item.status !== "done" && item.status !== "skipped" ? `
-          <button data-action="scan-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Escanear</button>
-          <button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Añadir manual</button>
-          <button class="ghost" data-action="skip-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">No comprar</button>` : ""}
-        ${item.status === "done" ? `<button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Añadir más</button>` : ""}
-        ${item.status === "skipped" ? `<button class="secondary" data-action="reopen-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">Reactivar</button>` : ""}
-      </div>
-    </article>`;
-}
-
-function statusLabel(status) {
-  if (status === "done") return "comprado";
-  if (status === "partial") return "parcial";
-  if (status === "skipped") return "no comprar";
-  return "pendiente";
 }
