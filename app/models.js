@@ -1,6 +1,6 @@
 import { uid, nowIso, todayIsoDate } from "./utils.js";
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export function withMeta(entity, prefix) {
   const stamp = nowIso();
