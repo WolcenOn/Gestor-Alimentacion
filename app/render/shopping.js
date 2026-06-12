@@ -1,5 +1,6 @@
 import { computeShoppingListWithProgress } from "../state/shoppingProgress.js";
 import { escapeHtml } from "../utils.js";
+import { isTrustedPurchaseEnabled } from "../fastPurchase.js";
 
 export function renderShopping(state) {
   const items = computeShoppingListWithProgress(state);
@@ -54,7 +55,7 @@ function groupShoppingItems(state, items) {
     const family = familyMap.get(item.familyId) || "Otros";
     const zone = supermarketZoneForFamily(family);
     const ingredient = ingredientMap.get(item.ingredientId);
-    const fastPurchase = Boolean(ingredient?.trustedPurchase || ingredient?.quickPurchaseTrusted || ingredient?.trustedPurchaseEnabled);
+    const fastPurchase = isTrustedPurchaseEnabled(ingredient);
     groups[zone] ||= { zone, items: [] };
     groups[zone].items.push({ ...item, family, zone, fastPurchase });
   }
