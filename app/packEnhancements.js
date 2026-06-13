@@ -18,6 +18,10 @@ function root() {
   return document.getElementById("remotePackList");
 }
 
+function packInstallSelector() {
+  return 'form[data-form="pack-install"], form[data-form="install-pack"]';
+}
+
 document.addEventListener("click", async event => {
   const button = event.target.closest("[data-action]");
   if (!button) return;
@@ -36,13 +40,13 @@ document.addEventListener("click", async event => {
 
     if (action === "select-all-pack-dishes") {
       stop(event);
-      document.querySelectorAll('form[data-form="install-pack"] input[name="dishIds"]').forEach(input => { input.checked = true; });
+      document.querySelectorAll(`${packInstallSelector()} input[name="dishIds"]`).forEach(input => { input.checked = true; });
       showAlert("Todas las recetas del pack están seleccionadas.");
     }
 
     if (action === "clear-pack-dishes") {
       stop(event);
-      document.querySelectorAll('form[data-form="install-pack"] input[name="dishIds"]').forEach(input => { input.checked = false; });
+      document.querySelectorAll(`${packInstallSelector()} input[name="dishIds"]`).forEach(input => { input.checked = false; });
       showAlert("Recetas desmarcadas. Marca las que quieras importar.");
     }
 
@@ -74,7 +78,7 @@ document.addEventListener("submit", event => {
   if (!form) return;
 
   try {
-    if (form.dataset.form === "install-pack") {
+    if (form.dataset.form === "pack-install" || form.dataset.form === "install-pack") {
       stop(event);
       installPreviewedPack(form, event);
     }
