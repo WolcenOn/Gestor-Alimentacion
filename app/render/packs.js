@@ -79,7 +79,7 @@ export function renderPackPreview(pack, sourceIndex = "local") {
       </div>
       <button class="secondary" data-action="close-modal">×</button>
     </header>
-    <form data-form="install-pack" data-pack-index="${escapeHtml(String(sourceIndex))}">
+    <form data-form="pack-install" data-pack-index="${escapeHtml(String(sourceIndex))}">
       <div class="item success">
         <strong>Pack cargado correctamente</strong>
         <p class="qty-line">Se han detectado ${dishCount} receta(s). El botón principal instala el pack completo.</p>
