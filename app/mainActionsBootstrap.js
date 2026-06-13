@@ -7,11 +7,6 @@ import {
   deleteDish,
   openEditStockModal,
   saveStockAdjust,
-  listPacksIntoUi,
-  previewRemotePack,
-  installPreviewedPack,
-  generatePackPrompt,
-  copyPackPrompt,
   startPreviewScanner,
   openInlinePurchaseScanner,
   openOpenFoodFactsModal,
@@ -25,7 +20,7 @@ import {
   openRecyclingModal,
   saveRecycling
 } from "./mainActions.js";
-import { formToObject, getSubmitterValue, showAlert } from "./render/ui.js";
+import { formToObject, showAlert } from "./render/ui.js";
 
 const USDA_SESSION_KEY = "gestorMenuSemanal.usdaApiKey.session";
 
@@ -71,10 +66,6 @@ document.addEventListener("click", guarded(async event => {
   if (action === "import-usda-food") { stop(event); importUsdaFood(Number(button.dataset.index), button.dataset.ingredientId || ""); }
   if (action === "open-waste-modal") { stop(event); openWasteModal(button.dataset.ingredientId); }
   if (action === "open-recycling-modal") { stop(event); openRecyclingModal(); }
-  if (action === "list-remote-packs") { stop(event); await listPacksIntoUi(); }
-  if (action === "preview-remote-pack") { stop(event); await previewRemotePack(button.dataset.index); }
-  if (action === "install-remote-pack") { stop(event); await previewRemotePack(button.dataset.index); }
-  if (action === "copy-pack-prompt") { stop(event); await copyPackPrompt(); }
 }), true);
 
 document.addEventListener("submit", guarded(async event => {
@@ -84,6 +75,4 @@ document.addEventListener("submit", guarded(async event => {
   if (form.dataset.form === "waste") { stop(event); saveWaste(form); }
   if (form.dataset.form === "recycling") { stop(event); saveRecycling(form); }
   if (form.dataset.form === "usda-settings") { stop(event); saveUsdaSettings(form); }
-  if (form.dataset.form === "pack-install") { stop(event); installPreviewedPack(form, event); }
-  if (form.dataset.form === "pack-prompt") { stop(event); generatePackPrompt(form); }
 }), true);
