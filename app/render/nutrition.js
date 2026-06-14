@@ -21,7 +21,7 @@ export function renderNutrition(state) {
       <article class="card">
         <h3>Ingredientes con nutrición</h3>
         <p class="metric">${profilesByIngredient.size}/${state.ingredients.length}</p>
-        <p class="muted">Completa los pendientes desde Ajustes → Enriquecimiento nutricional.</p>
+        <p class="muted">Completa los pendientes desde esta pantalla, Open Food Facts o USDA.</p>
       </article>
       <article class="card">
         <h3>Kcal semana planificada</h3>
@@ -84,11 +84,11 @@ export function renderNutrition(state) {
       <div class="section-title-row">
         <div>
           <h3>Nutrición por ingrediente</h3>
-          <p class="muted">Valores por 100 g/ml o por unidad según el perfil importado.</p>
+          <p class="muted">Valores por 100 g/ml o por unidad. Puedes crear perfiles manuales para alimentos no encontrados en bases de datos.</p>
         </div>
       </div>
       <label class="quick-search-label">Buscar ingredientes nutricionales
-        <input type="search" class="quick-search" placeholder="Ej. tomate, USDA, Open Food Facts..." data-search-target=".nutrition-ingredient-list .nutrition-ingredient-item" data-empty-target="nutritionIngredientSearchEmpty">
+        <input type="search" class="quick-search" placeholder="Ej. tomate, USDA, Open Food Facts, manual..." data-search-target=".nutrition-ingredient-list .nutrition-ingredient-item" data-empty-target="nutritionIngredientSearchEmpty">
       </label>
       <div id="nutritionIngredientSearchEmpty" class="search-empty muted" hidden>No hay ingredientes que coincidan.</div>
       <div class="list nutrition-ingredient-list">
@@ -159,7 +159,7 @@ function renderDishNutritionItem(state, dish) {
 function renderIngredientNutritionItem(ingredient, profile) {
   const searchText = [ingredient.name, profile?.source, profile?.sourceName, profile?.fdcId].join(" ");
   if (!profile) {
-    return `<div class="item nutrition-ingredient-item" data-search="${escapeHtml(searchText)}"><strong>${escapeHtml(ingredient.name)}</strong><p class="muted">Sin perfil nutricional.</p></div>`;
+    return `<div class="item nutrition-ingredient-item" data-search="${escapeHtml(searchText)}"><strong>${escapeHtml(ingredient.name)}</strong><p class="muted">Sin perfil nutricional.</p><div class="row-actions wrap"><button class="secondary" data-action="open-manual-nutrition" data-ingredient-id="${escapeHtml(ingredient.id)}">Añadir manual</button></div></div>`;
   }
   const split = splitCarbs(profile);
   return `
@@ -180,6 +180,7 @@ function renderIngredientNutritionItem(ingredient, profile) {
         <span>Grasa ${formatNutritionValue("fat", profile.fat)}</span>
         <span>Fibra ${formatNutritionValue("fiber", profile.fiber)}</span>
       </div>
+      <div class="row-actions wrap"><button class="secondary" data-action="open-manual-nutrition" data-ingredient-id="${escapeHtml(ingredient.id)}">Editar manual</button></div>
     </div>
   `;
 }
