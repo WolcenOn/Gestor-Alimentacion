@@ -1,6 +1,7 @@
 import { uid, nowIso, todayIsoDate } from "./utils.js";
+import { getWeekRange } from "./state/calendarPeriods.js";
 
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 export function withMeta(entity, prefix) {
   const stamp = nowIso();
@@ -47,9 +48,12 @@ export function createDefaultState() {
     { id: "member_ninos", name: "Niños", nutritionTargetId: null }
   ].map(m => withMeta(m, "member"));
 
+  const currentWeekRange = getWeekRange();
   const weeks = [withMeta({
-    id: "week_current",
-    name: "Semana actual",
+    id: currentWeekRange.id,
+    name: currentWeekRange.name,
+    startDate: currentWeekRange.startDate,
+    endDate: currentWeekRange.endDate,
     isTypical: true,
     plan: {
       "lunes__meal_dinner__member_all": ["dish_ensalada"],
@@ -67,7 +71,7 @@ export function createDefaultState() {
     dishes,
     dishPacks: [{ id: "pack_demo", name: "Pack demo", description: "Datos de ejemplo", tags: ["demo"], createdAt: nowIso(), updatedAt: nowIso(), schemaVersion: SCHEMA_VERSION }],
     weeks,
-    activeWeekId: "week_current",
+    activeWeekId: currentWeekRange.id,
     familyMembers,
     mealTypes,
     favoriteIds: [],
@@ -78,6 +82,6 @@ export function createDefaultState() {
     shoppingProgress: {},
     nutritionProfiles: [],
     historySnapshots: [],
-    settings: { createdOn: todayIsoDate() }
+    settings: { createdOn: todayIsoDate(), calendarView: "week", calendarMonth: currentWeekRange.startDate.slice(0, 7) }
   };
 }
