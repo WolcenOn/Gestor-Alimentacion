@@ -1,6 +1,7 @@
 import { createDefaultState, SCHEMA_VERSION } from "./models.js";
 import { validateState } from "./validation.js";
 import { normalizeTrustedPurchaseFlag } from "./fastPurchase.js";
+import { getMonthKey, getWeekRange, parseIsoDate } from "./state/calendarPeriods.js";
 
 const STORAGE_KEY = "gestorMenuSemanal.state.v1";
 let state = loadState();
@@ -76,6 +77,27 @@ function migrateProductNutritionSnapshots(data) {
   });
 }
 
+function migrateWeekDates(data) {
+  const currentRange = getWeekRange();
+  data.weeks ||= [];
+  data.weeks.forEach((week, index) => {
+    const baseDate = parseIsoDate(week.startDate) || getWeekRange(new Date(Date.now() + index * 7 * 24 * 60 * 60 * 1000)).start;
+    const range = index === 0 && !week.startDate ? currentRange : getWeekRange(baseDate);
+    week.startDate ||= range.startDate;
+    week.endDate ||= range.endDate;
+    if (!week.id || week.id === "week_current") week.id = range.id;
+    if (!week.name || week.name === "Semana actual") week.name = range.name;
+    week.plan ||= {};
+  });
+
+  if (data.activeWeekId === "week_current" && data.weeks[0]) data.activeWeekId = data.weeks[0].id;
+  if (!data.activeWeekId && data.weeks[0]) data.activeWeekId = data.weeks[0].id;
+  data.settings ||= {};
+  data.settings.calendarView ||= "week";
+  const activeWeek = data.weeks.find(week => week.id === data.activeWeekId) || data.weeks[0];
+  data.settings.calendarMonth ||= activeWeek?.startDate?.slice(0, 7) || getMonthKey();
+}
+
 export function migrateData(data) {
   if (!data.meta) data.meta = { schemaVersion: 0, lastMigrationAt: new Date().toISOString() };
   ensureBaseCollections(data);
@@ -92,8 +114,15 @@ export function migrateData(data) {
     data.meta.lastMigrationAt = new Date().toISOString();
   }
 
+  if (data.meta.schemaVersion < 3) {
+    migrateWeekDates(data);
+    data.meta.schemaVersion = 3;
+    data.meta.lastMigrationAt = new Date().toISOString();
+  }
+
   migrateTrustedPurchaseFlags(data);
   migrateProductNutritionSnapshots(data);
+  migrateWeekDates(data);
   data.meta.schemaVersion = SCHEMA_VERSION;
 
   if (!data.familyMembers.length) data.familyMembers.push({ id: "member_all", name: "Todos", nutritionTargetId: null, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), schemaVersion: SCHEMA_VERSION });
