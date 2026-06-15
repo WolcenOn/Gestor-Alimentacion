@@ -19,11 +19,11 @@ Gestor de Alimentación
           ↓
   glucosaTrackAdapter.js
           ↓
-  Módulo visual GlucosaTrack
-      ├─ curva glucémica
-      ├─ curvas por macros
-      ├─ simulación educativa de insulina
-      └─ avisos / interpretación visual
+  glucosaTrackEngine.js
+          ↓
+  glucosaTrackFusionBootstrap.js
+          ↓
+  Vista Metabólico / GlucosaTrack
 ```
 
 ## Fuente de verdad
@@ -36,9 +36,9 @@ El estado principal sigue siendo el estado del Gestor:
 - `state.weeks`
 - `member.metabolicSettings`
 
-GlucosaTrack no debe guardar copias permanentes de estos datos. Solo debe recibir snapshots o inputs calculados.
+GlucosaTrack no guarda copias permanentes de alimentos, platos ni miembros. Solo recibe inputs calculados desde el planificador.
 
-## Nuevo adaptador
+## Adaptador
 
 Se añade:
 
@@ -57,8 +57,6 @@ Devuelve una vista normalizada del planificador:
 - semanas
 - perfiles metabólicos normalizados
 
-Sirve para poblar selectores, vistas o futuras pantallas del módulo GlucosaTrack.
-
 ### `buildGlucosaTrackMealInput(options)`
 
 Construye el input de un plato concreto:
@@ -73,22 +71,89 @@ Construye el input de un plato concreto:
 - impacto glucémico
 - curva de absorción
 
-Este será el contrato principal para pintar la gráfica y simular curvas.
-
 ### `buildGlucosaTrackInputsForWeek(options)`
 
 Convierte la semana planificada en una lista de inputs compatibles con GlucosaTrack.
 
-Esto permitirá más adelante mostrar impacto glucémico por día, comida o miembro.
+## Motor GlucosaTrack
 
-## Qué se debe migrar desde GlucosaTrack
+Se añade:
 
-1. La gráfica grande con Chart.js.
-2. Los toggles de curvas visibles.
-3. El panel de estado actual: glucosa, tiempo hasta comida y condiciones.
-4. La simulación educativa de insulina.
-5. Las tarjetas visuales de resumen.
-6. La navegación móvil o una versión integrada dentro de la pestaña `Metabólico`.
+```text
+app/state/glucosaTrackEngine.js
+```
+
+Este módulo porta la parte relevante del algoritmo de GlucosaTrack y la separa de la UI.
+
+Incluye:
+
+- curva basal con `basalDecayPerHour`
+- azúcares simples
+- hidratos complejos
+- proteína
+- grasa
+- retraso de carbohidratos por grasa
+- cálculo tipo Varsovia para unidades grasa/proteína (`UGP`)
+- curva sin insulina
+- curva con insulina simulada
+- actividad/efecto de insulina
+- estrategias de dosis: única, dividida y múltiple extendida
+
+Funciones principales:
+
+```js
+buildGlucosaTrackMetabolicModel(input)
+getWarsawMealData(input)
+buildGlucoseWithInsulin(model, doses)
+recommendInsulin(input)
+optimizeInsulinPlan(input, strategy)
+buildGlucosaTrackSimulation(input, options)
+```
+
+## Vista integrada
+
+Se añade:
+
+```text
+app/glucosaTrackFusionBootstrap.js
+```
+
+La vista integrada de la pestaña **Metabólico** muestra:
+
+- selección de miembro del planificador
+- selección de plato del planificador
+- glucosa actual
+- tiempo hasta comer
+- estrategia de dosis
+- condiciones temporales
+- curva basal
+- curva sin insulina
+- curva con insulina
+- efecto de insulina
+- curvas por macro
+- plan educativo de dosis
+
+## Editor de perfil
+
+Se añade:
+
+```text
+app/glucosaTrackFusionProfile.js
+```
+
+Permite editar parámetros del motor directamente en `member.metabolicSettings`:
+
+- glucosa base
+- objetivos
+- ratio HC/insulina
+- sensibilidad
+- compensación basal
+- tiempos de absorción
+- factores grasa/proteína
+- retraso por grasa
+- tiempos de insulina
+- límites de dosis automática
+- factores por enfermedad/menstruación
 
 ## Qué no se debe duplicar
 
@@ -98,10 +163,9 @@ No duplicar:
 - platos
 - miembros
 - perfiles metabólicos
-- curvas calculadas persistidas
-- historial de planificación
+- planificación semanal
 
-Las curvas deben calcularse desde el estado actual salvo que más adelante se cree un histórico explícito de consumos reales.
+Las curvas se calculan desde el estado actual salvo que más adelante se cree un histórico explícito de consumos reales.
 
 ## Seguridad médica
 
@@ -111,12 +175,10 @@ Texto recomendado:
 
 > Simulación educativa no validada clínicamente. No sirve para decidir dosis, tratamientos ni cambios médicos sin supervisión profesional.
 
-## Siguiente paso técnico recomendado
+## Pendientes recomendados
 
-Crear `app/render/glucosaTrackPanel.js` o separar `metabolicPremiumModule.js` para que use:
-
-```js
-import { buildGlucosaTrackMealInput } from "../state/glucosaTrackAdapter.js";
-```
-
-Después, portar la visualización de GlucosaTrack para que pinte exclusivamente con ese input.
+1. Añadir histórico real de simulaciones/consumos dentro del Gestor.
+2. Permitir introducir dosis manuales además del plan automático.
+3. Añadir selector de dispositivo: pluma, bomba, Accu-Chek, etc.
+4. Añadir tests de motor para comparar salidas con GlucosaTrack original.
+5. Separar CSS de la vista en un archivo propio cuando la UI se estabilice.
