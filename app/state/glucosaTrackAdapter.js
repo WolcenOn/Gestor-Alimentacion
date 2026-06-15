@@ -1,27 +1,15 @@
 import { getState } from "../store.js";
 import { computeDishNutrition } from "./nutritionCalculator.js";
 import { buildAbsorptionCurve, estimateGlycemicImpactFromNutrition } from "./glycemicCalculator.js";
+import { GLUCOSATRACK_ENGINE_DEFAULTS } from "./glucosaTrackEngine.js";
 
-export const GLUCOSATRACK_ADAPTER_VERSION = 1;
+export const GLUCOSATRACK_ADAPTER_VERSION = 2;
 
 export const DEFAULT_GLUCOSE_PROFILE = {
   enabled: false,
   diabetes: false,
-  baseGlucose: 100,
-  carbRatio: 10,
-  insulinSensitivity: 50,
-  targetMin: 70,
-  targetMax: 140,
-  insulinOnset: 15,
-  insulinPeakTime: 75,
-  insulinDuration: 240,
-  simpleSugarTime: 30,
-  complexCarbTime: 95,
-  proteinTime: 240,
-  fatTime: 320,
-  sickMultiplier: 1.5,
-  menstruationMultiplier: 1.3,
-  disclaimerAccepted: false
+  disclaimerAccepted: false,
+  ...GLUCOSATRACK_ENGINE_DEFAULTS
 };
 
 function safeNumber(value, fallback = 0) {
@@ -47,8 +35,21 @@ function normalizeMetabolicSettings(member = {}) {
     complexCarbTime: safeNumber(settings.complexCarbTime, DEFAULT_GLUCOSE_PROFILE.complexCarbTime),
     proteinTime: safeNumber(settings.proteinTime, DEFAULT_GLUCOSE_PROFILE.proteinTime),
     fatTime: safeNumber(settings.fatTime, DEFAULT_GLUCOSE_PROFILE.fatTime),
+    simpleDuration: safeNumber(settings.simpleDuration, DEFAULT_GLUCOSE_PROFILE.simpleDuration),
+    complexDuration: safeNumber(settings.complexDuration, DEFAULT_GLUCOSE_PROFILE.complexDuration),
+    proteinDuration: safeNumber(settings.proteinDuration, DEFAULT_GLUCOSE_PROFILE.proteinDuration),
+    fatDuration: safeNumber(settings.fatDuration, DEFAULT_GLUCOSE_PROFILE.fatDuration),
+    proteinImpactFactor: safeNumber(settings.proteinImpactFactor, DEFAULT_GLUCOSE_PROFILE.proteinImpactFactor),
+    fatImpactFactor: safeNumber(settings.fatImpactFactor, DEFAULT_GLUCOSE_PROFILE.fatImpactFactor),
+    fatCarbDelayPer10g: safeNumber(settings.fatCarbDelayPer10g, DEFAULT_GLUCOSE_PROFILE.fatCarbDelayPer10g),
+    basalDecayPerHour: safeNumber(settings.basalDecayPerHour, DEFAULT_GLUCOSE_PROFILE.basalDecayPerHour),
     sickMultiplier: safeNumber(settings.sickMultiplier, DEFAULT_GLUCOSE_PROFILE.sickMultiplier),
-    menstruationMultiplier: safeNumber(settings.menstruationMultiplier, DEFAULT_GLUCOSE_PROFILE.menstruationMultiplier)
+    menstruationMultiplier: safeNumber(settings.menstruationMultiplier, DEFAULT_GLUCOSE_PROFILE.menstruationMultiplier),
+    maxAutoDosePerShot: safeNumber(settings.maxAutoDosePerShot, DEFAULT_GLUCOSE_PROFILE.maxAutoDosePerShot),
+    maxAutoTotalDose: safeNumber(settings.maxAutoTotalDose, DEFAULT_GLUCOSE_PROFILE.maxAutoTotalDose),
+    doseRoundStep: safeNumber(settings.doseRoundStep, DEFAULT_GLUCOSE_PROFILE.doseRoundStep),
+    doseMin: safeNumber(settings.doseMin, DEFAULT_GLUCOSE_PROFILE.doseMin),
+    hypoThreshold: safeNumber(settings.hypoThreshold, DEFAULT_GLUCOSE_PROFILE.hypoThreshold)
   };
 }
 
