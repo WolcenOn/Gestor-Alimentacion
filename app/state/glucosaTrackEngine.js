@@ -1,4 +1,4 @@
-const ENGINE_VERSION = 1;
+const ENGINE_VERSION = 2;
 
 export const GLUCOSATRACK_ENGINE_DEFAULTS = {
   baseGlucose: 100,
@@ -6,6 +6,7 @@ export const GLUCOSATRACK_ENGINE_DEFAULTS = {
   insulinSensitivity: 50,
   targetMin: 70,
   targetMax: 140,
+  idealTargetMargin: 10,
   simpleSugarTime: 30,
   complexCarbTime: 95,
   proteinTime: 240,
@@ -27,7 +28,10 @@ export const GLUCOSATRACK_ENGINE_DEFAULTS = {
   maxAutoTotalDose: 18,
   doseRoundStep: 0.5,
   doseMin: 0.1,
-  hypoThreshold: 70
+  hypoThreshold: 70,
+  hypoSafetyBuffer: 0,
+  slowMealFpUnitsThreshold: 0.5,
+  slowMealExtendedMinutesThreshold: 240
 };
 
 function n(value, fallback = 0) {
@@ -90,6 +94,20 @@ function mealOffset(input) {
 
 function startGlucose(input, config) {
   return n(input.glucoseContext?.currentGlucose, n(config.baseGlucose, 100));
+}
+
+function idealTarget(config) {
+  return (n(config.targetMin, 70) + n(config.targetMax, 140)) / 2;
+}
+
+function idealBand(config) {
+  const ideal = idealTarget(config);
+  const margin = Math.max(5, n(config.idealTargetMargin, 10));
+  return {
+    ideal,
+    low: Math.max(n(config.hypoThreshold, 70) + n(config.hypoSafetyBuffer, 0), ideal - margin),
+    high: ideal + margin
+  };
 }
 
 function warsawDurationMinutes(ugp) {
@@ -216,7 +234,8 @@ export function buildGlucosaTrackMetabolicModel(input) {
     fatRate,
     startGlucose: start,
     effISF: r1(effISF),
-    conditionMultiplier: r2(multiplier)
+    conditionMultiplier: r2(multiplier),
+    idealBand: idealBand(config)
   };
 }
 
@@ -259,7 +278,7 @@ export function buildInsulinActivity(model, doses = []) {
 export function buildGlucoseWithInsulin(model, doses = []) {
   if (!doses.length) return null;
   const config = model.config || GLUCOSATRACK_ENGINE_DEFAULTS;
-  const target = (n(config.targetMin, 70) + n(config.targetMax, 140)) / 2;
+  const target = idealTarget(config);
   const floor = Math.max(40, n(config.targetMin, 70) - 30);
   const correctionPool = Math.max(0, n(model.startGlucose, 100) - target);
   const rate = buildInsulinRate(model, doses);
@@ -287,66 +306,144 @@ function roundDose(value, config) {
   return rounded <= 0 ? 0 : Math.max(n(config.doseMin, step), rounded);
 }
 
+function normalizeDose(dose, config) {
+  return {
+    ...dose,
+    time: Math.round(n(dose.time, -10) / 5) * 5,
+    units: roundDose(Math.max(0, n(dose.units, 0)), config),
+    kind: dose.kind || "bolo"
+  };
+}
+
+function isSlowMeal(warsaw, config) {
+  return warsaw.fpUnits >= n(config.slowMealFpUnitsThreshold, 0.5)
+    || warsaw.extendedMinutes >= n(config.slowMealExtendedMinutesThreshold, 240)
+    || warsaw.totals.fats >= 12
+    || warsaw.totals.proteins >= 25;
+}
+
+function chooseStrategy(requestedStrategy, warsaw, config) {
+  const slowMeal = isSlowMeal(warsaw, config);
+  if (!slowMeal) return requestedStrategy || "single";
+  if (warsaw.fpUnits >= 1.5 || warsaw.extendedMinutes >= 300) return requestedStrategy === "single" ? "multi" : (requestedStrategy || "multi");
+  return requestedStrategy === "single" ? "split" : (requestedStrategy || "split");
+}
+
+function buildCandidateDoses(strategy, warsaw, correctionUnits, config) {
+  const carbUnits = warsaw.carbUnits;
+  const fpUnits = warsaw.fpUnits;
+  const extMin = warsaw.extendedMinutes;
+  if (strategy === "single" || fpUnits < 0.35) {
+    return [{ time: -10, units: carbUnits + fpUnits * 0.35 + correctionUnits * 0.7, kind: "bolo" }];
+  }
+  if (strategy === "split") {
+    const first = carbUnits * 0.9 + correctionUnits * 0.65 + fpUnits * 0.18;
+    const second = Math.max(0, carbUnits * 0.1 + fpUnits * 0.72 + correctionUnits * 0.15);
+    return [
+      { time: -10, units: first, kind: "bolo" },
+      { time: Math.min(150, Math.max(60, Math.round((extMin || 240) * 0.38 / 5) * 5)), units: second, kind: "extendida" }
+    ];
+  }
+  const first = carbUnits * 0.85 + correctionUnits * 0.6 + fpUnits * 0.12;
+  const second = Math.max(0, carbUnits * 0.1 + fpUnits * 0.42 + correctionUnits * 0.1);
+  const third = Math.max(0, carbUnits * 0.05 + fpUnits * 0.36);
+  return [
+    { time: -10, units: first, kind: "bolo" },
+    { time: Math.min(150, Math.max(60, Math.round((extMin || 300) * 0.32 / 5) * 5)), units: second, kind: "extendida" },
+    { time: Math.min(300, Math.max(135, Math.round((extMin || 300) * 0.72 / 5) * 5)), units: third, kind: "extendida" }
+  ];
+}
+
+function capAndRoundDoses(doses, config) {
+  let capped = doses
+    .map(dose => normalizeDose({ ...dose, units: Math.min(n(config.maxAutoDosePerShot, 8), n(dose.units, 0)) }, config))
+    .filter(dose => dose.units >= n(config.doseRoundStep, 0.5) / 2);
+  const total = capped.reduce((sum, dose) => sum + n(dose.units, 0), 0);
+  if (total > n(config.maxAutoTotalDose, 18) && total > 0) {
+    const scale = n(config.maxAutoTotalDose, 18) / total;
+    capped = capped
+      .map(dose => normalizeDose({ ...dose, units: dose.units * scale }, config))
+      .filter(dose => dose.units >= n(config.doseRoundStep, 0.5) / 2);
+  }
+  return capped;
+}
+
+function scaleDoses(doses, scale, config) {
+  return doses
+    .map(dose => normalizeDose({ ...dose, units: dose.units * scale }, config))
+    .filter(dose => dose.units >= n(config.doseRoundStep, 0.5) / 2);
+}
+
+function curveSafety(model, withInsulin) {
+  const band = model.idealBand || idealBand(model.config || GLUCOSATRACK_ENGINE_DEFAULTS);
+  const values = withInsulin?.glucose || model.glucoseNoIns;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const below = Math.max(0, band.low - min);
+  const above = Math.max(0, max - band.high);
+  return {
+    band,
+    min: r1(min),
+    max: r1(max),
+    below: r1(below),
+    above: r1(above),
+    hasHypoRisk: below > 0
+  };
+}
+
+function makeSafeDoses(model, doses, config) {
+  let bestDoses = doses;
+  let bestWithInsulin = buildGlucoseWithInsulin(model, bestDoses);
+  let bestSafety = curveSafety(model, bestWithInsulin);
+  if (!bestSafety.hasHypoRisk) return { doses: bestDoses, withInsulin: bestWithInsulin, safety: bestSafety, doseScale: 1 };
+
+  for (let scale = 0.9; scale >= 0.25; scale -= 0.05) {
+    const candidateDoses = scaleDoses(doses, scale, config);
+    const candidateWithInsulin = buildGlucoseWithInsulin(model, candidateDoses);
+    const candidateSafety = curveSafety(model, candidateWithInsulin);
+    if (!candidateSafety.hasHypoRisk) {
+      return { doses: candidateDoses, withInsulin: candidateWithInsulin, safety: candidateSafety, doseScale: r2(scale) };
+    }
+    if (candidateSafety.below < bestSafety.below) {
+      bestDoses = candidateDoses;
+      bestWithInsulin = candidateWithInsulin;
+      bestSafety = candidateSafety;
+    }
+  }
+  return { doses: bestDoses, withInsulin: bestWithInsulin, safety: bestSafety, doseScale: null };
+}
+
 export function recommendInsulin(input) {
-  const model = buildGlucosaTrackMetabolicModel(input);
-  const config = model.config;
-  const warsaw = getWarsawMealData(input);
-  const target = (n(config.targetMin, 70) + n(config.targetMax, 140)) / 2;
-  const correctionUnits = Math.max(0, startGlucose(input, config) - target) / Math.max(1, warsaw.effISF);
-  const totalUnits = warsaw.carbUnits + warsaw.fpUnits + correctionUnits;
-  return Math.max(0, r2(Math.min(n(config.maxAutoTotalDose, 18), roundDose(totalUnits, config))));
+  const plan = optimizeInsulinPlan(input, "auto");
+  return Math.max(0, r2(plan.totalUnits));
 }
 
 export function optimizeInsulinPlan(input, strategy = "split") {
   const config = normalizeConfig(input);
   const warsaw = getWarsawMealData(input);
-  const target = (n(config.targetMin, 70) + n(config.targetMax, 140)) / 2;
-  const correctionUnits = Math.max(0, startGlucose(input, config) - target) / Math.max(1, warsaw.effISF);
-  const carbUnits = warsaw.carbUnits;
-  const fpUnits = warsaw.fpUnits;
-  const extMin = warsaw.extendedMinutes;
-  let doses = [];
-
-  if (strategy === "single" || fpUnits < 0.5) {
-    doses = [{ time: -10, units: roundDose(carbUnits + fpUnits + correctionUnits, config), kind: "bolo" }];
-  } else if (strategy === "split") {
-    const first = carbUnits + correctionUnits * 0.85 + fpUnits * 0.35;
-    const second = Math.max(0, fpUnits * 0.65 + correctionUnits * 0.15);
-    doses = [
-      { time: -10, units: roundDose(first, config), kind: "bolo" },
-      { time: Math.min(120, Math.max(45, Math.round((extMin || 240) * 0.35 / 5) * 5)), units: roundDose(second, config), kind: "extendida" }
-    ];
-  } else {
-    const first = carbUnits + correctionUnits * 0.8 + fpUnits * 0.25;
-    const second = fpUnits * 0.4;
-    const third = Math.max(0, fpUnits * 0.35 + correctionUnits * 0.2);
-    doses = [
-      { time: -10, units: roundDose(first, config), kind: "bolo" },
-      { time: Math.min(120, Math.max(45, Math.round((extMin || 300) * 0.30 / 5) * 5)), units: roundDose(second, config), kind: "extendida" },
-      { time: Math.min(240, Math.max(120, Math.round((extMin || 300) * 0.70 / 5) * 5)), units: roundDose(third, config), kind: "extendida" }
-    ];
-  }
-
-  doses = doses
-    .filter(dose => dose.units >= n(config.doseRoundStep, 0.5) / 2)
-    .map(dose => ({ ...dose, units: Math.min(n(config.maxAutoDosePerShot, 8), dose.units) }));
-
-  const total = doses.reduce((sum, dose) => sum + n(dose.units, 0), 0);
-  if (total > n(config.maxAutoTotalDose, 18) && total > 0) {
-    const scale = n(config.maxAutoTotalDose, 18) / total;
-    doses = doses.map(dose => ({ ...dose, units: roundDose(dose.units * scale, config) })).filter(dose => dose.units >= n(config.doseRoundStep, 0.5) / 2);
-  }
-
+  const band = idealBand(config);
+  const correctionUnits = Math.max(0, startGlucose(input, config) - band.high) / Math.max(1, warsaw.effISF);
+  const requestedStrategy = strategy === "auto" ? "split" : strategy;
+  const appliedStrategy = chooseStrategy(requestedStrategy, warsaw, config);
   const model = buildGlucosaTrackMetabolicModel(input);
-  const withInsulin = buildGlucoseWithInsulin(model, doses);
+  const rawDoses = buildCandidateDoses(appliedStrategy, warsaw, correctionUnits, config);
+  const cappedDoses = capAndRoundDoses(rawDoses, config);
+  const safePlan = makeSafeDoses(model, cappedDoses, config);
+
   return {
-    strategy,
+    strategy: appliedStrategy,
+    requestedStrategy,
+    strategyAdjusted: appliedStrategy !== requestedStrategy,
+    slowMeal: isSlowMeal(warsaw, config),
     warsaw,
     correctionUnits: r2(correctionUnits),
-    doses,
-    totalUnits: r2(doses.reduce((sum, dose) => sum + n(dose.units, 0), 0)),
+    idealBand: band,
+    safety: safePlan.safety,
+    doseScale: safePlan.doseScale,
+    doses: safePlan.doses,
+    totalUnits: r2(safePlan.doses.reduce((sum, dose) => sum + n(dose.units, 0), 0)),
     model,
-    withInsulin
+    withInsulin: safePlan.withInsulin
   };
 }
 
@@ -355,7 +452,7 @@ export function buildGlucosaTrackSimulation(input, options = {}) {
   const optimizedPlan = optimizeInsulinPlan(input, strategy);
   const model = optimizedPlan.model;
   const withInsulin = optimizedPlan.withInsulin;
-  const recommendedUnits = recommendInsulin(input);
+  const recommendedUnits = Math.max(0, r2(optimizedPlan.totalUnits));
   return {
     engineVersion: ENGINE_VERSION,
     model,
