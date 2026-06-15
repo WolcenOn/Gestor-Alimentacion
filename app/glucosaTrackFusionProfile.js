@@ -7,6 +7,10 @@ function settingsFor(member = {}) {
   return { ...DEFAULT_GLUCOSE_PROFILE, profileType: "diabetes", ...(member.metabolicSettings || {}) };
 }
 
+function numericField(name, label, settings, attrs = "") {
+  return `<label>${label}<input name="${name}" type="number" ${attrs} value="${escapeHtml(String(settings[name]))}"></label>`;
+}
+
 function openFusionProfile(memberId) {
   const state = getState();
   const member = state.familyMembers.find(item => item.id === memberId) || state.familyMembers[0];
@@ -26,19 +30,50 @@ function openFusionProfile(memberId) {
         <span>⚠️</span>
         <div class="warning-text">Uso educativo. No utilizar para decidir dosis reales ni cambios terapéuticos.</div>
       </div>
+
+      <h3>Perfil y objetivos</h3>
       <div class="form-grid">
         <label>Activar perfil<select name="enabled"><option value="false" ${!settings.enabled ? "selected" : ""}>No</option><option value="true" ${settings.enabled ? "selected" : ""}>Sí</option></select></label>
         <label>Diabetes / glucosa<select name="diabetes"><option value="false" ${!settings.diabetes ? "selected" : ""}>No</option><option value="true" ${settings.diabetes ? "selected" : ""}>Sí</option></select></label>
-        <label>Glucosa base<input name="baseGlucose" type="number" min="40" max="400" value="${escapeHtml(String(settings.baseGlucose))}"></label>
-        <label>Ratio HC/insulina<input name="carbRatio" type="number" min="1" max="60" step="0.1" value="${escapeHtml(String(settings.carbRatio))}"></label>
-        <label>Sensibilidad insulina<input name="insulinSensitivity" type="number" min="1" max="200" value="${escapeHtml(String(settings.insulinSensitivity))}"></label>
-        <label>Objetivo mínimo<input name="targetMin" type="number" min="40" max="250" value="${escapeHtml(String(settings.targetMin))}"></label>
-        <label>Objetivo máximo<input name="targetMax" type="number" min="50" max="300" value="${escapeHtml(String(settings.targetMax))}"></label>
-        <label>Inicio insulina min<input name="insulinOnset" type="number" min="0" max="180" value="${escapeHtml(String(settings.insulinOnset))}"></label>
-        <label>Pico insulina min<input name="insulinPeakTime" type="number" min="10" max="360" value="${escapeHtml(String(settings.insulinPeakTime))}"></label>
-        <label>Duración insulina min<input name="insulinDuration" type="number" min="60" max="720" value="${escapeHtml(String(settings.insulinDuration))}"></label>
-        <label>Factor enfermedad<input name="sickMultiplier" type="number" min="1" max="3" step="0.1" value="${escapeHtml(String(settings.sickMultiplier))}"></label>
-        <label>Factor menstruación<input name="menstruationMultiplier" type="number" min="1" max="3" step="0.1" value="${escapeHtml(String(settings.menstruationMultiplier))}"></label>
+        ${numericField("baseGlucose", "Glucosa base", settings, "min=\"40\" max=\"400\"")}
+        ${numericField("targetMin", "Objetivo mínimo", settings, "min=\"40\" max=\"250\"")}
+        ${numericField("targetMax", "Objetivo máximo", settings, "min=\"50\" max=\"300\"")}
+        ${numericField("hypoThreshold", "Umbral hipo", settings, "min=\"40\" max=\"120\"")}
+      </div>
+
+      <h3>Insulina y basal</h3>
+      <div class="form-grid">
+        ${numericField("carbRatio", "Ratio HC/insulina", settings, "min=\"1\" max=\"60\" step=\"0.1\"")}
+        ${numericField("insulinSensitivity", "Sensibilidad mg/dL/U", settings, "min=\"1\" max=\"200\"")}
+        ${numericField("basalDecayPerHour", "Compensación basal mg/dL/h", settings, "min=\"0\" max=\"20\" step=\"0.1\"")}
+        ${numericField("insulinOnset", "Inicio insulina min", settings, "min=\"0\" max=\"180\"")}
+        ${numericField("insulinPeakTime", "Pico insulina min", settings, "min=\"10\" max=\"360\"")}
+        ${numericField("insulinDuration", "Duración insulina min", settings, "min=\"60\" max=\"720\"")}
+        ${numericField("doseRoundStep", "Redondeo dosis", settings, "min=\"0.1\" max=\"2\" step=\"0.1\"")}
+        ${numericField("doseMin", "Dosis mínima", settings, "min=\"0.1\" max=\"2\" step=\"0.1\"")}
+        ${numericField("maxAutoDosePerShot", "Máx. por dosis", settings, "min=\"1\" max=\"30\" step=\"0.5\"")}
+        ${numericField("maxAutoTotalDose", "Máx. total automático", settings, "min=\"1\" max=\"60\" step=\"0.5\"")}
+      </div>
+
+      <h3>Absorción del plato</h3>
+      <div class="form-grid">
+        ${numericField("simpleSugarTime", "Pico azúcares min", settings, "min=\"5\" max=\"180\"")}
+        ${numericField("complexCarbTime", "Pico HC complejos min", settings, "min=\"20\" max=\"300\"")}
+        ${numericField("proteinTime", "Pico proteína min", settings, "min=\"60\" max=\"480\"")}
+        ${numericField("fatTime", "Pico grasa min", settings, "min=\"60\" max=\"600\"")}
+        ${numericField("simpleDuration", "Duración azúcares min", settings, "min=\"30\" max=\"360\"")}
+        ${numericField("complexDuration", "Duración complejos min", settings, "min=\"60\" max=\"480\"")}
+        ${numericField("proteinDuration", "Duración proteína min", settings, "min=\"120\" max=\"720\"")}
+        ${numericField("fatDuration", "Duración grasa min", settings, "min=\"120\" max=\"720\"")}
+        ${numericField("proteinImpactFactor", "Factor proteína", settings, "min=\"0\" max=\"3\" step=\"0.1\"")}
+        ${numericField("fatImpactFactor", "Factor grasa", settings, "min=\"0\" max=\"3\" step=\"0.1\"")}
+        ${numericField("fatCarbDelayPer10g", "Retraso por 10g grasa", settings, "min=\"0\" max=\"60\" step=\"1\"")}
+      </div>
+
+      <h3>Condiciones temporales</h3>
+      <div class="form-grid">
+        ${numericField("sickMultiplier", "Factor enfermedad", settings, "min=\"1\" max=\"3\" step=\"0.1\"")}
+        ${numericField("menstruationMultiplier", "Factor menstruación", settings, "min=\"1\" max=\"3\" step=\"0.1\"")}
       </div>
       <button>Guardar perfil GlucosaTrack</button>
     </form>
@@ -58,13 +93,30 @@ function saveFusionProfile(form) {
       profileType: "diabetes",
       diabetes: data.diabetes === "true",
       baseGlucose: parseNumber(data.baseGlucose, previous.baseGlucose),
-      carbRatio: parseNumber(data.carbRatio, previous.carbRatio),
-      insulinSensitivity: parseNumber(data.insulinSensitivity, previous.insulinSensitivity),
       targetMin: parseNumber(data.targetMin, previous.targetMin),
       targetMax: parseNumber(data.targetMax, previous.targetMax),
+      hypoThreshold: parseNumber(data.hypoThreshold, previous.hypoThreshold),
+      carbRatio: parseNumber(data.carbRatio, previous.carbRatio),
+      insulinSensitivity: parseNumber(data.insulinSensitivity, previous.insulinSensitivity),
+      basalDecayPerHour: parseNumber(data.basalDecayPerHour, previous.basalDecayPerHour),
       insulinOnset: parseNumber(data.insulinOnset, previous.insulinOnset),
       insulinPeakTime: parseNumber(data.insulinPeakTime, previous.insulinPeakTime),
       insulinDuration: parseNumber(data.insulinDuration, previous.insulinDuration),
+      doseRoundStep: parseNumber(data.doseRoundStep, previous.doseRoundStep),
+      doseMin: parseNumber(data.doseMin, previous.doseMin),
+      maxAutoDosePerShot: parseNumber(data.maxAutoDosePerShot, previous.maxAutoDosePerShot),
+      maxAutoTotalDose: parseNumber(data.maxAutoTotalDose, previous.maxAutoTotalDose),
+      simpleSugarTime: parseNumber(data.simpleSugarTime, previous.simpleSugarTime),
+      complexCarbTime: parseNumber(data.complexCarbTime, previous.complexCarbTime),
+      proteinTime: parseNumber(data.proteinTime, previous.proteinTime),
+      fatTime: parseNumber(data.fatTime, previous.fatTime),
+      simpleDuration: parseNumber(data.simpleDuration, previous.simpleDuration),
+      complexDuration: parseNumber(data.complexDuration, previous.complexDuration),
+      proteinDuration: parseNumber(data.proteinDuration, previous.proteinDuration),
+      fatDuration: parseNumber(data.fatDuration, previous.fatDuration),
+      proteinImpactFactor: parseNumber(data.proteinImpactFactor, previous.proteinImpactFactor),
+      fatImpactFactor: parseNumber(data.fatImpactFactor, previous.fatImpactFactor),
+      fatCarbDelayPer10g: parseNumber(data.fatCarbDelayPer10g, previous.fatCarbDelayPer10g),
       sickMultiplier: parseNumber(data.sickMultiplier, previous.sickMultiplier),
       menstruationMultiplier: parseNumber(data.menstruationMultiplier, previous.menstruationMultiplier),
       disclaimerAccepted: true
