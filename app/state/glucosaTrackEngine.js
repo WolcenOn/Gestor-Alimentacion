@@ -1,4 +1,4 @@
-const ENGINE_VERSION = 2;
+const ENGINE_VERSION = 3;
 
 export const GLUCOSATRACK_ENGINE_DEFAULTS = {
   baseGlucose: 100,
@@ -31,7 +31,9 @@ export const GLUCOSATRACK_ENGINE_DEFAULTS = {
   hypoThreshold: 70,
   hypoSafetyBuffer: 0,
   slowMealFpUnitsThreshold: 0.5,
-  slowMealExtendedMinutesThreshold: 240
+  slowMealExtendedMinutesThreshold: 240,
+  slowComplexCarbThreshold: 35,
+  slowDoseCount: 4
 };
 
 function n(value, fallback = 0) {
@@ -318,6 +320,7 @@ function normalizeDose(dose, config) {
 function isSlowMeal(warsaw, config) {
   return warsaw.fpUnits >= n(config.slowMealFpUnitsThreshold, 0.5)
     || warsaw.extendedMinutes >= n(config.slowMealExtendedMinutesThreshold, 240)
+    || warsaw.totals.complexCarbs >= n(config.slowComplexCarbThreshold, 35)
     || warsaw.totals.fats >= 12
     || warsaw.totals.proteins >= 25;
 }
@@ -325,33 +328,52 @@ function isSlowMeal(warsaw, config) {
 function chooseStrategy(requestedStrategy, warsaw, config) {
   const slowMeal = isSlowMeal(warsaw, config);
   if (!slowMeal) return requestedStrategy || "single";
-  if (warsaw.fpUnits >= 1.5 || warsaw.extendedMinutes >= 300) return requestedStrategy === "single" ? "multi" : (requestedStrategy || "multi");
-  return requestedStrategy === "single" ? "split" : (requestedStrategy || "split");
+  if (requestedStrategy === "single") return "multi";
+  if (warsaw.fpUnits >= 1.2 || warsaw.extendedMinutes >= 240 || warsaw.totals.complexCarbs >= n(config.slowComplexCarbThreshold, 35)) return "multi";
+  return requestedStrategy || "split";
+}
+
+function slowAbsorptionFractions(warsaw) {
+  const complexShare = warsaw.totals.carbs > 0 ? warsaw.totals.complexCarbs / warsaw.totals.carbs : 0;
+  const fpShare = warsaw.totalMealUnits > 0 ? warsaw.fpUnits / warsaw.totalMealUnits : 0;
+  if (complexShare > 0.75 && fpShare < 0.25) return [0.35, 0.30, 0.22, 0.13];
+  if (fpShare > 0.45) return [0.30, 0.25, 0.25, 0.20];
+  return [0.32, 0.28, 0.24, 0.16];
+}
+
+function normalizeFractions(fractions) {
+  const sum = fractions.reduce((total, value) => total + value, 0) || 1;
+  return fractions.map(value => value / sum);
 }
 
 function buildCandidateDoses(strategy, warsaw, correctionUnits, config) {
-  const carbUnits = warsaw.carbUnits;
-  const fpUnits = warsaw.fpUnits;
-  const extMin = warsaw.extendedMinutes;
-  if (strategy === "single" || fpUnits < 0.35) {
-    return [{ time: -10, units: carbUnits + fpUnits * 0.35 + correctionUnits * 0.7, kind: "bolo" }];
+  const totalMealUnits = warsaw.totalMealUnits;
+  const totalUnits = totalMealUnits + correctionUnits;
+  const extMin = Math.max(180, warsaw.extendedMinutes || n(config.complexDuration, 240));
+
+  if (strategy === "single") {
+    return [{ time: -10, units: totalUnits, kind: "bolo" }];
   }
+
   if (strategy === "split") {
-    const first = carbUnits * 0.9 + correctionUnits * 0.65 + fpUnits * 0.18;
-    const second = Math.max(0, carbUnits * 0.1 + fpUnits * 0.72 + correctionUnits * 0.15);
+    const fractions = normalizeFractions([0.55, 0.45]);
     return [
-      { time: -10, units: first, kind: "bolo" },
-      { time: Math.min(150, Math.max(60, Math.round((extMin || 240) * 0.38 / 5) * 5)), units: second, kind: "extendida" }
+      { time: -10, units: totalUnits * fractions[0], kind: "bolo" },
+      { time: Math.min(150, Math.max(60, Math.round(extMin * 0.45 / 5) * 5)), units: totalUnits * fractions[1], kind: "extendida" }
     ];
   }
-  const first = carbUnits * 0.85 + correctionUnits * 0.6 + fpUnits * 0.12;
-  const second = Math.max(0, carbUnits * 0.1 + fpUnits * 0.42 + correctionUnits * 0.1);
-  const third = Math.max(0, carbUnits * 0.05 + fpUnits * 0.36);
-  return [
-    { time: -10, units: first, kind: "bolo" },
-    { time: Math.min(150, Math.max(60, Math.round((extMin || 300) * 0.32 / 5) * 5)), units: second, kind: "extendida" },
-    { time: Math.min(300, Math.max(135, Math.round((extMin || 300) * 0.72 / 5) * 5)), units: third, kind: "extendida" }
-  ];
+
+  const doseCount = clamp(Math.round(n(config.slowDoseCount, 4)), 3, 4);
+  const fractions = normalizeFractions(slowAbsorptionFractions(warsaw).slice(0, doseCount));
+  const lastTime = Math.min(420, Math.max(180, Math.round(extMin * 0.82 / 5) * 5));
+  const middleTime = Math.min(240, Math.max(90, Math.round(extMin * 0.42 / 5) * 5));
+  const laterTime = Math.min(330, Math.max(150, Math.round(extMin * 0.62 / 5) * 5));
+  const times = doseCount === 3 ? [-10, middleTime, lastTime] : [-10, Math.min(120, middleTime), laterTime, lastTime];
+  return fractions.map((fraction, index) => ({
+    time: times[index],
+    units: totalUnits * fraction,
+    kind: index === 0 ? "bolo" : "extendida"
+  }));
 }
 
 function capAndRoundDoses(doses, config) {
@@ -435,6 +457,7 @@ export function optimizeInsulinPlan(input, strategy = "split") {
     requestedStrategy,
     strategyAdjusted: appliedStrategy !== requestedStrategy,
     slowMeal: isSlowMeal(warsaw, config),
+    distributedTotalDose: appliedStrategy === "multi",
     warsaw,
     correctionUnits: r2(correctionUnits),
     idealBand: band,
