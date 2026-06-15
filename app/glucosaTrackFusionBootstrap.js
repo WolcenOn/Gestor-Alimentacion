@@ -89,6 +89,12 @@ function formatTimeLabel(minutes) {
   return `${Math.floor(minutes / 60)}h${String(minutes % 60).padStart(2, "0")}`;
 }
 
+function fallbackIdealBand(config) {
+  const ideal = (num(config.targetMin, 70) + num(config.targetMax, 140)) / 2;
+  const margin = Math.max(5, num(config.idealTargetMargin, 10));
+  return { ideal, low: Math.max(num(config.hypoThreshold, 70), ideal - margin), high: ideal + margin };
+}
+
 function renderSvgChart(simulation) {
   const model = simulation.model;
   const withInsulin = simulation.withInsulin;
@@ -97,6 +103,7 @@ function renderSvgChart(simulation) {
   const pad = { left: 58, right: 22, top: 24, bottom: 54 };
   const plotW = width - pad.left - pad.right;
   const plotH = height - pad.top - pad.bottom;
+  const band = model.idealBand || fallbackIdealBand(model.config || {});
   const series = model.times.map((time, index) => ({
     time,
     basal: model.basal[index],
@@ -112,18 +119,16 @@ function renderSvgChart(simulation) {
     ...model.basal,
     ...model.glucoseNoIns,
     ...(withInsulin?.glucose || []),
-    num(model.config.targetMin, 70),
-    num(model.config.targetMax, 140)
+    band.low,
+    band.high
   ];
   const rawMin = Math.max(30, Math.min(...allGlucoseValues) - 18);
-  const rawMax = Math.max(num(model.config.targetMax, 140) + 20, Math.max(...allGlucoseValues) + 18);
+  const rawMax = Math.max(band.high + 20, Math.max(...allGlucoseValues) + 18);
   const scale = buildTicks(rawMin, rawMax);
   const minTime = Math.min(...model.times);
   const maxTime = Math.max(...model.times);
   const x = time => pad.left + ((time - minTime) / (maxTime - minTime)) * plotW;
   const y = value => pad.top + ((scale.max - value) / (scale.max - scale.min)) * plotH;
-  const targetMin = num(model.config.targetMin, 70);
-  const targetMax = num(model.config.targetMax, 140);
   const xTicks = [-30, 0, 60, 120, 180, 240, 360, 480, 600].filter(tick => tick >= minTime && tick <= maxTime);
   const path = key => pathFrom(series.filter(point => point[key] !== null), point => x(point.time), point => y(point[key]));
   const effectMax = Math.max(...series.map(point => point.insulinEffect), 1);
@@ -131,10 +136,10 @@ function renderSvgChart(simulation) {
 
   return `
     <div class="glucosa-chart-card">
-      <svg class="glucosa-fusion-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="Curva GlucosaTrack con escalas corregidas">
+      <svg class="glucosa-fusion-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="Curva GlucosaTrack con rango ideal">
         <text x="${pad.left}" y="16" font-size="12" fill="#53786F" font-weight="800">Glucosa mg/dL</text>
         <text x="${width - pad.right}" y="${height - 14}" text-anchor="end" font-size="12" fill="#53786F" font-weight="800">Tiempo desde la comida</text>
-        <rect x="${pad.left}" y="${y(targetMax)}" width="${plotW}" height="${Math.max(0, y(targetMin) - y(targetMax))}" rx="10" fill="#D0F0EA" opacity="0.62"></rect>
+        <rect x="${pad.left}" y="${y(band.high)}" width="${plotW}" height="${Math.max(0, y(band.low) - y(band.high))}" rx="10" fill="#D0F0EA" opacity="0.72"></rect>
         ${scale.ticks.map(tick => `<path d="M${pad.left},${y(tick).toFixed(1)} H${width - pad.right}" stroke="#E5EFEA" stroke-width="1"></path><text x="${pad.left - 10}" y="${(y(tick) + 4).toFixed(1)}" text-anchor="end" font-size="12" fill="#53786F">${tick}</text>`).join("")}
         ${xTicks.map(tick => `<path d="M${x(tick).toFixed(1)},${pad.top} V${height - pad.bottom}" stroke="#F0F5F3" stroke-width="1"></path><text x="${x(tick).toFixed(1)}" y="${height - 30}" text-anchor="middle" font-size="12" fill="#53786F">${formatTimeLabel(tick)}</text>`).join("")}
         <path d="M${pad.left},${height - pad.bottom} H${width - pad.right}" stroke="#BFD8D1" stroke-width="1.4"></path>
@@ -146,7 +151,7 @@ function renderSvgChart(simulation) {
         <path d="${path("fat")}" stroke="#0F766E" stroke-width="2" fill="none" opacity="0.52"></path>
         <path d="${path("noIns")}" stroke="#B45309" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
         ${withInsulin ? `<path d="${path("withIns")}" stroke="#1A7F6E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path><path d="${effectPath}" stroke="#8B5CF6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.70"></path>` : ""}
-        <text x="${width - pad.right}" y="${(y(targetMin) - 5).toFixed(1)}" text-anchor="end" font-size="11" fill="#0F5A4D">rango objetivo</text>
+        <text x="${width - pad.right}" y="${(y(band.low) - 5).toFixed(1)}" text-anchor="end" font-size="11" fill="#0F5A4D">ideal ±${fmt((band.high - band.low) / 2)} mg/dL</text>
       </svg>
       <div class="glucosa-legend">
         <span><i class="dot basal"></i>Basal</span><span><i class="dot noins"></i>Sin insulina</span><span><i class="dot glucose"></i>Con insulina</span><span><i class="dot insulin"></i>Efecto insulina</span><span><i class="dot simple"></i>Azúcares</span><span><i class="dot complex"></i>Complejos</span><span><i class="dot protein"></i>Proteína</span><span><i class="dot fat"></i>Grasa</span>
@@ -184,6 +189,17 @@ function renderDoses(doses, suggestedDoses) {
   `;
 }
 
+function renderSafetyNote(plan, manualSafety) {
+  const band = plan.idealBand || plan.safety?.band;
+  const parts = [];
+  if (band) parts.push(`Objetivo usado: ${fmt(band.ideal)} mg/dL ±${fmt((band.high - band.low) / 2)}.`);
+  if (plan.strategyAdjusted) parts.push(`Comida lenta detectada: se cambió ${plan.requestedStrategy} → ${plan.strategy}.`);
+  if (plan.doseScale && plan.doseScale !== 1) parts.push(`Dosis reducida al ${fmt(plan.doseScale * 100)}% para evitar bajadas.`);
+  if (manualSafety?.hasHypoRisk) parts.push(`Atención: con las dosis manuales el mínimo cae ${fmt(manualSafety.below, 1)} mg/dL por debajo del ideal.`);
+  if (!parts.length) return "";
+  return `<div class="glucosa-safety-note">${parts.join(" ")}</div>`;
+}
+
 function renderResult(state, controls) {
   if (!state.familyMembers.length || !state.dishes.length) {
     return `<div class="empty-state"><div class="emoji">🍽️</div><div class="title">Faltan datos del planificador</div><div class="sub">Añade miembros, ingredientes con nutrición y un plato.</div></div>`;
@@ -204,22 +220,25 @@ function renderResult(state, controls) {
   const chartSimulation = { ...simulation, withInsulin: manualWithInsulin };
   const nutrition = input.nutrition.total;
   const model = simulation.model;
+  const band = simulation.optimizedPlan.idealBand || model.idealBand || fallbackIdealBand(model.config);
   const noInsPeak = peakInfo(model.times, model.glucoseNoIns);
   const withInsPeak = manualWithInsulin ? peakInfo(model.times, manualWithInsulin.glucose) : null;
   const withInsMin = manualWithInsulin ? minInfo(model.times, manualWithInsulin.glucose) : null;
+  const manualSafety = manualWithInsulin ? { hasHypoRisk: withInsMin.value < band.low, below: Math.max(0, band.low - withInsMin.value) } : null;
   const totalUnits = activeDoses.reduce((sum, dose) => sum + num(dose.units, 0), 0);
-  const risk = withInsPeak && withInsPeak.value > model.config.targetMax ? "warning" : withInsMin && withInsMin.value < model.config.targetMin ? "danger" : "safe";
+  const risk = withInsMin && withInsMin.value < band.low ? "danger" : withInsPeak && withInsPeak.value > band.high ? "warning" : "safe";
 
   return `
     <div class="glucosa-summary-grid">
       <div class="glucosa-kpi"><span>Plato</span><strong>${escapeHtml(input.dish.name)}</strong><small>${fmt(nutrition.kcal)} kcal · HC ${fmt(nutrition.carbs, 1)} g</small></div>
       <div class="glucosa-kpi"><span>Modelo GlucosaTrack</span><strong>${fmt(simulation.warsaw.totalMealUnits, 1)} U</strong><small>HC ${fmt(simulation.warsaw.carbUnits, 1)} U · grasa/proteína ${fmt(simulation.warsaw.fpUnits, 1)} U · UGP ${fmt(simulation.warsaw.ugp, 2)}</small></div>
-      <div class="glucosa-kpi ${risk}"><span>Pico con dosis</span><strong>${withInsPeak ? fmt(withInsPeak.value) : "—"} mg/dL</strong><small>mín. ${withInsMin ? fmt(withInsMin.value) : "—"} · sin insulina ${fmt(noInsPeak.value)} mg/dL</small></div>
+      <div class="glucosa-kpi ${risk}"><span>Curva con dosis</span><strong>${withInsPeak ? fmt(withInsPeak.value) : "—"} / ${withInsMin ? fmt(withInsMin.value) : "—"}</strong><small>máx/mín · ideal ${fmt(band.low)}-${fmt(band.high)} · sin insulina ${fmt(noInsPeak.value)} mg/dL</small></div>
     </div>
+    ${renderSafetyNote(simulation.optimizedPlan, manualSafety)}
     ${renderSvgChart(chartSimulation)}
     <div class="glucosa-summary-grid two">
       <div class="glucosa-kpi"><span>Desglose absorción</span><strong>${fmt(simulation.warsaw.carbEq, 1)} g eq.</strong><small>Azúcares ${fmt(simulation.warsaw.totals.sugars, 1)} · HC complejos ${fmt(simulation.warsaw.totals.complexCarbs, 1)} · proteína ${fmt(simulation.warsaw.totals.proteins, 1)} · grasa ${fmt(simulation.warsaw.totals.fats, 1)} · UGP ~${fmt(simulation.warsaw.extendedMinutes / 60, 1)} h</small></div>
-      <div class="glucosa-kpi insulin"><span>Dosis activa</span><strong>${fmt(totalUnits, 1)} U</strong><small>Optimizada sugerida ${fmt(simulation.optimizedPlan.totalUnits, 1)} U · corrección ${fmt(simulation.optimizedPlan.correctionUnits, 1)} U · ISF ${fmt(simulation.warsaw.effISF, 1)}</small></div>
+      <div class="glucosa-kpi insulin"><span>Dosis activa</span><strong>${fmt(totalUnits, 1)} U</strong><small>Optimizada segura ${fmt(simulation.optimizedPlan.totalUnits, 1)} U · corrección ${fmt(simulation.optimizedPlan.correctionUnits, 1)} U · ISF ${fmt(simulation.warsaw.effISF, 1)}</small></div>
     </div>
     <div class="glucosa-dose-card">
       <div class="card-title">💉 Ajustar dosis sobre la curva</div>
@@ -240,7 +259,7 @@ function renderFusionView(state = getState(), controls = {}) {
 
   return `
     <style>
-      .glucosa-fusion-card{background:linear-gradient(135deg,#F2FAF7,#FFFFFF);border:1px solid #DCEDE8;border-radius:22px;padding:18px;box-shadow:0 12px 34px rgba(15,90,77,.08);margin-bottom:16px}.glucosa-fusion-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}.glucosa-fusion-head h2{margin:0;font-size:1.5rem}.glucosa-source-pill{border-radius:999px;background:#D0F0EA;color:#0F5A4D;padding:6px 12px;font-weight:800;font-size:.8rem}.glucosa-controls{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:14px 0}.glucosa-controls label{font-size:.78rem;font-weight:800;color:#53786F;display:flex;flex-direction:column;gap:5px}.glucosa-controls input,.glucosa-controls select,.dose-edit-row input,.dose-edit-row select{border:1px solid #CFE4DE;border-radius:12px;padding:10px 12px;font:inherit;background:#fff;color:#0E2B24;min-width:0}.glucosa-condition-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.glucosa-condition-row label{display:inline-flex;gap:7px;align-items:center;border:1px solid #DCEDE8;border-radius:999px;padding:8px 12px;background:#fff;font-weight:800;color:#53786F}.glucosa-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}.glucosa-summary-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.glucosa-kpi,.glucosa-dose-card{background:#fff;border:1px solid #E5F0EC;border-radius:16px;padding:14px}.glucosa-kpi span{display:block;color:#6B8F88;font-weight:800;font-size:.78rem}.glucosa-kpi strong{display:block;color:#0F5A4D;font-size:1.25rem;margin:4px 0}.glucosa-kpi small{color:#53786F;line-height:1.35}.glucosa-kpi.warning strong{color:#B45309}.glucosa-kpi.danger strong{color:#B91C1C}.glucosa-kpi.safe strong{color:#047857}.glucosa-kpi.insulin strong{color:#6D28D9}.glucosa-chart-card{background:#fff;border:1px solid #E5F0EC;border-radius:18px;padding:10px;overflow:hidden}.glucosa-fusion-chart{width:100%;height:auto;display:block}.glucosa-legend{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px;font-size:.78rem;color:#53786F;font-weight:700}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px}.dot.basal{background:#64748B}.dot.noins{background:#B45309}.dot.glucose{background:#1A7F6E}.dot.insulin{background:#8B5CF6}.dot.simple{background:#F97316}.dot.complex{background:#3B82F6}.dot.protein{background:#A855F7}.dot.fat{background:#0F766E}.glucosa-footer-warning{background:#FFFBEB;border:1px solid rgba(245,158,11,.35);border-radius:16px;padding:12px 14px;color:#78350F;font-size:.9rem;margin-top:14px}.dose-edit-list{display:grid;gap:8px}.dose-edit-row{display:grid;grid-template-columns:120px 130px minmax(120px,1fr) 44px;gap:8px;align-items:end}.dose-edit-row label{font-size:.78rem;font-weight:800;color:#53786F;display:flex;flex-direction:column;gap:4px}@media(max-width:900px){.glucosa-controls,.glucosa-summary-grid,.glucosa-summary-grid.two,.dose-edit-row{grid-template-columns:1fr}.glucosa-fusion-card{padding:14px}}
+      .glucosa-fusion-card{background:linear-gradient(135deg,#F2FAF7,#FFFFFF);border:1px solid #DCEDE8;border-radius:22px;padding:18px;box-shadow:0 12px 34px rgba(15,90,77,.08);margin-bottom:16px}.glucosa-fusion-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}.glucosa-fusion-head h2{margin:0;font-size:1.5rem}.glucosa-source-pill{border-radius:999px;background:#D0F0EA;color:#0F5A4D;padding:6px 12px;font-weight:800;font-size:.8rem}.glucosa-controls{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:14px 0}.glucosa-controls label{font-size:.78rem;font-weight:800;color:#53786F;display:flex;flex-direction:column;gap:5px}.glucosa-controls input,.glucosa-controls select,.dose-edit-row input,.dose-edit-row select{border:1px solid #CFE4DE;border-radius:12px;padding:10px 12px;font:inherit;background:#fff;color:#0E2B24;min-width:0}.glucosa-condition-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.glucosa-condition-row label{display:inline-flex;gap:7px;align-items:center;border:1px solid #DCEDE8;border-radius:999px;padding:8px 12px;background:#fff;font-weight:800;color:#53786F}.glucosa-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}.glucosa-summary-grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.glucosa-kpi,.glucosa-dose-card{background:#fff;border:1px solid #E5F0EC;border-radius:16px;padding:14px}.glucosa-kpi span{display:block;color:#6B8F88;font-weight:800;font-size:.78rem}.glucosa-kpi strong{display:block;color:#0F5A4D;font-size:1.25rem;margin:4px 0}.glucosa-kpi small{color:#53786F;line-height:1.35}.glucosa-kpi.warning strong{color:#B45309}.glucosa-kpi.danger strong{color:#B91C1C}.glucosa-kpi.safe strong{color:#047857}.glucosa-kpi.insulin strong{color:#6D28D9}.glucosa-chart-card{background:#fff;border:1px solid #E5F0EC;border-radius:18px;padding:10px;overflow:hidden}.glucosa-fusion-chart{width:100%;height:auto;display:block}.glucosa-legend{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px;font-size:.78rem;color:#53786F;font-weight:700}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px}.dot.basal{background:#64748B}.dot.noins{background:#B45309}.dot.glucose{background:#1A7F6E}.dot.insulin{background:#8B5CF6}.dot.simple{background:#F97316}.dot.complex{background:#3B82F6}.dot.protein{background:#A855F7}.dot.fat{background:#0F766E}.glucosa-footer-warning{background:#FFFBEB;border:1px solid rgba(245,158,11,.35);border-radius:16px;padding:12px 14px;color:#78350F;font-size:.9rem;margin-top:14px}.glucosa-safety-note{background:#EFF6FF;border:1px solid rgba(59,130,246,.22);border-radius:14px;padding:10px 12px;color:#1E3A8A;font-size:.9rem;font-weight:700;margin:12px 0}.dose-edit-list{display:grid;gap:8px}.dose-edit-row{display:grid;grid-template-columns:120px 130px minmax(120px,1fr) 44px;gap:8px;align-items:end}.dose-edit-row label{font-size:.78rem;font-weight:800;color:#53786F;display:flex;flex-direction:column;gap:4px}@media(max-width:900px){.glucosa-controls,.glucosa-summary-grid,.glucosa-summary-grid.two,.dose-edit-row{grid-template-columns:1fr}.glucosa-fusion-card{padding:14px}}
     </style>
     <article class="glucosa-fusion-card" data-glucosa-fusion>
       <div class="glucosa-fusion-head"><div><p class="eyebrow">Fusión experimental</p><h2>GlucosaTrack integrado</h2><p class="muted">Cálculo con basal, macros e insulina ajustable.</p></div><span class="glucosa-source-pill">${snapshot.dishes.length} platos · ${snapshot.members.length} miembros</span></div>
