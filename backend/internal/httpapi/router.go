@@ -14,7 +14,7 @@ import (
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/store"
 )
 
-const apiVersion = "0.4.0"
+const apiVersion = "0.5.0"
 const accessTokenTTL = 12 * time.Hour
 const inviteTTL = 7 * 24 * time.Hour
 
@@ -34,6 +34,7 @@ func NewRouter(cfg config.Config, dbHealth DBHealthChecker, appStore *store.Stor
 	mux.HandleFunc("GET /api/v1/households/", householdByIDHandler(cfg, appStore))
 	mux.HandleFunc("PATCH /api/v1/households/", householdByIDHandler(cfg, appStore))
 	mux.HandleFunc("POST /api/v1/households/", householdByIDHandler(cfg, appStore))
+	mux.HandleFunc("PUT /api/v1/households/", householdByIDHandler(cfg, appStore))
 	mux.HandleFunc("POST /api/v1/invites/", acceptInviteHandler(cfg, appStore))
 	return withCORS(cfg, mux)
 }
@@ -95,6 +96,11 @@ type householdRequest struct {
 type inviteRequest struct {
 	Email string `json:"email"`
 	Role  string `json:"role"`
+}
+
+type syncRequest struct {
+	Version int             `json:"version"`
+	State   json.RawMessage `json:"state"`
 }
 
 func registerHandler(cfg config.Config, appStore *store.Store) http.HandlerFunc {
@@ -275,6 +281,24 @@ func householdByIDHandler(cfg config.Config, appStore *store.Store) http.Handler
 				return
 			}
 			writeJSON(w, http.StatusCreated, map[string]any{"invite": invite})
+		case r.Method == http.MethodGet && action == "sync":
+			snapshot, err := appStore.GetSyncSnapshot(r.Context(), claims.Subject, householdID)
+			if err != nil {
+				writeStoreError(w, err)
+				return
+			}
+			writeJSON(w, http.StatusOK, map[string]any{"sync": snapshot})
+		case r.Method == http.MethodPut && action == "sync":
+			var req syncRequest
+			if !decodeJSON(w, r, &req) {
+				return
+			}
+			snapshot, err := appStore.SaveSyncSnapshot(r.Context(), claims.Subject, householdID, req.Version, req.State)
+			if err != nil {
+				writeStoreError(w, err)
+				return
+			}
+			writeJSON(w, http.StatusOK, map[string]any{"sync": snapshot})
 		default:
 			writeError(w, http.StatusMethodNotAllowed, "method_not_allowed", "Método no permitido para esta ruta.")
 		}
@@ -363,8 +387,8 @@ func parseHouseholdPath(path string) (householdID string, action string, ok bool
 	if len(parts) == 1 {
 		return parts[0], "", true
 	}
-	if len(parts) == 2 && parts[1] == "invites" {
-		return parts[0], "invites", true
+	if len(parts) == 2 && (parts[1] == "invites" || parts[1] == "sync") {
+		return parts[0], parts[1], true
 	}
 	return "", "", false
 }
