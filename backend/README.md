@@ -4,15 +4,21 @@ Backend Go para login, hogares y sincronización de datos en la nube.
 
 ## Estado actual
 
-Fase 3 inicial:
+Fase 4 inicial:
 
 - `GET /health`
 - `GET /api/v1/version`
 - `POST /api/v1/auth/register`
 - `POST /api/v1/auth/login`
 - `GET /api/v1/me`
+- `GET /api/v1/households`
+- `POST /api/v1/households`
+- `GET /api/v1/households/{householdId}`
+- `PATCH /api/v1/households/{householdId}`
+- `POST /api/v1/households/{householdId}/invites`
+- `POST /api/v1/invites/{inviteToken}/accept`
 - conexión a PostgreSQL usando `DATABASE_URL`
-- migración inicial en `migrations/001_init.sql`
+- migraciones iniciales en `migrations/001_init.sql` y `migrations/002_household_invites.sql`
 
 ## Ejecutar localmente
 
@@ -49,13 +55,14 @@ Railway también inyecta `PORT` automáticamente en el entorno del servicio.
 
 ## Migraciones
 
-La primera migración está en:
+Migraciones actuales:
 
 ```text
 migrations/001_init.sql
+migrations/002_household_invites.sql
 ```
 
-Por ahora se puede ejecutar manualmente desde el panel o consola PostgreSQL. Más adelante añadiremos un runner de migraciones automático o un comando separado.
+Por ahora se pueden ejecutar manualmente desde el panel o consola PostgreSQL. Más adelante añadiremos un runner de migraciones automático o un comando separado.
 
 ## Auth
 
@@ -124,11 +131,101 @@ Authorization: Bearer <accessToken>
 
 Devuelve usuario y hogares asociados.
 
+## Hogares
+
+Todos los endpoints de hogares requieren:
+
+```http
+Authorization: Bearer <accessToken>
+```
+
+### Listar hogares
+
+```http
+GET /api/v1/households
+```
+
+### Crear hogar
+
+```http
+POST /api/v1/households
+Content-Type: application/json
+```
+
+Body:
+
+```json
+{
+  "name": "Casa familiar"
+}
+```
+
+### Ver hogar
+
+```http
+GET /api/v1/households/{householdId}
+```
+
+### Renombrar hogar
+
+Requiere rol `owner` o `admin`.
+
+```http
+PATCH /api/v1/households/{householdId}
+Content-Type: application/json
+```
+
+Body:
+
+```json
+{
+  "name": "Nuevo nombre"
+}
+```
+
+### Crear invitación
+
+Requiere rol `owner` o `admin`.
+
+```http
+POST /api/v1/households/{householdId}/invites
+Content-Type: application/json
+```
+
+Body:
+
+```json
+{
+  "email": "otra-persona@example.com",
+  "role": "member"
+}
+```
+
+Roles válidos para invitación:
+
+```text
+admin
+member
+viewer
+```
+
+La respuesta incluye un `token` que el frontend podrá convertir en enlace de invitación.
+
+### Aceptar invitación
+
+El usuario debe estar autenticado.
+
+```http
+POST /api/v1/invites/{inviteToken}/accept
+```
+
+Si la invitación es válida, añade el usuario al hogar.
+
 ## Próxima fase
 
-Fase 4:
+Fase 5:
 
-- endpoints de hogares,
-- invitaciones,
-- roles,
-- preparación de sincronización inicial por hogar.
+- endpoint de sincronización global por hogar,
+- guardar estado completo inicial del frontend,
+- recuperar estado desde otro dispositivo,
+- preparar `app/apiClient.js` sin romper localStorage.
