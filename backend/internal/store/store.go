@@ -30,6 +30,15 @@ type Household struct {
 	Role string `json:"role"`
 }
 
+// HouseholdMember is an account with access to a household.
+type HouseholdMember struct {
+	UserID      string    `json:"userId"`
+	Email       string    `json:"email"`
+	DisplayName string    `json:"displayName,omitempty"`
+	Role        string    `json:"role"`
+	JoinedAt    time.Time `json:"joinedAt"`
+}
+
 // HouseholdInvite is an invitation to join a household.
 type HouseholdInvite struct {
 	ID           string    `json:"id"`
@@ -54,6 +63,7 @@ var (
 	ErrForbidden          = errors.New("forbidden")
 	ErrNotFound           = errors.New("not found")
 	ErrInvalidInvite      = errors.New("invalid invite")
+	ErrLastOwner          = errors.New("last owner")
 )
 
 func New(db *sql.DB) *Store {
@@ -271,6 +281,100 @@ func (s *Store) UpdateHousehold(ctx context.Context, userID, householdID, name s
 	return household, nil
 }
 
+func (s *Store) ListHouseholdMembers(ctx context.Context, userID, householdID string) ([]HouseholdMember, error) {
+	if !s.Available() {
+		return nil, ErrDatabaseRequired
+	}
+	if _, err := s.GetHouseholdForUser(ctx, userID, householdID); err != nil {
+		return nil, err
+	}
+	rows, err := s.db.QueryContext(ctx, `
+		SELECT u.id, u.email, COALESCE(u.display_name, ''), hu.role, hu.created_at
+		FROM household_users hu
+		JOIN users u ON u.id = hu.user_id
+		WHERE hu.household_id = $1
+		ORDER BY hu.created_at ASC
+	`, householdID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	members := []HouseholdMember{}
+	for rows.Next() {
+		var member HouseholdMember
+		if err := rows.Scan(&member.UserID, &member.Email, &member.DisplayName, &member.Role, &member.JoinedAt); err != nil {
+			return nil, err
+		}
+		members = append(members, member)
+	}
+	return members, rows.Err()
+}
+
+func (s *Store) UpdateHouseholdMemberRole(ctx context.Context, actorUserID, householdID, targetUserID, role string) (HouseholdMember, error) {
+	var member HouseholdMember
+	if !s.Available() {
+		return member, ErrDatabaseRequired
+	}
+	if err := s.requireHouseholdRole(ctx, actorUserID, householdID, "owner", "admin"); err != nil {
+		return member, err
+	}
+	role = normalizeMemberRole(role)
+	if role == "owner" {
+		if err := s.requireHouseholdRole(ctx, actorUserID, householdID, "owner"); err != nil {
+			return member, err
+		}
+	}
+	if err := s.ensureNotLastOwnerDemotion(ctx, householdID, targetUserID, role); err != nil {
+		return member, err
+	}
+	row := s.db.QueryRowContext(ctx, `
+		UPDATE household_users
+		SET role = $1
+		WHERE household_id = $2 AND user_id = $3
+		RETURNING user_id, role, created_at
+	`, role, householdID, targetUserID)
+	if err := row.Scan(&member.UserID, &member.Role, &member.JoinedAt); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return member, ErrNotFound
+		}
+		return member, err
+	}
+	row = s.db.QueryRowContext(ctx, `
+		SELECT email, COALESCE(display_name, '')
+		FROM users
+		WHERE id = $1
+	`, targetUserID)
+	if err := row.Scan(&member.Email, &member.DisplayName); err != nil {
+		return member, err
+	}
+	return member, nil
+}
+
+func (s *Store) RemoveHouseholdMember(ctx context.Context, actorUserID, householdID, targetUserID string) error {
+	if !s.Available() {
+		return ErrDatabaseRequired
+	}
+	if actorUserID != targetUserID {
+		if err := s.requireHouseholdRole(ctx, actorUserID, householdID, "owner", "admin"); err != nil {
+			return err
+		}
+	}
+	if err := s.ensureNotLastOwnerRemoval(ctx, householdID, targetUserID); err != nil {
+		return err
+	}
+	result, err := s.db.ExecContext(ctx, `
+		DELETE FROM household_users
+		WHERE household_id = $1 AND user_id = $2
+	`, householdID, targetUserID)
+	if err != nil {
+		return err
+	}
+	if affected, err := result.RowsAffected(); err == nil && affected == 0 {
+		return ErrNotFound
+	}
+	return nil
+}
+
 func (s *Store) CreateInvite(ctx context.Context, userID, householdID, invitedEmail, role string, ttl time.Duration) (HouseholdInvite, error) {
 	var invite HouseholdInvite
 	if !s.Available() {
@@ -364,6 +468,59 @@ func (s *Store) AcceptInvite(ctx context.Context, userID, token string) (Househo
 	return household, nil
 }
 
+func (s *Store) ensureNotLastOwnerDemotion(ctx context.Context, householdID, targetUserID, newRole string) error {
+	if newRole == "owner" {
+		return nil
+	}
+	var currentRole string
+	if err := s.db.QueryRowContext(ctx, `
+		SELECT role FROM household_users WHERE household_id = $1 AND user_id = $2
+	`, householdID, targetUserID).Scan(&currentRole); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return ErrNotFound
+		}
+		return err
+	}
+	if currentRole != "owner" {
+		return nil
+	}
+	var owners int
+	if err := s.db.QueryRowContext(ctx, `
+		SELECT COUNT(*) FROM household_users WHERE household_id = $1 AND role = 'owner'
+	`, householdID).Scan(&owners); err != nil {
+		return err
+	}
+	if owners <= 1 {
+		return ErrLastOwner
+	}
+	return nil
+}
+
+func (s *Store) ensureNotLastOwnerRemoval(ctx context.Context, householdID, targetUserID string) error {
+	var role string
+	if err := s.db.QueryRowContext(ctx, `
+		SELECT role FROM household_users WHERE household_id = $1 AND user_id = $2
+	`, householdID, targetUserID).Scan(&role); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return ErrNotFound
+		}
+		return err
+	}
+	if role != "owner" {
+		return nil
+	}
+	var owners int
+	if err := s.db.QueryRowContext(ctx, `
+		SELECT COUNT(*) FROM household_users WHERE household_id = $1 AND role = 'owner'
+	`, householdID).Scan(&owners); err != nil {
+		return err
+	}
+	if owners <= 1 {
+		return ErrLastOwner
+	}
+	return nil
+}
+
 func (s *Store) requireHouseholdRole(ctx context.Context, userID, householdID string, allowed ...string) error {
 	var role string
 	row := s.db.QueryRowContext(ctx, `
@@ -392,6 +549,15 @@ func normalizeEmail(email string) string {
 func normalizeInviteRole(role string) string {
 	switch strings.ToLower(strings.TrimSpace(role)) {
 	case "admin", "viewer":
+		return strings.ToLower(strings.TrimSpace(role))
+	default:
+		return "member"
+	}
+}
+
+func normalizeMemberRole(role string) string {
+	switch strings.ToLower(strings.TrimSpace(role)) {
+	case "owner", "admin", "viewer":
 		return strings.ToLower(strings.TrimSpace(role))
 	default:
 		return "member"
