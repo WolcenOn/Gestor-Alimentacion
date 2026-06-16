@@ -1,6 +1,7 @@
 package httpapi
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"slices"
@@ -9,24 +10,40 @@ import (
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/config"
 )
 
-const apiVersion = "0.1.0"
+const apiVersion = "0.2.0"
+
+// DBHealthChecker checks database availability for health responses.
+type DBHealthChecker func(context.Context) string
 
 // NewRouter builds the HTTP router for the API.
-func NewRouter(cfg config.Config) http.Handler {
+func NewRouter(cfg config.Config, dbHealth DBHealthChecker) http.Handler {
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /health", healthHandler(cfg))
+	mux.HandleFunc("GET /health", healthHandler(cfg, dbHealth))
 	mux.HandleFunc("GET /api/v1/version", versionHandler(cfg))
 	return withCORS(cfg, mux)
 }
 
-func healthHandler(cfg config.Config) http.HandlerFunc {
+func healthHandler(cfg config.Config, dbHealth DBHealthChecker) http.HandlerFunc {
 	startedAt := time.Now().UTC()
 	return func(w http.ResponseWriter, r *http.Request) {
-		writeJSON(w, http.StatusOK, map[string]any{
-			"status":       "ok",
+		ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+		defer cancel()
+
+		database := "not_configured"
+		if dbHealth != nil {
+			database = dbHealth(ctx)
+		}
+
+		status := http.StatusOK
+		if database == "unreachable" {
+			status = http.StatusServiceUnavailable
+		}
+
+		writeJSON(w, status, map[string]any{
+			"status":       statusText(status),
 			"service":      "gestor-alimentacion-api",
 			"environment":  cfg.AppEnv,
-			"database":     databaseStatus(cfg),
+			"database":     database,
 			"started_at":   startedAt.Format(time.RFC3339),
 			"checked_at":   time.Now().UTC().Format(time.RFC3339),
 			"backend_lang": "go",
@@ -44,11 +61,11 @@ func versionHandler(cfg config.Config) http.HandlerFunc {
 	}
 }
 
-func databaseStatus(cfg config.Config) string {
-	if cfg.DatabaseURL == "" {
-		return "not_configured"
+func statusText(status int) string {
+	if status >= 200 && status < 300 {
+		return "ok"
 	}
-	return "configured"
+	return "error"
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload any) {
