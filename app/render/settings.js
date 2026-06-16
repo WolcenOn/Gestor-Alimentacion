@@ -11,6 +11,9 @@ function renderCloudSettings() {
   const householdName = session?.households?.[0]?.name || "";
   const statusLabel = syncStatus.mode === "synced" ? "Sincronizado" : syncStatus.mode === "syncing" ? "Sincronizando" : syncStatus.mode === "error" ? "Error" : syncStatus.mode === "ready" ? "Preparado" : "Local";
 
+  const loginSubmit = "event.preventDefault();window.GestorCloudAPI.loginCloudAccount({email:this.elements.email.value,password:this.elements.password.value}).then(()=>{alert('Sesión cloud iniciada.');location.reload();}).catch(error=>alert(error.message));";
+  const registerSubmit = "event.preventDefault();window.GestorCloudAPI.registerCloudAccount({email:this.elements.email.value,password:this.elements.password.value,displayName:this.elements.displayName.value,householdName:this.elements.householdName.value||'Mi hogar'}).then(()=>{alert('Cuenta cloud creada.');location.reload();}).catch(error=>alert(error.message));";
+
   return `
     <article class="card cloud-sync-card">
       <div class="section-title-row">
@@ -33,14 +36,14 @@ function renderCloudSettings() {
 
       ${session ? `
         <div class="actions wrap">
-          <button type="button" data-action="cloud-push">Subir datos locales a la nube</button>
-          <button type="button" class="secondary" data-action="cloud-pull">Descargar datos de la nube</button>
-          <button type="button" class="secondary" data-action="cloud-enable-auto-sync">Activar autosync</button>
-          <button type="button" class="secondary" data-action="cloud-logout">Cerrar sesión cloud</button>
+          <button type="button" onclick="window.GestorCloudSync.push().then(()=>alert('Datos subidos a la nube.')).catch(error=>alert(error.message))">Subir datos locales a la nube</button>
+          <button type="button" class="secondary" onclick="window.GestorCloudSync.pull({apply:true}).then(()=>{alert('Datos descargados desde la nube.');location.reload();}).catch(error=>alert(error.message))">Descargar datos de la nube</button>
+          <button type="button" class="secondary" onclick="window.GestorCloudSync.enableAutoSync();window.GestorCloudSync.push().then(()=>alert('Autosync activado.')).catch(error=>alert(error.message))">Activar autosync</button>
+          <button type="button" class="secondary" onclick="window.GestorCloudAPI.clearCloudSession();alert('Sesión cloud cerrada.');location.reload();">Cerrar sesión cloud</button>
         </div>
       ` : `
         <div class="grid cols-2 settings-grid">
-          <form data-form="cloud-login" class="stack-form">
+          <form data-form="cloud-login" class="stack-form" onsubmit="${escapeHtml(loginSubmit)}">
             <h4>Iniciar sesión</h4>
             <label>Email
               <input name="email" type="email" autocomplete="email" required>
@@ -51,7 +54,7 @@ function renderCloudSettings() {
             <button ${configured ? "" : "disabled"}>Entrar</button>
           </form>
 
-          <form data-form="cloud-register" class="stack-form">
+          <form data-form="cloud-register" class="stack-form" onsubmit="${escapeHtml(registerSubmit)}">
             <h4>Crear cuenta</h4>
             <label>Email
               <input name="email" type="email" autocomplete="email" required>
