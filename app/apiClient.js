@@ -162,7 +162,7 @@ export async function acceptHouseholdInvite(token) {
   return request(`/invites/${encodeURIComponent(token)}/accept`, { method: "POST" });
 }
 
-export default {
+const GestorCloudAPI = {
   getApiBaseUrl,
   isCloudConfigured,
   getCloudSession,
@@ -179,3 +179,7 @@ export default {
   createHouseholdInvite,
   acceptHouseholdInvite
 };
+
+window.GestorCloudAPI = GestorCloudAPI;
+
+export default GestorCloudAPI;
