@@ -36,7 +36,15 @@ func main() {
 		}
 		database = pool
 		defer database.Close()
-		logger.Info("database connection ready")
+
+		migrationCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+		if err := db.RunMigrations(migrationCtx, database); err != nil {
+			cancel()
+			logger.Error("database migrations failed", "error", err)
+			os.Exit(1)
+		}
+		cancel()
+		logger.Info("database connection and migrations ready")
 	}
 
 	appStore := store.New(database)
