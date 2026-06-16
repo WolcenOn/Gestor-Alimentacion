@@ -325,7 +325,7 @@ Criterio de éxito:
 ### Fase 3 — Registro y login
 
 - Implementar registro.
-- Hashear contraseñas con bcrypt o argon2id.
+- Hashear contraseñas.
 - Implementar login.
 - Emitir JWT.
 - Middleware de autenticación.
@@ -362,12 +362,15 @@ El JSON puede guardar inicialmente:
 ```json
 {
   "version": 1,
-  "ingredients": [],
-  "dishes": [],
-  "familyMembers": [],
-  "weeklyPlans": [],
-  "shoppingLists": [],
-  "settings": {}
+  "state": {
+    "ingredients": [],
+    "dishes": [],
+    "familyMembers": [],
+    "weeklyPlans": [],
+    "shoppingLists": [],
+    "settings": {},
+    "metabolicProfiles": {}
+  }
 }
 ```
 
@@ -383,15 +386,30 @@ Crear:
 ```text
 app/apiClient.js
 app/cloudSync.js
-app/authView.js
+app/config.js
+app/config.example.js
 ```
 
 Reglas:
 
-- Si no hay login, sigue usando localStorage.
-- Si hay login, usa nube + caché local.
-- Los errores de red no deben romper el uso local.
-- Mostrar estado: `Guardado local`, `Sincronizado`, `Error de sincronización`.
+- Si `API_BASE_URL` está vacío, la aplicación sigue en modo local con `localStorage`.
+- Si hay backend configurado y sesión, se puede hacer pull/push del estado del hogar.
+- Los errores de red no rompen el uso local.
+- La sincronización automática se engancha a `subscribe()` del store y usa debounce.
+- `window.GestorCloudSync` permite probar manualmente `pull()`, `push()` y `enableAutoSync()` desde consola.
+- No se añade todavía una pantalla obligatoria de login.
+
+Estado actual de la fase:
+
+- `app/apiClient.js` creado.
+- `app/cloudSync.js` creado.
+- `app/config.js` creado con `API_BASE_URL` vacío.
+- `index.html` carga los módulos cloud sin romper GitHub Pages.
+
+Criterio de éxito:
+
+- Con `API_BASE_URL` vacío, la app funciona igual que antes.
+- Con backend configurado y sesión guardada, se puede sincronizar un snapshot del estado actual.
 
 ### Fase 7 — Recurso por recurso
 
@@ -504,15 +522,15 @@ solo accesible por backend
 
 ## Checklist de avance
 
-- [ ] Crear backend Go mínimo.
-- [ ] Desplegar `/health` en Railway.
-- [ ] Añadir PostgreSQL.
-- [ ] Crear migraciones.
-- [ ] Implementar auth.
-- [ ] Crear hogares.
-- [ ] Añadir invitaciones.
-- [ ] Crear `apiClient.js`.
-- [ ] Crear sincronización global.
+- [x] Crear backend Go mínimo.
+- [x] Desplegar `/health` en Railway preparado.
+- [x] Añadir PostgreSQL preparado.
+- [x] Crear migraciones.
+- [x] Implementar auth.
+- [x] Crear hogares.
+- [x] Añadir invitaciones.
+- [x] Crear `apiClient.js`.
+- [x] Crear sincronización global.
 - [ ] Migrar recursos gradualmente.
 - [ ] Portar motor glucémico a Go.
 - [ ] Añadir pruebas de equivalencia JS/Go.
