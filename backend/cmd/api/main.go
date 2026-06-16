@@ -14,11 +14,16 @@ import (
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/config"
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/db"
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/httpapi"
+	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/store"
 )
 
 func main() {
 	cfg := config.Load()
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
+
+	if cfg.JWTSecret == "" {
+		logger.Warn("JWT_SECRET is not configured; auth endpoints will fail until it is set")
+	}
 
 	var database *sql.DB
 	if cfg.DatabaseURL == "" {
@@ -34,11 +39,12 @@ func main() {
 		logger.Info("database connection ready")
 	}
 
+	appStore := store.New(database)
 	server := &http.Server{
 		Addr: ":" + cfg.Port,
 		Handler: httpapi.NewRouter(cfg, func(ctx context.Context) string {
 			return db.Health(ctx, database)
-		}),
+		}, appStore),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       15 * time.Second,
 		WriteTimeout:      30 * time.Second,
