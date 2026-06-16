@@ -1,9 +1,4 @@
-[build]
-builder = "NIXPACKS"
-buildCommand = "cd backend && go build -o bin/api ./cmd/api"
-
 [deploy]
-startCommand = "cd backend && ./bin/api"
 healthcheckPath = "/health"
 healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"
