@@ -9,6 +9,7 @@ COPY backend/go.mod ./
 RUN go mod download
 
 COPY backend/ ./
+RUN go mod tidy
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /out/api ./cmd/api
 
 FROM gcr.io/distroless/static-debian12:nonroot
