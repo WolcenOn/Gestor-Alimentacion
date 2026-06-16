@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"log/slog"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"time"
 
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/config"
+	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/db"
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/httpapi"
 )
 
@@ -18,9 +20,25 @@ func main() {
 	cfg := config.Load()
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 
+	var database *sql.DB
+	if cfg.DatabaseURL == "" {
+		logger.Warn("DATABASE_URL is not configured; database health will be not_configured")
+	} else {
+		pool, err := db.Open(cfg.DatabaseURL)
+		if err != nil {
+			logger.Error("database connection failed", "error", err)
+			os.Exit(1)
+		}
+		database = pool
+		defer database.Close()
+		logger.Info("database connection ready")
+	}
+
 	server := &http.Server{
-		Addr:              ":" + cfg.Port,
-		Handler:           httpapi.NewRouter(cfg),
+		Addr: ":" + cfg.Port,
+		Handler: httpapi.NewRouter(cfg, func(ctx context.Context) string {
+			return db.Health(ctx, database)
+		}),
 		ReadHeaderTimeout: 5 * time.Second,
 		ReadTimeout:       15 * time.Second,
 		WriteTimeout:      30 * time.Second,
