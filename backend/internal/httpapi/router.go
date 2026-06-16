@@ -14,8 +14,9 @@ import (
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/store"
 )
 
-const apiVersion = "0.3.0"
+const apiVersion = "0.4.0"
 const accessTokenTTL = 12 * time.Hour
+const inviteTTL = 7 * 24 * time.Hour
 
 // DBHealthChecker checks database availability for health responses.
 type DBHealthChecker func(context.Context) string
@@ -28,6 +29,12 @@ func NewRouter(cfg config.Config, dbHealth DBHealthChecker, appStore *store.Stor
 	mux.HandleFunc("POST /api/v1/auth/register", registerHandler(cfg, appStore))
 	mux.HandleFunc("POST /api/v1/auth/login", loginHandler(cfg, appStore))
 	mux.HandleFunc("GET /api/v1/me", meHandler(cfg, appStore))
+	mux.HandleFunc("GET /api/v1/households", listHouseholdsHandler(cfg, appStore))
+	mux.HandleFunc("POST /api/v1/households", createHouseholdHandler(cfg, appStore))
+	mux.HandleFunc("GET /api/v1/households/", householdByIDHandler(cfg, appStore))
+	mux.HandleFunc("PATCH /api/v1/households/", householdByIDHandler(cfg, appStore))
+	mux.HandleFunc("POST /api/v1/households/", householdByIDHandler(cfg, appStore))
+	mux.HandleFunc("POST /api/v1/invites/", acceptInviteHandler(cfg, appStore))
 	return withCORS(cfg, mux)
 }
 
@@ -79,6 +86,15 @@ type registerRequest struct {
 type loginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+type householdRequest struct {
+	Name string `json:"name"`
+}
+
+type inviteRequest struct {
+	Email string `json:"email"`
+	Role  string `json:"role"`
 }
 
 func registerHandler(cfg config.Config, appStore *store.Store) http.HandlerFunc {
@@ -184,12 +200,121 @@ func meHandler(cfg config.Config, appStore *store.Store) http.HandlerFunc {
 	}
 }
 
+func listHouseholdsHandler(cfg config.Config, appStore *store.Store) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		claims, ok := authenticatedStore(w, r, cfg, appStore)
+		if !ok {
+			return
+		}
+		households, err := appStore.ListHouseholdsForUser(r.Context(), claims.Subject)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, "households_failed", "No se pudieron cargar los hogares.")
+			return
+		}
+		writeJSON(w, http.StatusOK, map[string]any{"households": households})
+	}
+}
+
+func createHouseholdHandler(cfg config.Config, appStore *store.Store) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		claims, ok := authenticatedStore(w, r, cfg, appStore)
+		if !ok {
+			return
+		}
+		var req householdRequest
+		if !decodeJSON(w, r, &req) {
+			return
+		}
+		household, err := appStore.CreateHousehold(r.Context(), claims.Subject, req.Name)
+		if err != nil {
+			writeStoreError(w, err)
+			return
+		}
+		writeJSON(w, http.StatusCreated, map[string]any{"household": household})
+	}
+}
+
+func householdByIDHandler(cfg config.Config, appStore *store.Store) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		claims, ok := authenticatedStore(w, r, cfg, appStore)
+		if !ok {
+			return
+		}
+		householdID, action, ok := parseHouseholdPath(r.URL.Path)
+		if !ok {
+			writeError(w, http.StatusNotFound, "not_found", "Ruta de hogar no encontrada.")
+			return
+		}
+		switch {
+		case r.Method == http.MethodGet && action == "":
+			household, err := appStore.GetHouseholdForUser(r.Context(), claims.Subject, householdID)
+			if err != nil {
+				writeStoreError(w, err)
+				return
+			}
+			writeJSON(w, http.StatusOK, map[string]any{"household": household})
+		case r.Method == http.MethodPatch && action == "":
+			var req householdRequest
+			if !decodeJSON(w, r, &req) {
+				return
+			}
+			household, err := appStore.UpdateHousehold(r.Context(), claims.Subject, householdID, req.Name)
+			if err != nil {
+				writeStoreError(w, err)
+				return
+			}
+			writeJSON(w, http.StatusOK, map[string]any{"household": household})
+		case r.Method == http.MethodPost && action == "invites":
+			var req inviteRequest
+			if !decodeJSON(w, r, &req) {
+				return
+			}
+			invite, err := appStore.CreateInvite(r.Context(), claims.Subject, householdID, req.Email, req.Role, inviteTTL)
+			if err != nil {
+				writeStoreError(w, err)
+				return
+			}
+			writeJSON(w, http.StatusCreated, map[string]any{"invite": invite})
+		default:
+			writeError(w, http.StatusMethodNotAllowed, "method_not_allowed", "Método no permitido para esta ruta.")
+		}
+	}
+}
+
+func acceptInviteHandler(cfg config.Config, appStore *store.Store) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		claims, ok := authenticatedStore(w, r, cfg, appStore)
+		if !ok {
+			return
+		}
+		token, ok := parseInviteAcceptPath(r.URL.Path)
+		if !ok {
+			writeError(w, http.StatusNotFound, "not_found", "Invitación no encontrada.")
+			return
+		}
+		household, err := appStore.AcceptInvite(r.Context(), claims.Subject, token)
+		if err != nil {
+			writeStoreError(w, err)
+			return
+		}
+		writeJSON(w, http.StatusOK, map[string]any{"household": household})
+	}
+}
+
 func issueUserToken(cfg config.Config, user store.User) (string, error) {
 	return auth.IssueToken(cfg.JWTSecret, auth.Claims{
 		Subject: user.ID,
 		Email:   user.Email,
 		Name:    user.DisplayName,
 	}, accessTokenTTL)
+}
+
+func authenticatedStore(w http.ResponseWriter, r *http.Request, cfg config.Config, appStore *store.Store) (auth.Claims, bool) {
+	var empty auth.Claims
+	if !storeAvailable(w, appStore) {
+		return empty, false
+	}
+	return requireAuth(w, r, cfg)
 }
 
 func requireAuth(w http.ResponseWriter, r *http.Request, cfg config.Config) (auth.Claims, bool) {
@@ -226,6 +351,36 @@ func decodeJSON(w http.ResponseWriter, r *http.Request, target any) bool {
 	return true
 }
 
+func parseHouseholdPath(path string) (householdID string, action string, ok bool) {
+	prefix := "/api/v1/households/"
+	if !strings.HasPrefix(path, prefix) {
+		return "", "", false
+	}
+	parts := strings.Split(strings.Trim(strings.TrimPrefix(path, prefix), "/"), "/")
+	if len(parts) == 0 || parts[0] == "" {
+		return "", "", false
+	}
+	if len(parts) == 1 {
+		return parts[0], "", true
+	}
+	if len(parts) == 2 && parts[1] == "invites" {
+		return parts[0], "invites", true
+	}
+	return "", "", false
+}
+
+func parseInviteAcceptPath(path string) (token string, ok bool) {
+	prefix := "/api/v1/invites/"
+	if !strings.HasPrefix(path, prefix) {
+		return "", false
+	}
+	parts := strings.Split(strings.Trim(strings.TrimPrefix(path, prefix), "/"), "/")
+	if len(parts) == 2 && parts[0] != "" && parts[1] == "accept" {
+		return parts[0], true
+	}
+	return "", false
+}
+
 func statusText(status int) string {
 	if status >= 200 && status < 300 {
 		return "ok"
@@ -237,6 +392,21 @@ func writeJSON(w http.ResponseWriter, status int, payload any) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(status)
 	_ = json.NewEncoder(w).Encode(payload)
+}
+
+func writeStoreError(w http.ResponseWriter, err error) {
+	switch {
+	case errors.Is(err, store.ErrForbidden):
+		writeError(w, http.StatusForbidden, "forbidden", "No tienes permisos para realizar esta acción.")
+	case errors.Is(err, store.ErrNotFound):
+		writeError(w, http.StatusNotFound, "not_found", "No se encontró el recurso solicitado.")
+	case errors.Is(err, store.ErrInvalidInvite):
+		writeError(w, http.StatusBadRequest, "invalid_invite", "La invitación no es válida o ha caducado.")
+	case errors.Is(err, store.ErrDatabaseRequired):
+		writeError(w, http.StatusServiceUnavailable, "database_required", "La base de datos no está configurada.")
+	default:
+		writeError(w, http.StatusInternalServerError, "server_error", "No se pudo completar la operación.")
+	}
 }
 
 func writeError(w http.ResponseWriter, status int, code, message string) {
