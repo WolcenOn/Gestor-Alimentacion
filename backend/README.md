@@ -4,7 +4,7 @@ Backend Go para login, hogares y sincronización de datos en la nube.
 
 ## Estado actual
 
-Fase 4 inicial:
+Fase 5 inicial:
 
 - `GET /health`
 - `GET /api/v1/version`
@@ -17,8 +17,10 @@ Fase 4 inicial:
 - `PATCH /api/v1/households/{householdId}`
 - `POST /api/v1/households/{householdId}/invites`
 - `POST /api/v1/invites/{inviteToken}/accept`
+- `GET /api/v1/households/{householdId}/sync`
+- `PUT /api/v1/households/{householdId}/sync`
 - conexión a PostgreSQL usando `DATABASE_URL`
-- migraciones iniciales en `migrations/001_init.sql` y `migrations/002_household_invites.sql`
+- migraciones iniciales en `migrations/001_init.sql`, `migrations/002_household_invites.sql` y `migrations/003_household_sync.sql`
 
 ## Ejecutar localmente
 
@@ -60,6 +62,7 @@ Migraciones actuales:
 ```text
 migrations/001_init.sql
 migrations/002_household_invites.sql
+migrations/003_household_sync.sql
 ```
 
 Por ahora se pueden ejecutar manualmente desde el panel o consola PostgreSQL. Más adelante añadiremos un runner de migraciones automático o un comando separado.
@@ -221,11 +224,65 @@ POST /api/v1/invites/{inviteToken}/accept
 
 Si la invitación es válida, añade el usuario al hogar.
 
+## Sincronización inicial
+
+La sincronización inicial guarda un snapshot JSON completo del estado del frontend por hogar. Esto permite sincronizar datos entre dispositivos sin migrar todavía cada recurso a endpoints independientes.
+
+### Descargar estado del hogar
+
+```http
+GET /api/v1/households/{householdId}/sync
+Authorization: Bearer <accessToken>
+```
+
+Respuesta si todavía no hay estado guardado:
+
+```json
+{
+  "sync": {
+    "householdId": "...",
+    "version": 1,
+    "state": {},
+    "updatedAt": "0001-01-01T00:00:00Z"
+  }
+}
+```
+
+### Subir estado del hogar
+
+Requiere rol `owner`, `admin` o `member`. El rol `viewer` puede leer, pero no guardar.
+
+```http
+PUT /api/v1/households/{householdId}/sync
+Authorization: Bearer <accessToken>
+Content-Type: application/json
+```
+
+Body recomendado:
+
+```json
+{
+  "version": 1,
+  "state": {
+    "ingredients": [],
+    "dishes": [],
+    "familyMembers": [],
+    "weeklyPlans": [],
+    "shoppingLists": [],
+    "settings": {},
+    "metabolicProfiles": {}
+  }
+}
+```
+
+La respuesta devuelve el snapshot guardado, incluyendo `updatedAt`.
+
 ## Próxima fase
 
-Fase 5:
+Fase 6:
 
-- endpoint de sincronización global por hogar,
-- guardar estado completo inicial del frontend,
-- recuperar estado desde otro dispositivo,
-- preparar `app/apiClient.js` sin romper localStorage.
+- crear `app/apiClient.js`,
+- crear `app/cloudSync.js`,
+- mantener localStorage como fallback,
+- permitir login desde el frontend sin romper GitHub Pages,
+- mostrar estado: local, sincronizado o error.
