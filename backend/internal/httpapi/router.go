@@ -35,6 +35,7 @@ func NewRouter(cfg config.Config, dbHealth DBHealthChecker, appStore *store.Stor
 	mux.HandleFunc("PATCH /api/v1/households/", householdByIDHandler(cfg, appStore))
 	mux.HandleFunc("POST /api/v1/households/", householdByIDHandler(cfg, appStore))
 	mux.HandleFunc("PUT /api/v1/households/", householdByIDHandler(cfg, appStore))
+	mux.HandleFunc("DELETE /api/v1/households/", householdByIDHandler(cfg, appStore))
 	mux.HandleFunc("POST /api/v1/invites/", acceptInviteHandler(cfg, appStore))
 	return withCORS(cfg, mux)
 }
@@ -96,6 +97,10 @@ type householdRequest struct {
 type inviteRequest struct {
 	Email string `json:"email"`
 	Role  string `json:"role"`
+}
+
+type memberRoleRequest struct {
+	Role string `json:"role"`
 }
 
 type syncRequest struct {
@@ -270,6 +275,32 @@ func householdByIDHandler(cfg config.Config, appStore *store.Store) http.Handler
 				return
 			}
 			writeJSON(w, http.StatusOK, map[string]any{"household": household})
+		case r.Method == http.MethodGet && action == "members":
+			members, err := appStore.ListHouseholdMembers(r.Context(), claims.Subject, householdID)
+			if err != nil {
+				writeStoreError(w, err)
+				return
+			}
+			writeJSON(w, http.StatusOK, map[string]any{"members": members})
+		case r.Method == http.MethodPatch && strings.HasPrefix(action, "members/"):
+			targetUserID := strings.TrimPrefix(action, "members/")
+			var req memberRoleRequest
+			if !decodeJSON(w, r, &req) {
+				return
+			}
+			member, err := appStore.UpdateHouseholdMemberRole(r.Context(), claims.Subject, householdID, targetUserID, req.Role)
+			if err != nil {
+				writeStoreError(w, err)
+				return
+			}
+			writeJSON(w, http.StatusOK, map[string]any{"member": member})
+		case r.Method == http.MethodDelete && strings.HasPrefix(action, "members/"):
+			targetUserID := strings.TrimPrefix(action, "members/")
+			if err := appStore.RemoveHouseholdMember(r.Context(), claims.Subject, householdID, targetUserID); err != nil {
+				writeStoreError(w, err)
+				return
+			}
+			writeJSON(w, http.StatusOK, map[string]any{"removed": true})
 		case r.Method == http.MethodPost && action == "invites":
 			var req inviteRequest
 			if !decodeJSON(w, r, &req) {
@@ -387,8 +418,11 @@ func parseHouseholdPath(path string) (householdID string, action string, ok bool
 	if len(parts) == 1 {
 		return parts[0], "", true
 	}
-	if len(parts) == 2 && (parts[1] == "invites" || parts[1] == "sync") {
+	if len(parts) == 2 && (parts[1] == "invites" || parts[1] == "sync" || parts[1] == "members") {
 		return parts[0], parts[1], true
+	}
+	if len(parts) == 3 && parts[1] == "members" && parts[2] != "" {
+		return parts[0], "members/" + parts[2], true
 	}
 	return "", "", false
 }
@@ -426,6 +460,8 @@ func writeStoreError(w http.ResponseWriter, err error) {
 		writeError(w, http.StatusNotFound, "not_found", "No se encontró el recurso solicitado.")
 	case errors.Is(err, store.ErrInvalidInvite):
 		writeError(w, http.StatusBadRequest, "invalid_invite", "La invitación no es válida o ha caducado.")
+	case errors.Is(err, store.ErrLastOwner):
+		writeError(w, http.StatusConflict, "last_owner", "El hogar necesita al menos una cuenta propietaria.")
 	case errors.Is(err, store.ErrDatabaseRequired):
 		writeError(w, http.StatusServiceUnavailable, "database_required", "La base de datos no está configurada.")
 	default:
