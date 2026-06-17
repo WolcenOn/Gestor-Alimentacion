@@ -23,6 +23,7 @@ import {
 import { formToObject, showAlert } from "./render/ui.js";
 
 const USDA_SESSION_KEY = "gestorMenuSemanal.usdaApiKey.session";
+const JOIN_SESSION_KEY = "gestorMenuSemanal.pendingHouseholdJoin.v1";
 
 function guarded(fn) {
   return async (...args) => {
@@ -44,11 +45,61 @@ function saveUsdaSettings(form) {
   showAlert(cleaned ? "API key de USDA guardada solo para esta sesión." : "API key de USDA borrada de esta sesión. Se usará DEMO_KEY para pruebas.");
 }
 
+function readJoinCodeFromUrl() {
+  const params = new URLSearchParams(window.location.search || "");
+  return String(params.get("invite") || "").trim();
+}
+
+function removeJoinCodeFromUrl() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("invite");
+  window.history.replaceState({}, document.title, `${url.pathname}${url.search}${url.hash}`);
+}
+
+function mergeJoinedHousehold(household) {
+  const api = window.GestorCloudAPI;
+  const session = api?.getCloudSession?.();
+  if (!api || !session || !household?.id) return;
+  const households = Array.isArray(session.households) ? session.households : [];
+  const nextHouseholds = households.some(item => item.id === household.id)
+    ? households.map(item => item.id === household.id ? household : item)
+    : [...households, household];
+  api.setCloudSession({ ...session, households: nextHouseholds });
+}
+
+async function acceptPendingJoin() {
+  const api = window.GestorCloudAPI;
+  const code = sessionStorage.getItem(JOIN_SESSION_KEY) || "";
+  if (!code || !api?.isLoggedIn?.()) return false;
+  const result = await api.acceptHouseholdInvite(code);
+  mergeJoinedHousehold(result.household);
+  sessionStorage.removeItem(JOIN_SESSION_KEY);
+  showAlert(`Invitación aceptada. Ya formas parte de ${result.household?.name || "ese hogar"}.`);
+  window.setTimeout(() => window.location.reload(), 700);
+  return true;
+}
+
+async function prepareInviteFlow() {
+  const code = readJoinCodeFromUrl();
+  if (code) {
+    sessionStorage.setItem(JOIN_SESSION_KEY, code);
+    removeJoinCodeFromUrl();
+  }
+  if (!sessionStorage.getItem(JOIN_SESSION_KEY)) return;
+  if (!window.GestorCloudAPI?.isLoggedIn?.()) {
+    showAlert("Invitación detectada. Inicia sesión o crea una cuenta cloud para unirte al hogar.");
+    document.querySelector('[data-tab="settings"]')?.click();
+    return;
+  }
+  await acceptPendingJoin();
+}
+
 document.addEventListener("click", guarded(async event => {
   const button = event.target.closest("[data-action]");
   if (!button) return;
   const action = button.dataset.action;
 
+  if (action === "accept-pending-household-join") { stop(event); await acceptPendingJoin(); }
   if (action === "new-week") { stop(event); newWeek(); }
   if (action === "duplicate-week") { stop(event); duplicateWeek(); }
   if (action === "clear-week") { stop(event); clearWeek(); }
@@ -76,3 +127,6 @@ document.addEventListener("submit", guarded(async event => {
   if (form.dataset.form === "recycling") { stop(event); saveRecycling(form); }
   if (form.dataset.form === "usda-settings") { stop(event); saveUsdaSettings(form); }
 }), true);
+
+window.addEventListener("load", guarded(prepareInviteFlow));
+window.GestorInviteFlow = { acceptPending: acceptPendingJoin };
