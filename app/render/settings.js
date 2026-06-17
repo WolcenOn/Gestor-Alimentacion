@@ -13,6 +13,10 @@ function renderCloudSettings() {
 
   const loginSubmit = "event.preventDefault();window.GestorCloudAPI.loginCloudAccount({email:this.elements.email.value,password:this.elements.password.value}).then(()=>{alert('Sesión cloud iniciada.');location.reload();}).catch(error=>alert(error.message));";
   const registerSubmit = "event.preventDefault();window.GestorCloudAPI.registerCloudAccount({email:this.elements.email.value,password:this.elements.password.value,displayName:this.elements.displayName.value,householdName:this.elements.householdName.value||'Mi hogar'}).then(()=>{alert('Cuenta cloud creada.');location.reload();}).catch(error=>alert(error.message));";
+  const inviteSubmit = "event.preventDefault();window.GestorCloudMembers.invite({email:this.elements.email.value,role:this.elements.role.value}).then(({invite})=>{const link=location.origin+location.pathname+'?invite='+invite.token;this.querySelector('[data-invite-output]').value=link;alert('Invitación creada. Copia el enlace y envíalo a la otra cuenta.');}).catch(error=>alert(error.message));";
+  const loadMembers = "window.GestorCloudMembers.list().then(({members})=>{document.getElementById('cloudMembersOutput').textContent=members.map(m=>`${m.email} · ${m.role} · ${m.userId}`).join('\\n')||'Sin miembros';}).catch(error=>alert(error.message));";
+  const updateRole = "const id=document.getElementById('cloudMemberUserId').value.trim();const role=document.getElementById('cloudMemberRole').value;if(!id){alert('Pega el userId del miembro.');return;}window.GestorCloudMembers.updateRole(id,role).then(()=>{alert('Rol actualizado.');}).catch(error=>alert(error.message));";
+  const removeMember = "const id=document.getElementById('cloudMemberUserId').value.trim();if(!id){alert('Pega el userId del miembro.');return;}if(!confirm('¿Quitar esta cuenta del hogar?'))return;window.GestorCloudMembers.remove(id).then(()=>{alert('Miembro eliminado.');}).catch(error=>alert(error.message));";
 
   return `
     <article class="card cloud-sync-card">
@@ -40,6 +44,47 @@ function renderCloudSettings() {
           <button type="button" class="secondary" onclick="window.GestorCloudSync.pull({apply:true}).then(()=>{alert('Datos descargados desde la nube.');location.reload();}).catch(error=>alert(error.message))">Descargar datos de la nube</button>
           <button type="button" class="secondary" onclick="window.GestorCloudSync.enableAutoSync();window.GestorCloudSync.push().then(()=>alert('Autosync activado.')).catch(error=>alert(error.message))">Activar autosync</button>
           <button type="button" class="secondary" onclick="window.GestorCloudAPI.clearCloudSession();alert('Sesión cloud cerrada.');location.reload();">Cerrar sesión cloud</button>
+        </div>
+
+        <div class="grid cols-2 settings-grid">
+          <form class="stack-form" onsubmit="${escapeHtml(inviteSubmit)}">
+            <h4>Invitar a otra cuenta</h4>
+            <label>Email invitado
+              <input name="email" type="email" autocomplete="email" placeholder="persona@ejemplo.com">
+            </label>
+            <label>Permiso
+              <select name="role">
+                <option value="viewer">Viewer · solo consultar</option>
+                <option value="member" selected>Member · consultar y sincronizar</option>
+                <option value="admin">Admin · invitar y editar hogar</option>
+              </select>
+            </label>
+            <button type="submit">Crear invitación</button>
+            <label>Enlace de invitación
+              <textarea data-invite-output rows="3" readonly placeholder="Aquí aparecerá el enlace para enviar"></textarea>
+            </label>
+          </form>
+
+          <div class="stack-form">
+            <h4>Miembros y permisos</h4>
+            <button type="button" class="secondary" onclick="${escapeHtml(loadMembers)}">Cargar miembros</button>
+            <pre id="cloudMembersOutput" class="help-note" style="white-space:pre-wrap;max-height:12rem;overflow:auto;">Pulsa “Cargar miembros”.</pre>
+            <label>User ID del miembro
+              <input id="cloudMemberUserId" autocomplete="off" placeholder="Pega aquí el userId">
+            </label>
+            <label>Nuevo rol
+              <select id="cloudMemberRole">
+                <option value="viewer">viewer</option>
+                <option value="member" selected>member</option>
+                <option value="admin">admin</option>
+                <option value="owner">owner</option>
+              </select>
+            </label>
+            <div class="actions wrap">
+              <button type="button" onclick="${escapeHtml(updateRole)}">Cambiar rol</button>
+              <button type="button" class="secondary" onclick="${escapeHtml(removeMember)}">Quitar del hogar</button>
+            </div>
+          </div>
         </div>
       ` : `
         <div class="grid cols-2 settings-grid">
@@ -75,7 +120,7 @@ function renderCloudSettings() {
 
       <div class="help-note">
         <p><strong>Recomendación:</strong> la primera vez usa “Subir datos locales a la nube” para guardar tu estado actual. En otro dispositivo, inicia sesión y usa “Descargar datos de la nube”.</p>
-        <p class="muted">La sincronización guarda un snapshot completo del estado actual. Más adelante se migrará recurso por recurso.</p>
+        <p class="muted">Roles: <strong>owner</strong> es la cuenta principal/propietaria, <strong>admin</strong> puede invitar y editar hogar, <strong>member</strong> puede sincronizar, <strong>viewer</strong> queda preparado para modo solo lectura.</p>
       </div>
     </article>
   `;
