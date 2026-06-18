@@ -50,8 +50,20 @@ function tokenExpired(session) {
 }
 
 function closePrompt() {
+  const modalRoot = document.getElementById("modalRoot");
+  if (modalRoot) modalRoot.innerHTML = "";
   document.getElementById(SESSION_PROMPT_ID)?.remove();
   promptVisible = false;
+}
+
+function showSessionAlert(message) {
+  const root = document.getElementById("alerts");
+  if (!root) return;
+  const el = document.createElement("div");
+  el.className = "alert";
+  el.textContent = message;
+  root.append(el);
+  window.setTimeout(() => el.remove(), 6500);
 }
 
 function goToCloudSettings() {
@@ -65,14 +77,7 @@ function goToCloudSettings() {
 function continueLocal() {
   enableLocalMode();
   closePrompt();
-  const root = document.getElementById("alerts");
-  if (root) {
-    const el = document.createElement("div");
-    el.className = "alert";
-    el.textContent = "Modo local activado. La nube, sincronización familiar y funciones premium quedan desactivadas hasta iniciar sesión.";
-    root.append(el);
-    window.setTimeout(() => el.remove(), 6500);
-  }
+  showSessionAlert("Modo local activado. La nube, sincronización familiar y funciones premium quedan desactivadas hasta iniciar sesión.");
 }
 
 function setPromptError(message) {
@@ -88,6 +93,13 @@ function setPromptBusy(isBusy) {
   prompt.querySelectorAll("button, input").forEach(element => { element.disabled = Boolean(isBusy); });
   const submit = prompt.querySelector("[data-cloud-login-submit]");
   if (submit) submit.textContent = isBusy ? "Entrando..." : "Entrar y sincronizar";
+}
+
+function startAutoSyncWithoutBlocking() {
+  window.setTimeout(() => {
+    Promise.resolve(window.GestorCloudSync?.startAutoSync?.())
+      .catch(error => console.warn("No se pudo iniciar la sincronización automática", error));
+  }, 120);
 }
 
 async function submitPromptLogin(event) {
@@ -109,16 +121,9 @@ async function submitPromptLogin(event) {
     await window.GestorCloudAPI.loginCloudAccount({ email, password });
     disableLocalMode();
     closePrompt();
-    await window.GestorCloudSync?.startAutoSync?.();
+    showSessionAlert("Sesión iniciada. La nube y la sincronización familiar vuelven a estar activas.");
     document.querySelector('[data-tab="settings"]')?.click();
-    const root = document.getElementById("alerts");
-    if (root) {
-      const el = document.createElement("div");
-      el.className = "alert";
-      el.textContent = "Sesión iniciada. La nube y la sincronización familiar vuelven a estar activas.";
-      root.append(el);
-      window.setTimeout(() => el.remove(), 6500);
-    }
+    startAutoSyncWithoutBlocking();
   } catch (error) {
     setPromptBusy(false);
     setPromptError(error?.message || "Email o contraseña incorrectos.");
@@ -216,7 +221,8 @@ window.GestorCloudSessionGuard = {
   continueLocal,
   enableLocalMode,
   disableLocalMode,
-  isLocalMode: localModeEnabled
+  isLocalMode: localModeEnabled,
+  closePrompt
 };
 
 window.addEventListener("load", () => {
