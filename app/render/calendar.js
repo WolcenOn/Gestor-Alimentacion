@@ -172,7 +172,7 @@ function renderDishPill(state, key, dishId) {
   const dish = state.dishes.find(d => d.id === dishId);
   return `
     <span class="dish-pill">
-      <span>${escapeHtml(dish?.name || "Plato eliminado")}</span>
+      <button class="ghost dish-pill-name" data-action="open-dish-detail" data-dish-id="${escapeHtml(dishId)}" title="Ver ficha del plato">${escapeHtml(dish?.name || "Plato eliminado")}</button>
       <button class="ghost icon-button" aria-label="Quitar plato" data-action="remove-dish-from-slot" data-slot="${escapeHtml(key)}" data-dish-id="${escapeHtml(dishId)}">×</button>
     </span>
   `;
