@@ -64,7 +64,11 @@ function mergeJoinedHousehold(household) {
   const nextHouseholds = households.some(item => item.id === household.id)
     ? households.map(item => item.id === household.id ? household : item)
     : [...households, household];
-  api.setCloudSession({ ...session, households: nextHouseholds });
+  api.setCloudSession({
+    ...session,
+    households: nextHouseholds,
+    activeHouseholdId: household.id
+  });
 }
 
 async function acceptPendingJoin() {
@@ -74,7 +78,7 @@ async function acceptPendingJoin() {
   const result = await api.acceptHouseholdInvite(code);
   mergeJoinedHousehold(result.household);
   sessionStorage.removeItem(JOIN_SESSION_KEY);
-  showAlert(`Invitación aceptada. Ya formas parte de ${result.household?.name || "ese hogar"}.`);
+  showAlert(`Invitación aceptada. Ya formas parte de ${result.household?.name || "ese hogar"}. Este hogar queda seleccionado para la sincronización.`);
   window.setTimeout(() => window.location.reload(), 700);
   return true;
 }
