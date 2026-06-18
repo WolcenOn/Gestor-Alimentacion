@@ -1,4 +1,4 @@
-const CACHE_VERSION = "gestor-menu-v1.0.3";
+const CACHE_VERSION = "gestor-menu-v1.0.4";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -9,6 +9,8 @@ const APP_SHELL = [
   "./app/cloudSync.js",
   "./app/cloudMembers.js",
   "./app/main.js",
+  "./app/foodTranslationEnhancements.js",
+  "./app/services/foodTranslation.js",
   "./app/mainActionsBootstrap.js",
   "./assets/icons/icon-192.svg",
   "./assets/icons/icon-512.svg"
