@@ -99,7 +99,7 @@ function renderManageCard(state, ingredient) {
   const packageInfo = latestPackageInfo(state, ingredient);
   const searchText = [ingredient.name, family, ingredient.qty, ingredient.unit, packageInfo, ingredient.expiryDate || "sin fecha", ingredient.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", fastEnabled ? "compra rápida confianza" : "compra normal", productText].join(" ");
   return `
-    <div class="item ingredient-item" data-search="${escapeHtml(searchText)}">
+    <div class="item ingredient-item" data-ingredient-id="${escapeHtml(ingredient.id)}" data-search="${escapeHtml(searchText)}">
       <div class="item-title">
         <div>
           <strong>${escapeHtml(ingredient.name)}</strong>
@@ -120,6 +120,7 @@ function renderManageCard(state, ingredient) {
         ${renderNutritionDetails(state, ingredient)}
       </details>
       <div class="row-actions wrap">
+        <button class="secondary" data-action="open-ingredient-detail" data-ingredient-id="${escapeHtml(ingredient.id)}">Ver ficha</button>
         <button class="secondary" data-action="edit-stock" data-ingredient-id="${escapeHtml(ingredient.id)}">Editar stock</button>
         <button class="secondary" data-action="open-waste-modal" data-ingredient-id="${escapeHtml(ingredient.id)}">Tirar</button>
         <button class="danger" data-action="delete-ingredient" data-ingredient-id="${escapeHtml(ingredient.id)}">Eliminar</button>
