@@ -11,6 +11,7 @@ import (
 
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/auth"
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/config"
+	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/nutrition"
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/store"
 )
 
@@ -37,6 +38,7 @@ func NewRouter(cfg config.Config, dbHealth DBHealthChecker, appStore *store.Stor
 	mux.HandleFunc("PUT /api/v1/households/", householdByIDHandler(cfg, appStore))
 	mux.HandleFunc("DELETE /api/v1/households/", householdByIDHandler(cfg, appStore))
 	mux.HandleFunc("POST /api/v1/invites/", acceptInviteHandler(cfg, appStore))
+	mux.HandleFunc("GET /api/v1/nutrition/usda/search", usdaSearchHandler(cfg))
 	return withCORS(cfg, mux)
 }
 
@@ -353,6 +355,32 @@ func acceptInviteHandler(cfg config.Config, appStore *store.Store) http.HandlerF
 			return
 		}
 		writeJSON(w, http.StatusOK, map[string]any{"household": household})
+	}
+}
+
+func usdaSearchHandler(cfg config.Config) http.HandlerFunc {
+	client := nutrition.NewUSDAClient(cfg.USDAAPIKey)
+	return func(w http.ResponseWriter, r *http.Request) {
+		if _, ok := requireAuth(w, r, cfg); !ok {
+			return
+		}
+		query := strings.TrimSpace(r.URL.Query().Get("q"))
+		if query == "" {
+			writeError(w, http.StatusBadRequest, "missing_query", "Introduce un alimento para buscar.")
+			return
+		}
+		if !client.Configured() {
+			writeError(w, http.StatusServiceUnavailable, "usda_not_configured", "La clave USDA_API_KEY no está configurada en el servidor.")
+			return
+		}
+		ctx, cancel := context.WithTimeout(r.Context(), 15*time.Second)
+		defer cancel()
+		result, err := client.SearchFoods(ctx, query, 12)
+		if err != nil {
+			writeError(w, http.StatusBadGateway, "usda_error", "No se pudo consultar USDA FoodData Central.")
+			return
+		}
+		writeJSON(w, http.StatusOK, result)
 	}
 }
 
