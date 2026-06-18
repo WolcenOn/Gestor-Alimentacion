@@ -11,6 +11,7 @@ type Config struct {
 	AppEnv             string
 	DatabaseURL        string
 	JWTSecret          string
+	USDAAPIKey         string
 	CORSAllowedOrigins []string
 }
 
@@ -21,6 +22,7 @@ func Load() Config {
 		AppEnv:             env("APP_ENV", "development"),
 		DatabaseURL:        os.Getenv("DATABASE_URL"),
 		JWTSecret:          os.Getenv("JWT_SECRET"),
+		USDAAPIKey:         os.Getenv("USDA_API_KEY"),
 		CORSAllowedOrigins: splitCSV(env("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:8080")),
 	}
 }
