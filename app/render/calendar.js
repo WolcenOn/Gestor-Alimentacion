@@ -131,41 +131,9 @@ function renderMemberSlot(state, week, day, meal, member) {
       <div class="dish-stack">
         ${planned.length ? planned.map(dishId => renderDishPill(state, key, dishId)).join("") : `<p class="empty-slot">Sin platos asignados</p>`}
       </div>
-      <label class="add-dish-label">Añadir plato
-        <select data-action="add-dish-to-slot" data-slot="${escapeHtml(key)}">
-          <option value="">Seleccionar plato</option>
-          ${renderDishOptionsByCategory(state.dishes)}
-        </select>
-      </label>
+      <button type="button" class="secondary add-dish-button" data-action="open-dish-picker" data-slot="${escapeHtml(key)}">Añadir plato</button>
     </div>
   `;
-}
-
-function renderDishOptionsByCategory(dishes) {
-  const grouped = new Map();
-  const normalizedDishes = [...dishes].sort(compareDishByCategoryAndName);
-
-  for (const dish of normalizedDishes) {
-    const category = normalizeCategory(dish.category);
-    if (!grouped.has(category)) grouped.set(category, []);
-    grouped.get(category).push(dish);
-  }
-
-  return [...grouped.entries()].map(([category, categoryDishes]) => `
-    <optgroup label="${escapeHtml(category)}">
-      ${categoryDishes.map(dish => `<option value="${escapeHtml(dish.id)}">${escapeHtml(dish.name)}</option>`).join("")}
-    </optgroup>
-  `).join("");
-}
-
-function compareDishByCategoryAndName(a, b) {
-  return normalizeCategory(a.category).localeCompare(normalizeCategory(b.category), "es", { sensitivity: "base" })
-    || String(a.name || "").localeCompare(String(b.name || ""), "es", { sensitivity: "base" });
-}
-
-function normalizeCategory(category) {
-  const value = String(category || "").trim();
-  return value ? capitalize(value) : "Sin categoría";
 }
 
 function renderDishPill(state, key, dishId) {
