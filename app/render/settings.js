@@ -11,6 +11,13 @@ function renderCloudSettings() {
   const householdName = session?.households?.[0]?.name || "";
   const statusLabel = syncStatus.mode === "synced" ? "Sincronizado" : syncStatus.mode === "syncing" ? "Sincronizando" : syncStatus.mode === "error" ? "Error" : syncStatus.mode === "ready" ? "Preparado" : "Local";
 
+  const loginSubmit = "event.preventDefault();window.GestorCloudAPI.loginCloudAccount({email:this.elements.email.value,password:this.elements.password.value}).then(()=>{alert('Sesión cloud iniciada.');location.reload();}).catch(error=>alert(error.message));";
+  const registerSubmit = "event.preventDefault();window.GestorCloudAPI.registerCloudAccount({email:this.elements.email.value,password:this.elements.password.value,displayName:this.elements.displayName.value,householdName:this.elements.householdName.value||'Mi hogar'}).then(()=>{alert('Cuenta cloud creada.');location.reload();}).catch(error=>alert(error.message));";
+  const inviteSubmit = "event.preventDefault();window.GestorCloudMembers.invite({email:this.elements.email.value,role:this.elements.role.value}).then(({invite})=>{const link=location.origin+location.pathname+'?invite='+invite.token;this.querySelector('[data-invite-output]').value=link;alert('Invitación creada. Copia el enlace y envíalo a la otra cuenta.');}).catch(error=>alert(error.message));";
+  const loadMembers = "window.GestorCloudMembers.list().then(({members})=>{document.getElementById('cloudMembersOutput').textContent=members.map(m=>`${m.email} · ${m.role} · ${m.userId}`).join('\\n')||'Sin miembros';}).catch(error=>alert(error.message));";
+  const updateRole = "const id=document.getElementById('cloudMemberUserId').value.trim();const role=document.getElementById('cloudMemberRole').value;if(!id){alert('Pega el userId del miembro.');return;}window.GestorCloudMembers.updateRole(id,role).then(()=>{alert('Rol actualizado.');}).catch(error=>alert(error.message));";
+  const removeMember = "const id=document.getElementById('cloudMemberUserId').value.trim();if(!id){alert('Pega el userId del miembro.');return;}if(!confirm('¿Quitar esta cuenta del hogar?'))return;window.GestorCloudMembers.remove(id).then(()=>{alert('Miembro eliminado.');}).catch(error=>alert(error.message));";
+
   return `
     <article class="card cloud-sync-card">
       <div class="section-title-row">
@@ -33,14 +40,14 @@ function renderCloudSettings() {
 
       ${session ? `
         <div class="actions wrap">
-          <button type="button" data-cloud-action="push">Subir datos locales a la nube</button>
-          <button type="button" class="secondary" data-cloud-action="pull">Descargar datos de la nube</button>
-          <button type="button" class="secondary" data-cloud-action="enable-auto-sync">Activar autosync</button>
-          <button type="button" class="secondary" data-cloud-action="logout">Cerrar sesión cloud</button>
+          <button type="button" onclick="window.GestorCloudSync.push().then(()=>alert('Datos subidos a la nube.')).catch(error=>alert(error.message))">Subir datos locales a la nube</button>
+          <button type="button" class="secondary" onclick="window.GestorCloudSync.pull({apply:true}).then(()=>{alert('Datos descargados desde la nube.');location.reload();}).catch(error=>alert(error.message))">Descargar datos de la nube</button>
+          <button type="button" class="secondary" onclick="window.GestorCloudSync.enableAutoSync();window.GestorCloudSync.push().then(()=>alert('Autosync activado.')).catch(error=>alert(error.message))">Activar autosync</button>
+          <button type="button" class="secondary" onclick="window.GestorCloudAPI.clearCloudSession();alert('Sesión cloud cerrada.');location.reload();">Cerrar sesión cloud</button>
         </div>
 
         <div class="grid cols-2 settings-grid">
-          <form class="stack-form" data-cloud-form="invite">
+          <form class="stack-form" onsubmit="${escapeHtml(inviteSubmit)}">
             <h4>Invitar a otra cuenta</h4>
             <label>Email invitado
               <input name="email" type="email" autocomplete="email" placeholder="persona@ejemplo.com">
@@ -60,7 +67,7 @@ function renderCloudSettings() {
 
           <div class="stack-form">
             <h4>Miembros y permisos</h4>
-            <button type="button" class="secondary" data-cloud-action="load-members">Cargar miembros</button>
+            <button type="button" class="secondary" onclick="${escapeHtml(loadMembers)}">Cargar miembros</button>
             <pre id="cloudMembersOutput" class="help-note" style="white-space:pre-wrap;max-height:12rem;overflow:auto;">Pulsa “Cargar miembros”.</pre>
             <label>User ID del miembro
               <input id="cloudMemberUserId" autocomplete="off" placeholder="Pega aquí el userId">
@@ -74,14 +81,14 @@ function renderCloudSettings() {
               </select>
             </label>
             <div class="actions wrap">
-              <button type="button" data-cloud-action="update-role">Cambiar rol</button>
-              <button type="button" class="secondary" data-cloud-action="remove-member">Quitar del hogar</button>
+              <button type="button" onclick="${escapeHtml(updateRole)}">Cambiar rol</button>
+              <button type="button" class="secondary" onclick="${escapeHtml(removeMember)}">Quitar del hogar</button>
             </div>
           </div>
         </div>
       ` : `
         <div class="grid cols-2 settings-grid">
-          <form data-cloud-form="login" class="stack-form">
+          <form data-form="cloud-login" class="stack-form" onsubmit="${escapeHtml(loginSubmit)}">
             <h4>Iniciar sesión</h4>
             <label>Email
               <input name="email" type="email" autocomplete="email" required>
@@ -92,7 +99,7 @@ function renderCloudSettings() {
             <button ${configured ? "" : "disabled"}>Entrar</button>
           </form>
 
-          <form data-cloud-form="register" class="stack-form">
+          <form data-form="cloud-register" class="stack-form" onsubmit="${escapeHtml(registerSubmit)}">
             <h4>Crear cuenta</h4>
             <label>Email
               <input name="email" type="email" autocomplete="email" required>
