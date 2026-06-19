@@ -9,7 +9,8 @@ function renderCloudSettings() {
   const syncStatus = getCloudSyncStatus();
   const userEmail = session?.user?.email || "";
   const householdName = session?.households?.[0]?.name || "";
-  const statusLabel = syncStatus.mode === "synced" ? "Sincronizado" : syncStatus.mode === "syncing" ? "Sincronizando" : syncStatus.mode === "error" ? "Error" : syncStatus.mode === "ready" ? "Preparado" : "Local";
+  const statusLabel = syncStatus.mode === "synced" ? "Sincronizado" : syncStatus.mode === "syncing" ? "Sincronizando" : syncStatus.mode === "error" ? "Error" : syncStatus.mode === "pending" ? "Pendiente" : syncStatus.mode === "ready" ? "Preparado" : "Local";
+  const pendingInfo = syncStatus.pendingLocalChanges ? `Cambios locales pendientes${syncStatus.pendingSince ? ` desde ${new Date(syncStatus.pendingSince).toLocaleString()}` : ""}` : "Sin cambios pendientes";
 
   const loginSubmit = "event.preventDefault();window.GestorCloudAPI.loginCloudAccount({email:this.elements.email.value,password:this.elements.password.value}).then(()=>{alert('Sesión cloud iniciada.');location.reload();}).catch(error=>alert(error.message));";
   const registerSubmit = "event.preventDefault();window.GestorCloudAPI.registerCloudAccount({email:this.elements.email.value,password:this.elements.password.value,displayName:this.elements.displayName.value,householdName:this.elements.householdName.value||'Mi hogar'}).then(()=>{alert('Cuenta cloud creada.');location.reload();}).catch(error=>alert(error.message));";
@@ -25,17 +26,19 @@ function renderCloudSettings() {
           <h3>Nube y sincronización</h3>
           <p class="muted">Guarda tus datos en Railway/PostgreSQL y compártelos entre dispositivos. El modo local sigue funcionando si la nube falla.</p>
         </div>
-        <span class="badge ${syncStatus.mode === "error" ? "warning" : ""}">${escapeHtml(statusLabel)}</span>
+        <span class="badge ${syncStatus.mode === "error" || syncStatus.mode === "pending" ? "warning" : ""}">${escapeHtml(statusLabel)}</span>
       </div>
 
       <div class="mini-facts">
         <span>API: ${configured ? "configurada" : "sin configurar"}</span>
         <span>Sesión: ${session ? escapeHtml(userEmail) : "no iniciada"}</span>
         <span>Hogar: ${householdName ? escapeHtml(householdName) : "sin seleccionar"}</span>
+        <span>${escapeHtml(pendingInfo)}</span>
       </div>
 
       ${configured ? `<p class="qty-line">Backend: <code>${escapeHtml(apiBaseUrl)}</code></p>` : `<p class="alert">Configura <code>app/config.js</code> para activar la nube.</p>`}
       ${syncStatus.lastSyncAt ? `<p class="qty-line">Última sincronización: ${escapeHtml(new Date(syncStatus.lastSyncAt).toLocaleString())}</p>` : ""}
+      ${syncStatus.lastAttemptAt ? `<p class="qty-line">Último intento: ${escapeHtml(new Date(syncStatus.lastAttemptAt).toLocaleString())}${syncStatus.retryCount ? ` · reintentos: ${Number(syncStatus.retryCount)}` : ""}</p>` : ""}
       ${syncStatus.lastError ? `<p class="alert">${escapeHtml(syncStatus.lastError)}</p>` : ""}
 
       ${session ? `
