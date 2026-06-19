@@ -110,6 +110,6 @@ assert.equal(withoutProfile.products[0].nutritionSnapshot, null);
 assert.equal(withoutProfile.products[0].activeNutrition, false);
 
 assert.deepEqual(second, first);
-assert.equal(first.meta.schemaVersion, 2);
+assert.equal(first.meta.schemaVersion, 3);
 
 console.log("migration-v2.test.js OK");
