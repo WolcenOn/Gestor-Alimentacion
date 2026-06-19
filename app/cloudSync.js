@@ -18,13 +18,13 @@ let pendingSaveTimer = null;
 let pollTimer = null;
 let autoSyncEnabled = false;
 let suppressNextSave = false;
-let dirtyLocalChanges = false;
+let dirtyLocalChanges = Boolean(status.pendingLocalChanges);
 let syncing = false;
 let unsubscribeStore = null;
 
 function loadStatus() {
   try {
-    return JSON.parse(localStorage.getItem(STATUS_KEY) || "null") || defaultStatus();
+    return { ...defaultStatus(), ...(JSON.parse(localStorage.getItem(STATUS_KEY) || "null") || {}) };
   } catch (error) {
     console.warn("No se pudo leer el estado de sincronización", error);
     return defaultStatus();
@@ -39,7 +39,11 @@ function defaultStatus() {
     householdId: null,
     householdName: null,
     updatedAt: null,
-    role: null
+    role: null,
+    pendingLocalChanges: false,
+    pendingSince: null,
+    lastAttemptAt: null,
+    retryCount: 0
   };
 }
 
@@ -110,6 +114,45 @@ function statusContext() {
   };
 }
 
+function markLocalChangesPending() {
+  dirtyLocalChanges = true;
+  setStatus({
+    mode: "pending",
+    ...statusContext(),
+    pendingLocalChanges: true,
+    pendingSince: status.pendingSince || new Date().toISOString(),
+    lastError: null
+  });
+}
+
+function clearPendingLocalChanges(nextStatus = {}) {
+  dirtyLocalChanges = false;
+  setStatus({
+    pendingLocalChanges: false,
+    pendingSince: null,
+    retryCount: 0,
+    ...nextStatus
+  });
+}
+
+function markSyncAttempt() {
+  setStatus({
+    mode: "syncing",
+    ...statusContext(),
+    lastAttemptAt: new Date().toISOString(),
+    lastError: null
+  });
+}
+
+function markSyncError(error) {
+  setStatus({
+    mode: dirtyLocalChanges ? "pending" : "error",
+    ...statusContext(),
+    lastError: error.message || String(error),
+    retryCount: (status.retryCount || 0) + 1
+  });
+}
+
 export function getCloudSyncStatus() {
   return structuredClone(status);
 }
@@ -130,7 +173,7 @@ export async function pullCloudState({ apply = true, onlyIfNewer = false } = {})
   if (!isLoggedIn()) throw new ApiError("No hay sesión cloud.", { code: "not_logged_in" });
   if (!householdId) throw new ApiError("No hay hogar activo.", { code: "missing_household" });
 
-  setStatus({ mode: "syncing", lastError: null, householdId, householdName, role });
+  markSyncAttempt();
   syncing = true;
   try {
     const snapshot = await fetchHouseholdSync(householdId);
@@ -143,17 +186,19 @@ export async function pullCloudState({ apply = true, onlyIfNewer = false } = {})
       dirtyLocalChanges = false;
     }
     setStatus({
-      mode: "synced",
+      mode: dirtyLocalChanges ? "pending" : "synced",
       lastSyncAt: new Date().toISOString(),
       lastError: null,
       householdId,
       householdName,
       role,
-      updatedAt: remoteAt || status.updatedAt || null
+      updatedAt: remoteAt || status.updatedAt || null,
+      pendingLocalChanges: dirtyLocalChanges,
+      pendingSince: dirtyLocalChanges ? status.pendingSince : null
     });
     return snapshot;
   } catch (error) {
-    setStatus({ mode: "error", lastError: error.message || String(error), householdId, householdName, role });
+    markSyncError(error);
     throw error;
   } finally {
     syncing = false;
@@ -169,15 +214,14 @@ export async function pushCloudState({ state = getState() } = {}) {
   if (!householdId) throw new ApiError("No hay hogar activo.", { code: "missing_household" });
   if (!canEditCloud(role)) throw new ApiError("Tu rol permite consultar, pero no modificar la nube.", { code: "read_only_role" });
 
-  setStatus({ mode: "syncing", lastError: null, householdId, householdName, role });
+  markSyncAttempt();
   syncing = true;
   try {
     const snapshot = await saveHouseholdSync(householdId, {
       version: CLOUD_SCHEMA_VERSION,
       state: cloudStateEnvelope(state)
     });
-    dirtyLocalChanges = false;
-    setStatus({
+    clearPendingLocalChanges({
       mode: "synced",
       lastSyncAt: new Date().toISOString(),
       lastError: null,
@@ -188,7 +232,7 @@ export async function pushCloudState({ state = getState() } = {}) {
     });
     return snapshot;
   } catch (error) {
-    setStatus({ mode: "error", lastError: error.message || String(error), householdId, householdName, role });
+    markSyncError(error);
     throw error;
   } finally {
     syncing = false;
@@ -197,7 +241,7 @@ export async function pushCloudState({ state = getState() } = {}) {
 
 export function scheduleCloudPush() {
   if (!autoSyncEnabled || !canWriteCloudSync()) return;
-  dirtyLocalChanges = true;
+  markLocalChangesPending();
   window.clearTimeout(pendingSaveTimer);
   pendingSaveTimer = window.setTimeout(() => {
     pushCloudState().catch(error => console.warn("No se pudo sincronizar con la nube", error));
@@ -210,23 +254,27 @@ async function initialCloudSync() {
   const role = currentRole();
   const householdName = currentHouseholdName();
   try {
+    if (dirtyLocalChanges && canEditCloud(role)) {
+      await pushCloudState();
+      return;
+    }
+
     const snapshot = await fetchHouseholdSync(householdId);
     const appState = extractAppState(snapshot);
     const remoteAt = remoteUpdatedAt(snapshot);
     if (appState) {
       suppressNextSave = true;
       setState(appState, "cloud-pull");
-      dirtyLocalChanges = false;
-      setStatus({ mode: "synced", lastSyncAt: new Date().toISOString(), lastError: null, householdId, householdName, role, updatedAt: remoteAt || null });
+      clearPendingLocalChanges({ mode: "synced", lastSyncAt: new Date().toISOString(), lastError: null, householdId, householdName, role, updatedAt: remoteAt || null });
       return;
     }
     if (canEditCloud(role)) {
       await pushCloudState();
     } else {
-      setStatus({ mode: "synced", lastSyncAt: new Date().toISOString(), lastError: null, householdId, householdName, role, updatedAt: remoteAt || null });
+      clearPendingLocalChanges({ mode: "synced", lastSyncAt: new Date().toISOString(), lastError: null, householdId, householdName, role, updatedAt: remoteAt || null });
     }
   } catch (error) {
-    setStatus({ mode: "error", lastError: error.message || String(error), householdId, householdName, role });
+    markSyncError(error);
     console.warn("No se pudo hacer la sincronización inicial", error);
   }
 }
@@ -260,7 +308,7 @@ export function enableCloudAutoSync() {
     }
     startPolling();
   }
-  setStatus({ mode: "ready", ...statusContext(), lastError: null });
+  setStatus({ mode: dirtyLocalChanges ? "pending" : "ready", ...statusContext(), lastError: null, pendingLocalChanges: dirtyLocalChanges });
 }
 
 export async function startCloudAutoSync() {
@@ -298,6 +346,10 @@ window.addEventListener("load", () => {
 });
 
 window.addEventListener("online", () => {
+  if (dirtyLocalChanges && canWriteCloudSync()) {
+    pushCloudState().catch(error => console.warn("No se pudieron subir cambios pendientes", error));
+    return;
+  }
   startCloudAutoSync().catch(error => console.warn("No se pudo reanudar autosync", error));
 });
 
