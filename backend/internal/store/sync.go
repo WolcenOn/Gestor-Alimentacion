@@ -46,7 +46,7 @@ func (s *Store) GetSyncSnapshot(ctx context.Context, userID, householdID string)
 }
 
 // SaveSyncSnapshot stores the whole frontend state for a household.
-func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string, version int, state json.RawMessage) (SyncSnapshot, error) {
+func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string, version int, state json.RawMessage, expectedUpdatedAt *time.Time) (SyncSnapshot, error) {
 	var snapshot SyncSnapshot
 	if !s.Available() {
 		return snapshot, ErrDatabaseRequired
@@ -64,7 +64,33 @@ func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string
 		return snapshot, ErrNotFound
 	}
 
-	row := s.db.QueryRowContext(ctx, `
+	tx, err := s.db.BeginTx(ctx, nil)
+	if err != nil {
+		return snapshot, err
+	}
+	defer tx.Rollback()
+
+	if expectedUpdatedAt != nil {
+		var currentUpdatedAt time.Time
+		err := tx.QueryRowContext(ctx, `
+			SELECT updated_at
+			FROM household_sync_snapshots
+			WHERE household_id = $1
+			FOR UPDATE
+		`, householdID).Scan(&currentUpdatedAt)
+		switch {
+		case errors.Is(err, sql.ErrNoRows):
+			if !expectedUpdatedAt.IsZero() {
+				return snapshot, ErrConflict
+			}
+		case err != nil:
+			return snapshot, err
+		case !currentUpdatedAt.Equal(*expectedUpdatedAt):
+			return snapshot, ErrConflict
+		}
+	}
+
+	row := tx.QueryRowContext(ctx, `
 		INSERT INTO household_sync_snapshots (household_id, state, version, updated_by, updated_at)
 		VALUES ($1, $2, $3, $4, now())
 		ON CONFLICT (household_id) DO UPDATE SET
@@ -75,6 +101,9 @@ func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string
 		RETURNING household_id, version, state, updated_at
 	`, householdID, state, version, userID)
 	if err := row.Scan(&snapshot.HouseholdID, &snapshot.Version, &snapshot.State, &snapshot.UpdatedAt); err != nil {
+		return snapshot, err
+	}
+	if err := tx.Commit(); err != nil {
 		return snapshot, err
 	}
 	return snapshot, nil
