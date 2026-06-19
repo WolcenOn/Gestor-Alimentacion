@@ -27,6 +27,17 @@ func TestSecurityHeadersOnHealth(t *testing.T) {
 	}
 }
 
+func TestAPIResponsesAreNotStored(t *testing.T) {
+	router := NewRouter(testConfig(), nil, nil)
+
+	recorder := httptest.NewRecorder()
+	request := httptest.NewRequest(http.MethodGet, "/api/v1/version", nil)
+	router.ServeHTTP(recorder, request)
+
+	assertHeader(t, recorder, "Cache-Control", "no-store")
+	assertHeader(t, recorder, "Pragma", "no-cache")
+}
+
 func TestCORSAllowsOnlyConfiguredOrigin(t *testing.T) {
 	router := NewRouter(testConfig(), nil, nil)
 
