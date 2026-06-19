@@ -126,6 +126,46 @@ function renderCloudSettings() {
   `;
 }
 
+function renderPrivacySettings(state) {
+  const session = getCloudSession();
+  const syncStatus = getCloudSyncStatus();
+  const cloudMode = session ? "Cloud activo" : "Solo local";
+  const lastSync = syncStatus.lastSyncAt ? new Date(syncStatus.lastSyncAt).toLocaleString() : "sin sincronización";
+  const totals = [
+    `${state.ingredients.length} ingredientes`,
+    `${state.dishes.length} platos`,
+    `${state.weeks.length} semanas`,
+    `${state.nutritionProfiles.length} perfiles nutricionales`,
+    `${state.historySnapshots.length} snapshots`
+  ];
+
+  return `
+    <article class="card privacy-card">
+      <div class="section-title-row">
+        <div>
+          <h3>Privacidad y datos</h3>
+          <p class="muted">Controla qué se guarda en este navegador y qué podría sincronizarse con la nube cuando actives una cuenta cloud.</p>
+        </div>
+        <span class="badge ${session ? "success" : ""}">${escapeHtml(cloudMode)}</span>
+      </div>
+      <div class="mini-facts">
+        <span>Estado: ${escapeHtml(cloudMode)}</span>
+        <span>Última sync: ${escapeHtml(lastSync)}</span>
+        <span>Datos: ${escapeHtml(totals.join(" · "))}</span>
+      </div>
+      <div class="help-note">
+        <p><strong>Modo local:</strong> los datos viven en <code>localStorage</code> de este navegador. Exporta JSON antes de borrar caché, cambiar de dispositivo o hacer pruebas destructivas.</p>
+        <p><strong>Modo cloud:</strong> al iniciar sesión y sincronizar, el estado del hogar se guarda en el backend configurado. El borrado local no elimina datos ya subidos a la nube.</p>
+        <p class="muted">La app puede contener datos sensibles si registras glucosa, metabolismo o información de salud. No compartas exportaciones JSON sin revisarlas.</p>
+      </div>
+      <div class="actions wrap">
+        <button type="button" data-action="export-data">Exportar mis datos JSON</button>
+        <button type="button" class="secondary" data-action="reset-local-data">Borrar datos locales de este navegador</button>
+      </div>
+    </article>
+  `;
+}
+
 export function renderSettings(state) {
   const ingredientsWithNutrition = new Set(state.nutritionProfiles.map(profile => profile.ingredientId));
   const pendingNutrition = state.ingredients.filter(ingredient => !ingredientsWithNutrition.has(ingredient.id)).length;
@@ -141,6 +181,7 @@ export function renderSettings(state) {
     </div>
 
     ${renderCloudSettings()}
+    ${renderPrivacySettings(state)}
 
     <div class="grid cols-2 settings-grid">
       <article class="card">
