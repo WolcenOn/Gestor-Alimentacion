@@ -1,0 +1,21 @@
+# Local environment files
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Dependencies and build outputs
+node_modules/
+dist/
+build/
+coverage/
+backend/bin/
+backend/tmp/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
