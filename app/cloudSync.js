@@ -4,14 +4,14 @@ import {
   fetchHouseholdSync,
   getCloudSession,
   isCloudConfigured,
-  isLoggedIn,
-  saveHouseholdSync
+  isLoggedIn
 } from "./apiClient.js";
 
 const STATUS_KEY = "gestorMenuSemanal.cloudSyncStatus.v1";
 const CLOUD_SCHEMA_VERSION = 1;
 const AUTO_SAVE_DELAY_MS = 2200;
 const REMOTE_POLL_MS = 15000;
+const DEFAULT_TIMEOUT_MS = 12000;
 
 let status = loadStatus();
 let pendingSaveTimer = null;
@@ -55,6 +55,48 @@ function saveStatus() {
 function setStatus(next) {
   status = { ...status, ...next };
   saveStatus();
+}
+
+function apiBaseUrl() {
+  const config = window.APP_CONFIG || window.GESTOR_APP_CONFIG || {};
+  return String(config.API_BASE_URL || config.apiBaseUrl || "").trim().replace(/\/+$/, "");
+}
+
+async function saveHouseholdSyncWithPrecondition(householdId, body) {
+  const baseUrl = apiBaseUrl();
+  if (!baseUrl) throw new ApiError("El backend cloud no está configurado.", { code: "cloud_not_configured" });
+
+  const session = getCloudSession();
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
+  const headers = new Headers({ "Content-Type": "application/json" });
+  if (session?.accessToken) headers.set("Authorization", "Bearer " + session.accessToken);
+
+  try {
+    const response = await fetch(`${baseUrl}/households/${encodeURIComponent(householdId)}/sync`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify(body),
+      signal: controller.signal
+    });
+    const contentType = response.headers.get("Content-Type") || "";
+    const payload = contentType.includes("application/json") ? await response.json() : null;
+    if (!response.ok) {
+      const apiError = payload?.error || {};
+      throw new ApiError(apiError.message || `Error HTTP ${response.status}`, {
+        status: response.status,
+        code: apiError.code || "http_error",
+        details: payload
+      });
+    }
+    return payload;
+  } catch (error) {
+    if (error.name === "AbortError") throw new ApiError("La petición al backend ha tardado demasiado.", { code: "timeout" });
+    if (error instanceof ApiError) throw error;
+    throw new ApiError("No se pudo conectar con el backend.", { code: "network_error", details: error });
+  } finally {
+    window.clearTimeout(timeout);
+  }
 }
 
 function currentHousehold() {
@@ -226,7 +268,7 @@ export async function pushCloudState({ state = getState() } = {}) {
   markSyncAttempt();
   syncing = true;
   try {
-    const snapshot = await saveHouseholdSync(householdId, {
+    const snapshot = await saveHouseholdSyncWithPrecondition(householdId, {
       version: CLOUD_SCHEMA_VERSION,
       state: cloudStateEnvelope(state),
       expectedUpdatedAt: status.updatedAt || null
