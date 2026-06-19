@@ -248,12 +248,18 @@ export async function pushCloudState({ state = getState() } = {}) {
   }
 }
 
+export async function resolvePendingCloudChanges() {
+  if (!dirtyLocalChanges) return { status: getCloudSyncStatus(), skipped: true };
+  const snapshot = await pushCloudState();
+  return { snapshot, status: getCloudSyncStatus(), skipped: false };
+}
+
 export function scheduleCloudPush() {
   if (!autoSyncEnabled || !canWriteCloudSync()) return;
   markLocalChangesPending();
   window.clearTimeout(pendingSaveTimer);
   pendingSaveTimer = window.setTimeout(() => {
-    pushCloudState().catch(error => console.warn("No se pudo sincronizar con la nube", error));
+    resolvePendingCloudChanges().catch(error => console.warn("No se pudo sincronizar con la nube", error));
   }, AUTO_SAVE_DELAY_MS);
 }
 
@@ -264,7 +270,7 @@ async function initialCloudSync() {
   const householdName = currentHouseholdName();
   try {
     if (dirtyLocalChanges && canEditCloud(role)) {
-      await pushCloudState();
+      await resolvePendingCloudChanges();
       return;
     }
 
@@ -343,6 +349,7 @@ window.GestorCloudSync = {
   canWrite: canWriteCloudSync,
   pull: pullCloudState,
   push: pushCloudState,
+  resolvePending: resolvePendingCloudChanges,
   enableAutoSync: enableCloudAutoSync,
   startAutoSync: startCloudAutoSync,
   disableAutoSync: disableCloudAutoSync
@@ -356,7 +363,7 @@ window.addEventListener("load", () => {
 
 window.addEventListener("online", () => {
   if (dirtyLocalChanges && canWriteCloudSync()) {
-    pushCloudState().catch(error => console.warn("No se pudieron subir cambios pendientes", error));
+    resolvePendingCloudChanges().catch(error => console.warn("No se pudieron subir cambios pendientes", error));
     return;
   }
   startCloudAutoSync().catch(error => console.warn("No se pudo reanudar autosync", error));
