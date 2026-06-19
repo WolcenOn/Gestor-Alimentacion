@@ -37,6 +37,7 @@ function defaultStatus() {
     lastSyncAt: null,
     lastError: null,
     householdId: null,
+    householdName: null,
     updatedAt: null,
     role: null
   };
@@ -54,8 +55,9 @@ function setStatus(next) {
 
 function currentHousehold() {
   const session = getCloudSession();
-  const activeId = session?.activeHouseholdId || status.householdId || session?.households?.[0]?.id || null;
-  return session?.households?.find(household => household.id === activeId) || session?.households?.[0] || null;
+  const list = Array.isArray(session?.households) ? session.households : [];
+  const activeId = session?.activeHouseholdId || list[0]?.id || null;
+  return list.find(household => household.id === activeId) || list[0] || null;
 }
 
 function currentHouseholdId() {
@@ -64,6 +66,10 @@ function currentHouseholdId() {
 
 function currentRole() {
   return currentHousehold()?.role || null;
+}
+
+function currentHouseholdName() {
+  return currentHousehold()?.name || null;
 }
 
 function canEditCloud(role = currentRole()) {
@@ -96,6 +102,14 @@ function isRemoteNewer(remoteAt) {
   return new Date(remoteAt).getTime() > new Date(status.updatedAt).getTime();
 }
 
+function statusContext() {
+  return {
+    householdId: currentHouseholdId(),
+    householdName: currentHouseholdName(),
+    role: currentRole()
+  };
+}
+
 export function getCloudSyncStatus() {
   return structuredClone(status);
 }
@@ -111,11 +125,12 @@ export function canWriteCloudSync() {
 export async function pullCloudState({ apply = true, onlyIfNewer = false } = {}) {
   const householdId = currentHouseholdId();
   const role = currentRole();
+  const householdName = currentHouseholdName();
   if (!isCloudConfigured()) throw new ApiError("Cloud no configurado.", { code: "cloud_not_configured" });
   if (!isLoggedIn()) throw new ApiError("No hay sesión cloud.", { code: "not_logged_in" });
   if (!householdId) throw new ApiError("No hay hogar activo.", { code: "missing_household" });
 
-  setStatus({ mode: "syncing", lastError: null, householdId, role });
+  setStatus({ mode: "syncing", lastError: null, householdId, householdName, role });
   syncing = true;
   try {
     const snapshot = await fetchHouseholdSync(householdId);
@@ -132,12 +147,13 @@ export async function pullCloudState({ apply = true, onlyIfNewer = false } = {})
       lastSyncAt: new Date().toISOString(),
       lastError: null,
       householdId,
+      householdName,
       role,
       updatedAt: remoteAt || status.updatedAt || null
     });
     return snapshot;
   } catch (error) {
-    setStatus({ mode: "error", lastError: error.message || String(error), householdId, role });
+    setStatus({ mode: "error", lastError: error.message || String(error), householdId, householdName, role });
     throw error;
   } finally {
     syncing = false;
@@ -147,12 +163,13 @@ export async function pullCloudState({ apply = true, onlyIfNewer = false } = {})
 export async function pushCloudState({ state = getState() } = {}) {
   const householdId = currentHouseholdId();
   const role = currentRole();
+  const householdName = currentHouseholdName();
   if (!isCloudConfigured()) throw new ApiError("Cloud no configurado.", { code: "cloud_not_configured" });
   if (!isLoggedIn()) throw new ApiError("No hay sesión cloud.", { code: "not_logged_in" });
   if (!householdId) throw new ApiError("No hay hogar activo.", { code: "missing_household" });
   if (!canEditCloud(role)) throw new ApiError("Tu rol permite consultar, pero no modificar la nube.", { code: "read_only_role" });
 
-  setStatus({ mode: "syncing", lastError: null, householdId, role });
+  setStatus({ mode: "syncing", lastError: null, householdId, householdName, role });
   syncing = true;
   try {
     const snapshot = await saveHouseholdSync(householdId, {
@@ -165,12 +182,13 @@ export async function pushCloudState({ state = getState() } = {}) {
       lastSyncAt: new Date().toISOString(),
       lastError: null,
       householdId,
+      householdName,
       role,
       updatedAt: remoteUpdatedAt(snapshot) || null
     });
     return snapshot;
   } catch (error) {
-    setStatus({ mode: "error", lastError: error.message || String(error), householdId, role });
+    setStatus({ mode: "error", lastError: error.message || String(error), householdId, householdName, role });
     throw error;
   } finally {
     syncing = false;
@@ -190,6 +208,7 @@ async function initialCloudSync() {
   if (!canUseCloudSync()) return;
   const householdId = currentHouseholdId();
   const role = currentRole();
+  const householdName = currentHouseholdName();
   try {
     const snapshot = await fetchHouseholdSync(householdId);
     const appState = extractAppState(snapshot);
@@ -198,16 +217,16 @@ async function initialCloudSync() {
       suppressNextSave = true;
       setState(appState, "cloud-pull");
       dirtyLocalChanges = false;
-      setStatus({ mode: "synced", lastSyncAt: new Date().toISOString(), lastError: null, householdId, role, updatedAt: remoteAt || null });
+      setStatus({ mode: "synced", lastSyncAt: new Date().toISOString(), lastError: null, householdId, householdName, role, updatedAt: remoteAt || null });
       return;
     }
     if (canEditCloud(role)) {
       await pushCloudState();
     } else {
-      setStatus({ mode: "synced", lastSyncAt: new Date().toISOString(), lastError: null, householdId, role, updatedAt: remoteAt || null });
+      setStatus({ mode: "synced", lastSyncAt: new Date().toISOString(), lastError: null, householdId, householdName, role, updatedAt: remoteAt || null });
     }
   } catch (error) {
-    setStatus({ mode: "error", lastError: error.message || String(error), householdId, role });
+    setStatus({ mode: "error", lastError: error.message || String(error), householdId, householdName, role });
     console.warn("No se pudo hacer la sincronización inicial", error);
   }
 }
@@ -241,7 +260,7 @@ export function enableCloudAutoSync() {
     }
     startPolling();
   }
-  setStatus({ mode: "ready", householdId: currentHouseholdId(), role: currentRole(), lastError: null });
+  setStatus({ mode: "ready", ...statusContext(), lastError: null });
 }
 
 export async function startCloudAutoSync() {
@@ -280,4 +299,9 @@ window.addEventListener("load", () => {
 
 window.addEventListener("online", () => {
   startCloudAutoSync().catch(error => console.warn("No se pudo reanudar autosync", error));
+});
+
+window.addEventListener("gestor:cloud-session", () => {
+  disableCloudAutoSync();
+  window.setTimeout(() => startCloudAutoSync().catch(error => console.warn("No se pudo reiniciar autosync", error)), 100);
 });
