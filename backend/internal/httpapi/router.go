@@ -39,7 +39,7 @@ func NewRouter(cfg config.Config, dbHealth DBHealthChecker, appStore *store.Stor
 	mux.HandleFunc("DELETE /api/v1/households/", householdByIDHandler(cfg, appStore))
 	mux.HandleFunc("POST /api/v1/invites/", acceptInviteHandler(cfg, appStore))
 	mux.HandleFunc("GET /api/v1/nutrition/usda/search", usdaSearchHandler(cfg))
-	return withCORS(cfg, mux)
+	return withSecurityHeaders(withCORS(cfg, withAuthRateLimit(mux, newAuthRateLimiter())))
 }
 
 func healthHandler(cfg config.Config, dbHealth DBHealthChecker) http.HandlerFunc {
