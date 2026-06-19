@@ -153,6 +153,14 @@ function markSyncError(error) {
   });
 }
 
+function preventUnsafePull({ apply, force }) {
+  if (apply && dirtyLocalChanges && !force) {
+    throw new ApiError("Hay cambios locales pendientes. Sube primero esos cambios o exporta tus datos antes de descargar desde la nube.", {
+      code: "pending_local_changes"
+    });
+  }
+}
+
 export function getCloudSyncStatus() {
   return structuredClone(status);
 }
@@ -165,13 +173,14 @@ export function canWriteCloudSync() {
   return canUseCloudSync() && canEditCloud();
 }
 
-export async function pullCloudState({ apply = true, onlyIfNewer = false } = {}) {
+export async function pullCloudState({ apply = true, onlyIfNewer = false, force = false } = {}) {
   const householdId = currentHouseholdId();
   const role = currentRole();
   const householdName = currentHouseholdName();
   if (!isCloudConfigured()) throw new ApiError("Cloud no configurado.", { code: "cloud_not_configured" });
   if (!isLoggedIn()) throw new ApiError("No hay sesión cloud.", { code: "not_logged_in" });
   if (!householdId) throw new ApiError("No hay hogar activo.", { code: "missing_household" });
+  preventUnsafePull({ apply, force });
 
   markSyncAttempt();
   syncing = true;
