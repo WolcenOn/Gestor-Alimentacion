@@ -3,6 +3,7 @@ package httpapi
 import (
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 
 	"github.com/WolcenOn/Gestor-Almentacion/backend/internal/config"
@@ -71,8 +72,9 @@ func TestAuthRateLimit(t *testing.T) {
 	if recorder.Code != http.StatusTooManyRequests {
 		t.Fatalf("expected rate limit status %d, got %d", http.StatusTooManyRequests, recorder.Code)
 	}
-	if recorder.Header().Get("Retry-After") == "" {
-		t.Fatal("expected Retry-After header")
+	seconds, err := strconv.Atoi(recorder.Header().Get("Retry-After"))
+	if err != nil || seconds < 1 {
+		t.Fatalf("expected Retry-After seconds, got %q", recorder.Header().Get("Retry-After"))
 	}
 }
 
