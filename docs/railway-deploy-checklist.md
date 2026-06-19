@@ -7,7 +7,7 @@ Esta guía asume que la cuenta de Railway ya está enlazada con GitHub.
 1. En Railway, crear un nuevo proyecto.
 2. Elegir despliegue desde GitHub.
 3. Seleccionar el repositorio `WolcenOn/Gestor-Almentacion`.
-4. Seleccionar la rama `fusion-glucosatrack-planificador` mientras seguimos probando.
+4. Seleccionar la rama que quieras desplegar. Para estabilización usa `stabilization-week-1-production-readiness`; para producción estable usa la rama que se decida tras revisar el PR.
 5. Configurar el servicio para usar la carpeta raíz del backend:
 
 ```text
@@ -39,11 +39,11 @@ PORT=<inyectado-por-railway>
 DATABASE_URL=<inyectado-por-postgresql>
 ```
 
-No poner ninguna de estas variables en el frontend.
+No poner ninguna de estas variables en el frontend. Para desarrollo local, copiar `backend/.env.example` a un archivo local no versionado y rellenar valores reales solo en el entorno.
 
 ## 4. Build y start
 
-El archivo `backend/railway.toml` define:
+Si Railway despliega desde la carpeta `backend`, el archivo `backend/railway.toml` define:
 
 ```toml
 [build]
@@ -55,9 +55,11 @@ startCommand = "./bin/api"
 healthcheckPath = "/health"
 ```
 
+Si Railway despliega desde la raíz con Docker, el `Dockerfile` copia `backend/go.mod` y `backend/go.sum`, ejecuta `go mod download` y compila sin hacer `go mod tidy` en producción.
+
 ## 5. Migraciones
 
-Ejecutar en PostgreSQL, en orden:
+Migraciones actuales:
 
 ```text
 backend/migrations/001_init.sql
@@ -65,7 +67,7 @@ backend/migrations/002_household_invites.sql
 backend/migrations/003_household_sync.sql
 ```
 
-De momento son manuales. Más adelante añadiremos runner automático.
+La API Go ejecuta las migraciones automáticamente al arrancar mediante `db.RunMigrations`. Solo ejecútalas manualmente si necesitas recuperar o diagnosticar una base concreta.
 
 ## 6. Probar backend
 
@@ -76,7 +78,7 @@ GET https://<backend-railway-url>/health
 GET https://<backend-railway-url>/api/v1/version
 ```
 
-`/health` debe devolver `database: ok` si PostgreSQL está conectado.
+`/health` debe devolver `database: ok` si PostgreSQL está conectado. También puedes verlo desde la app con el botón visible “Comprobar backend” de la cabecera.
 
 ## 7. Conectar GitHub Pages
 
@@ -97,3 +99,16 @@ No poner secretos en `app/config.js`.
 3. Guardar estado con `PUT /api/v1/households/{householdId}/sync`.
 4. Leer estado con `GET /api/v1/households/{householdId}/sync`.
 5. Confirmar que GitHub Pages sigue funcionando aunque el backend falle.
+
+## 9. CI antes de mergear
+
+La rama debe pasar GitHub Actions:
+
+```bash
+npm test
+cd backend
+go mod download
+go test ./...
+```
+
+Si `go.sum` cambia tras `go mod tidy`, commitear el resultado antes de desplegar.
