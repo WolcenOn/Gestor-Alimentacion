@@ -2,13 +2,21 @@ import { escapeHtml } from "../utils.js";
 import { getApiBaseUrl, getCloudSession, isCloudConfigured } from "../apiClient.js";
 import { getCloudSyncStatus } from "../cloudSync.js";
 
+function activeHouseholdFromSession(session, syncStatus) {
+  const households = Array.isArray(session?.households) ? session.households : [];
+  const activeId = session?.activeHouseholdId || syncStatus.householdId || households[0]?.id || "";
+  return households.find(household => household.id === activeId) || households[0] || null;
+}
+
 function renderCloudSettings() {
   const configured = isCloudConfigured();
   const apiBaseUrl = getApiBaseUrl();
   const session = getCloudSession();
   const syncStatus = getCloudSyncStatus();
+  const activeHousehold = activeHouseholdFromSession(session, syncStatus);
   const userEmail = session?.user?.email || "";
-  const householdName = session?.households?.[0]?.name || "";
+  const householdName = activeHousehold?.name || syncStatus.householdName || "";
+  const householdRole = activeHousehold?.role || syncStatus.role || "";
   const statusLabel = syncStatus.mode === "synced" ? "Sincronizado" : syncStatus.mode === "syncing" ? "Sincronizando" : syncStatus.mode === "error" ? "Error" : syncStatus.mode === "ready" ? "Preparado" : "Local";
 
   const loginSubmit = "event.preventDefault();window.GestorCloudAPI.loginCloudAccount({email:this.elements.email.value,password:this.elements.password.value}).then(()=>{alert('Sesión cloud iniciada.');location.reload();}).catch(error=>alert(error.message));";
@@ -31,11 +39,13 @@ function renderCloudSettings() {
       <div class="mini-facts">
         <span>API: ${configured ? "configurada" : "sin configurar"}</span>
         <span>Sesión: ${session ? escapeHtml(userEmail) : "no iniciada"}</span>
-        <span>Hogar: ${householdName ? escapeHtml(householdName) : "sin seleccionar"}</span>
+        <span>Hogar activo: ${householdName ? `${escapeHtml(householdName)}${householdRole ? ` · ${escapeHtml(householdRole)}` : ""}` : "sin seleccionar"}</span>
       </div>
 
       ${configured ? `<p class="qty-line">Backend: <code>${escapeHtml(apiBaseUrl)}</code></p>` : `<p class="alert">Configura <code>app/config.js</code> para activar la nube.</p>`}
-      ${syncStatus.lastSyncAt ? `<p class="qty-line">Última sincronización: ${escapeHtml(new Date(syncStatus.lastSyncAt).toLocaleString())}</p>` : ""}
+      ${syncStatus.householdId ? `<p class="small muted">ID hogar sync: <code>${escapeHtml(syncStatus.householdId)}</code></p>` : ""}
+      ${syncStatus.updatedAt ? `<p class="qty-line">Última actualización en nube: ${escapeHtml(new Date(syncStatus.updatedAt).toLocaleString())}</p>` : ""}
+      ${syncStatus.lastSyncAt ? `<p class="qty-line">Última sincronización local: ${escapeHtml(new Date(syncStatus.lastSyncAt).toLocaleString())}</p>` : ""}
       ${syncStatus.lastError ? `<p class="alert">${escapeHtml(syncStatus.lastError)}</p>` : ""}
 
       ${session ? `
@@ -119,7 +129,7 @@ function renderCloudSettings() {
       `}
 
       <div class="help-note">
-        <p><strong>Recomendación:</strong> la primera vez usa “Subir datos locales a la nube” para guardar tu estado actual. En otro dispositivo, inicia sesión y usa “Descargar datos de la nube”.</p>
+        <p><strong>Recomendación:</strong> comprueba arriba que “Hogar activo” es el hogar compartido. Después usa “Subir datos locales a la nube” en el owner y “Descargar datos de la nube” en el admin.</p>
         <p class="muted">Roles: <strong>owner</strong> es la cuenta principal/propietaria, <strong>admin</strong> puede invitar y editar hogar, <strong>member</strong> puede sincronizar, <strong>viewer</strong> queda preparado para modo solo lectura.</p>
       </div>
     </article>
@@ -228,29 +238,24 @@ export function renderSettings(state) {
           <span class="badge warning">${pendingNutrition} pendientes</span>
         </div>
         <div class="mini-facts">
-          <span>Ingredientes: ${state.ingredients.length}</span>
-          <span>Con nutrición: ${ingredientsWithNutrition.size}</span>
-          <span>Con producto/código: ${offLinked}</span>
-        </div>
-        <div class="help-note">
-          <p><strong>Flujo recomendado:</strong> primero personaliza nombres e ingredientes. Después lanza la búsqueda por lotes. La app guarda candidaturas y solo aplica las marcadas como suficientemente fiables.</p>
-          <p class="muted">Para resolver traducciones, se usa una tabla interna español→inglés y varios sinónimos antes de consultar USDA. Si la coincidencia no es clara, queda en revisión y no se aplica automáticamente.</p>
+          <span>Con Open Food Facts/código: ${offLinked}</span>
+          <span>Sin nutrición: ${pendingNutrition}</span>
         </div>
         <div class="actions wrap">
           <button type="button" data-action="scan-bulk-nutrition">Buscar nutrición pendiente</button>
-          <button type="button" class="secondary" data-action="apply-bulk-nutrition">Aplicar candidaturas fiables</button>
+          <button type="button" class="secondary" data-action="apply-bulk-nutrition">Aplicar fiables</button>
           <button type="button" class="secondary" data-action="clear-bulk-nutrition-cache">Borrar candidaturas</button>
         </div>
-        <div id="nutritionBatchResults" class="list nutrition-batch-results">
-          <p class="muted">Todavía no hay candidaturas. Lanza una búsqueda por lotes para generarlas.</p>
-        </div>
+        <div id="nutritionBatchResults" class="nutrition-batch-results"></div>
       </article>
     </div>
 
-    <article class="card tips-card">
-      <h3>Cómo funciona ahora la semana</h3>
-      <p>En la pestaña <strong>Semana</strong>, cada día muestra todas las comidas configuradas y, dentro de cada comida, todos los miembros. Puedes añadir tantos platos como quieras a cada persona.</p>
-      <p class="muted">Al quitar un miembro o una comida, se limpia automáticamente su planificación asociada para mantener el estado consistente.</p>
+    <article class="card">
+      <div class="section-title-row"><div><h3>Exportar e importar datos</h3><p class="muted">Copia de seguridad local en JSON.</p></div></div>
+      <div class="actions wrap">
+        <button data-action="export-data">Exportar JSON</button>
+        <label class="button secondary file-button">Importar JSON<input id="importFile" type="file" accept="application/json,.json" hidden></label>
+      </div>
     </article>
   `;
 }
