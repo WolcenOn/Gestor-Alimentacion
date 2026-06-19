@@ -46,7 +46,7 @@ func (s *Store) GetSyncSnapshot(ctx context.Context, userID, householdID string)
 }
 
 // SaveSyncSnapshot stores the whole frontend state for a household.
-func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string, version int, state json.RawMessage, expectedUpdatedAt *time.Time) (SyncSnapshot, error) {
+func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string, version int, state json.RawMessage, expectedUpdatedAt ...*time.Time) (SyncSnapshot, error) {
 	var snapshot SyncSnapshot
 	_ = expectedUpdatedAt
 	if !s.Available() {
