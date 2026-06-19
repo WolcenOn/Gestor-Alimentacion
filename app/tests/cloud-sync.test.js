@@ -46,7 +46,12 @@ localStorage.setItem("gestorMenuSemanal.cloudSession.v1", JSON.stringify(session
 
 const { updateState } = await import("../store.js");
 const { ApiError } = await import("../apiClient.js");
-const { enableCloudAutoSync, getCloudSyncStatus, pullCloudState, pushCloudState } = await import("../cloudSync.js");
+const {
+  enableCloudAutoSync,
+  getCloudSyncStatus,
+  pullCloudState,
+  resolvePendingCloudChanges
+} = await import("../cloudSync.js");
 
 enableCloudAutoSync();
 
@@ -75,12 +80,17 @@ globalThis.fetch = async (url, options = {}) => {
   });
 };
 
-await pushCloudState();
+const resolved = await resolvePendingCloudChanges();
 status = getCloudSyncStatus();
+assert.equal(resolved.skipped, false);
 assert.equal(fetchCalls, 1);
 assert.equal(status.pendingLocalChanges, false);
 assert.equal(status.mode, "synced");
 assert.equal(status.retryCount, 0);
 assert.equal(status.updatedAt, "2026-06-19T16:00:00.000Z");
+
+const noPending = await resolvePendingCloudChanges();
+assert.equal(noPending.skipped, true);
+assert.equal(fetchCalls, 1);
 
 console.log("cloud-sync.test.js OK");
