@@ -3,6 +3,7 @@ package httpapi
 import (
 	"net"
 	"net/http"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -55,13 +56,21 @@ func withAuthRateLimit(next http.Handler, limiter *authRateLimiter) http.Handler
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if limiter != nil && isAuthWriteEndpoint(r) {
 			if retryAfter, allowed := limiter.allow(clientIP(r), r.URL.Path); !allowed {
-				w.Header().Set("Retry-After", retryAfter.String())
+				w.Header().Set("Retry-After", retryAfterSeconds(retryAfter))
 				writeError(w, http.StatusTooManyRequests, "rate_limited", "Demasiados intentos. Espera unos minutos antes de volver a probar.")
 				return
 			}
 		}
 		next.ServeHTTP(w, r)
 	})
+}
+
+func retryAfterSeconds(duration time.Duration) string {
+	seconds := int(duration.Round(time.Second).Seconds())
+	if seconds < 1 {
+		seconds = 1
+	}
+	return strconv.Itoa(seconds)
 }
 
 func isAuthWriteEndpoint(r *http.Request) bool {
@@ -85,7 +94,7 @@ func (l *authRateLimiter) allow(ip, path string) (time.Duration, bool) {
 	}
 
 	if bucket.count >= authRateLimitMaxAttempts {
-		return time.Until(bucket.resetAfter).Round(time.Second), false
+		return bucket.resetAfter.Sub(now), false
 	}
 
 	bucket.count++
