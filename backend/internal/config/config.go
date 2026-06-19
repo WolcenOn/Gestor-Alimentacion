@@ -17,6 +17,8 @@ type Config struct {
 	JWTSecret          string
 	USDAAPIKey         string
 	CORSAllowedOrigins []string
+	ReleaseCommit      string
+	BuildTime          string
 }
 
 // Load reads configuration from environment variables. It keeps safe defaults for local development.
@@ -28,6 +30,8 @@ func Load() Config {
 		JWTSecret:          os.Getenv("JWT_SECRET"),
 		USDAAPIKey:         os.Getenv("USDA_API_KEY"),
 		CORSAllowedOrigins: splitCSV(env("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:8080")),
+		ReleaseCommit:      env("RAILWAY_GIT_COMMIT_SHA", env("RELEASE_COMMIT", "local")),
+		BuildTime:          env("BUILD_TIME", "unknown"),
 	}
 }
 
