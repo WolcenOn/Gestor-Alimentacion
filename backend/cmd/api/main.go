@@ -21,6 +21,11 @@ func main() {
 	cfg := config.Load()
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 
+	if err := cfg.ValidateProduction(); err != nil {
+		logger.Error("unsafe production configuration", "error", err)
+		os.Exit(1)
+	}
+
 	if cfg.JWTSecret == "" {
 		logger.Warn("JWT_SECRET is not configured; auth endpoints will fail until it is set")
 	}

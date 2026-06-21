@@ -1,4 +1,4 @@
-import { getState, updateState, setState, subscribe, migrateData } from "./store.js";
+import { getState, updateState, setState, subscribe, migrateData, resetDemoData } from "./store.js";
 import { withMeta } from "./models.js";
 import { stripDangerousText, parseNumber, downloadTextFile, readFileAsText, safeJsonParse, normalizeUnit } from "./utils.js";
 import { validateState, validatePack } from "./validation.js";
@@ -97,6 +97,7 @@ document.addEventListener("click", guarded(async event => {
   if (action === "print-shopping") printShopping(state);
   if (action === "print-week") printWeek(state);
   if (action === "export-data") exportData(state);
+  if (action === "reset-local-data") resetLocalData();
   if (action === "share-shopping") shareShoppingText(state);
   if (action === "create-snapshot") {
     updateState(draft => createWeeklySnapshot(draft), "snapshot");
@@ -337,6 +338,13 @@ async function scanIntoPurchaseForm() {
 
 function exportData(state) {
   downloadTextFile(`gestor-menu-semanal-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(state, null, 2));
+}
+
+function resetLocalData() {
+  const confirmed = confirm("Esto borra los datos locales de este navegador y reinicia la app con datos por defecto. No borra datos ya sincronizados en la nube. ¿Quieres continuar?");
+  if (!confirmed) return;
+  resetDemoData();
+  showAlert("Datos locales reiniciados. Si usas nube, descarga o sube datos solo cuando tengas claro qué estado quieres conservar.");
 }
 
 async function importDataFile(file) {

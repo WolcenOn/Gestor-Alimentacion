@@ -1,9 +1,13 @@
 package config
 
 import (
+	"errors"
+	"fmt"
 	"os"
 	"strings"
 )
+
+const minProductionJWTSecretLength = 32
 
 // Config contains runtime configuration for the Railway Go API.
 type Config struct {
@@ -25,6 +29,29 @@ func Load() Config {
 		USDAAPIKey:         os.Getenv("USDA_API_KEY"),
 		CORSAllowedOrigins: splitCSV(env("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:8080")),
 	}
+}
+
+// ValidateProduction rejects unsafe production configuration before the API starts.
+func (cfg Config) ValidateProduction() error {
+	if !strings.EqualFold(cfg.AppEnv, "production") {
+		return nil
+	}
+
+	if strings.TrimSpace(cfg.DatabaseURL) == "" {
+		return errors.New("DATABASE_URL is required in production")
+	}
+	if len(strings.TrimSpace(cfg.JWTSecret)) < minProductionJWTSecretLength {
+		return fmt.Errorf("JWT_SECRET must be at least %d characters in production", minProductionJWTSecretLength)
+	}
+	if len(cfg.CORSAllowedOrigins) == 0 {
+		return errors.New("CORS_ALLOWED_ORIGINS must include at least one explicit origin in production")
+	}
+	for _, origin := range cfg.CORSAllowedOrigins {
+		if origin == "*" {
+			return errors.New("CORS_ALLOWED_ORIGINS cannot include wildcard '*' in production")
+		}
+	}
+	return nil
 }
 
 func env(key, fallback string) string {

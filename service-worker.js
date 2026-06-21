@@ -25,6 +25,23 @@ const APP_SHELL = [
   "./assets/icons/icon-512.svg"
 ];
 
+const STATIC_PATH_PREFIXES = [
+  "/app/",
+  "/assets/",
+  "/packs/"
+];
+
+const STATIC_FILE_EXTENSIONS = [
+  ".css",
+  ".html",
+  ".js",
+  ".json",
+  ".png",
+  ".svg",
+  ".webmanifest",
+  ".woff2"
+];
+
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_VERSION)
@@ -48,13 +65,30 @@ self.addEventListener("fetch", event => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
+  if (isSensitiveRequest(url)) return;
+
   if (request.mode === "navigate") {
     event.respondWith(networkFirst(request, "./index.html"));
     return;
   }
 
+  if (!isStaticAsset(url)) return;
+
   event.respondWith(staleWhileRevalidate(request));
 });
+
+function isSensitiveRequest(url) {
+  return url.pathname.startsWith("/api/") ||
+    url.pathname.includes("/auth/") ||
+    url.pathname.includes("/sync") ||
+    url.pathname.includes("/households") ||
+    url.pathname.includes("/invites");
+}
+
+function isStaticAsset(url) {
+  return STATIC_PATH_PREFIXES.some(prefix => url.pathname.startsWith(prefix)) ||
+    STATIC_FILE_EXTENSIONS.some(extension => url.pathname.endsWith(extension));
+}
 
 async function networkFirst(request, fallbackUrl) {
   const cache = await caches.open(CACHE_VERSION);
