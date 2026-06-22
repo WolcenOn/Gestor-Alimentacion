@@ -15,6 +15,55 @@ function normalizeText(value) {
     .trim();
 }
 
+function cssEscape(value) {
+  return window.CSS?.escape ? CSS.escape(value) : String(value).replace(/"/g, "\\\"");
+}
+
+function injectRecipeBuilderStyles() {
+  if (document.getElementById("recipeIngredientBuilderStyles")) return;
+  const style = document.createElement("style");
+  style.id = "recipeIngredientBuilderStyles";
+  style.textContent = `
+    .recipe-builder { display: grid; gap: .85rem; }
+    .recipe-builder-title { align-items: end; }
+    .recipe-builder-lines { display: grid; gap: .7rem; }
+    .dynamic-recipe-line {
+      display: grid;
+      grid-template-columns: minmax(220px, 1.3fr) minmax(120px, .65fr) minmax(120px, .65fr) auto;
+      gap: .72rem;
+      align-items: end;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: .75rem;
+      background: rgba(255,255,255,.72);
+    }
+    .recipe-ingredient-picker-field { display: grid; gap: .35rem; }
+    .recipe-ingredient-label {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: .72rem .85rem;
+      background: rgba(248,250,252,.95);
+      font-weight: 850;
+      color: var(--text);
+    }
+    .recipe-builder-actions { align-items: center; }
+    .recipe-ingredient-option { width: 100%; justify-content: space-between; text-align: left; border-radius: 16px; }
+    .recipe-ingredient-option span:first-child { display: grid; gap: .18rem; }
+    .recipe-ingredient-option small { color: rgba(255,255,255,.85); font-weight: 650; }
+    .recipe-ingredient-option.secondary small, button.secondary.recipe-ingredient-option small { color: var(--muted); }
+    .recipe-ingredient-category summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: .7rem; padding: .75rem .8rem; border-radius: 16px; background: var(--primary-soft); }
+    .recipe-ingredient-category[open] summary { margin-bottom: .7rem; }
+    @media (max-width: 780px) {
+      .dynamic-recipe-line { grid-template-columns: 1fr; }
+      .recipe-ingredient-picker-field button, .dynamic-recipe-line button { width: 100%; }
+    }
+  `;
+  document.head.append(style);
+}
+
 function ingredientFamilyName(state, ingredient) {
   return state.ingredientFamilies?.find(family => family.id === ingredient.familyId)?.name || "Sin familia";
 }
@@ -84,6 +133,7 @@ function renderIngredientPicker(lineId) {
 }
 
 function openIngredientPicker(lineId) {
+  injectRecipeBuilderStyles();
   openModal(renderIngredientPicker(lineId));
   document.querySelector("[data-ingredient-picker-global]")?.focus();
 }
@@ -108,7 +158,7 @@ function removeRecipeLine(button) {
 
 function pickIngredient(button) {
   const lineId = button.dataset.recipeLineId || "";
-  const line = document.querySelector(`[data-recipe-line-id="${CSS.escape(lineId)}"]`);
+  const line = document.querySelector(`[data-recipe-line-id="${cssEscape(lineId)}"]`);
   if (!line) return;
   const ingredientId = button.dataset.ingredientId || "";
   const ingredientName = button.dataset.ingredientName || "Ingrediente";
@@ -162,6 +212,7 @@ document.addEventListener("click", event => {
   if (addButton) {
     event.preventDefault();
     event.stopPropagation();
+    injectRecipeBuilderStyles();
     addRecipeLine(addButton.closest("[data-recipe-builder]"));
     return;
   }
@@ -203,6 +254,8 @@ document.addEventListener("change", event => {
   const builder = event.target.closest("[data-recipe-builder]");
   if (builder && event.target.matches("[data-recipe-qty], [data-recipe-unit]")) updateRecipeJson(builder);
 }, true);
+
+window.addEventListener("load", injectRecipeBuilderStyles);
 
 window.GestorRecipeIngredients = {
   openPicker: openIngredientPicker,
