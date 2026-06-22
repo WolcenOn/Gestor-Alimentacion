@@ -1,7 +1,9 @@
 import { escapeHtml } from "../utils.js";
 
+const UNIT_OPTIONS = ["g", "kg", "ml", "l", "unidades"];
+const INITIAL_RECIPE_LINE_ID = "recipe_line_1";
+
 export function renderDishes(state) {
-  const ingredientOptions = state.ingredients.map(i => `<option value="${escapeHtml(i.id)}">${escapeHtml(i.name)} (${escapeHtml(i.unit)})</option>`).join("");
   return `
     <div class="stacked-layout">
       <details class="card collapsible-card">
@@ -24,15 +26,27 @@ export function renderDishes(state) {
             </div>
             <label>Etiquetas<input name="tags" placeholder="fácil, mediterránea"></label>
             <label>Notas<textarea name="notes"></textarea></label>
-            <label>Pautas de elaboración<textarea name="instructions" placeholder="Un paso por línea. Ej.:\nLavar y cortar los tomates.\nTriturar con el pan y el aceite.\nServir frío."></textarea></label>
-            <h3>Ingredientes de la receta</h3>
-            <p class="muted small">Las cantidades se guardan por 1 ración si indicas raciones de referencia mayor que 1.</p>
-            ${Array.from({ length: 6 }, (_, index) => `
-              <div class="form-grid recipe-line">
-                <label>Ingrediente ${index + 1}<select name="ingredientId_${index}"><option value="">—</option>${ingredientOptions}</select></label>
-                <label>Cantidad<input name="qty_${index}" type="number" min="0" step="0.01"></label>
-                <label>Unidad<select name="unit_${index}"><option>g</option><option>kg</option><option>ml</option><option>l</option><option>unidades</option></select></label>
-              </div>`).join("")}
+            <label>Pautas de elaboración<textarea name="instructions" placeholder="Un paso por línea. Ej.:
+Lavar y cortar los tomates.
+Triturar con el pan y el aceite.
+Servir frío."></textarea></label>
+            <div class="section-title-row recipe-builder-title">
+              <div>
+                <h3>Ingredientes de la receta</h3>
+                <p class="muted small">Añade tantos ingredientes como necesites. Usa el selector para buscar por nombre o familia.</p>
+              </div>
+              <span class="badge">Dinámico</span>
+            </div>
+            <div class="recipe-builder" data-recipe-builder>
+              <input type="hidden" name="recipeJson" value="[]" data-recipe-json>
+              <div class="recipe-builder-lines" data-recipe-lines>
+                ${renderRecipeLine(INITIAL_RECIPE_LINE_ID, true)}
+              </div>
+              <div class="actions wrap recipe-builder-actions">
+                <button type="button" class="secondary" data-action="add-recipe-line">Añadir otro ingrediente</button>
+                <span class="small muted">Las cantidades se guardan por receta de referencia. Indica raciones arriba si la receta base produce más de una ración.</span>
+              </div>
+            </div>
             <button>Añadir plato</button>
           </form>
         </div>
@@ -52,6 +66,21 @@ export function renderDishes(state) {
         <div id="dishSearchEmpty" class="search-empty muted" hidden>No hay platos que coincidan con la búsqueda.</div>
         <div class="list dish-list">${state.dishes.map(d => renderDishItem(state, d)).join("")}</div>
       </article>
+    </div>
+  `;
+}
+
+export function renderRecipeLine(lineId, required = false) {
+  return `
+    <div class="recipe-line dynamic-recipe-line" data-recipe-line data-recipe-line-id="${escapeHtml(lineId)}">
+      <input type="hidden" data-recipe-ingredient-id>
+      <div class="recipe-ingredient-picker-field">
+        <span class="recipe-ingredient-label" data-recipe-ingredient-label>${required ? "Elige el primer ingrediente" : "Ingrediente sin seleccionar"}</span>
+        <button type="button" class="secondary" data-action="open-recipe-ingredient-picker" data-recipe-line-id="${escapeHtml(lineId)}">Elegir ingrediente</button>
+      </div>
+      <label>Cantidad<input data-recipe-qty type="number" min="0" step="0.01" placeholder="Ej. 250"></label>
+      <label>Unidad<select data-recipe-unit>${UNIT_OPTIONS.map(unit => `<option>${escapeHtml(unit)}</option>`).join("")}</select></label>
+      <button type="button" class="secondary" data-action="remove-recipe-line" data-recipe-line-id="${escapeHtml(lineId)}" ${required ? "disabled" : ""}>Quitar</button>
     </div>
   `;
 }

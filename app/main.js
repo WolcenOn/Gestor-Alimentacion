@@ -186,8 +186,22 @@ function addIngredient(form) {
   showAlert("Ingrediente añadido.");
 }
 
-function addDish(form) {
-  const data = formToObject(form);
+function readRecipeFromForm(form, data) {
+  const fromBuilder = String(data.recipeJson || "").trim();
+  if (fromBuilder) {
+    try {
+      return JSON.parse(fromBuilder)
+        .map(line => ({
+          ingredientId: String(line.ingredientId || ""),
+          qty: parseNumber(line.qty),
+          unit: normalizeUnit(line.unit)
+        }))
+        .filter(line => line.ingredientId && line.qty > 0);
+    } catch {
+      throw new Error("No se pudo leer la lista dinámica de ingredientes. Revisa la receta y vuelve a intentarlo.");
+    }
+  }
+
   const recipe = [];
   for (let i = 0; i < 6; i++) {
     if (!data[`ingredientId_${i}`]) continue;
@@ -195,7 +209,13 @@ function addDish(form) {
     if (qty <= 0) continue;
     recipe.push({ ingredientId: data[`ingredientId_${i}`], qty, unit: normalizeUnit(data[`unit_${i}`]) });
   }
-  if (!recipe.length) throw new Error("Añade al menos un ingrediente a la receta.");
+  return recipe;
+}
+
+function addDish(form) {
+  const data = formToObject(form);
+  const recipe = readRecipeFromForm(form, data);
+  if (!recipe.length) throw new Error("Añade al menos un ingrediente con cantidad a la receta.");
   updateState(draft => {
     draft.dishes.push(withMeta({
       name: stripDangerousText(data.name),
@@ -213,6 +233,7 @@ function addDish(form) {
     }, "dish"));
   }, "dish-add");
   form.reset();
+  form.querySelector("[data-recipe-json]")?.setAttribute("value", "[]");
   showAlert("Plato añadido.");
 }
 
