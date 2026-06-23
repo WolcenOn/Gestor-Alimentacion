@@ -19,19 +19,26 @@ function labelFor(payload, error) {
 
 function ensureBadge() {
   let badge = document.getElementById(HEALTH_BADGE_ID);
-  if (badge) return badge;
+  if (badge) {
+    if (!badge.dataset.healthBound) {
+      badge.dataset.healthBound = "true";
+      badge.addEventListener("click", () => checkBackendHealth({ showDetails: true }));
+    }
+    return badge;
+  }
 
-  const host = document.querySelector(".header-actions");
+  const host = document.querySelector(".side-menu-list") || document.querySelector(".header-actions");
   if (!host) return null;
 
   badge = document.createElement("button");
   badge.id = HEALTH_BADGE_ID;
   badge.type = "button";
-  badge.className = "secondary";
+  badge.dataset.sideMenuItem = "true";
+  badge.dataset.healthBound = "true";
   badge.textContent = "Comprobar backend";
   badge.title = "Ejecuta GET /health en el backend Railway configurado.";
   badge.addEventListener("click", () => checkBackendHealth({ showDetails: true }));
-  host.prepend(badge);
+  host.append(badge);
   return badge;
 }
 
