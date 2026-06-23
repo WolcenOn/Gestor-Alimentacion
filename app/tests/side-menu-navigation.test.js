@@ -3,27 +3,27 @@ import { readFileSync } from "node:fs";
 
 const html = readFileSync(new URL("../../index.html", import.meta.url), "utf8");
 
-const navMatch = html.match(/<nav class="tabs app-screen"[\s\S]*?<\/nav>/);
-assert.ok(navMatch, "main navigation should exist");
-const navHtml = navMatch[0];
-
-for (const mainTab of ["dashboard", "ingredients", "dishes", "calendar", "shopping", "nutrition"]) {
-  assert.match(navHtml, new RegExp(`data-tab="${mainTab}"`));
-}
-
-for (const secondaryTab of ["settings", "packs", "metabolic", "help"]) {
-  assert.doesNotMatch(navHtml, new RegExp(`data-tab="${secondaryTab}"`));
-}
+assert.doesNotMatch(html, /<nav class="tabs app-screen"/);
+assert.match(html, /class="secondary menu-trigger"/);
+assert.match(html, /aria-label="Abrir menú lateral"/);
 
 assert.match(html, /id="sideMenu"/);
+assert.match(html, /id="backendHealthBadge"/);
 assert.match(html, /data-action="open-side-menu"/);
-assert.match(html, /data-action="export-data" data-side-menu-item/);
-assert.match(html, /data-legal-doc="terms" data-side-menu-item/);
-assert.match(html, /data-tab="settings" data-side-menu-item/);
-assert.match(html, /data-tab="packs" data-side-menu-item/);
-assert.match(html, /data-tab="metabolic" data-side-menu-item/);
-assert.match(html, /data-tab="help" data-side-menu-item/);
-assert.match(html, /src="app\/sideMenu.js"/);
 assert.match(html, /href="side-menu.css"/);
+assert.match(html, /src="app\/sideMenu.js"/);
+
+for (const tab of ["dashboard", "ingredients", "dishes", "calendar", "shopping", "nutrition", "settings", "packs", "metabolic", "help"]) {
+  assert.match(html, new RegExp(`data-tab="${tab}" data-side-menu-item`));
+}
+
+assert.match(html, /data-action="export-data" data-side-menu-item/);
+assert.match(html, /data-legal-doc="privacy" data-side-menu-item/);
+assert.match(html, /data-legal-doc="terms" data-side-menu-item/);
+
+const headerMatch = html.match(/<header class="app-header app-screen simplified-header"[\s\S]*?<\/header>/);
+assert.ok(headerMatch, "simplified header should exist");
+const headerHtml = headerMatch[0];
+assert.doesNotMatch(headerHtml, /Backend OK|Comprobar backend|Privacidad|Términos|Exportar JSON/);
 
 console.log("side-menu-navigation.test.js OK");
