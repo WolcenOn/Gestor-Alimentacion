@@ -24,11 +24,7 @@
       <p class="muted">Planifica, compra, actualiza stock e imprime solo lo necesario.</p>
     </div>
     <div class="header-actions">
-      <button class="secondary" data-action="export-data">Exportar JSON</button>
-      <label class="button secondary file-button">
-        Importar JSON
-        <input id="importFile" type="file" accept="application/json,.json" hidden>
-      </label>
+      <button class="secondary" data-action="open-side-menu" aria-controls="sideMenu" aria-expanded="false">Más</button>
     </div>
   </header>
 
@@ -38,12 +34,35 @@
     <button data-tab="dishes">Platos</button>
     <button data-tab="calendar">Semana</button>
     <button data-tab="shopping">Compra</button>
-    <button data-tab="packs">Packs</button>
     <button data-tab="nutrition">Nutrición</button>
-    <button data-tab="metabolic">Metabólico</button>
-    <button data-tab="settings">Ajustes</button>
-    <button data-tab="help">Ayuda</button>
   </nav>
+
+  <aside id="sideMenu" class="side-menu app-screen" aria-hidden="true">
+    <button type="button" class="side-menu-backdrop" data-action="close-side-menu" aria-label="Cerrar menú"></button>
+    <section class="side-menu-panel" role="dialog" aria-modal="true" aria-labelledby="sideMenuTitle">
+      <header class="side-menu-header">
+        <div>
+          <p class="eyebrow">Menú</p>
+          <h2 id="sideMenuTitle">Más opciones</h2>
+          <p class="muted">Herramientas menos frecuentes, ayuda y configuración.</p>
+        </div>
+        <button type="button" class="secondary" data-action="close-side-menu" aria-label="Cerrar">×</button>
+      </header>
+      <div class="side-menu-list">
+        <button type="button" data-tab="settings" data-side-menu-item>Ajustes</button>
+        <button type="button" data-action="open-legal-doc" data-legal-doc="privacy" data-side-menu-item>Privacidad</button>
+        <button type="button" data-action="open-legal-doc" data-legal-doc="terms" data-side-menu-item>Términos de servicio</button>
+        <button type="button" data-action="export-data" data-side-menu-item>Exportar JSON</button>
+        <label class="button secondary side-menu-file" data-side-menu-item>
+          Importar JSON
+          <input id="importFile" type="file" accept="application/json,.json" hidden>
+        </label>
+        <button type="button" data-tab="packs" data-side-menu-item>Packs</button>
+        <button type="button" data-tab="metabolic" data-side-menu-item>Metabólico</button>
+        <button type="button" data-tab="help" data-side-menu-item>Ayuda</button>
+      </div>
+    </section>
+  </aside>
 
   <main id="mainContent" class="app-shell app-screen" tabindex="-1">
     <section id="alerts" class="alerts" aria-live="polite"></section>
@@ -68,6 +87,7 @@
   <script type="module" src="app/metabolicPremiumModule.js"></script>
   <script type="module" src="app/packEnhancements.js"></script>
   <script type="module" src="app/main.js"></script>
+  <script type="module" src="app/sideMenu.js"></script>
   <script type="module" src="app/recipeIngredientBuilder.js"></script>
   <script type="module" src="app/detailCards.js"></script>
   <script type="module" src="app/dishPickerEnhancements.js"></script>
