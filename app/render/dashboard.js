@@ -22,6 +22,7 @@ export function renderDashboard(state) {
   const wasteScore = getWasteScore(state);
   const recycling = getRecyclingSummary(state);
   const recyclingRows = Object.entries(recycling);
+  const totalRecycling = recyclingRows.reduce((sum, [, qty]) => sum + Number(qty || 0), 0);
   const plannedDishes = buildPlannedDishRows(state, week);
   const todayName = getTodayName();
   const todayDishes = plannedDishes.filter(row => row.day === todayName);
@@ -30,25 +31,25 @@ export function renderDashboard(state) {
   const stockLow = state.ingredients.filter(ingredient => Number(ingredient.qty || 0) <= 0).slice(0, 5);
 
   return `
-    <div class="card-header">
+    <div class="card-header dashboard-header-clean">
       <div>
         <p class="eyebrow">Panel accionable</p>
         <h2>${escapeHtml(week?.name || "Sin semana activa")}</h2>
         <p class="muted">Resuelve rápido el día familiar: cocinar, comprar, guardar compra y evitar desperdicio.</p>
       </div>
-      <div class="header-actions compact-actions"><button data-action="open-recycling-modal" class="secondary">Registrar reciclaje</button><button data-action="create-snapshot" class="secondary">Guardar snapshot</button></div>
     </div>
 
-    <section class="task-launcher grid cols-3">
+    <section class="dashboard-card-grid task-launcher">
       ${renderTaskCard("Hoy cocinamos", todayDishes.length ? `${todayDishes.length} plato(s) para ${todayName}` : `Nada planificado para ${todayName}`, "Ver semana", "calendar")}
       ${renderTaskCard("Ir a comprar", `${pending} pendientes · ${partial} parciales`, "Abrir compra", "shopping")}
       ${renderTaskCard("Planificar semana", `${plannedSlots} de ${totalSlots} huecos`, "Abrir semana", "calendar")}
       ${renderTaskCard("Guardar compra", "Escáner o entrada manual desde Compra", "Registrar", "shopping")}
       ${renderTaskCard("Aprovechar caducidades", expiring.length ? `${expiring.length} producto(s) en 7 días` : "Sin urgencias", "Ver ingredientes", "ingredients")}
+      ${renderTaskCard("Registrar reciclaje", totalRecycling ? `${totalRecycling} envase(s) pendientes/registrados` : "Añade envases al cerrar compra", "Registrar", null, "open-recycling-modal")}
       ${renderTaskCard("Revisar nutrición", `${state.nutritionProfiles.length}/${state.ingredients.length} perfiles`, "Abrir nutrición", "nutrition")}
     </section>
 
-    <article class="card today-card" style="margin-top:1rem">
+    <article class="card today-card dashboard-card-block">
       <div class="section-title-row">
         <div>
           <h3>Hoy cocinamos</h3>
@@ -59,25 +60,51 @@ export function renderDashboard(state) {
       ${todayDishes.length ? `<div class="list planned-dish-list today-dish-list">${todayDishes.map(row => renderPlannedDishRow(row, true)).join("")}</div>` : `<p class="muted">No hay platos planificados para hoy. Puedes planificarlos en Semana o usar el stock actual para improvisar.</p><div class="actions wrap"><button data-tab="calendar">Planificar hoy</button><button data-tab="ingredients" class="secondary">Ver stock</button></div>`}
     </article>
 
-    <div class="grid cols-3" style="margin-top:1rem">
-      <article class="card">
-        <h3>Estado de la semana</h3>
+    <div class="dashboard-card-grid dashboard-metric-grid">
+      <article class="card compact-dashboard-card">
+        <h3>Estado semana</h3>
         <p class="metric">${plannedPct}%</p>
-        <p class="muted">${plannedSlots} de ${totalSlots} huecos planificados.</p>
+        <p class="muted">${plannedSlots} de ${totalSlots} huecos.</p>
       </article>
-      <article class="card">
+      <article class="card compact-dashboard-card">
         <h3>Compra pendiente</h3>
         <p class="metric">${pending}</p>
-        <p class="muted">${partial} ingredientes están parcialmente comprados.</p>
+        <p class="muted">${partial} parcialmente comprados.</p>
       </article>
-      <article class="card">
+      <article class="card compact-dashboard-card">
         <h3>Platos revisados</h3>
         <p class="metric">${consumedCount + skippedCount}/${plannedDishes.length}</p>
-        <p class="muted">Consumidos: ${consumedCount} · No consumidos: ${skippedCount}</p>
+        <p class="muted">Consumidos: ${consumedCount} · No: ${skippedCount}</p>
+      </article>
+      <article class="card compact-dashboard-card score-card">
+        <h3>Anti-desperdicio</h3>
+        <p class="metric">${wasteScore.score}/100</p>
+        <p class="muted">Tirado: ${formatMoney(wasteScore.wastedValue)}</p>
+      </article>
+      <article class="card compact-dashboard-card">
+        <h3>Coste estimado</h3>
+        <p class="metric">${formatMoney(estimatedCost)}</p>
+        <p class="muted">Cantidades restantes.</p>
+      </article>
+      <article class="card compact-dashboard-card">
+        <h3>Envases</h3>
+        ${recyclingRows.length ? `<div class="recycling-bars compact-recycling-bars">${recyclingRows.map(([type, qty]) => `<div><span>${escapeHtml(type)}</span><strong>${qty}</strong></div>`).join("")}</div>` : `<p class="muted">Sin envases registrados.</p>`}
+      </article>
+      <article class="card compact-dashboard-card dashboard-list-card">
+        <h3>Caduca pronto</h3>
+        ${expiring.length ? `<div class="list compact-list">${expiring.slice(0, 3).map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><span class="badge warning">${escapeHtml(i.expiryDate)}</span></div>`).join("")}</div>` : `<p class="muted">Sin urgencias.</p>`}
+      </article>
+      <article class="card compact-dashboard-card dashboard-list-card">
+        <h3>Stock bajo</h3>
+        ${stockLow.length ? `<div class="list compact-list">${stockLow.slice(0, 3).map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><p class="qty-line">${formatQty(i.qty, i.unit)}</p></div>`).join("")}</div>` : `<p class="muted">Nada a cero.</p>`}
+      </article>
+      <article class="card compact-dashboard-card dashboard-list-card">
+        <h3>Compra parcial</h3>
+        ${partialShopping.length ? `<div class="list compact-list">${partialShopping.slice(0, 3).map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><p class="qty-line">Falta: ${i.display.remaining}</p></div>`).join("")}</div>` : `<p class="muted">Sin parciales.</p>`}
       </article>
     </div>
 
-    <article class="card dashboard-planning-card" style="margin-top:1rem">
+    <article class="card dashboard-planning-card dashboard-card-block">
       <div class="section-title-row">
         <div>
           <h3>Seguimiento del menú planificado</h3>
@@ -87,44 +114,18 @@ export function renderDashboard(state) {
       </div>
       ${plannedDishes.length ? `<div class="list planned-dish-list">${plannedDishes.map(row => renderPlannedDishRow(row)).join("")}</div>` : `<p class="muted">Aún no hay platos planificados en la semana.</p>`}
     </article>
-
-    <div class="grid cols-3" style="margin-top:1rem">
-      <article class="card score-card">
-        <h3>Puntuación anti-desperdicio</h3>
-        <p class="metric">${wasteScore.score}/100</p>
-        <p class="muted">Comprado: ${formatMoney(wasteScore.purchasedValue)} · Tirado: ${formatMoney(wasteScore.wastedValue)}</p>
-      </article>
-      <article class="card">
-        <h3>Coste estimado</h3>
-        <p class="metric">${formatMoney(estimatedCost)}</p>
-        <p class="muted">Calculado sobre cantidades restantes.</p>
-      </article>
-      <article class="card">
-        <h3>Envases para reciclar</h3>
-        ${recyclingRows.length ? `<div class="recycling-bars">${recyclingRows.map(([type, qty]) => `<div><span>${escapeHtml(type)}</span><strong>${qty}</strong></div>`).join("")}</div>` : `<p class="muted">Aún no hay envases registrados.</p>`}
-      </article>
-      <article class="card">
-        <h3>Caduca pronto</h3>
-        ${expiring.length ? `<div class="list">${expiring.slice(0, 5).map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><span class="badge warning">${escapeHtml(i.expiryDate)}</span></div>`).join("")}</div>` : `<p class="muted">No hay ingredientes con caducidad en los próximos 7 días.</p>`}
-      </article>
-      <article class="card">
-        <h3>Stock bajo</h3>
-        ${stockLow.length ? `<div class="list">${stockLow.map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><p class="qty-line">${formatQty(i.qty, i.unit)}</p></div>`).join("")}</div>` : `<p class="muted">No hay ingredientes a cero.</p>`}
-      </article>
-      <article class="card">
-        <h3>Compra parcial</h3>
-        ${partialShopping.length ? `<div class="list">${partialShopping.map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><p class="qty-line">Comprado: ${i.display.purchased} · Falta: ${i.display.remaining}</p></div>`).join("")}</div>` : `<p class="muted">No hay compras parciales.</p>`}
-      </article>
-    </div>
   `;
 }
 
-function renderTaskCard(title, detail, buttonLabel, tab) {
+function renderTaskCard(title, detail, buttonLabel, tab, action = null) {
+  const buttonAttrs = action
+    ? `data-action="${escapeHtml(action)}"`
+    : `data-tab="${escapeHtml(tab)}"`;
   return `
-    <article class="card task-card">
+    <article class="card task-card compact-dashboard-card">
       <h3>${escapeHtml(title)}</h3>
       <p class="muted">${escapeHtml(detail)}</p>
-      <button type="button" data-tab="${escapeHtml(tab)}">${escapeHtml(buttonLabel)}</button>
+      <button type="button" ${buttonAttrs}>${escapeHtml(buttonLabel)}</button>
     </article>
   `;
 }

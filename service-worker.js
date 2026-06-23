@@ -1,9 +1,10 @@
-const CACHE_VERSION = "gestor-menu-v1.0.15";
+const CACHE_VERSION = "gestor-menu-v1.0.16";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./side-menu.css",
+  "./dashboard-compact.css",
   "./manifest.webmanifest",
   "./app/config.js",
   "./app/apiClient.js",
