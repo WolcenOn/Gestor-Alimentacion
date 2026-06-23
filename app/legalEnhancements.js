@@ -8,6 +8,7 @@ function openLegalDoc(type = "privacy") {
 }
 
 function injectHeaderLegalActions() {
+  if (document.getElementById("sideMenu")) return;
   const actions = document.querySelector(".header-actions");
   if (!actions || actions.querySelector("[data-legal-header]")) return;
 
