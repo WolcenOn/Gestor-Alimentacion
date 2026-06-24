@@ -127,14 +127,42 @@ details[open] > .collapsible-summary .summary-hint::before { content: "Cerrar ·
 .qty-line { color: var(--muted); margin: .15rem 0 0; }
 .table-wrap { overflow-x: auto; }
 .week-mobile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.accessible-week-grid { align-items: start; }
 .day-card { padding: 0; overflow: hidden; }
+.accessible-day-card { scroll-margin-top: 5rem; }
 .day-card-header { padding: 1rem; background: linear-gradient(135deg, rgba(15,118,110,.1), rgba(245,158,11,.08)); border-bottom: 1px solid var(--border); }
+.accessible-day-header { display: flex; justify-content: space-between; gap: .9rem; align-items: center; }
 .day-card-header h3 { font-size: 1.2rem; }
 .day-meals { display: grid; gap: .75rem; padding: .9rem; }
+.accessible-day-meals { gap: .65rem; }
+.calendar-week-legend { display: flex; justify-content: space-between; align-items: center; gap: .85rem; margin-bottom: 1rem; padding: .85rem 1rem; }
+.meal-legend-list { display: flex; flex-wrap: wrap; gap: .45rem; }
+.meal-legend-chip { display: inline-flex; align-items: center; gap: .35rem; border-radius: 999px; padding: .36rem .7rem; border: 1px solid var(--border); background: var(--surface-strong); font-weight: 850; font-size: .88rem; }
 .meal-block { background: rgba(248, 250, 252, .9); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+.accessible-meal-block { border-left: 7px solid var(--primary); box-shadow: 0 6px 16px rgba(15,23,42,.045); }
+.accessible-meal-block[open] { background: rgba(255,255,255,.92); }
+.accessible-meal-block > summary { list-style: none; cursor: pointer; }
+.accessible-meal-block > summary::-webkit-details-marker { display: none; }
 .meal-block-title { padding: .68rem .8rem; background: #fff; border-bottom: 1px solid var(--border); color: var(--primary-dark); font-weight: 900; }
+.meal-block-summary { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .72rem .8rem; background: #fff; border-bottom: 1px solid rgba(217,226,236,.72); }
+.meal-title-row { display: inline-flex; align-items: center; gap: .65rem; min-width: 0; }
+.meal-title-row small { display: block; color: var(--muted); margin-top: .16rem; font-weight: 700; }
+.meal-icon { display: grid; place-items: center; width: 2.15rem; height: 2.15rem; border-radius: 999px; background: rgba(15,23,42,.06); font-size: 1.18rem; flex: 0 0 auto; }
+.meal-breakfast { border-left-color: #f59e0b; }
+.meal-breakfast .meal-icon, .meal-breakfast.meal-legend-chip { background: #fff7db; color: #8a4b00; border-color: #f9d47a; }
+.meal-lunch { border-left-color: #0f766e; }
+.meal-lunch .meal-icon, .meal-lunch.meal-legend-chip { background: #e6fffb; color: #0b5f59; border-color: #9ae6dd; }
+.meal-snack { border-left-color: #d97706; }
+.meal-snack .meal-icon, .meal-snack.meal-legend-chip { background: #fff1e6; color: #93400a; border-color: #fed7aa; }
+.meal-dinner { border-left-color: #4f46e5; }
+.meal-dinner .meal-icon, .meal-dinner.meal-legend-chip { background: #eef2ff; color: #3730a3; border-color: #c7d2fe; }
+.meal-other { border-left-color: var(--muted); }
+.meal-other .meal-icon, .meal-other.meal-legend-chip { background: var(--bg-soft); color: var(--text); }
 .member-slots { display: grid; gap: .62rem; padding: .7rem; }
+.compact-member-slots { gap: .55rem; padding: .65rem; }
 .member-slot { display: grid; gap: .55rem; padding: .75rem; border-radius: 16px; background: var(--surface-strong); border: 1px solid rgba(217,226,236,.8); }
+.compact-member-slot { padding: .68rem; }
+.compact-member-slot.is-empty { background: rgba(248,250,252,.72); }
 .member-slot-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; }
 .dish-stack { display: grid; gap: .42rem; }
 .empty-slot { margin: 0; color: var(--muted); font-size: .92rem; }
@@ -179,6 +207,7 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 1rem 0; }
   .grid.cols-2, .grid.cols-3, .form-grid, .inline-form { grid-template-columns: 1fr; }
   .card, .day-card { border-radius: 20px; }
   .card-header, .calendar-topbar, .settings-header, .calendar-week-toolbar { flex-direction: column; align-items: stretch; }
+  .calendar-week-legend { align-items: stretch; flex-direction: column; }
   .toolbar-actions, .header-actions, .actions { width: 100%; }
   .toolbar-actions button, .header-actions button, .header-actions .button, .actions button, .actions .button { flex: 1 1 auto; }
   .shopping-item { grid-template-columns: 1fr; }
