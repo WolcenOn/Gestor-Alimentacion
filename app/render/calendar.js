@@ -31,6 +31,7 @@ function renderWeekView(state, week) {
         <p class="muted">${escapeHtml(week.startDate || "")} ${week.endDate ? `→ ${escapeHtml(week.endDate)}` : ""}</p>
       </div>
       <div class="actions toolbar-actions">
+        <button data-action="open-week-planner-assistant">Asistente</button>
         <button class="secondary" data-action="new-week">Nueva</button>
         <button class="secondary" data-action="duplicate-week">Duplicar</button>
         <button class="secondary" data-action="clear-week">Limpiar</button>
