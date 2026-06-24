@@ -1,0 +1,104 @@
+.dashboard-today-focus {
+  border-left: 7px solid var(--primary);
+  scroll-margin-top: 5rem;
+}
+
+.task-card.compact-dashboard-card .button {
+  align-self: end;
+  width: 100%;
+  margin-top: auto;
+}
+
+.today-meal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: .85rem;
+  margin-top: 1rem;
+}
+
+.today-meal-card {
+  border: 1px solid var(--border);
+  border-left: 7px solid var(--primary);
+  border-radius: 18px;
+  background: rgba(248, 250, 252, .86);
+  overflow: hidden;
+}
+
+.today-meal-card.meal-breakfast { border-left-color: #f59e0b; }
+.today-meal-card.meal-lunch { border-left-color: #0f766e; }
+.today-meal-card.meal-snack { border-left-color: #d97706; }
+.today-meal-card.meal-dinner { border-left-color: #4f46e5; }
+.today-meal-card.meal-other { border-left-color: var(--muted); }
+
+.today-meal-header {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding: .8rem;
+  background: var(--surface-strong);
+  border-bottom: 1px solid var(--border);
+}
+
+.today-meal-header h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.today-dish-card-list {
+  display: grid;
+  gap: .6rem;
+  padding: .7rem;
+}
+
+.today-dish-card {
+  display: grid;
+  gap: .5rem;
+  padding: .72rem;
+  border: 1px solid rgba(217,226,236,.9);
+  border-radius: 16px;
+  background: var(--surface-strong);
+}
+
+.today-dish-card.consumed {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+
+.today-dish-card.skipped {
+  border-color: #f9d47a;
+  background: #fffbeb;
+}
+
+.today-dish-main,
+.dashboard-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .65rem;
+  flex-wrap: wrap;
+}
+
+.today-dish-main .dish-pill-name {
+  padding: 0;
+  min-height: auto;
+  text-align: left;
+  justify-content: flex-start;
+  color: var(--text);
+  font-weight: 900;
+}
+
+.empty-dashboard-state {
+  display: grid;
+  gap: .75rem;
+  padding: 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 18px;
+  background: rgba(248, 250, 252, .8);
+  margin-top: 1rem;
+}
+
+@media (max-width: 560px) {
+  .today-meal-grid {
+    grid-template-columns: 1fr;
+  }
+}
