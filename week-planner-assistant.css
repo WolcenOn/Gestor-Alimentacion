@@ -1,0 +1,77 @@
+.week-planner-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.week-planner-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.planner-section,
+.planner-preview-card {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: rgba(248, 250, 252, .82);
+  padding: .9rem;
+  display: grid;
+  gap: .75rem;
+}
+
+.planner-section h3 {
+  margin: 0;
+}
+
+.planner-chip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: .45rem;
+}
+
+.planner-check,
+.planner-dish-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: .55rem;
+  border: 1px solid rgba(217, 226, 236, .95);
+  border-radius: 14px;
+  background: var(--surface-strong);
+  padding: .65rem;
+  font-weight: 800;
+}
+
+.planner-dish-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .6rem;
+  max-height: 42vh;
+  overflow: auto;
+  padding-right: .2rem;
+}
+
+.planner-dish-choice small {
+  display: block;
+  color: var(--muted);
+  margin-top: .18rem;
+  font-weight: 700;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  .week-planner-grid,
+  .planner-dish-list {
+    grid-template-columns: 1fr;
+  }
+}
