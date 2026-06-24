@@ -1,3 +1,4 @@
+import "./weekPlannerAssistant.js";
 import {
   newWeek,
   duplicateWeek,
