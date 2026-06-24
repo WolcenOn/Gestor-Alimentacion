@@ -2,7 +2,7 @@ import { getState, updateState, setState, subscribe, migrateData, resetDemoData 
 import { withMeta } from "./models.js";
 import { stripDangerousText, parseNumber, downloadTextFile, readFileAsText, safeJsonParse, normalizeUnit } from "./utils.js";
 import { validateState, validatePack } from "./validation.js";
-import { renderDashboard } from "./render/dashboard.js";
+import { renderDashboard, renderCookingReviewModal } from "./render/dashboard.js";
 import { renderIngredients } from "./render/ingredients.js";
 import { renderDishes } from "./render/dishes.js";
 import { renderCalendar } from "./render/calendar.js";
@@ -11,7 +11,7 @@ import { renderPacks } from "./render/packs.js";
 import { renderNutrition } from "./render/nutrition.js";
 import { renderHelp } from "./render/help.js";
 import { renderSettings } from "./render/settings.js";
-import { showAlert, closeModal, formToObject, getSubmitterValue } from "./render/ui.js";
+import { showAlert, closeModal, openModal, formToObject, getSubmitterValue } from "./render/ui.js";
 import { printShopping } from "./print/printShopping.js";
 import { printWeek } from "./print/printWeek.js";
 import { registerPurchase } from "./state/stock.js";
@@ -84,6 +84,7 @@ document.addEventListener("click", guarded(async event => {
       return;
     }
     activeTab = tab.dataset.tab;
+    closeModal();
     render();
     return;
   }
@@ -94,6 +95,7 @@ document.addEventListener("click", guarded(async event => {
   const state = getState();
 
   if (action === "close-modal") closeModal();
+  if (action === "open-cooking-review") openModal(renderCookingReviewModal(state, button.dataset.day));
   if (action === "print-shopping") printShopping(state);
   if (action === "print-week") printWeek(state);
   if (action === "export-data") exportData(state);
@@ -191,11 +193,7 @@ function readRecipeFromForm(form, data) {
   if (fromBuilder) {
     try {
       return JSON.parse(fromBuilder)
-        .map(line => ({
-          ingredientId: String(line.ingredientId || ""),
-          qty: parseNumber(line.qty),
-          unit: normalizeUnit(line.unit)
-        }))
+        .map(line => ({ ingredientId: String(line.ingredientId || ""), qty: parseNumber(line.qty), unit: normalizeUnit(line.unit) }))
         .filter(line => line.ingredientId && line.qty > 0);
     } catch {
       throw new Error("No se pudo leer la lista dinámica de ingredientes. Revisa la receta y vuelve a intentarlo.");
