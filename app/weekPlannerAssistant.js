@@ -4,6 +4,16 @@ import { openModal, closeModal, showAlert } from "./render/ui.js";
 
 const ALL_MEMBERS = "__all_members__";
 
+ensurePlannerStylesheet();
+
+function ensurePlannerStylesheet() {
+  if (document.querySelector('link[href="week-planner-assistant.css"]')) return;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = "week-planner-assistant.css";
+  document.head.append(link);
+}
+
 function openWeekPlannerAssistant() {
   openModal(renderPlannerModal(getState()));
 }
