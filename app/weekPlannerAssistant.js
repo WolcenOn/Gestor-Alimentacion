@@ -65,10 +65,10 @@ function renderPlannerModal(state) {
       <section class="planner-section">
         <h3>3. Filtros rápidos</h3>
         <div class="form-grid">
-          <label>Buscar receta, etiqueta o categoría<input name="includeText" placeholder="Ej. desayuno, pollo, rápido, diabético"></label>
-          <label>Excluir ingrediente o palabra<input name="excludeText" placeholder="Ej. gluten, leche, frutos secos"></label>
+          <label>Buscar receta, etiqueta o categoría<input name="includeText" data-planner-filter placeholder="Ej. desayuno, pollo, rápido, diabético"></label>
+          <label>Excluir ingrediente o palabra<input name="excludeText" data-planner-filter placeholder="Ej. gluten, leche, frutos secos"></label>
         </div>
-        <p class="small muted">El filtro revisa nombre, categoría, etiquetas, notas e ingredientes de cada receta.</p>
+        <p class="small muted" data-planner-filter-count>${state.dishes.length} receta(s) visibles.</p>
       </section>
 
       <section class="planner-section">
@@ -98,12 +98,11 @@ function renderPlannerModal(state) {
 function renderDishChoice(state, dish) {
   const meta = dishSearchText(state, dish);
   return `
-    <label class="planner-dish-choice">
+    <label class="planner-dish-choice" data-planner-dish-search="${escapeHtml(normalizeSearch(meta))}">
       <input type="checkbox" name="dishIds" value="${escapeHtml(dish.id)}">
       <span>
         <strong>${escapeHtml(dish.name)}</strong>
         <small>${escapeHtml([dish.category, ...(dish.tags || [])].filter(Boolean).join(" · ") || "Sin etiquetas")}</small>
-        <span class="visually-hidden">${escapeHtml(meta)}</span>
       </span>
     </label>
   `;
@@ -156,6 +155,21 @@ function applyWeekPlanner(form) {
   showAlert(applied ? `Planificación aplicada en ${applied} hueco(s).` : "No había huecos vacíos que rellenar con ese criterio.");
 }
 
+function updatePlannerFilters(form) {
+  const includeText = normalizeSearch(form.elements.includeText?.value);
+  const excludeText = normalizeSearch(form.elements.excludeText?.value);
+  let visible = 0;
+  form.querySelectorAll("[data-planner-dish-search]").forEach(choice => {
+    const text = choice.dataset.plannerDishSearch || "";
+    const show = (!includeText || text.includes(includeText)) && (!excludeText || !text.includes(excludeText));
+    choice.hidden = !show;
+    if (!show) choice.querySelector('input[type="checkbox"]')?.checked && (choice.querySelector('input[type="checkbox"]').checked = false);
+    if (show) visible += 1;
+  });
+  const counter = form.querySelector("[data-planner-filter-count]");
+  if (counter) counter.textContent = `${visible} receta(s) visibles.`;
+}
+
 function dishSearchText(state, dish) {
   const ingredientNames = (dish.recipe || [])
     .map(line => state.ingredients.find(ingredient => ingredient.id === line.ingredientId)?.name || "")
@@ -187,6 +201,12 @@ document.addEventListener("click", event => {
   const button = event.target.closest('[data-action="open-week-planner-assistant"]');
   if (!button) return;
   openWeekPlannerAssistant();
+});
+
+document.addEventListener("input", event => {
+  if (!event.target.matches("[data-planner-filter]")) return;
+  const form = event.target.closest('form[data-form="week-planner-assistant"]');
+  if (form) updatePlannerFilters(form);
 });
 
 document.addEventListener("submit", event => {
