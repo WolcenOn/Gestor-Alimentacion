@@ -38,7 +38,17 @@ function renderWeekView(state, week) {
       </div>
     </div>
 
-    <div class="week-mobile-grid">
+    <section class="card calendar-week-legend" aria-label="Leyenda de comidas">
+      <strong>Comidas diferenciadas</strong>
+      <div class="meal-legend-list">
+        ${state.mealTypes.map(meal => {
+          const visual = mealVisual(meal);
+          return `<span class="meal-legend-chip ${visual.className}"><span aria-hidden="true">${visual.icon}</span>${escapeHtml(meal.name)}</span>`;
+        }).join("")}
+      </div>
+    </section>
+
+    <div class="week-mobile-grid accessible-week-grid">
       ${DAYS.map(day => renderDayCard(state, week, day)).join("")}
     </div>
   `;
@@ -96,12 +106,17 @@ function renderMonthWeekRow(state, range) {
 }
 
 function renderDayCard(state, week, day) {
+  const plannedCount = countDayPlannedDishes(state, week, day);
   return `
-    <article class="day-card">
-      <header class="day-card-header">
-        <h3>${escapeHtml(capitalize(day))}</h3>
+    <article class="day-card accessible-day-card">
+      <header class="day-card-header accessible-day-header">
+        <div>
+          <h3>${escapeHtml(capitalize(day))}</h3>
+          <p class="qty-line">${plannedCount ? `${plannedCount} plato(s) planificado(s)` : "Sin platos todavía"}</p>
+        </div>
+        <span class="badge ${plannedCount ? "success" : "warning"}">${plannedCount}</span>
       </header>
-      <div class="day-meals">
+      <div class="day-meals accessible-day-meals">
         ${state.mealTypes.map(meal => renderMealBlock(state, week, day, meal)).join("")}
       </div>
     </article>
@@ -109,21 +124,34 @@ function renderDayCard(state, week, day) {
 }
 
 function renderMealBlock(state, week, day, meal) {
+  const visual = mealVisual(meal);
+  const summary = mealSummary(state, week, day, meal);
+  const isOpen = summary.dishCount > 0 ? "open" : "";
   return `
-    <section class="meal-block">
-      <div class="meal-block-title">${escapeHtml(meal.name)}</div>
-      <div class="member-slots">
+    <details class="meal-block accessible-meal-block ${visual.className}" ${isOpen}>
+      <summary class="meal-block-summary">
+        <span class="meal-title-row">
+          <span class="meal-icon" aria-hidden="true">${visual.icon}</span>
+          <span>
+            <strong>${escapeHtml(meal.name)}</strong>
+            <small>${summary.memberCount ? `${summary.memberCount} miembro(s) con plato` : "Sin asignar"}</small>
+          </span>
+        </span>
+        <span class="badge ${summary.dishCount ? "success" : "warning"}">${summary.dishCount} plato(s)</span>
+      </summary>
+      <div class="member-slots compact-member-slots">
         ${state.familyMembers.map(member => renderMemberSlot(state, week, day, meal, member)).join("")}
       </div>
-    </section>
+    </details>
   `;
 }
 
 function renderMemberSlot(state, week, day, meal, member) {
   const key = `${day}__${meal.id}__${member.id}`;
   const planned = week.plan[key] || [];
+  const statusClass = planned.length ? "has-dishes" : "is-empty";
   return `
-    <div class="member-slot">
+    <div class="member-slot compact-member-slot ${statusClass}">
       <div class="member-slot-head">
         <strong>${escapeHtml(member.name)}</strong>
         <span class="mini-badge">${planned.length}</span>
@@ -134,6 +162,33 @@ function renderMemberSlot(state, week, day, meal, member) {
       <button type="button" class="secondary add-dish-button" data-action="open-dish-picker" data-slot="${escapeHtml(key)}">Añadir plato</button>
     </div>
   `;
+}
+
+function mealSummary(state, week, day, meal) {
+  let dishCount = 0;
+  let memberCount = 0;
+  for (const member of state.familyMembers) {
+    const key = `${day}__${meal.id}__${member.id}`;
+    const planned = week.plan[key] || [];
+    if (planned.length) {
+      memberCount += 1;
+      dishCount += planned.length;
+    }
+  }
+  return { dishCount, memberCount };
+}
+
+function countDayPlannedDishes(state, week, day) {
+  return state.mealTypes.reduce((total, meal) => total + mealSummary(state, week, day, meal).dishCount, 0);
+}
+
+function mealVisual(meal) {
+  const value = `${meal.id || ""} ${meal.name || ""}`.toLowerCase();
+  if (/breakfast|desayuno/.test(value)) return { icon: "☀️", className: "meal-breakfast" };
+  if (/lunch|comida|almuerzo/.test(value)) return { icon: "🍽️", className: "meal-lunch" };
+  if (/snack|merienda/.test(value)) return { icon: "🧺", className: "meal-snack" };
+  if (/dinner|cena/.test(value)) return { icon: "🌙", className: "meal-dinner" };
+  return { icon: "🍴", className: "meal-other" };
 }
 
 function renderDishPill(state, key, dishId) {
