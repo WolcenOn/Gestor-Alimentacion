@@ -38,13 +38,12 @@ function renderWeekView(state, week) {
       </div>
     </div>
 
-    <section class="card calendar-week-legend" aria-label="Leyenda de comidas">
-      <strong>Comidas diferenciadas</strong>
+    <section class="card calendar-week-legend" aria-label="Leyenda de planificación">
+      <strong>Estado de la semana</strong>
       <div class="meal-legend-list">
-        ${state.mealTypes.map(meal => {
-          const visual = mealVisual(meal);
-          return `<span class="meal-legend-chip ${visual.className}"><span aria-hidden="true">${visual.icon}</span>${escapeHtml(meal.name)}</span>`;
-        }).join("")}
+        <span class="plan-status-chip plan-status-complete">Planificado todo</span>
+        <span class="plan-status-chip plan-status-partial">Faltan platos</span>
+        <span class="plan-status-chip plan-status-empty">Sin planificar</span>
       </div>
     </section>
 
@@ -106,29 +105,28 @@ function renderMonthWeekRow(state, range) {
 }
 
 function renderDayCard(state, week, day) {
-  const plannedCount = countDayPlannedDishes(state, week, day);
+  const status = dayPlanningStatus(state, week, day);
   return `
-    <article class="day-card accessible-day-card">
-      <header class="day-card-header accessible-day-header">
+    <details class="day-card accessible-day-card planning-day-card ${status.className}">
+      <summary class="day-card-header accessible-day-header planning-day-summary">
         <div>
           <h3>${escapeHtml(capitalize(day))}</h3>
-          <p class="qty-line">${plannedCount ? `${plannedCount} plato(s) planificado(s)` : "Sin platos todavía"}</p>
+          <p class="qty-line">${escapeHtml(status.helpText)}</p>
         </div>
-        <span class="badge ${plannedCount ? "success" : "warning"}">${plannedCount}</span>
-      </header>
+        <span class="plan-status-chip ${status.className}">${escapeHtml(status.label)}</span>
+      </summary>
       <div class="day-meals accessible-day-meals">
         ${state.mealTypes.map(meal => renderMealBlock(state, week, day, meal)).join("")}
       </div>
-    </article>
+    </details>
   `;
 }
 
 function renderMealBlock(state, week, day, meal) {
   const visual = mealVisual(meal);
   const summary = mealSummary(state, week, day, meal);
-  const isOpen = summary.dishCount > 0 ? "open" : "";
   return `
-    <details class="meal-block accessible-meal-block ${visual.className}" ${isOpen}>
+    <details class="meal-block accessible-meal-block ${visual.className}">
       <summary class="meal-block-summary">
         <span class="meal-title-row">
           <span class="meal-icon" aria-hidden="true">${visual.icon}</span>
@@ -178,8 +176,28 @@ function mealSummary(state, week, day, meal) {
   return { dishCount, memberCount };
 }
 
-function countDayPlannedDishes(state, week, day) {
-  return state.mealTypes.reduce((total, meal) => total + mealSummary(state, week, day, meal).dishCount, 0);
+function dayPlanningStatus(state, week, day) {
+  const expected = expectedDaySlots(state);
+  const planned = countDayPlannedSlots(state, week, day);
+  const missing = Math.max(expected - planned, 0);
+  if (!planned) return { className: "plan-status-empty", label: "Sin planificar", helpText: `Faltan ${expected} plato(s)` };
+  if (!missing) return { className: "plan-status-complete", label: "Planificado todo", helpText: `${planned}/${expected} plato(s) asignado(s)` };
+  return { className: "plan-status-partial", label: `Faltan ${missing} plato(s)`, helpText: `${planned}/${expected} plato(s) asignado(s)` };
+}
+
+function expectedDaySlots(state) {
+  return Math.max((state.mealTypes?.length || 0) * (state.familyMembers?.length || 0), 1);
+}
+
+function countDayPlannedSlots(state, week, day) {
+  let total = 0;
+  for (const meal of state.mealTypes) {
+    for (const member of state.familyMembers) {
+      const key = `${day}__${meal.id}__${member.id}`;
+      if ((week.plan[key] || []).length) total += 1;
+    }
+  }
+  return total;
 }
 
 function mealVisual(meal) {
