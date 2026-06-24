@@ -9,6 +9,18 @@
   margin-top: auto;
 }
 
+.dashboard-day-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin: 0 0 1rem;
+}
+
+.dashboard-day-switcher button {
+  min-height: 38px;
+  padding: .5rem .75rem;
+}
+
 .today-meal-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -98,6 +110,10 @@
 }
 
 @media (max-width: 560px) {
+  .dashboard-day-switcher button {
+    flex: 1 1 72px;
+  }
+
   .today-meal-grid {
     grid-template-columns: 1fr;
   }
