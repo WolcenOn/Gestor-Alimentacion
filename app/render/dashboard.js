@@ -44,6 +44,7 @@ export function renderDashboard(state) {
       ${renderTaskCard("Hoy cocinamos", todayDishes.length ? `${todayDishes.length} plato(s) para ${todayName}` : `Nada planificado para ${todayName}`, "Abrir cocina", { action: "open-cooking-review", day: todayName })}
       ${renderTaskCard("Ir a comprar", `${pending} pendientes · ${partial} parciales`, "Abrir compra", { tab: "shopping" })}
       ${renderTaskCard("Planificar semana", `${plannedSlots} de ${totalSlots} huecos`, "Abrir semana", { tab: "calendar" })}
+      ${renderTaskCard("Asistente semanal", "Rellena días, comidas y miembros con recetas en rotación", "Automatizar", { action: "open-week-planner-assistant" })}
       ${renderTaskCard("Guardar compra", "Escáner o entrada manual desde Compra", "Registrar", { tab: "shopping" })}
       ${renderTaskCard("Aprovechar caducidades", expiring.length ? `${expiring.length} producto(s) en 7 días` : "Sin urgencias", "Ver ingredientes", { tab: "ingredients" })}
       ${renderTaskCard("Registrar reciclaje", totalRecycling ? `${totalRecycling} envase(s) registrados` : "Añade envases al cerrar compra", "Registrar", { action: "open-recycling-modal" })}
