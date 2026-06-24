@@ -1,5 +1,6 @@
-import { updateState } from "./store.js";
-import { showAlert } from "./render/ui.js";
+import { getState, updateState } from "./store.js";
+import { showAlert, openModal } from "./render/ui.js";
+import { renderCookingReviewModal } from "./render/dashboard.js";
 import { consumePlannedDish, skipPlannedDish, reopenPlannedDish } from "./state/stock.js";
 
 function getDishPayload(button) {
@@ -7,6 +8,12 @@ function getDishPayload(button) {
   const dishId = button.dataset.dishId;
   if (!slot || !dishId) throw new Error("No se pudo identificar el plato planificado.");
   return { slot, dishId };
+}
+
+function refreshCookingReviewIfOpen(button) {
+  const modal = button.closest("[data-cooking-review-day]");
+  if (!modal) return;
+  openModal(renderCookingReviewModal(getState(), modal.dataset.cookingReviewDay));
 }
 
 document.addEventListener("click", event => {
@@ -48,6 +55,8 @@ document.addEventListener("click", event => {
       }, "meal-reopened");
       showAlert(restored ? "Plato reabierto y stock restaurado." : "Plato reabierto para decidir más tarde.");
     }
+
+    refreshCookingReviewIfOpen(button);
   } catch (error) {
     console.error(error);
     showAlert(error.message || "No se pudo actualizar el estado del plato.", "error");
