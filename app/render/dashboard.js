@@ -109,18 +109,20 @@ export function renderCookingReviewModal(state, selectedDay = getTodayName()) {
   const safeDay = DAYS.includes(selectedDay) ? selectedDay : getTodayName();
   const dayDishes = plannedDishes.filter(row => row.day === safeDay);
   return `
-    <header>
-      <div>
-        <p class="eyebrow">Cocina y revisión</p>
-        <h2>Ficha de cocina · ${escapeHtml(capitalize(safeDay))}</h2>
-        <p class="muted">Cambia de día para marcar platos atrasados como consumidos o no consumidos.</p>
-      </div>
-      <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
-    </header>
-    <nav class="dashboard-day-switcher" aria-label="Elegir día para revisar">
-      ${DAYS.map(day => `<button type="button" class="${day === safeDay ? "" : "secondary"}" data-action="open-cooking-review" data-day="${escapeHtml(day)}">${escapeHtml(capitalize(day.slice(0, 3)))}</button>`).join("")}
-    </nav>
-    ${dayDishes.length ? renderTodayMealGroups(state, dayDishes) : renderEmptyDayCard(safeDay)}
+    <div class="dashboard-cooking-modal" data-cooking-review-day="${escapeHtml(safeDay)}">
+      <header>
+        <div>
+          <p class="eyebrow">Cocina y revisión</p>
+          <h2>Ficha de cocina · ${escapeHtml(capitalize(safeDay))}</h2>
+          <p class="muted">Cambia de día para marcar platos atrasados como consumidos o no consumidos.</p>
+        </div>
+        <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
+      </header>
+      <nav class="dashboard-day-switcher" aria-label="Elegir día para revisar">
+        ${DAYS.map(day => `<button type="button" class="${day === safeDay ? "" : "secondary"}" data-action="open-cooking-review" data-day="${escapeHtml(day)}">${escapeHtml(capitalize(day.slice(0, 3)))}</button>`).join("")}
+      </nav>
+      ${dayDishes.length ? renderTodayMealGroups(state, dayDishes) : renderEmptyDayCard(safeDay)}
+    </div>
   `;
 }
 
