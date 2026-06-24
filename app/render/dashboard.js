@@ -36,12 +36,12 @@ export function renderDashboard(state) {
       <div>
         <p class="eyebrow">Panel accionable</p>
         <h2>${escapeHtml(week?.name || "Sin semana activa")}</h2>
-        <p class="muted">Accede rápido a lo que importa hoy: cocinar, comprar, revisar stock y completar la semana.</p>
+        <p class="muted">Accede rápido a lo que importa: cocinar, revisar días pendientes, comprar y completar la semana.</p>
       </div>
     </div>
 
     <section class="dashboard-card-grid task-launcher">
-      ${renderTaskCard("Hoy cocinamos", todayDishes.length ? `${todayDishes.length} plato(s) para ${todayName}` : `Nada planificado para ${todayName}`, "Ver ficha de hoy", { href: "#dashboardTodayCard" })}
+      ${renderTaskCard("Hoy cocinamos", todayDishes.length ? `${todayDishes.length} plato(s) para ${todayName}` : `Nada planificado para ${todayName}`, "Abrir cocina", { action: "open-cooking-review", day: todayName })}
       ${renderTaskCard("Ir a comprar", `${pending} pendientes · ${partial} parciales`, "Abrir compra", { tab: "shopping" })}
       ${renderTaskCard("Planificar semana", `${plannedSlots} de ${totalSlots} huecos`, "Abrir semana", { tab: "calendar" })}
       ${renderTaskCard("Guardar compra", "Escáner o entrada manual desde Compra", "Registrar", { tab: "shopping" })}
@@ -49,8 +49,6 @@ export function renderDashboard(state) {
       ${renderTaskCard("Registrar reciclaje", totalRecycling ? `${totalRecycling} envase(s) registrados` : "Añade envases al cerrar compra", "Registrar", { action: "open-recycling-modal" })}
       ${renderTaskCard("Revisar nutrición", `${state.nutritionProfiles.length}/${state.ingredients.length} perfiles`, "Abrir nutrición", { tab: "nutrition" })}
     </section>
-
-    ${renderTodayCookingCard(state, todayName, todayDishes)}
 
     <div class="dashboard-card-grid dashboard-metric-grid">
       <article class="card compact-dashboard-card">
@@ -73,6 +71,7 @@ export function renderDashboard(state) {
           <span class="badge success">${consumedCount} consumidos</span>
           <span class="badge warning">${skippedCount} no consumidos</span>
         </div>
+        <button type="button" class="secondary" data-action="open-cooking-review" data-day="${escapeHtml(todayName)}">Revisar días</button>
       </article>
       <article class="card compact-dashboard-card score-card">
         <h3>Anti-desperdicio</h3>
@@ -104,46 +103,47 @@ export function renderDashboard(state) {
   `;
 }
 
+export function renderCookingReviewModal(state, selectedDay = getTodayName()) {
+  const week = state.weeks.find(w => w.id === state.activeWeekId);
+  const plannedDishes = buildPlannedDishRows(state, week);
+  const safeDay = DAYS.includes(selectedDay) ? selectedDay : getTodayName();
+  const dayDishes = plannedDishes.filter(row => row.day === safeDay);
+  return `
+    <header>
+      <div>
+        <p class="eyebrow">Cocina y revisión</p>
+        <h2>Ficha de cocina · ${escapeHtml(capitalize(safeDay))}</h2>
+        <p class="muted">Cambia de día para marcar platos atrasados como consumidos o no consumidos.</p>
+      </div>
+      <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
+    </header>
+    <nav class="dashboard-day-switcher" aria-label="Elegir día para revisar">
+      ${DAYS.map(day => `<button type="button" class="${day === safeDay ? "" : "secondary"}" data-action="open-cooking-review" data-day="${escapeHtml(day)}">${escapeHtml(capitalize(day.slice(0, 3)))}</button>`).join("")}
+    </nav>
+    ${dayDishes.length ? renderTodayMealGroups(state, dayDishes) : renderEmptyDayCard(safeDay)}
+  `;
+}
+
 function renderTaskCard(title, detail, buttonLabel, target = {}) {
-  const action = target.action ? `data-action="${escapeHtml(target.action)}"` : "";
-  const tab = target.tab ? `data-tab="${escapeHtml(target.tab)}"` : "";
-  const href = target.href || "";
-  const control = href
-    ? `<a class="button" href="${escapeHtml(href)}">${escapeHtml(buttonLabel)}</a>`
-    : `<button type="button" ${action || tab}>${escapeHtml(buttonLabel)}</button>`;
+  const attrs = target.action
+    ? `data-action="${escapeHtml(target.action)}" ${target.day ? `data-day="${escapeHtml(target.day)}"` : ""}`
+    : `data-tab="${escapeHtml(target.tab)}"`;
   return `
     <article class="card task-card compact-dashboard-card">
       <h3>${escapeHtml(title)}</h3>
       <p class="muted">${escapeHtml(detail)}</p>
-      ${control}
+      <button type="button" ${attrs}>${escapeHtml(buttonLabel)}</button>
     </article>
   `;
 }
 
-function renderTodayCookingCard(state, todayName, todayDishes) {
-  return `
-    <article id="dashboardTodayCard" class="card today-card dashboard-card-block dashboard-today-focus">
-      <div class="section-title-row">
-        <div>
-          <p class="eyebrow">Hoy</p>
-          <h3>Ficha de cocina para ${escapeHtml(todayName)}</h3>
-          <p class="muted">Solo muestra lo que se cocina hoy. Desde aquí puedes abrir el plato o marcar qué pasó realmente.</p>
-        </div>
-        <span class="badge ${todayDishes.length ? "success" : "warning"}">${todayDishes.length} plato(s)</span>
-      </div>
-      ${todayDishes.length ? renderTodayMealGroups(state, todayDishes) : renderEmptyTodayCard()}
-    </article>
-  `;
-}
-
-function renderEmptyTodayCard() {
+function renderEmptyDayCard(day) {
   return `
     <div class="empty-dashboard-state">
-      <strong>No hay platos planificados para hoy.</strong>
-      <p class="muted">Planifica el día desde Semana o revisa el stock para improvisar una comida rápida.</p>
+      <strong>No hay platos planificados para ${escapeHtml(day)}.</strong>
+      <p class="muted">Puedes planificar este día desde Semana o revisar otro día de la semana.</p>
       <div class="actions wrap">
-        <button type="button" data-tab="calendar">Planificar hoy</button>
-        <button type="button" data-tab="ingredients" class="secondary">Ver stock</button>
+        <button type="button" data-tab="calendar">Planificar día</button>
       </div>
     </div>
   `;
@@ -246,4 +246,8 @@ function mealVisual(meal) {
   if (/snack|merienda/.test(value)) return { icon: "🧺", className: "meal-snack" };
   if (/dinner|cena/.test(value)) return { icon: "🌙", className: "meal-dinner" };
   return { icon: "🍴", className: "meal-other" };
+}
+
+function capitalize(value) {
+  return String(value).charAt(0).toUpperCase() + String(value).slice(1);
 }
