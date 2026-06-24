@@ -28,6 +28,7 @@ export function renderDashboard(state) {
   const todayDishes = plannedDishes.filter(row => row.day === todayName);
   const consumedCount = plannedDishes.filter(row => row.status === "consumed").length;
   const skippedCount = plannedDishes.filter(row => row.status === "skipped").length;
+  const pendingReviewCount = plannedDishes.filter(row => row.status === "pending").length;
   const stockLow = state.ingredients.filter(ingredient => Number(ingredient.qty || 0) <= 0).slice(0, 5);
 
   return `
@@ -35,46 +36,43 @@ export function renderDashboard(state) {
       <div>
         <p class="eyebrow">Panel accionable</p>
         <h2>${escapeHtml(week?.name || "Sin semana activa")}</h2>
-        <p class="muted">Resuelve rápido el día familiar: cocinar, comprar, guardar compra y evitar desperdicio.</p>
+        <p class="muted">Accede rápido a lo que importa hoy: cocinar, comprar, revisar stock y completar la semana.</p>
       </div>
     </div>
 
     <section class="dashboard-card-grid task-launcher">
-      ${renderTaskCard("Hoy cocinamos", todayDishes.length ? `${todayDishes.length} plato(s) para ${todayName}` : `Nada planificado para ${todayName}`, "Ver semana", "calendar")}
-      ${renderTaskCard("Ir a comprar", `${pending} pendientes · ${partial} parciales`, "Abrir compra", "shopping")}
-      ${renderTaskCard("Planificar semana", `${plannedSlots} de ${totalSlots} huecos`, "Abrir semana", "calendar")}
-      ${renderTaskCard("Guardar compra", "Escáner o entrada manual desde Compra", "Registrar", "shopping")}
-      ${renderTaskCard("Aprovechar caducidades", expiring.length ? `${expiring.length} producto(s) en 7 días` : "Sin urgencias", "Ver ingredientes", "ingredients")}
-      ${renderTaskCard("Registrar reciclaje", totalRecycling ? `${totalRecycling} envase(s) pendientes/registrados` : "Añade envases al cerrar compra", "Registrar", null, "open-recycling-modal")}
-      ${renderTaskCard("Revisar nutrición", `${state.nutritionProfiles.length}/${state.ingredients.length} perfiles`, "Abrir nutrición", "nutrition")}
+      ${renderTaskCard("Hoy cocinamos", todayDishes.length ? `${todayDishes.length} plato(s) para ${todayName}` : `Nada planificado para ${todayName}`, "Ver ficha de hoy", { href: "#dashboardTodayCard" })}
+      ${renderTaskCard("Ir a comprar", `${pending} pendientes · ${partial} parciales`, "Abrir compra", { tab: "shopping" })}
+      ${renderTaskCard("Planificar semana", `${plannedSlots} de ${totalSlots} huecos`, "Abrir semana", { tab: "calendar" })}
+      ${renderTaskCard("Guardar compra", "Escáner o entrada manual desde Compra", "Registrar", { tab: "shopping" })}
+      ${renderTaskCard("Aprovechar caducidades", expiring.length ? `${expiring.length} producto(s) en 7 días` : "Sin urgencias", "Ver ingredientes", { tab: "ingredients" })}
+      ${renderTaskCard("Registrar reciclaje", totalRecycling ? `${totalRecycling} envase(s) registrados` : "Añade envases al cerrar compra", "Registrar", { action: "open-recycling-modal" })}
+      ${renderTaskCard("Revisar nutrición", `${state.nutritionProfiles.length}/${state.ingredients.length} perfiles`, "Abrir nutrición", { tab: "nutrition" })}
     </section>
 
-    <article class="card today-card dashboard-card-block">
-      <div class="section-title-row">
-        <div>
-          <h3>Hoy cocinamos</h3>
-          <p class="muted">Platos de ${escapeHtml(todayName)}. Marca qué pasó realmente para mantener el stock al día.</p>
-        </div>
-        <span class="badge">${todayDishes.length} plato(s)</span>
-      </div>
-      ${todayDishes.length ? `<div class="list planned-dish-list today-dish-list">${todayDishes.map(row => renderPlannedDishRow(row, true)).join("")}</div>` : `<p class="muted">No hay platos planificados para hoy. Puedes planificarlos en Semana o usar el stock actual para improvisar.</p><div class="actions wrap"><button data-tab="calendar">Planificar hoy</button><button data-tab="ingredients" class="secondary">Ver stock</button></div>`}
-    </article>
+    ${renderTodayCookingCard(state, todayName, todayDishes)}
 
     <div class="dashboard-card-grid dashboard-metric-grid">
       <article class="card compact-dashboard-card">
         <h3>Estado semana</h3>
         <p class="metric">${plannedPct}%</p>
         <p class="muted">${plannedSlots} de ${totalSlots} huecos.</p>
+        <button type="button" class="secondary" data-tab="calendar">Completar semana</button>
       </article>
       <article class="card compact-dashboard-card">
         <h3>Compra pendiente</h3>
         <p class="metric">${pending}</p>
         <p class="muted">${partial} parcialmente comprados.</p>
+        <button type="button" class="secondary" data-tab="shopping">Abrir compra</button>
       </article>
-      <article class="card compact-dashboard-card">
-        <h3>Platos revisados</h3>
+      <article class="card compact-dashboard-card dashboard-review-summary">
+        <h3>Revisión de platos</h3>
         <p class="metric">${consumedCount + skippedCount}/${plannedDishes.length}</p>
-        <p class="muted">Consumidos: ${consumedCount} · No: ${skippedCount}</p>
+        <p class="muted">Pendientes: ${pendingReviewCount}</p>
+        <div class="dashboard-status-row">
+          <span class="badge success">${consumedCount} consumidos</span>
+          <span class="badge warning">${skippedCount} no consumidos</span>
+        </div>
       </article>
       <article class="card compact-dashboard-card score-card">
         <h3>Anti-desperdicio</h3>
@@ -103,29 +101,105 @@ export function renderDashboard(state) {
         ${partialShopping.length ? `<div class="list compact-list">${partialShopping.slice(0, 3).map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><p class="qty-line">Falta: ${i.display.remaining}</p></div>`).join("")}</div>` : `<p class="muted">Sin parciales.</p>`}
       </article>
     </div>
-
-    <article class="card dashboard-planning-card dashboard-card-block">
-      <div class="section-title-row">
-        <div>
-          <h3>Seguimiento del menú planificado</h3>
-          <p class="muted">Pulsa <strong>Consumido</strong> para descontar ingredientes. Pulsa <strong>No consumido</strong> si se comió fuera o se cambió el plato.</p>
-        </div>
-        <span class="badge">${plannedDishes.length} platos</span>
-      </div>
-      ${plannedDishes.length ? `<div class="list planned-dish-list">${plannedDishes.map(row => renderPlannedDishRow(row)).join("")}</div>` : `<p class="muted">Aún no hay platos planificados en la semana.</p>`}
-    </article>
   `;
 }
 
-function renderTaskCard(title, detail, buttonLabel, tab, action = null) {
-  const buttonAttrs = action
-    ? `data-action="${escapeHtml(action)}"`
-    : `data-tab="${escapeHtml(tab)}"`;
+function renderTaskCard(title, detail, buttonLabel, target = {}) {
+  const action = target.action ? `data-action="${escapeHtml(target.action)}"` : "";
+  const tab = target.tab ? `data-tab="${escapeHtml(target.tab)}"` : "";
+  const href = target.href || "";
+  const control = href
+    ? `<a class="button" href="${escapeHtml(href)}">${escapeHtml(buttonLabel)}</a>`
+    : `<button type="button" ${action || tab}>${escapeHtml(buttonLabel)}</button>`;
   return `
     <article class="card task-card compact-dashboard-card">
       <h3>${escapeHtml(title)}</h3>
       <p class="muted">${escapeHtml(detail)}</p>
-      <button type="button" ${buttonAttrs}>${escapeHtml(buttonLabel)}</button>
+      ${control}
+    </article>
+  `;
+}
+
+function renderTodayCookingCard(state, todayName, todayDishes) {
+  return `
+    <article id="dashboardTodayCard" class="card today-card dashboard-card-block dashboard-today-focus">
+      <div class="section-title-row">
+        <div>
+          <p class="eyebrow">Hoy</p>
+          <h3>Ficha de cocina para ${escapeHtml(todayName)}</h3>
+          <p class="muted">Solo muestra lo que se cocina hoy. Desde aquí puedes abrir el plato o marcar qué pasó realmente.</p>
+        </div>
+        <span class="badge ${todayDishes.length ? "success" : "warning"}">${todayDishes.length} plato(s)</span>
+      </div>
+      ${todayDishes.length ? renderTodayMealGroups(state, todayDishes) : renderEmptyTodayCard()}
+    </article>
+  `;
+}
+
+function renderEmptyTodayCard() {
+  return `
+    <div class="empty-dashboard-state">
+      <strong>No hay platos planificados para hoy.</strong>
+      <p class="muted">Planifica el día desde Semana o revisa el stock para improvisar una comida rápida.</p>
+      <div class="actions wrap">
+        <button type="button" data-tab="calendar">Planificar hoy</button>
+        <button type="button" data-tab="ingredients" class="secondary">Ver stock</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderTodayMealGroups(state, todayDishes) {
+  const grouped = new Map();
+  for (const row of todayDishes) {
+    const mealId = row.meal.id || row.meal.name;
+    if (!grouped.has(mealId)) grouped.set(mealId, { meal: row.meal, rows: [] });
+    grouped.get(mealId).rows.push(row);
+  }
+  return `
+    <div class="today-meal-grid">
+      ${[...grouped.values()].map(group => renderTodayMealGroup(state, group.meal, group.rows)).join("")}
+    </div>
+  `;
+}
+
+function renderTodayMealGroup(state, meal, rows) {
+  const visual = mealVisual(meal);
+  return `
+    <section class="today-meal-card ${visual.className}">
+      <header class="today-meal-header">
+        <span class="meal-icon" aria-hidden="true">${visual.icon}</span>
+        <div>
+          <h4>${escapeHtml(meal.name)}</h4>
+          <p class="qty-line">${rows.length} plato(s) para revisar</p>
+        </div>
+      </header>
+      <div class="today-dish-card-list">
+        ${rows.map(row => renderTodayDishCard(row)).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function renderTodayDishCard(row) {
+  const statusLabel = row.status === "consumed" ? "Consumido" : row.status === "skipped" ? "No consumido" : "Pendiente";
+  const statusClass = row.status === "consumed" ? "success" : row.status === "skipped" ? "warning" : "";
+  return `
+    <article class="today-dish-card ${escapeHtml(row.status)}">
+      <div class="today-dish-main">
+        <button class="ghost dish-pill-name" data-action="open-dish-detail" data-dish-id="${escapeHtml(row.dish.id)}" title="Ver ficha del plato">${escapeHtml(row.dish.name)}</button>
+        <span class="badge ${statusClass}">${statusLabel}</span>
+      </div>
+      <p class="qty-line">${escapeHtml(row.member.name)}</p>
+      <div class="actions wrap compact-actions planned-dish-actions">
+        <button type="button" data-action="mark-planned-dish-consumed" data-slot="${escapeHtml(row.slot)}" data-dish-id="${escapeHtml(row.dish.id)}" ${row.status === "consumed" ? "disabled" : ""}>Consumido</button>
+        <button type="button" class="secondary" data-action="mark-planned-dish-skipped" data-slot="${escapeHtml(row.slot)}" data-dish-id="${escapeHtml(row.dish.id)}" ${row.status === "skipped" ? "disabled" : ""}>No consumido</button>
+        ${row.status !== "pending" ? `<button type="button" class="ghost" data-action="reopen-planned-dish" data-slot="${escapeHtml(row.slot)}" data-dish-id="${escapeHtml(row.dish.id)}">Reabrir</button>` : ""}
+      </div>
+      <details>
+        <summary>Ingredientes a descontar</summary>
+        <ul>${row.ingredients.map(text => `<li>${escapeHtml(text)}</li>`).join("")}</ul>
+      </details>
     </article>
   `;
 }
@@ -165,27 +239,11 @@ function buildPlannedDishRows(state, week) {
   return rows;
 }
 
-function renderPlannedDishRow(row, compact = false) {
-  const statusLabel = row.status === "consumed" ? "Consumido" : row.status === "skipped" ? "No consumido" : "Pendiente";
-  const statusClass = row.status === "consumed" ? "" : row.status === "skipped" ? "warning" : "";
-  return `
-    <div class="item planned-dish-item ${escapeHtml(row.status)} ${compact ? "compact" : ""}">
-      <div class="planned-dish-main">
-        <div>
-          <strong>${escapeHtml(row.dish.name)}</strong>
-          <p class="qty-line">${escapeHtml(row.day)} · ${escapeHtml(row.meal.name)} · ${escapeHtml(row.member.name)}</p>
-        </div>
-        <span class="badge ${statusClass}">${statusLabel}</span>
-      </div>
-      <div class="actions wrap compact-actions planned-dish-actions">
-        <button type="button" data-action="mark-planned-dish-consumed" data-slot="${escapeHtml(row.slot)}" data-dish-id="${escapeHtml(row.dish.id)}" ${row.status === "consumed" ? "disabled" : ""}>Consumido</button>
-        <button type="button" class="secondary" data-action="mark-planned-dish-skipped" data-slot="${escapeHtml(row.slot)}" data-dish-id="${escapeHtml(row.dish.id)}" ${row.status === "skipped" ? "disabled" : ""}>No consumido</button>
-        ${row.status !== "pending" ? `<button type="button" class="ghost" data-action="reopen-planned-dish" data-slot="${escapeHtml(row.slot)}" data-dish-id="${escapeHtml(row.dish.id)}">Reabrir</button>` : ""}
-      </div>
-      <details>
-        <summary>Ver ingredientes que se descontarán si marcas Consumido</summary>
-        <ul>${row.ingredients.map(text => `<li>${escapeHtml(text)}</li>`).join("")}</ul>
-      </details>
-    </div>
-  `;
+function mealVisual(meal) {
+  const value = `${meal.id || ""} ${meal.name || ""}`.toLowerCase();
+  if (/breakfast|desayuno/.test(value)) return { icon: "☀️", className: "meal-breakfast" };
+  if (/lunch|comida|almuerzo/.test(value)) return { icon: "🍽️", className: "meal-lunch" };
+  if (/snack|merienda/.test(value)) return { icon: "🧺", className: "meal-snack" };
+  if (/dinner|cena/.test(value)) return { icon: "🌙", className: "meal-dinner" };
+  return { icon: "🍴", className: "meal-other" };
 }
