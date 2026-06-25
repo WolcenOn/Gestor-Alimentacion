@@ -6,14 +6,20 @@ import { registerPurchase } from "./state/stock.js";
 import { normalizePackagingType } from "./state/wasteRecycling.js";
 
 function scannedProductFromForm(data, ingredientName = "") {
+  const priceSource = data.priceSource || (data.openPricesUrl ? "open-prices" : "");
   return {
     barcode: stripDangerousText(data.barcode || ""),
     brand: stripDangerousText(data.brand || ""),
     productName: stripDangerousText(data.productName || data.name || ingredientName),
     packageQty: parseNumber(data.packageSizeQty || data.packageQty || data.qty),
     packageUnit: normalizeUnit(data.packageSizeUnit || data.packageUnit || data.unit || "g"),
-    price: parseNumber(data.approxPrice),
-    source: "openfoodfacts-scan",
+    price: parseNumber(data.price || data.approxPrice),
+    priceSource,
+    priceSourceLabel: data.priceSourceLabel || (priceSource === "open-prices" ? "Open Prices" : ""),
+    priceDate: data.priceDate || "",
+    priceStoreName: stripDangerousText(data.priceStoreName || ""),
+    openPricesUrl: data.openPricesUrl || "",
+    source: priceSource === "open-prices" ? "open-prices" : "openfoodfacts-scan",
     packagingType: normalizePackagingType(data.packagingType || "otro"),
     packaging: stripDangerousText(data.packaging || ""),
     createdAt: new Date().toISOString(),
@@ -43,7 +49,7 @@ function saveScannedIngredientPurchase(form) {
       storageType: data.storageType || "pantry",
       expiryDate: data.expiryDate || "",
       dateType: data.dateType || "none",
-      approxPrice: parseNumber(data.approxPrice),
+      approxPrice: parseNumber(data.price || data.approxPrice),
       packagingType: normalizePackagingType(data.packagingType || product.packagingType || "otro"),
       notes: stripDangerousText(data.notes || data.ingredientsText || ""),
       products: product.barcode || product.productName || product.brand ? [product] : []
@@ -62,7 +68,12 @@ function saveScannedIngredientPurchase(form) {
       brand: product.brand,
       productName: product.productName || ingredient.name,
       productSource: product.source,
-      price: parseNumber(data.approxPrice),
+      price: parseNumber(data.price || data.approxPrice),
+      priceSource: product.priceSource,
+      priceSourceLabel: product.priceSourceLabel,
+      priceDate: product.priceDate,
+      priceStoreName: product.priceStoreName,
+      openPricesUrl: product.openPricesUrl,
       purchaseDate: new Date().toISOString().slice(0, 10),
       expiryDate: data.expiryDate || "",
       dateType: data.dateType || "none",
