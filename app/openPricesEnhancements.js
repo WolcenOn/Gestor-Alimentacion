@@ -22,17 +22,15 @@ function ensurePriceHint(form) {
   if (!hint) {
     hint = document.createElement("div");
     hint.dataset.openPricesHint = "true";
-    hint.className = "small muted";
-    form.querySelector('label textarea, textarea[name="notes"]')?.closest("label")?.before(hint)
-      || form.querySelector(".actions")?.before(hint)
-      || form.append(hint);
+    hint.className = "item small price-source-card";
+    form.querySelector(".actions")?.before(hint) || form.append(hint);
   }
   return hint;
 }
 
 function applyOpenPriceToForm(form, price) {
   if (!form || !price?.price) return;
-  const priceField = form.elements.price || form.elements.approxPrice;
+  const priceField = form.elements.price;
   if (priceField && !Number(priceField.value || 0)) priceField.value = Number(price.price).toFixed(2);
   ensureHidden(form, "priceSource", "open-prices");
   ensureHidden(form, "priceSourceLabel", "Open Prices");
@@ -42,23 +40,27 @@ function applyOpenPriceToForm(form, price) {
 
   const hint = ensurePriceHint(form);
   const sourceDetails = [price.location, price.date].filter(Boolean).join(" · ");
-  hint.innerHTML = `Precio sugerido por <strong>Open Prices</strong>: ${formatMoney(price.price)}${sourceDetails ? ` · ${sourceDetails}` : ""}. Si tu ticket tiene un precio mejor, corrígelo aquí y puedes actualizarlo en Open Prices.`;
+  hint.innerHTML = `<strong>Precio sugerido por Open Prices: ${formatMoney(price.price)}</strong><p class="qty-line">${sourceDetails ? sourceDetails : "Sin tienda/fecha asociada"}. Si tu ticket tiene un precio mejor, corrígelo aquí y puedes actualizarlo en Open Prices.</p>`;
   addOpenPricesButton(form);
 }
 
 function addOpenPricesButton(form) {
+  if (!form?.matches?.('form[data-form="purchase"]')) return;
   if (form.querySelector('[data-action="open-open-prices"]')) return;
   const barcode = form.elements.barcode?.value || "";
+  const actions = form.querySelector(".actions");
+  if (!actions) return;
   const button = document.createElement("button");
   button.type = "button";
   button.className = "secondary";
   button.dataset.action = "open-open-prices";
   button.dataset.barcode = barcode;
   button.textContent = "Actualizar en Open Prices";
-  form.querySelector(".actions")?.append(button);
+  actions.append(button);
 }
 
 async function enrichFormWithOpenPrices(form) {
+  if (!form?.matches?.('form[data-form="purchase"]')) return;
   const barcode = String(form.elements.barcode?.value || "").trim();
   if (!/^\d{6,18}$/.test(barcode) || form.dataset.openPricesChecked === barcode) return;
   form.dataset.openPricesChecked = barcode;
@@ -74,7 +76,7 @@ function watchForm(form) {
 }
 
 function scanOpenPriceForms(root = document) {
-  root.querySelectorAll?.('form[data-form="purchase"], form[data-form="ingredient"][data-scanned-ingredient="true"]').forEach(watchForm);
+  root.querySelectorAll?.('form[data-form="purchase"]').forEach(watchForm);
 }
 
 function saveOpenPricesPurchase(form, event) {
@@ -122,7 +124,7 @@ function saveOpenPricesPurchase(form, event) {
 }
 
 document.addEventListener("input", event => {
-  const form = event.target.closest?.('form[data-form="purchase"], form[data-form="ingredient"][data-scanned-ingredient="true"]');
+  const form = event.target.closest?.('form[data-form="purchase"]');
   if (!form || event.target.name !== "barcode") return;
   form.dataset.openPricesChecked = "";
   enrichFormWithOpenPrices(form).catch(error => console.warn(error));
