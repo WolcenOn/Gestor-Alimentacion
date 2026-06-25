@@ -1,4 +1,4 @@
-import { DAYS, escapeHtml } from "../utils.js";
+import { DAYS, escapeHtml, formatQty } from "../utils.js";
 import { addMonths, buildMonthWeeks, countPlannedSlots, findWeekByStartDate, getMonthKey, hasPlannedSlots, monthLabel } from "../state/calendarPeriods.js";
 
 export function renderCalendar(state) {
@@ -133,10 +133,10 @@ function renderMealBlock(state, week, day, meal) {
           <span class="meal-icon" aria-hidden="true">${visual.icon}</span>
           <span>
             <strong>${escapeHtml(meal.name)}</strong>
-            <small>${summary.memberCount ? `${summary.memberCount} miembro(s) con plato` : "Sin asignar"}</small>
+            <small>${summary.memberCount ? `${summary.memberCount} miembro(s) con comida` : "Sin asignar"}</small>
           </span>
         </span>
-        <span class="badge ${summary.dishCount ? "success" : "warning"}">${summary.dishCount} plato(s)</span>
+        <span class="badge ${summary.itemCount ? "success" : "warning"}">${summary.itemCount} item(s)</span>
       </summary>
       <div class="member-slots compact-member-slots">
         ${state.familyMembers.map(member => renderMemberSlot(state, week, day, meal, member)).join("")}
@@ -148,42 +148,55 @@ function renderMealBlock(state, week, day, meal) {
 function renderMemberSlot(state, week, day, meal, member) {
   const key = `${day}__${meal.id}__${member.id}`;
   const planned = week.plan[key] || [];
-  const statusClass = planned.length ? "has-dishes" : "is-empty";
+  const ingredients = week.ingredientPlan?.[key] || [];
+  const totalItems = planned.length + ingredients.length;
+  const statusClass = totalItems ? "has-dishes" : "is-empty";
   return `
     <div class="member-slot compact-member-slot ${statusClass}">
       <div class="member-slot-head">
         <strong>${escapeHtml(member.name)}</strong>
-        <span class="mini-badge">${planned.length}</span>
+        <span class="mini-badge">${totalItems}</span>
       </div>
       <div class="dish-stack">
-        ${planned.length ? planned.map(dishId => renderDishPill(state, key, dishId)).join("") : `<p class="empty-slot">Sin platos asignados</p>`}
+        ${planned.length ? planned.map(dishId => renderDishPill(state, key, dishId)).join("") : ""}
+        ${ingredients.length ? ingredients.map(line => renderIngredientPill(state, key, line)).join("") : ""}
+        ${totalItems ? "" : `<p class="empty-slot">Sin platos ni ingredientes asignados</p>`}
       </div>
-      <button type="button" class="secondary add-dish-button" data-action="open-dish-picker" data-slot="${escapeHtml(key)}">Añadir plato</button>
+      <div class="actions wrap slot-actions">
+        <button type="button" class="secondary add-dish-button" data-action="open-dish-picker" data-slot="${escapeHtml(key)}">Añadir plato</button>
+        <button type="button" class="secondary add-ingredient-button" data-action="open-week-ingredient-picker" data-slot="${escapeHtml(key)}">Añadir ingrediente</button>
+      </div>
     </div>
   `;
 }
 
 function mealSummary(state, week, day, meal) {
+  let itemCount = 0;
   let dishCount = 0;
+  let ingredientCount = 0;
   let memberCount = 0;
   for (const member of state.familyMembers) {
     const key = `${day}__${meal.id}__${member.id}`;
-    const planned = week.plan[key] || [];
-    if (planned.length) {
+    const dishes = week.plan[key] || [];
+    const ingredients = week.ingredientPlan?.[key] || [];
+    const slotItems = dishes.length + ingredients.length;
+    if (slotItems) {
       memberCount += 1;
-      dishCount += planned.length;
+      dishCount += dishes.length;
+      ingredientCount += ingredients.length;
+      itemCount += slotItems;
     }
   }
-  return { dishCount, memberCount };
+  return { dishCount, ingredientCount, itemCount, memberCount };
 }
 
 function dayPlanningStatus(state, week, day) {
   const expected = expectedDaySlots(state);
   const planned = countDayPlannedSlots(state, week, day);
   const missing = Math.max(expected - planned, 0);
-  if (!planned) return { className: "plan-status-empty", label: "Sin planificar", helpText: `Faltan ${expected} plato(s)` };
-  if (!missing) return { className: "plan-status-complete", label: "Planificado todo", helpText: `${planned}/${expected} plato(s) asignado(s)` };
-  return { className: "plan-status-partial", label: `Faltan ${missing} plato(s)`, helpText: `${planned}/${expected} plato(s) asignado(s)` };
+  if (!planned) return { className: "plan-status-empty", label: "Sin planificar", helpText: `Faltan ${expected} comida(s)` };
+  if (!missing) return { className: "plan-status-complete", label: "Planificado todo", helpText: `${planned}/${expected} comida(s) asignada(s)` };
+  return { className: "plan-status-partial", label: `Faltan ${missing} comida(s)`, helpText: `${planned}/${expected} comida(s) asignada(s)` };
 }
 
 function expectedDaySlots(state) {
@@ -195,7 +208,7 @@ function countDayPlannedSlots(state, week, day) {
   for (const meal of state.mealTypes) {
     for (const member of state.familyMembers) {
       const key = `${day}__${meal.id}__${member.id}`;
-      if ((week.plan[key] || []).length) total += 1;
+      if ((week.plan[key] || []).length || (week.ingredientPlan?.[key] || []).length) total += 1;
     }
   }
   return total;
@@ -216,6 +229,16 @@ function renderDishPill(state, key, dishId) {
     <span class="dish-pill">
       <button class="ghost dish-pill-name" data-action="open-dish-detail" data-dish-id="${escapeHtml(dishId)}" title="Ver ficha del plato">${escapeHtml(dish?.name || "Plato eliminado")}</button>
       <button class="ghost icon-button" aria-label="Quitar plato" data-action="remove-dish-from-slot" data-slot="${escapeHtml(key)}" data-dish-id="${escapeHtml(dishId)}">×</button>
+    </span>
+  `;
+}
+
+function renderIngredientPill(state, key, line) {
+  const ingredient = state.ingredients.find(item => item.id === line.ingredientId);
+  return `
+    <span class="dish-pill ingredient-pill">
+      <span class="dish-pill-name">${escapeHtml(ingredient?.name || "Ingrediente eliminado")} · ${escapeHtml(formatQty(line.qty, line.unit || ingredient?.unit || "g"))}</span>
+      <button class="ghost icon-button" aria-label="Quitar ingrediente" data-action="remove-ingredient-from-slot" data-slot="${escapeHtml(key)}" data-line-id="${escapeHtml(line.id || "")}">×</button>
     </span>
   `;
 }
