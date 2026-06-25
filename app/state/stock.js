@@ -15,6 +15,8 @@ export function registerPurchase(state, input) {
   const packageCount = Number(input.packagingQty) || 0;
   const packageSizeQty = Number(input.packageSizeQty) || (packageCount > 0 ? purchased.qty / packageCount : purchased.qty);
   const packageSizeUnit = normalizeUnit(input.packageSizeUnit || purchased.unit);
+  const priceSource = input.priceSource || (input.productSource === "open-prices" ? "open-prices" : "");
+  const priceSourceLabel = input.priceSourceLabel || (priceSource === "open-prices" ? "Open Prices" : "");
 
   ingredient.qty = ingredientBase.qty + purchased.qty;
   ingredient.unit = ingredientBase.unit;
@@ -31,6 +33,12 @@ export function registerPurchase(state, input) {
     packageSizeUnit,
     barcode: input.barcode || "",
     brand: input.brand || "",
+    price: Number(input.price) || 0,
+    priceSource,
+    priceSourceLabel,
+    priceDate: input.priceDate || "",
+    priceStoreName: input.priceStoreName || "",
+    openPricesUrl: input.openPricesUrl || "",
     purchaseDate: input.purchaseDate || new Date().toISOString().slice(0, 10),
     expiryDate: input.expiryDate || "",
     dateType: input.dateType || "none",
@@ -54,6 +62,11 @@ export function registerPurchase(state, input) {
     barcode: input.barcode || "",
     brand: input.brand || "",
     price: Number(input.price) || 0,
+    priceSource,
+    priceSourceLabel,
+    priceDate: input.priceDate || "",
+    priceStoreName: input.priceStoreName || "",
+    openPricesUrl: input.openPricesUrl || "",
     isPartial: Boolean(input.isPartial),
     packagingType: input.packagingType || "",
     packagingQty: packageCount,
@@ -100,6 +113,11 @@ export function registerPurchase(state, input) {
       lastPurchasedQty: purchased.qty,
       lastPurchasedUnit: purchased.unit,
       price: Number(input.price) || 0,
+      priceSource,
+      priceSourceLabel,
+      priceDate: input.priceDate || "",
+      priceStoreName: input.priceStoreName || "",
+      openPricesUrl: input.openPricesUrl || "",
       source: input.productSource || "manual",
       packagingType: input.packagingType || "otro",
       updatedAt: nowIso()
