@@ -1,3 +1,4 @@
+import "./scannedPurchaseIngredientEnhancements.js";
 import { translateFoodQueryToEnglish } from "./services/foodTranslationSmart.js";
 
 function ensureInfoBox(input) {
