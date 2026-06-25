@@ -1,5 +1,6 @@
 import "./scannedPurchaseIngredientEnhancements.js";
 import "./openPricesEnhancements.js";
+import "./weekIngredientPlannerEnhancements.js";
 import "./dishRecipeSubmitFix.js";
 import { translateFoodQueryToEnglish } from "./services/foodTranslationSmart.js";
 
