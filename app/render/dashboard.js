@@ -14,22 +14,19 @@ export function renderDashboard(state) {
   const partialShopping = shopping.filter(i => i.status === "partial");
   const pending = pendingShopping.length;
   const partial = partialShopping.length;
-  const estimatedCost = shopping.reduce((sum, item) => {
-    const ingredient = state.ingredients.find(i => i.id === item.ingredientId);
-    return sum + item.remainingQty * (Number(ingredient?.approxPrice) || 0);
-  }, 0);
-  const expiring = getExpiringIngredients(state, 7);
+  const estimatedCost = estimateRemainingCost(state, shopping);
+  const expiring = getExpiringIngredients(state, 7).slice(0, 3);
   const wasteScore = getWasteScore(state);
   const recycling = getRecyclingSummary(state);
   const recyclingRows = Object.entries(recycling);
   const totalRecycling = recyclingRows.reduce((sum, [, qty]) => sum + Number(qty || 0), 0);
-  const plannedDishes = buildPlannedDishRows(state, week);
+  const plannedDishes = buildPlannedDishRows(state, week, { includeIngredients: false });
   const todayName = getTodayName();
   const todayDishes = plannedDishes.filter(row => row.day === todayName);
   const consumedCount = plannedDishes.filter(row => row.status === "consumed").length;
   const skippedCount = plannedDishes.filter(row => row.status === "skipped").length;
   const pendingReviewCount = plannedDishes.filter(row => row.status === "pending").length;
-  const stockLow = state.ingredients.filter(ingredient => Number(ingredient.qty || 0) <= 0).slice(0, 5);
+  const stockLow = state.ingredients.filter(ingredient => Number(ingredient.qty || 0) <= 0).slice(0, 3);
 
   return `
     <div class="card-header dashboard-header-clean">
@@ -82,19 +79,19 @@ export function renderDashboard(state) {
       <article class="card compact-dashboard-card">
         <h3>Coste estimado</h3>
         <p class="metric">${formatMoney(estimatedCost)}</p>
-        <p class="muted">Cantidades restantes.</p>
+        <p class="muted">Aprox. por kg, litro o unidad.</p>
       </article>
       <article class="card compact-dashboard-card">
         <h3>Envases</h3>
-        ${recyclingRows.length ? `<div class="recycling-bars compact-recycling-bars">${recyclingRows.map(([type, qty]) => `<div><span>${escapeHtml(type)}</span><strong>${qty}</strong></div>`).join("")}</div>` : `<p class="muted">Sin envases registrados.</p>`}
+        ${recyclingRows.length ? `<div class="recycling-bars compact-recycling-bars">${recyclingRows.slice(0, 4).map(([type, qty]) => `<div><span>${escapeHtml(type)}</span><strong>${qty}</strong></div>`).join("")}</div>` : `<p class="muted">Sin envases registrados.</p>`}
       </article>
       <article class="card compact-dashboard-card dashboard-list-card">
         <h3>Caduca pronto</h3>
-        ${expiring.length ? `<div class="list compact-list">${expiring.slice(0, 3).map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><span class="badge warning">${escapeHtml(i.expiryDate)}</span></div>`).join("")}</div>` : `<p class="muted">Sin urgencias.</p>`}
+        ${expiring.length ? `<div class="list compact-list">${expiring.map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><span class="badge warning">${escapeHtml(i.expiryDate)}</span></div>`).join("")}</div>` : `<p class="muted">Sin urgencias.</p>`}
       </article>
       <article class="card compact-dashboard-card dashboard-list-card">
         <h3>Stock bajo</h3>
-        ${stockLow.length ? `<div class="list compact-list">${stockLow.slice(0, 3).map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><p class="qty-line">${formatQty(i.qty, i.unit)}</p></div>`).join("")}</div>` : `<p class="muted">Nada a cero.</p>`}
+        ${stockLow.length ? `<div class="list compact-list">${stockLow.map(i => `<div class="item"><strong>${escapeHtml(i.name)}</strong><p class="qty-line">${formatQty(i.qty, i.unit)}</p></div>`).join("")}</div>` : `<p class="muted">Nada a cero.</p>`}
       </article>
       <article class="card compact-dashboard-card dashboard-list-card">
         <h3>Compra parcial</h3>
@@ -106,7 +103,7 @@ export function renderDashboard(state) {
 
 export function renderCookingReviewModal(state, selectedDay = getTodayName()) {
   const week = state.weeks.find(w => w.id === state.activeWeekId);
-  const plannedDishes = buildPlannedDishRows(state, week);
+  const plannedDishes = buildPlannedDishRows(state, week, { includeIngredients: true });
   const safeDay = DAYS.includes(selectedDay) ? selectedDay : getTodayName();
   const dayDishes = plannedDishes.filter(row => row.day === safeDay);
   return `
@@ -125,6 +122,24 @@ export function renderCookingReviewModal(state, selectedDay = getTodayName()) {
       ${dayDishes.length ? renderTodayMealGroups(state, dayDishes) : renderEmptyDayCard(safeDay)}
     </div>
   `;
+}
+
+function estimateRemainingCost(state, shopping) {
+  return shopping.reduce((sum, item) => {
+    if (!item.remainingQty || item.status === "done" || item.status === "skipped") return sum;
+    const ingredient = state.ingredients.find(i => i.id === item.ingredientId);
+    const price = Number(ingredient?.approxPrice) || 0;
+    if (!price) return sum;
+    const qtyForPricing = priceQuantity(item.remainingQty, item.unit);
+    return sum + qtyForPricing * price;
+  }, 0);
+}
+
+function priceQuantity(qty, unit) {
+  const normalized = String(unit || "").toLowerCase();
+  const amount = Number(qty) || 0;
+  if (normalized === "g" || normalized === "ml") return amount / 1000;
+  return amount;
 }
 
 function renderTaskCard(title, detail, buttonLabel, target = {}) {
@@ -201,7 +216,7 @@ function renderTodayDishCard(row) {
       </div>
       <details>
         <summary>Ingredientes a descontar</summary>
-        <ul>${row.ingredients.map(text => `<li>${escapeHtml(text)}</li>`).join("")}</ul>
+        <ul>${(row.ingredients || []).map(text => `<li>${escapeHtml(text)}</li>`).join("")}</ul>
       </details>
     </article>
   `;
@@ -213,15 +228,17 @@ function getTodayName() {
   return map[jsDay];
 }
 
-function buildPlannedDishRows(state, week) {
+function buildPlannedDishRows(state, week, { includeIngredients = false } = {}) {
   if (!week) return [];
+  const dishMap = new Map(state.dishes.map(dish => [dish.id, dish]));
+  const ingredientMap = includeIngredients ? new Map(state.ingredients.map(ingredient => [ingredient.id, ingredient])) : null;
   const rows = [];
   for (const day of DAYS) {
     for (const meal of state.mealTypes) {
       for (const member of state.familyMembers) {
         const slot = `${day}__${meal.id}__${member.id}`;
         for (const dishId of week.plan?.[slot] || []) {
-          const dish = state.dishes.find(item => item.id === dishId);
+          const dish = dishMap.get(dishId);
           if (!dish) continue;
           rows.push({
             day,
@@ -230,10 +247,10 @@ function buildPlannedDishRows(state, week) {
             slot,
             dish,
             status: getPlannedDishStatus(state, slot, dishId, week.id),
-            ingredients: (dish.recipe || []).map(line => {
-              const ingredient = state.ingredients.find(item => item.id === line.ingredientId);
+            ingredients: includeIngredients ? (dish.recipe || []).map(line => {
+              const ingredient = ingredientMap.get(line.ingredientId);
               return `${ingredient?.name || "Ingrediente eliminado"}: ${formatQty(line.qty, line.unit)}`;
-            })
+            }) : []
           });
         }
       }
