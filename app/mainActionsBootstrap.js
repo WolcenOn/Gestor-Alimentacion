@@ -1,4 +1,5 @@
 import "./weekPlannerAssistant.js";
+import "./smartFoodTranslationEnhancements.js";
 import {
   newWeek,
   duplicateWeek,
