@@ -1,4 +1,5 @@
 import "./scannedPurchaseIngredientEnhancements.js";
+import "./dishRecipeSubmitFix.js";
 import { translateFoodQueryToEnglish } from "./services/foodTranslationSmart.js";
 
 function ensureInfoBox(input) {
