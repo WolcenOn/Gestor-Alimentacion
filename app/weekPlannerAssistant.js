@@ -3,6 +3,13 @@ import { DAYS, escapeHtml } from "./utils.js";
 import { openModal, closeModal, showAlert } from "./render/ui.js";
 
 const ALL_MEMBERS = "__all_members__";
+let plannerTray = [];
+let plannerSettings = {
+  mealId: "",
+  memberId: ALL_MEMBERS,
+  applyMode: "empty",
+  days: [...DAYS]
+};
 
 ensurePlannerStylesheet();
 
@@ -15,18 +22,22 @@ function ensurePlannerStylesheet() {
 }
 
 function openWeekPlannerAssistant() {
-  openModal(renderPlannerModal(getState()));
+  const state = getState();
+  if (!plannerSettings.mealId) plannerSettings.mealId = state.mealTypes[0]?.id || "";
+  openModal(renderPlannerModal(state));
 }
 
 function renderPlannerModal(state) {
   const week = state.weeks.find(item => item.id === state.activeWeekId);
-  const selectedMeal = state.mealTypes[0]?.id || "";
+  const selectedMealId = plannerSettings.mealId || state.mealTypes[0]?.id || "";
+  const selectedMeal = state.mealTypes.find(meal => meal.id === selectedMealId);
+  const matchingCount = plannerTray.filter(item => item.mealId === selectedMealId).length;
   return `
     <header>
       <div>
         <p class="eyebrow">Asistente</p>
-        <h2>Planificar semana automáticamente</h2>
-        <p class="muted">Elige días, comida, miembros y recetas. Puedes alternar platos o crear combinaciones como salmón + puré.</p>
+        <h2>Planificar semana por propuestas</h2>
+        <p class="muted">Añade platos o combinaciones a una lista y luego rellena huecos de desayuno, comida o cena.</p>
       </div>
       <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
     </header>
@@ -34,70 +45,75 @@ function renderPlannerModal(state) {
     <form data-form="week-planner-assistant" class="week-planner-form">
       <section class="week-planner-grid">
         <div class="planner-section">
-          <h3>1. Días</h3>
+          <h3>1. Días que quieres rellenar</h3>
           <div class="planner-chip-grid">
-            ${DAYS.map(day => `<label class="planner-check"><input type="checkbox" name="days" value="${escapeHtml(day)}" checked> ${escapeHtml(capitalize(day))}</label>`).join("")}
+            ${DAYS.map(day => `<label class="planner-check"><input type="checkbox" name="days" value="${escapeHtml(day)}" ${plannerSettings.days.includes(day) ? "checked" : ""}> ${escapeHtml(capitalize(day))}</label>`).join("")}
           </div>
         </div>
 
         <div class="planner-section">
-          <h3>2. Comida, persona y modo</h3>
+          <h3>2. Contexto de la propuesta</h3>
           <label>Tipo de comida
-            <select name="mealId" required>
-              ${state.mealTypes.map(meal => `<option value="${escapeHtml(meal.id)}" ${meal.id === selectedMeal ? "selected" : ""}>${escapeHtml(meal.name)}</option>`).join("")}
+            <select name="mealId" required data-planner-setting>
+              ${state.mealTypes.map(meal => `<option value="${escapeHtml(meal.id)}" ${meal.id === selectedMealId ? "selected" : ""}>${escapeHtml(meal.name)}</option>`).join("")}
             </select>
           </label>
-          <label>Aplicar a
-            <select name="memberId" required>
-              <option value="${ALL_MEMBERS}">Todos los miembros</option>
-              ${state.familyMembers.map(member => `<option value="${escapeHtml(member.id)}">${escapeHtml(member.name)}</option>`).join("")}
+          <label>Para quién
+            <select name="memberId" required data-planner-setting>
+              <option value="${ALL_MEMBERS}" ${plannerSettings.memberId === ALL_MEMBERS ? "selected" : ""}>Todos los miembros</option>
+              ${state.familyMembers.map(member => `<option value="${escapeHtml(member.id)}" ${plannerSettings.memberId === member.id ? "selected" : ""}>${escapeHtml(member.name)}</option>`).join("")}
             </select>
           </label>
-          <label>Cómo usar los platos seleccionados
-            <select name="planningMode">
-              <option value="rotation">Plato único en rotación</option>
-              <option value="combo">Combinación fija en el mismo hueco</option>
-            </select>
-          </label>
-          <label>Modo de aplicación
-            <select name="applyMode">
-              <option value="empty">Rellenar solo huecos vacíos</option>
-              <option value="replace">Sustituir lo que haya</option>
-              <option value="append">Añadir a lo que ya haya</option>
+          <label>Al rellenar huecos
+            <select name="applyMode" data-planner-setting>
+              <option value="empty" ${plannerSettings.applyMode === "empty" ? "selected" : ""}>Rellenar solo huecos vacíos</option>
+              <option value="replace" ${plannerSettings.applyMode === "replace" ? "selected" : ""}>Sustituir lo que haya</option>
+              <option value="append" ${plannerSettings.applyMode === "append" ? "selected" : ""}>Añadir a lo que ya haya</option>
             </select>
           </label>
         </div>
       </section>
 
       <section class="planner-section">
-        <h3>3. Filtros rápidos</h3>
+        <h3>3. Buscar platos</h3>
         <div class="form-grid">
-          <label>Buscar receta, etiqueta o categoría<input name="includeText" data-planner-filter placeholder="Ej. desayuno, pollo, rápido, diabético"></label>
+          <label>Buscar receta, etiqueta o ingrediente<input name="includeText" data-planner-filter placeholder="Ej. salmón, verduras, rápido, desayuno"></label>
           <label>Excluir ingrediente o palabra<input name="excludeText" data-planner-filter placeholder="Ej. gluten, leche, frutos secos"></label>
         </div>
         <p class="small muted" data-planner-filter-count>${state.dishes.length} receta(s) visibles.</p>
       </section>
 
-      <section class="planner-section">
+      <section class="planner-section planner-dish-picker-section">
         <div class="section-title-row">
           <div>
-            <h3>4. Recetas disponibles</h3>
-            <p class="muted">Marca una o varias. En combinación fija se guardan juntas en cada hueco elegido.</p>
+            <h3>4. Elige plato(s)</h3>
+            <p class="muted">Marca uno para una propuesta simple o varios para una combinación, por ejemplo salmón + puré.</p>
           </div>
-          <span class="badge">${state.dishes.length} receta(s)</span>
+          <button type="button" data-action="add-planner-menu">Añadir a la lista</button>
         </div>
         ${state.dishes.length ? `<div class="planner-dish-list">${state.dishes.map(dish => renderDishChoice(state, dish)).join("")}</div>` : `<p class="muted">Todavía no hay recetas. Importa packs o crea platos antes de usar el asistente.</p>`}
       </section>
 
-      <section class="planner-preview-card">
-        <strong>Resumen</strong>
-        <p class="muted">Semana: ${escapeHtml(week?.name || "Sin semana activa")}. En rotación se asigna 1 plato por hueco; en combinación se asignan todos los platos marcados juntos.</p>
+      <section class="planner-section planner-tray-section">
+        <div class="section-title-row">
+          <div>
+            <h3>5. Lista de propuestas</h3>
+            <p class="muted">Cuando tengas varias propuestas para ${escapeHtml(selectedMeal?.name || "esta comida")}, rellena los huecos.</p>
+          </div>
+          <span class="badge ${matchingCount >= 5 ? "success" : "warning"}">${matchingCount} para esta comida</span>
+        </div>
+        ${renderPlannerTray(state)}
+        ${matchingCount >= 5 ? `<p class="planner-suggestion success">Ya tienes ${matchingCount} propuestas para ${escapeHtml(selectedMeal?.name || "esta comida")}. Puedes rellenar los huecos de la semana.</p>` : `<p class="planner-suggestion">Añade unas 5 propuestas para cubrir la comida entre semana y luego rellena huecos.</p>`}
+        <div class="actions wrap">
+          <button type="button" data-action="fill-planner-meal">Rellenar huecos de esta comida</button>
+          <button type="button" class="secondary" data-action="clear-planner-tray">Vaciar lista</button>
+        </div>
       </section>
 
-      <div class="actions">
-        <button type="submit">Aplicar planificación</button>
-        <button type="button" class="secondary" data-action="close-modal">Cancelar</button>
-      </div>
+      <section class="planner-preview-card">
+        <strong>Resumen</strong>
+        <p class="muted">Semana: ${escapeHtml(week?.name || "Sin semana activa")}. Las propuestas se aplican en rotación y cada combinación queda junta en el mismo hueco.</p>
+      </section>
     </form>
   `;
 }
@@ -115,63 +131,113 @@ function renderDishChoice(state, dish) {
   `;
 }
 
-function applyWeekPlanner(form) {
-  const state = getState();
-  const data = new FormData(form);
-  const days = data.getAll("days");
-  const mealId = String(data.get("mealId") || "");
-  const memberId = String(data.get("memberId") || "");
-  const applyMode = String(data.get("applyMode") || "empty");
-  const planningMode = String(data.get("planningMode") || "rotation");
-  const includeText = normalizeSearch(data.get("includeText"));
-  const excludeText = normalizeSearch(data.get("excludeText"));
-  const selectedDishIds = data.getAll("dishIds").map(String);
-  const matchingDishIds = selectedDishIds.filter(dishId => {
-    const dish = state.dishes.find(item => item.id === dishId);
-    if (!dish) return false;
-    const text = normalizeSearch(dishSearchText(state, dish));
-    return (!includeText || text.includes(includeText)) && (!excludeText || !text.includes(excludeText));
-  });
+function renderPlannerTray(state) {
+  if (!plannerTray.length) return `<p class="muted">Todavía no has añadido propuestas. Marca uno o varios platos y pulsa “Añadir a la lista”.</p>`;
+  return `
+    <div class="planner-tray-list">
+      ${plannerTray.map((item, index) => renderPlannerTrayItem(state, item, index)).join("")}
+    </div>
+  `;
+}
 
+function renderPlannerTrayItem(state, item, index) {
+  const meal = state.mealTypes.find(meal => meal.id === item.mealId);
+  const member = item.memberId === ALL_MEMBERS ? null : state.familyMembers.find(member => member.id === item.memberId);
+  const dishes = item.dishIds.map(id => state.dishes.find(dish => dish.id === id)?.name || "Plato eliminado");
+  return `
+    <article class="planner-tray-item">
+      <div>
+        <strong>${index + 1}. ${escapeHtml(dishes.join(" + "))}</strong>
+        <p class="qty-line">${escapeHtml(meal?.name || "Comida")} · ${member ? escapeHtml(member.name) : "Todos"}</p>
+      </div>
+      <button type="button" class="ghost icon-button" data-action="remove-planner-menu" data-planner-menu-id="${escapeHtml(item.id)}" aria-label="Quitar propuesta">×</button>
+    </article>
+  `;
+}
+
+function addSelectedProposal(form) {
+  syncPlannerSettings(form);
+  const state = getState();
+  const selectedDishIds = selectedVisibleDishIds(form);
+  if (!selectedDishIds.length) throw new Error("Marca al menos un plato para añadir a la lista.");
+  plannerTray.push({
+    id: `menu_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+    mealId: plannerSettings.mealId,
+    memberId: plannerSettings.memberId,
+    dishIds: dedupeDishIds(selectedDishIds)
+  });
+  openModal(renderPlannerModal(state));
+  const count = plannerTray.filter(item => item.mealId === plannerSettings.mealId).length;
+  showAlert(count >= 5 ? `Ya tienes ${count} propuestas para esta comida. Puedes rellenar huecos.` : "Propuesta añadida a la lista.");
+}
+
+function fillPlannerMeal(form) {
+  syncPlannerSettings(form);
+  const state = getState();
+  const days = plannerSettings.days;
+  const mealId = plannerSettings.mealId;
+  const applyMode = plannerSettings.applyMode;
   if (!days.length) throw new Error("Selecciona al menos un día.");
   if (!mealId) throw new Error("Selecciona una comida.");
-  if (!matchingDishIds.length) throw new Error("Selecciona alguna receta que cumpla los filtros.");
-  if (planningMode === "combo" && matchingDishIds.length < 2) throw new Error("Para una combinación fija selecciona al menos dos platos.");
+  const matchingMenus = plannerTray.filter(item => item.mealId === mealId);
+  if (!matchingMenus.length) throw new Error("Añade primero propuestas para esta comida.");
 
-  const targetMembers = memberId === ALL_MEMBERS
+  const requestedMembers = plannerSettings.memberId === ALL_MEMBERS
     ? state.familyMembers.map(member => member.id)
-    : [memberId];
+    : [plannerSettings.memberId];
 
   let applied = 0;
   updateState(draft => {
     const week = draft.weeks.find(item => item.id === draft.activeWeekId);
     if (!week) throw new Error("No hay semana activa.");
     week.plan ||= {};
-    let cursor = 0;
-    for (const day of days) {
-      for (const targetMemberId of targetMembers) {
+    const cursors = new Map();
+
+    for (const targetMemberId of requestedMembers) {
+      const menusForMember = matchingMenus.filter(item => item.memberId === ALL_MEMBERS || item.memberId === targetMemberId);
+      if (!menusForMember.length) continue;
+      for (const day of days) {
         const slot = `${day}__${mealId}__${targetMemberId}`;
         const current = week.plan[slot] || [];
         const hasPlanned = current.length > 0;
         if (applyMode === "empty" && hasPlanned) continue;
-
-        const nextDishIds = planningMode === "combo"
-          ? matchingDishIds
-          : [matchingDishIds[cursor % matchingDishIds.length]];
-
+        const cursor = cursors.get(targetMemberId) || 0;
+        const proposal = menusForMember[cursor % menusForMember.length];
         week.plan[slot] = applyMode === "append"
-          ? dedupeDishIds([...current, ...nextDishIds])
-          : [...nextDishIds];
-
-        cursor += 1;
+          ? dedupeDishIds([...current, ...proposal.dishIds])
+          : [...proposal.dishIds];
+        cursors.set(targetMemberId, cursor + 1);
         applied += 1;
       }
     }
   }, "week-planner-assistant");
 
   closeModal();
-  const modeLabel = planningMode === "combo" ? "combinación" : "planificación";
-  showAlert(applied ? `${capitalize(modeLabel)} aplicada en ${applied} hueco(s).` : "No había huecos vacíos que rellenar con ese criterio.");
+  showAlert(applied ? `Huecos rellenados con ${matchingMenus.length} propuesta(s). Aplicado en ${applied} hueco(s).` : "No había huecos aplicables para esos días y persona.");
+}
+
+function selectedVisibleDishIds(form) {
+  return [...form.querySelectorAll('.planner-dish-choice:not([hidden]) input[name="dishIds"]:checked')].map(input => input.value);
+}
+
+function syncPlannerSettings(form) {
+  plannerSettings = {
+    mealId: String(form.elements.mealId?.value || plannerSettings.mealId || ""),
+    memberId: String(form.elements.memberId?.value || plannerSettings.memberId || ALL_MEMBERS),
+    applyMode: String(form.elements.applyMode?.value || plannerSettings.applyMode || "empty"),
+    days: new FormData(form).getAll("days").map(String)
+  };
+}
+
+function removePlannerMenu(menuId) {
+  plannerTray = plannerTray.filter(item => item.id !== menuId);
+  openModal(renderPlannerModal(getState()));
+}
+
+function clearPlannerTray() {
+  plannerTray = [];
+  openModal(renderPlannerModal(getState()));
+  showAlert("Lista de propuestas vaciada.");
 }
 
 function dedupeDishIds(dishIds) {
@@ -222,9 +288,31 @@ function capitalize(value) {
 }
 
 document.addEventListener("click", event => {
-  const button = event.target.closest('[data-action="open-week-planner-assistant"]');
-  if (!button) return;
-  openWeekPlannerAssistant();
+  const actionButton = event.target.closest("[data-action]");
+  if (!actionButton) return;
+  const action = actionButton.dataset.action;
+  if (action === "open-week-planner-assistant") {
+    openWeekPlannerAssistant();
+    return;
+  }
+
+  const form = actionButton.closest('form[data-form="week-planner-assistant"]');
+  if (!form) return;
+  try {
+    if (action === "add-planner-menu") addSelectedProposal(form);
+    if (action === "fill-planner-meal") fillPlannerMeal(form);
+    if (action === "remove-planner-menu") removePlannerMenu(actionButton.dataset.plannerMenuId);
+    if (action === "clear-planner-tray") clearPlannerTray();
+  } catch (error) {
+    console.error(error);
+    showAlert(error.message || "No se pudo actualizar el asistente.", "error");
+  }
+});
+
+document.addEventListener("change", event => {
+  const form = event.target.closest('form[data-form="week-planner-assistant"]');
+  if (!form || !event.target.matches("[data-planner-setting], input[name='days']")) return;
+  syncPlannerSettings(form);
 });
 
 document.addEventListener("input", event => {
@@ -238,7 +326,7 @@ document.addEventListener("submit", event => {
   if (!form) return;
   event.preventDefault();
   try {
-    applyWeekPlanner(form);
+    fillPlannerMeal(form);
   } catch (error) {
     console.error(error);
     showAlert(error.message || "No se pudo aplicar la planificación.", "error");
