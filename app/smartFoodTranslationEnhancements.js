@@ -2,6 +2,7 @@ import "./scannedPurchaseIngredientEnhancements.js";
 import "./openPricesEnhancements.js";
 import "./weekIngredientPlannerEnhancements.js";
 import "./dishRecipeSubmitFix.js";
+import "./scanLayoutFix.js";
 import { translateFoodQueryToEnglish } from "./services/foodTranslationSmart.js";
 
 function ensureInfoBox(input) {
