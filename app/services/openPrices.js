@@ -26,8 +26,16 @@ function normalizeLocation(price = {}) {
     || "";
 }
 
+function openPricesSearchUrl(code = "") {
+  const barcode = String(code || "").trim();
+  return barcode
+    ? `${OPEN_PRICES_BASE}/app/prices?product_code=${encodeURIComponent(barcode)}`
+    : `${OPEN_PRICES_BASE}/app/prices`;
+}
+
 function normalizeOpenPrice(raw = {}) {
   const amount = Number(raw.price ?? raw.price_value ?? raw.value ?? 0) || 0;
+  const code = raw.product_code || raw.code || raw.barcode || "";
   if (!amount) return null;
   return {
     price: amount,
@@ -38,9 +46,9 @@ function normalizeOpenPrice(raw = {}) {
     location: normalizeLocation(raw),
     proofId: raw.proof_id || raw.proof?.id || "",
     priceId: raw.id || "",
-    productCode: raw.product_code || raw.code || raw.barcode || "",
+    productCode: code,
     fetchedAt: new Date().toISOString(),
-    url: `${OPEN_PRICES_BASE}/app/product/${encodeURIComponent(raw.product_code || raw.code || raw.barcode || "")}`
+    url: openPricesSearchUrl(code)
   };
 }
 
@@ -78,7 +86,7 @@ export async function lookupOpenPriceByBarcode(barcode) {
       const payload = await fetchJson(url);
       const price = chooseBestPrice(asArray(payload));
       if (price) {
-        const result = { ...price, productCode: price.productCode || code, url: `${OPEN_PRICES_BASE}/app/product/${encodeURIComponent(code)}` };
+        const result = { ...price, productCode: price.productCode || code, url: openPricesSearchUrl(code) };
         cache[key] = { cachedAt: Date.now(), price: result };
         setCache(cache);
         return result;
@@ -94,8 +102,5 @@ export async function lookupOpenPriceByBarcode(barcode) {
 }
 
 export function getOpenPricesContributionUrl(barcode = "") {
-  const code = String(barcode || "").trim();
-  return code
-    ? `${OPEN_PRICES_BASE}/app/product/${encodeURIComponent(code)}`
-    : `${OPEN_PRICES_BASE}/app`;
+  return openPricesSearchUrl(barcode);
 }
