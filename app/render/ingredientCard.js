@@ -1,4 +1,4 @@
-import { escapeHtml } from "../utils.js";
+import { escapeHtml, formatMoney } from "../utils.js";
 import { formatNutritionValue } from "../state/nutritionCalculator.js";
 import { getFastPurchaseProduct, getPackageQty, getPackageUnit, ingredientHasFastPurchaseData, isTrustedPurchaseEnabled } from "../fastPurchase.js";
 
@@ -57,6 +57,35 @@ function latestPackageInfo(state, ingredient) {
   return `${formatNumber(count)} envase(s) × ${formatNumber(packageQty)} ${packageUnit} = ${formatNumber(total)} ${product.lastPurchasedUnit || packageUnit || ingredient.unit}`;
 }
 
+function latestPriceInfo(state, ingredient) {
+  const lots = (state.purchaseLots || [])
+    .filter(lot => lot.ingredientId === ingredient.id && Number(lot.price) > 0)
+    .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+  const source = lots[0] || primaryProduct(ingredient);
+  if (!Number(source?.price || 0)) return null;
+  return {
+    price: Number(source.price),
+    source: source.priceSourceLabel || source.priceSource || source.source || "manual",
+    date: source.priceDate || "",
+    store: source.priceStoreName || "",
+    url: source.openPricesUrl || "",
+    barcode: source.barcode || primaryProduct(ingredient).barcode || ""
+  };
+}
+
+function renderPriceInfo(state, ingredient) {
+  const info = latestPriceInfo(state, ingredient);
+  const barcode = info?.barcode || primaryProduct(ingredient).barcode || "";
+  if (!info && !barcode) return "";
+  const details = info ? [info.source, info.store, info.date].filter(Boolean).join(" · ") : "sin precio guardado";
+  return `
+    <div class="item small price-source-card">
+      <strong>Precio ${info ? formatMoney(info.price) : "pendiente"}</strong>
+      <p class="qty-line">${escapeHtml(details)}${info?.source === "Open Prices" || info?.source === "open-prices" ? " · precio sugerido" : ""}</p>
+      ${barcode ? `<button type="button" class="secondary" data-action="open-open-prices" data-barcode="${escapeHtml(barcode)}">Actualizar en Open Prices</button>` : ""}
+    </div>`;
+}
+
 function renderFastPurchasePanel(ingredient) {
   const product = primaryProduct(ingredient);
   const enabled = isTrustedPurchaseEnabled(ingredient);
@@ -94,10 +123,11 @@ function renderManageCard(state, ingredient) {
   const productCount = (ingredient.products || []).length;
   const fastReady = ingredientHasFastPurchaseData(ingredient);
   const fastEnabled = isTrustedPurchaseEnabled(ingredient);
-  const productText = (ingredient.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit].filter(Boolean).join(" ")).join(" ");
+  const productText = (ingredient.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit, p.priceSourceLabel, p.priceSource].filter(Boolean).join(" ")).join(" ");
   const packaging = ingredient.packagingType || ingredient.products?.find(p => p.packagingType || p.packaging)?.packagingType || ingredient.products?.find(p => p.packaging)?.packaging || "sin envase";
   const packageInfo = latestPackageInfo(state, ingredient);
-  const searchText = [ingredient.name, family, ingredient.qty, ingredient.unit, packageInfo, ingredient.expiryDate || "sin fecha", ingredient.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", fastEnabled ? "compra rápida confianza" : "compra normal", productText].join(" ");
+  const priceInfo = latestPriceInfo(state, ingredient);
+  const searchText = [ingredient.name, family, ingredient.qty, ingredient.unit, packageInfo, priceInfo?.source, priceInfo?.price, ingredient.expiryDate || "sin fecha", ingredient.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", fastEnabled ? "compra rápida confianza" : "compra normal", productText].join(" ");
   return `
     <div class="item ingredient-item" data-ingredient-id="${escapeHtml(ingredient.id)}" data-search="${escapeHtml(searchText)}">
       <div class="item-title">
@@ -114,6 +144,7 @@ function renderManageCard(state, ingredient) {
         <span>Envase: ${escapeHtml(packaging)}</span>
         <span>Compra rápida: ${fastEnabled ? "activa" : "no"}${fastReady ? "" : " · incompleta"}</span>
       </div>
+      ${renderPriceInfo(state, ingredient)}
       ${renderFastPurchasePanel(ingredient)}
       <details>
         <summary>Ver nutrición activa</summary>
@@ -139,12 +170,14 @@ function renderShopCard(state, ingredient, item) {
         ? `Omitido en esta compra · Necesario originalmente: ${item.display.missing}`
         : `Faltan: ${item.display.missing} · Tengo: ${item.display.stock}`;
   const badgeClass = item.status === "partial" || item.status === "skipped" ? "warning" : "";
-  const searchText = [item.name, item.family, item.zone, item.status, statusLabel(item.status), statusText, item.display?.missing, item.display?.stock, item.display?.remaining, item.fastPurchase ? "compra rápida" : ""].join(" ");
+  const priceInfo = latestPriceInfo(state, ingredient);
+  const searchText = [item.name, item.family, item.zone, item.status, statusLabel(item.status), statusText, item.display?.missing, item.display?.stock, item.display?.remaining, item.fastPurchase ? "compra rápida" : "", priceInfo?.source, priceInfo?.price].join(" ");
   return `
     <article class="item shopping-item supermarket-item ${escapeHtml(item.status)}" data-search="${escapeHtml(searchText)}">
       <div>
         <div class="item-title"><strong>${icon} ${escapeHtml(item.name)}</strong><span class="badge ${badgeClass}">${escapeHtml(statusLabel(item.status))}</span></div>
         <p class="qty-line">${statusText}</p>
+        ${priceInfo ? `<p class="small muted">Precio guardado: ${formatMoney(priceInfo.price)} · ${escapeHtml(priceInfo.source || "manual")}</p>` : ""}
       </div>
       <details>
         <summary>Ver nutrición</summary>
