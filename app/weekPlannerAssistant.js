@@ -4,6 +4,7 @@ import { openModal, closeModal, showAlert } from "./render/ui.js";
 
 const ALL_MEMBERS = "__all_members__";
 let plannerTray = [];
+let plannerCombo = [];
 let plannerSettings = {
   mealId: "",
   memberId: ALL_MEMBERS,
@@ -14,11 +15,13 @@ let plannerSettings = {
 ensurePlannerStylesheet();
 
 function ensurePlannerStylesheet() {
-  if (document.querySelector('link[href="week-planner-assistant.css"]')) return;
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = "week-planner-assistant.css";
-  document.head.append(link);
+  for (const href of ["week-planner-assistant.css", "week-planner-tray.css"]) {
+    if (document.querySelector(`link[href="${href}"]`)) continue;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = href;
+    document.head.append(link);
+  }
 }
 
 function openWeekPlannerAssistant() {
@@ -37,7 +40,7 @@ function renderPlannerModal(state) {
       <div>
         <p class="eyebrow">Asistente</p>
         <h2>Planificar semana por propuestas</h2>
-        <p class="muted">Añade platos o combinaciones a una lista y luego rellena huecos de desayuno, comida o cena.</p>
+        <p class="muted">Construye platos o combinaciones, guárdalos en una lista y luego rellena desayuno, comida o cena.</p>
       </div>
       <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
     </header>
@@ -52,7 +55,7 @@ function renderPlannerModal(state) {
         </div>
 
         <div class="planner-section">
-          <h3>2. Contexto de la propuesta</h3>
+          <h3>2. Contexto</h3>
           <label>Tipo de comida
             <select name="mealId" required data-planner-setting>
               ${state.mealTypes.map(meal => `<option value="${escapeHtml(meal.id)}" ${meal.id === selectedMealId ? "selected" : ""}>${escapeHtml(meal.name)}</option>`).join("")}
@@ -86,18 +89,33 @@ function renderPlannerModal(state) {
       <section class="planner-section planner-dish-picker-section">
         <div class="section-title-row">
           <div>
-            <h3>4. Elige plato(s)</h3>
-            <p class="muted">Marca uno para una propuesta simple o varios para una combinación, por ejemplo salmón + puré.</p>
+            <h3>4. Construye una propuesta</h3>
+            <p class="muted">Pulsa “Sumar” en cada plato para crear una combinación. También puedes marcar varios y sumarlos juntos.</p>
           </div>
-          <button type="button" data-action="add-planner-menu">Añadir a la lista</button>
+          <button type="button" data-action="add-selected-to-planner-combo">Sumar selección</button>
         </div>
         ${state.dishes.length ? `<div class="planner-dish-list">${state.dishes.map(dish => renderDishChoice(state, dish)).join("")}</div>` : `<p class="muted">Todavía no hay recetas. Importa packs o crea platos antes de usar el asistente.</p>`}
+      </section>
+
+      <section class="planner-section planner-combo-section">
+        <div class="section-title-row">
+          <div>
+            <h3>5. Combinación en construcción</h3>
+            <p class="muted">Aquí sí se ve la combinación completa antes de guardarla.</p>
+          </div>
+          <span class="badge ${plannerCombo.length > 1 ? "success" : "warning"}">${plannerCombo.length} plato(s)</span>
+        </div>
+        ${renderCurrentCombo(state)}
+        <div class="actions wrap">
+          <button type="button" data-action="save-planner-combo">Guardar propuesta en la lista</button>
+          <button type="button" class="secondary" data-action="clear-planner-combo">Limpiar combinación</button>
+        </div>
       </section>
 
       <section class="planner-section planner-tray-section">
         <div class="section-title-row">
           <div>
-            <h3>5. Lista de propuestas</h3>
+            <h3>6. Lista de propuestas</h3>
             <p class="muted">Cuando tengas varias propuestas para ${escapeHtml(selectedMeal?.name || "esta comida")}, rellena los huecos.</p>
           </div>
           <span class="badge ${matchingCount >= 5 ? "success" : "warning"}">${matchingCount} para esta comida</span>
@@ -127,12 +145,30 @@ function renderDishChoice(state, dish) {
         <strong>${escapeHtml(dish.name)}</strong>
         <small>${escapeHtml([dish.category, ...(dish.tags || [])].filter(Boolean).join(" · ") || "Sin etiquetas")}</small>
       </span>
+      <button type="button" class="secondary" data-action="add-planner-dish" data-dish-id="${escapeHtml(dish.id)}">Sumar</button>
     </label>
   `;
 }
 
+function renderCurrentCombo(state) {
+  if (!plannerCombo.length) return `<p class="muted">Aún no hay platos en la combinación. Pulsa “Sumar” en salmón, puré, ensalada, etc.</p>`;
+  return `
+    <div class="planner-tray-list">
+      ${plannerCombo.map(dishId => {
+        const dish = state.dishes.find(item => item.id === dishId);
+        return `
+          <article class="planner-tray-item">
+            <div><strong>${escapeHtml(dish?.name || "Plato eliminado")}</strong></div>
+            <button type="button" class="ghost icon-button" data-action="remove-planner-dish-from-combo" data-dish-id="${escapeHtml(dishId)}" aria-label="Quitar plato de la combinación">×</button>
+          </article>
+        `;
+      }).join("")}
+    </div>
+  `;
+}
+
 function renderPlannerTray(state) {
-  if (!plannerTray.length) return `<p class="muted">Todavía no has añadido propuestas. Marca uno o varios platos y pulsa “Añadir a la lista”.</p>`;
+  if (!plannerTray.length) return `<p class="muted">Todavía no has añadido propuestas. Crea una combinación y guárdala en la lista.</p>`;
   return `
     <div class="planner-tray-list">
       ${plannerTray.map((item, index) => renderPlannerTrayItem(state, item, index)).join("")}
@@ -155,20 +191,34 @@ function renderPlannerTrayItem(state, item, index) {
   `;
 }
 
-function addSelectedProposal(form) {
+function addDishToCurrentCombo(dishId) {
+  if (!dishId) return;
+  plannerCombo = dedupeDishIds([...plannerCombo, dishId]);
+  openModal(renderPlannerModal(getState()));
+}
+
+function addSelectedToCurrentCombo(form) {
+  const selected = selectedVisibleDishIds(form);
+  if (!selected.length) throw new Error("Marca al menos un plato o usa el botón Sumar de cada tarjeta.");
+  plannerCombo = dedupeDishIds([...plannerCombo, ...selected]);
+  openModal(renderPlannerModal(getState()));
+}
+
+function saveCurrentCombo(form) {
   syncPlannerSettings(form);
-  const state = getState();
-  const selectedDishIds = selectedVisibleDishIds(form);
-  if (!selectedDishIds.length) throw new Error("Marca al menos un plato para añadir a la lista.");
+  const fallbackSelected = selectedVisibleDishIds(form);
+  const dishIds = dedupeDishIds(plannerCombo.length ? plannerCombo : fallbackSelected);
+  if (!dishIds.length) throw new Error("Añade al menos un plato a la combinación antes de guardarla.");
   plannerTray.push({
     id: `menu_${Date.now()}_${Math.random().toString(16).slice(2)}`,
     mealId: plannerSettings.mealId,
     memberId: plannerSettings.memberId,
-    dishIds: dedupeDishIds(selectedDishIds)
+    dishIds
   });
-  openModal(renderPlannerModal(state));
+  plannerCombo = [];
+  openModal(renderPlannerModal(getState()));
   const count = plannerTray.filter(item => item.mealId === plannerSettings.mealId).length;
-  showAlert(count >= 5 ? `Ya tienes ${count} propuestas para esta comida. Puedes rellenar huecos.` : "Propuesta añadida a la lista.");
+  showAlert(count >= 5 ? `Ya tienes ${count} propuestas para esta comida. Puedes rellenar huecos.` : "Propuesta guardada en la lista.");
 }
 
 function fillPlannerMeal(form) {
@@ -240,6 +290,16 @@ function clearPlannerTray() {
   showAlert("Lista de propuestas vaciada.");
 }
 
+function removeDishFromCombo(dishId) {
+  plannerCombo = plannerCombo.filter(item => item !== dishId);
+  openModal(renderPlannerModal(getState()));
+}
+
+function clearPlannerCombo() {
+  plannerCombo = [];
+  openModal(renderPlannerModal(getState()));
+}
+
 function dedupeDishIds(dishIds) {
   return [...new Set(dishIds.filter(Boolean))];
 }
@@ -299,7 +359,11 @@ document.addEventListener("click", event => {
   const form = actionButton.closest('form[data-form="week-planner-assistant"]');
   if (!form) return;
   try {
-    if (action === "add-planner-menu") addSelectedProposal(form);
+    if (action === "add-planner-dish") addDishToCurrentCombo(actionButton.dataset.dishId);
+    if (action === "add-selected-to-planner-combo") addSelectedToCurrentCombo(form);
+    if (action === "save-planner-combo" || action === "add-planner-menu") saveCurrentCombo(form);
+    if (action === "clear-planner-combo") clearPlannerCombo();
+    if (action === "remove-planner-dish-from-combo") removeDishFromCombo(actionButton.dataset.dishId);
     if (action === "fill-planner-meal") fillPlannerMeal(form);
     if (action === "remove-planner-menu") removePlannerMenu(actionButton.dataset.plannerMenuId);
     if (action === "clear-planner-tray") clearPlannerTray();
