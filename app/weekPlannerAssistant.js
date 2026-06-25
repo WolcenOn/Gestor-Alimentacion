@@ -26,7 +26,7 @@ function renderPlannerModal(state) {
       <div>
         <p class="eyebrow">Asistente</p>
         <h2>Planificar semana automáticamente</h2>
-        <p class="muted">Elige días, comida, miembros y recetas. El asistente las aplicará en rotación sobre la semana activa.</p>
+        <p class="muted">Elige días, comida, miembros y recetas. Puedes alternar platos o crear combinaciones como salmón + puré.</p>
       </div>
       <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
     </header>
@@ -41,7 +41,7 @@ function renderPlannerModal(state) {
         </div>
 
         <div class="planner-section">
-          <h3>2. Comida y miembro</h3>
+          <h3>2. Comida, persona y modo</h3>
           <label>Tipo de comida
             <select name="mealId" required>
               ${state.mealTypes.map(meal => `<option value="${escapeHtml(meal.id)}" ${meal.id === selectedMeal ? "selected" : ""}>${escapeHtml(meal.name)}</option>`).join("")}
@@ -53,10 +53,17 @@ function renderPlannerModal(state) {
               ${state.familyMembers.map(member => `<option value="${escapeHtml(member.id)}">${escapeHtml(member.name)}</option>`).join("")}
             </select>
           </label>
+          <label>Cómo usar los platos seleccionados
+            <select name="planningMode">
+              <option value="rotation">Plato único en rotación</option>
+              <option value="combo">Combinación fija en el mismo hueco</option>
+            </select>
+          </label>
           <label>Modo de aplicación
             <select name="applyMode">
               <option value="empty">Rellenar solo huecos vacíos</option>
               <option value="replace">Sustituir lo que haya</option>
+              <option value="append">Añadir a lo que ya haya</option>
             </select>
           </label>
         </div>
@@ -75,7 +82,7 @@ function renderPlannerModal(state) {
         <div class="section-title-row">
           <div>
             <h3>4. Recetas disponibles</h3>
-            <p class="muted">Marca varias para alternarlas durante los días seleccionados.</p>
+            <p class="muted">Marca una o varias. En combinación fija se guardan juntas en cada hueco elegido.</p>
           </div>
           <span class="badge">${state.dishes.length} receta(s)</span>
         </div>
@@ -84,7 +91,7 @@ function renderPlannerModal(state) {
 
       <section class="planner-preview-card">
         <strong>Resumen</strong>
-        <p class="muted">Semana: ${escapeHtml(week?.name || "Sin semana activa")}. Se asignará una receta por hueco seleccionado, rotando las recetas marcadas.</p>
+        <p class="muted">Semana: ${escapeHtml(week?.name || "Sin semana activa")}. En rotación se asigna 1 plato por hueco; en combinación se asignan todos los platos marcados juntos.</p>
       </section>
 
       <div class="actions">
@@ -115,6 +122,7 @@ function applyWeekPlanner(form) {
   const mealId = String(data.get("mealId") || "");
   const memberId = String(data.get("memberId") || "");
   const applyMode = String(data.get("applyMode") || "empty");
+  const planningMode = String(data.get("planningMode") || "rotation");
   const includeText = normalizeSearch(data.get("includeText"));
   const excludeText = normalizeSearch(data.get("excludeText"));
   const selectedDishIds = data.getAll("dishIds").map(String);
@@ -128,6 +136,7 @@ function applyWeekPlanner(form) {
   if (!days.length) throw new Error("Selecciona al menos un día.");
   if (!mealId) throw new Error("Selecciona una comida.");
   if (!matchingDishIds.length) throw new Error("Selecciona alguna receta que cumpla los filtros.");
+  if (planningMode === "combo" && matchingDishIds.length < 2) throw new Error("Para una combinación fija selecciona al menos dos platos.");
 
   const targetMembers = memberId === ALL_MEMBERS
     ? state.familyMembers.map(member => member.id)
@@ -142,9 +151,18 @@ function applyWeekPlanner(form) {
     for (const day of days) {
       for (const targetMemberId of targetMembers) {
         const slot = `${day}__${mealId}__${targetMemberId}`;
-        const hasPlanned = (week.plan[slot] || []).length > 0;
+        const current = week.plan[slot] || [];
+        const hasPlanned = current.length > 0;
         if (applyMode === "empty" && hasPlanned) continue;
-        week.plan[slot] = [matchingDishIds[cursor % matchingDishIds.length]];
+
+        const nextDishIds = planningMode === "combo"
+          ? matchingDishIds
+          : [matchingDishIds[cursor % matchingDishIds.length]];
+
+        week.plan[slot] = applyMode === "append"
+          ? dedupeDishIds([...current, ...nextDishIds])
+          : [...nextDishIds];
+
         cursor += 1;
         applied += 1;
       }
@@ -152,7 +170,12 @@ function applyWeekPlanner(form) {
   }, "week-planner-assistant");
 
   closeModal();
-  showAlert(applied ? `Planificación aplicada en ${applied} hueco(s).` : "No había huecos vacíos que rellenar con ese criterio.");
+  const modeLabel = planningMode === "combo" ? "combinación" : "planificación";
+  showAlert(applied ? `${capitalize(modeLabel)} aplicada en ${applied} hueco(s).` : "No había huecos vacíos que rellenar con ese criterio.");
+}
+
+function dedupeDishIds(dishIds) {
+  return [...new Set(dishIds.filter(Boolean))];
 }
 
 function updatePlannerFilters(form) {
@@ -163,7 +186,8 @@ function updatePlannerFilters(form) {
     const text = choice.dataset.plannerDishSearch || "";
     const show = (!includeText || text.includes(includeText)) && (!excludeText || !text.includes(excludeText));
     choice.hidden = !show;
-    if (!show) choice.querySelector('input[type="checkbox"]')?.checked && (choice.querySelector('input[type="checkbox"]').checked = false);
+    const checkbox = choice.querySelector('input[type="checkbox"]');
+    if (!show && checkbox) checkbox.checked = false;
     if (show) visible += 1;
   });
   const counter = form.querySelector("[data-planner-filter-count]");
