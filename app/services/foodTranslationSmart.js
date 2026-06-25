@@ -35,6 +35,7 @@ function extractPreparationPhrase(query) {
   let foodQuery = normalizeText(query);
   const preparations = [];
   for (const item of PREPARATION_PHRASES) {
+    item.pattern.lastIndex = 0;
     if (!item.pattern.test(foodQuery)) continue;
     item.pattern.lastIndex = 0;
     foodQuery = foodQuery.replace(item.pattern, " ");
