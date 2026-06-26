@@ -3,39 +3,39 @@ import { PACK_SOURCE } from "../services/packLoader.js";
 
 export function renderPacks(state) {
   return `
-    <div class="grid cols-2">
-      <article class="card">
+    <div class="grid cols-2 packs-page-grid">
+      <article class="card packs-card">
         <h2>Packs seguros</h2>
         <p class="muted">Origen bloqueado por seguridad. Los packs se normalizan a recetas de 1 ración y se previsualizan antes de instalar.</p>
-        <div class="item">
+        <div class="item pack-source-card">
           <strong>${PACK_SOURCE.owner}/${PACK_SOURCE.repo}</strong>
           <p class="qty-line">Branch: ${PACK_SOURCE.branch} · Ruta: ${PACK_SOURCE.basePath}/</p>
         </div>
         <label class="quick-search-label">Búsqueda rápida de packs remotos
-          <input type="search" class="quick-search" placeholder="Ej. verano, Huelva, vegano, andalucía..." data-search-target="#remotePackList .pack-file-item" data-empty-target="remotePackSearchEmpty">
+          <input type="search" class="quick-search" placeholder="Ej. desayuno, verano, Huelva, vegano..." data-search-target="#remotePackList .pack-file-item" data-empty-target="remotePackSearchEmpty">
         </label>
-        <div class="actions" style="margin-top:1rem">
+        <div class="actions wrap" style="margin-top:1rem">
           <button data-action="list-remote-packs">Buscar packs remotos</button>
           <label class="button secondary file-button">Importar pack local<input id="packFile" type="file" accept="application/json,.json" hidden></label>
         </div>
         <div id="remotePackSearchEmpty" class="search-empty muted" hidden>No hay packs remotos que coincidan con la búsqueda.</div>
-        <div id="remotePackList" class="list" style="margin-top:1rem"></div>
+        <div id="remotePackList" class="list pack-list" style="margin-top:1rem"></div>
       </article>
 
-      <article class="card">
+      <article class="card packs-card">
         <div class="section-title-row">
           <div>
             <h2>Packs instalados</h2>
-            <p class="muted">Busca los packs que ya has añadido al recetario.</p>
+            <p class="muted">Consulta qué recetas instaló cada pack y elimina packs con advertencia si ya no los quieres.</p>
           </div>
           <span class="badge">${state.dishPacks.length} packs</span>
         </div>
         <label class="quick-search-label">Búsqueda rápida de packs instalados
-          <input type="search" class="quick-search" placeholder="Ej. temporada, vegano, cenas..." data-search-target=".installed-pack-list .installed-pack-item" data-empty-target="installedPackSearchEmpty">
+          <input type="search" class="quick-search" placeholder="Ej. desayuno, temporada, vegano..." data-search-target=".installed-pack-list .installed-pack-item" data-empty-target="installedPackSearchEmpty">
         </label>
         <div id="installedPackSearchEmpty" class="search-empty muted" hidden>No hay packs instalados que coincidan con la búsqueda.</div>
-        <div class="list installed-pack-list">
-          ${state.dishPacks.length ? state.dishPacks.map(p => `<div class="item installed-pack-item" data-search="${escapeHtml([p.name, p.description, p.tags?.join(" ")].join(" "))}"><strong>${escapeHtml(p.name)}</strong><p class="qty-line">${escapeHtml(p.description || "")}</p></div>`).join("") : `<p class="muted">No hay packs instalados.</p>`}
+        <div class="list installed-pack-list pack-list">
+          ${state.dishPacks.length ? state.dishPacks.map(pack => renderInstalledPack(state, pack)).join("") : `<p class="muted">No hay packs instalados.</p>`}
         </div>
       </article>
     </div>
@@ -65,6 +65,77 @@ export function renderPacks(state) {
         <div class="actions"><button class="secondary" type="button" data-action="copy-pack-prompt">Copiar prompt</button></div>
       </div>
     </details>
+  `;
+}
+
+function renderInstalledPack(state, pack) {
+  const dishes = state.dishes.filter(dish => dish.packId === pack.id);
+  const plannedCount = countPackPlanningReferences(state, dishes.map(dish => dish.id));
+  const searchText = [pack.name, pack.description, pack.tags?.join(" "), dishes.map(d => d.name).join(" ")].join(" ");
+  return `
+    <article class="item installed-pack-item pack-installed-card" data-search="${escapeHtml(searchText)}">
+      <div class="item-title pack-card-title">
+        <div class="pack-title-text">
+          <strong>${escapeHtml(pack.name)}</strong>
+          <p class="qty-line">${escapeHtml(pack.description || "")}</p>
+          <p class="small muted">${dishes.length} receta(s) instaladas${plannedCount ? ` · ${plannedCount} uso(s) en planificación` : ""}</p>
+        </div>
+        <button type="button" class="danger" data-action="confirm-delete-pack" data-pack-id="${escapeHtml(pack.id)}">Eliminar pack</button>
+      </div>
+      <details>
+        <summary>Ver recetas instaladas del pack</summary>
+        ${dishes.length ? `<ul class="pack-installed-dish-list">${dishes.map(dish => `<li><strong>${escapeHtml(dish.name)}</strong><span>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</span></li>`).join("")}</ul>` : `<p class="muted">Este pack no tiene recetas instaladas o ya fueron eliminadas.</p>`}
+      </details>
+    </article>
+  `;
+}
+
+function countPackPlanningReferences(state, dishIds) {
+  const ids = new Set(dishIds);
+  let count = 0;
+  for (const week of state.weeks || []) {
+    for (const planned of Object.values(week.plan || {})) {
+      for (const dishId of planned || []) if (ids.has(dishId)) count += 1;
+    }
+  }
+  return count;
+}
+
+export function renderPackDeleteConfirmation(state, packId) {
+  const pack = state.dishPacks.find(item => item.id === packId);
+  if (!pack) return `<header><h2>Pack no encontrado</h2><button class="secondary" data-action="close-modal">×</button></header>`;
+  const dishes = state.dishes.filter(dish => dish.packId === pack.id);
+  const dishIds = new Set(dishes.map(dish => dish.id));
+  const plannedCount = countPackPlanningReferences(state, dishes.map(dish => dish.id));
+  const weeksWithPack = (state.weeks || []).filter(week => Object.values(week.plan || {}).some(planned => (planned || []).some(dishId => dishIds.has(dishId))));
+  return `
+    <header>
+      <div>
+        <p class="eyebrow">Eliminar pack instalado</p>
+        <h2>${escapeHtml(pack.name)}</h2>
+        <p class="muted">Esta acción elimina el pack de tu recetario local.</p>
+      </div>
+      <button class="secondary" data-action="close-modal">×</button>
+    </header>
+    <div class="item danger-soft">
+      <strong>Advertencia</strong>
+      <p class="qty-line">Se eliminarán ${dishes.length} receta(s) asociadas al pack. ${plannedCount ? `También hay ${plannedCount} referencia(s) en planificación semanal.` : "No hay recetas de este pack usadas en planificación."}</p>
+    </div>
+    ${weeksWithPack.length ? `<div class="item"><strong>Semanas afectadas</strong><ul>${weeksWithPack.map(week => `<li>${escapeHtml(week.name || week.id)}</li>`).join("")}</ul></div>` : ""}
+    <div class="item">
+      <strong>Recetas que se eliminarán</strong>
+      ${dishes.length ? `<ul>${dishes.map(dish => `<li>${escapeHtml(dish.name)}</li>`).join("")}</ul>` : `<p class="muted">No quedan recetas asociadas.</p>`}
+    </div>
+    <form data-form="delete-installed-pack" data-pack-id="${escapeHtml(pack.id)}">
+      <label class="check-row">
+        <input type="checkbox" name="removePlanning" value="true" ${plannedCount ? "checked" : ""}>
+        <span><strong>Eliminar también estas recetas de la planificación</strong><small>Quita las referencias de Semana para evitar platos eliminados en huecos planificados.</small></span>
+      </label>
+      <div class="actions">
+        <button class="danger" name="confirmDelete" value="yes">Sí, eliminar pack</button>
+        <button type="button" class="secondary" data-action="close-modal">Cancelar</button>
+      </div>
+    </form>
   `;
 }
 
