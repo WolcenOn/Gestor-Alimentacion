@@ -1,7 +1,7 @@
 import { getState, updateState } from "./store.js";
 import { readFileAsText, safeJsonParse } from "./utils.js";
 import { showAlert, openModal, closeModal, formToObject, getSubmitterValue } from "./render/ui.js";
-import { renderPackPreview } from "./render/packs.js";
+import { renderPackPreview, renderPackDeleteConfirmation } from "./render/packs.js";
 import { listRemotePacks, loadRemotePack, mergePackIntoState, normalizePack, buildPackPrompt } from "./services/packLoader.js";
 import { validatePack } from "./validation.js";
 
@@ -54,6 +54,11 @@ document.addEventListener("click", async event => {
       stop(event);
       await copyPackPrompt();
     }
+
+    if (action === "confirm-delete-pack") {
+      stop(event);
+      openDeletePackModal(button.dataset.packId || "");
+    }
   } catch (error) {
     console.error(error);
     showAlert(error.message || "No se pudo completar la acción de packs.", "error");
@@ -86,6 +91,11 @@ document.addEventListener("submit", event => {
     if (form.dataset.form === "pack-prompt") {
       stop(event);
       generatePackPrompt(form);
+    }
+
+    if (form.dataset.form === "delete-installed-pack") {
+      stop(event);
+      deleteInstalledPack(form);
     }
   } catch (error) {
     console.error(error);
@@ -144,6 +154,47 @@ function installPreviewedPack(form, event) {
   pendingPackPreview = null;
   closeModal();
   showAlert(`Pack ${installedName} instalado con ${total} receta(s).`);
+}
+
+function openDeletePackModal(packId) {
+  if (!packId) throw new Error("Pack no encontrado.");
+  openModal(renderPackDeleteConfirmation(getState(), packId));
+}
+
+function deleteInstalledPack(form) {
+  const packId = form.dataset.packId || "";
+  const removePlanning = Boolean(form.elements.removePlanning?.checked);
+  let deletedRecipes = 0;
+  let removedPlanning = 0;
+  let packName = "pack";
+
+  updateState(draft => {
+    const pack = draft.dishPacks.find(item => item.id === packId);
+    if (!pack) throw new Error("Pack no encontrado.");
+    packName = pack.name;
+    const dishIds = new Set(draft.dishes.filter(dish => dish.packId === packId).map(dish => dish.id));
+    deletedRecipes = dishIds.size;
+
+    if (removePlanning) {
+      for (const week of draft.weeks || []) {
+        for (const [slot, planned] of Object.entries(week.plan || {})) {
+          const next = (planned || []).filter(dishId => {
+            const remove = dishIds.has(dishId);
+            if (remove) removedPlanning += 1;
+            return !remove;
+          });
+          if (next.length) week.plan[slot] = next;
+          else delete week.plan[slot];
+        }
+      }
+    }
+
+    draft.dishes = draft.dishes.filter(dish => dish.packId !== packId);
+    draft.dishPacks = draft.dishPacks.filter(item => item.id !== packId);
+  }, removePlanning ? "pack-delete-with-planning" : "pack-delete-recipes-only");
+
+  closeModal();
+  showAlert(`${packName} eliminado: ${deletedRecipes} receta(s) quitadas${removePlanning ? ` y ${removedPlanning} referencia(s) de planificación borradas` : ""}.`);
 }
 
 function generatePackPrompt(form) {
