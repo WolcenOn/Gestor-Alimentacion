@@ -1,4 +1,4 @@
-import { translateFoodQueryToEnglish } from "./services/foodTranslation.js";
+import { translateFoodQueryToEnglish } from "./services/foodTranslationSmart.js";
 
 function translatedInfoText(result) {
   if (!result.query) return "Escribe un alimento en español o inglés.";
@@ -22,7 +22,8 @@ function ensureInfoBox(input) {
 function previewTranslation() {
   const input = document.getElementById("usdaSearchQuery");
   if (!input) return null;
-  const result = translateFoodQueryToEnglish(input.value || "");
+  const original = input.dataset.originalQuery || input.value || "";
+  const result = translateFoodQueryToEnglish(original);
   const box = ensureInfoBox(input);
   if (box) box.textContent = translatedInfoText(result);
   return result;
@@ -31,17 +32,21 @@ function previewTranslation() {
 function applyTranslationBeforeSearch() {
   const input = document.getElementById("usdaSearchQuery");
   if (!input) return;
-  const result = translateFoodQueryToEnglish(input.value || "");
+  const original = input.dataset.originalQuery || input.value || "";
+  const result = translateFoodQueryToEnglish(original);
   const box = ensureInfoBox(input);
   if (box) box.textContent = translatedInfoText(result);
   if (result.query && result.translated) {
-    input.dataset.originalQuery = input.value;
+    input.dataset.originalQuery = original;
     input.value = result.query;
   }
 }
 
 document.addEventListener("input", event => {
-  if (event.target?.id === "usdaSearchQuery") previewTranslation();
+  if (event.target?.id === "usdaSearchQuery") {
+    event.target.dataset.originalQuery = event.target.value || "";
+    previewTranslation();
+  }
 }, true);
 
 document.addEventListener("click", event => {
