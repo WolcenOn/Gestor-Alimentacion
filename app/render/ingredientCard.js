@@ -63,26 +63,24 @@ function latestPriceInfo(state, ingredient) {
     .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
   const source = lots[0] || primaryProduct(ingredient);
   if (!Number(source?.price || 0)) return null;
+  const rawSource = String(source.priceSourceLabel || source.priceSource || source.source || "manual");
+  const isOpenPrices = rawSource.toLowerCase().includes("open-prices") || rawSource.toLowerCase().includes("open prices");
   return {
     price: Number(source.price),
-    source: source.priceSourceLabel || source.priceSource || source.source || "manual",
-    date: source.priceDate || "",
-    store: source.priceStoreName || "",
-    url: source.openPricesUrl || "",
-    barcode: source.barcode || primaryProduct(ingredient).barcode || ""
+    source: isOpenPrices ? "manual/local" : rawSource,
+    date: isOpenPrices ? "" : source.priceDate || "",
+    store: isOpenPrices ? "" : source.priceStoreName || ""
   };
 }
 
 function renderPriceInfo(state, ingredient) {
   const info = latestPriceInfo(state, ingredient);
-  const barcode = info?.barcode || primaryProduct(ingredient).barcode || "";
-  if (!info && !barcode) return "";
-  const details = info ? [info.source, info.store, info.date].filter(Boolean).join(" · ") : "sin precio guardado";
+  if (!info) return "";
+  const details = [info.source, info.store, info.date].filter(Boolean).join(" · ");
   return `
     <div class="item small price-source-card">
-      <strong>Precio ${info ? formatMoney(info.price) : "pendiente"}</strong>
-      <p class="qty-line">${escapeHtml(details)}${info?.source === "Open Prices" || info?.source === "open-prices" ? " · precio sugerido" : ""}</p>
-      ${barcode ? `<button type="button" class="secondary" data-action="open-open-prices" data-barcode="${escapeHtml(barcode)}">Actualizar en Open Prices</button>` : ""}
+      <strong>Precio ${formatMoney(info.price)}</strong>
+      <p class="qty-line">${escapeHtml(details || "manual/local")}</p>
     </div>`;
 }
 
@@ -123,7 +121,7 @@ function renderManageCard(state, ingredient) {
   const productCount = (ingredient.products || []).length;
   const fastReady = ingredientHasFastPurchaseData(ingredient);
   const fastEnabled = isTrustedPurchaseEnabled(ingredient);
-  const productText = (ingredient.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit, p.priceSourceLabel, p.priceSource].filter(Boolean).join(" ")).join(" ");
+  const productText = (ingredient.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit].filter(Boolean).join(" ")).join(" ");
   const packaging = ingredient.packagingType || ingredient.products?.find(p => p.packagingType || p.packaging)?.packagingType || ingredient.products?.find(p => p.packaging)?.packaging || "sin envase";
   const packageInfo = latestPackageInfo(state, ingredient);
   const priceInfo = latestPriceInfo(state, ingredient);
