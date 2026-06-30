@@ -1,10 +1,13 @@
-const CACHE_VERSION = "gestor-menu-v1.0.16";
+const CACHE_VERSION = "gestor-menu-v1.0.17";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
   "./side-menu.css",
   "./dashboard-compact.css",
+  "./dashboard-today.css",
+  "./week-accessibility.css",
+  "./week-planner-assistant.css",
   "./manifest.webmanifest",
   "./app/config.js",
   "./app/apiClient.js",
@@ -20,6 +23,9 @@ const APP_SHELL = [
   "./app/detailCards.js",
   "./app/dishPickerEnhancements.js",
   "./app/foodTranslationEnhancements.js",
+  "./app/smartFoodTranslationEnhancements.js",
+  "./app/weekPlannerAssistant.js",
+  "./app/calendarNavigationEnhancements.js",
   "./app/services/foodTranslation.js",
   "./app/services/usdaFoodData.js",
   "./app/nutritionBatchEnhancements.js",
