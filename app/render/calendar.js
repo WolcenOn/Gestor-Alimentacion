@@ -14,6 +14,7 @@ export function renderCalendar(state) {
         <p class="muted">Cambia entre vista mensual para navegar y vista semanal para editar con detalle.</p>
       </div>
       <div class="actions toolbar-actions">
+        <button class="secondary" data-action="open-current-week">Semana actual</button>
         <button class="${view === "week" ? "" : "secondary"}" data-action="calendar-view" data-calendar-view="week">Semana</button>
         <button class="${view === "month" ? "" : "secondary"}" data-action="calendar-view" data-calendar-view="month">Mes</button>
       </div>
@@ -23,7 +24,7 @@ export function renderCalendar(state) {
 }
 
 function renderWeekView(state, week) {
-  if (!week) return `<article class="card"><h2>No hay semana activa</h2><button data-action="new-week">Crear semana</button></article>`;
+  if (!week) return `<article class="card"><h2>No hay semana activa</h2><button data-action="open-current-week">Crear semana actual</button></article>`;
   return `
     <div class="card calendar-week-toolbar">
       <div>
@@ -32,6 +33,7 @@ function renderWeekView(state, week) {
       </div>
       <div class="actions toolbar-actions">
         <button data-action="open-week-planner-assistant">Asistente</button>
+        <button class="secondary" data-action="open-current-week">Semana actual</button>
         <button class="secondary" data-action="new-week">Nueva</button>
         <button class="secondary" data-action="duplicate-week">Duplicar</button>
         <button class="secondary" data-action="clear-week">Limpiar</button>
@@ -65,7 +67,7 @@ function renderMonthView(state, monthKey) {
         </div>
         <div class="actions toolbar-actions">
           <button class="secondary" data-action="calendar-month" data-month="${escapeHtml(addMonths(monthKey, -1))}">← Mes anterior</button>
-          <button class="secondary" data-action="calendar-month" data-month="${escapeHtml(getMonthKey())}">Hoy</button>
+          <button class="secondary" data-action="open-current-week">Semana actual</button>
           <button class="secondary" data-action="calendar-month" data-month="${escapeHtml(addMonths(monthKey, 1))}">Mes siguiente →</button>
         </div>
       </div>
