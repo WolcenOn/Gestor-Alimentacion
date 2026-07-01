@@ -28,6 +28,7 @@ import { formToObject, showAlert } from "./render/ui.js";
 
 const USDA_SESSION_KEY = "gestorMenuSemanal.usdaApiKey.session";
 const JOIN_SESSION_KEY = "gestorMenuSemanal.pendingHouseholdJoin.v1";
+const SHOPPING_FILTER_KEY = "gestorMenuSemanal.shoppingStatusFilter.v1";
 
 function guarded(fn) {
   return async (...args) => {
@@ -39,6 +40,11 @@ function guarded(fn) {
 function stop(event) {
   event.preventDefault();
   event.stopImmediatePropagation();
+}
+
+function setShoppingFilter(filter) {
+  localStorage.setItem(SHOPPING_FILTER_KEY, filter || "open");
+  document.querySelector('[data-tab="shopping"]')?.click();
 }
 
 function saveUsdaSettings(form) {
@@ -107,6 +113,7 @@ document.addEventListener("click", guarded(async event => {
   if (!button) return;
   const action = button.dataset.action;
 
+  if (action === "set-shopping-filter") { stop(event); setShoppingFilter(button.dataset.shoppingFilter); }
   if (action === "accept-pending-household-join") { stop(event); await acceptPendingJoin(); }
   if (action === "new-week") { stop(event); newWeek(); }
   if (action === "duplicate-week") { stop(event); duplicateWeek(); }
