@@ -1,4 +1,4 @@
-const CACHE_VERSION = "gestor-menu-v1.0.23";
+const CACHE_VERSION = "gestor-menu-v1.0.24";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -121,7 +121,7 @@ async function staleWhileRevalidate(request) {
   const cached = await cache.match(request);
   const network = fetch(request)
     .then(response => {
-      if (response.ok) cache.put(request.clone(), response.clone());
+      if (response.ok) cache.put(request, response.clone());
       return response;
     })
     .catch(() => cached);
