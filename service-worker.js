@@ -1,4 +1,4 @@
-const CACHE_VERSION = "gestor-menu-v1.0.21";
+const CACHE_VERSION = "gestor-menu-v1.0.22";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -27,6 +27,7 @@ const APP_SHELL = [
   "./app/weekPlannerAssistant.js",
   "./app/calendarNavigationEnhancements.js",
   "./app/purchaseScanPriceEnhancements.js",
+  "./app/shoppingFilterStyles.js",
   "./app/services/foodTranslation.js",
   "./app/services/usdaFoodData.js",
   "./app/nutritionBatchEnhancements.js",
