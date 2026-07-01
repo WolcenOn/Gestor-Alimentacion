@@ -1,7 +1,10 @@
-import { getState, updateState } from "./store.js";
+import { getState, subscribe, updateState } from "./store.js";
 import { withMeta } from "./models.js";
 import { findWeekByStartDate, getWeekRange, parseIsoDate } from "./state/calendarPeriods.js";
 import { showAlert } from "./render/ui.js";
+
+const AUTO_SYNC_REASONS = new Set(["cloud-pull", "import", "reset", "load", "calendar-autofix"]);
+let syncingCurrentWeek = false;
 
 function stop(event) {
   event.preventDefault();
@@ -71,15 +74,21 @@ function createCalendarWeek(startDate) {
   showAlert("Semana creada y abierta.");
 }
 
-function openCurrentWeek({ notify = false } = {}) {
+function openCurrentWeek({ notify = false, reason = "calendar-current-week" } = {}) {
   const range = getWeekRange();
   let changed = false;
 
-  updateState(draft => {
-    const week = ensureWeekForRange(draft, range);
-    changed = draft.activeWeekId !== week.id || draft.settings?.calendarMonth !== range.startDate.slice(0, 7);
-    applyActiveWeek(draft, week, { view: draft.settings?.calendarView || "week" });
-  }, "calendar-current-week");
+  syncingCurrentWeek = true;
+  try {
+    updateState(draft => {
+      const week = ensureWeekForRange(draft, range);
+      changed = draft.activeWeekId !== week.id || draft.settings?.calendarMonth !== range.startDate.slice(0, 7);
+      applyActiveWeek(draft, week, { view: draft.settings?.calendarView || "week" });
+      draft.settings.currentWeekAutoSelectedAt = new Date().toISOString();
+    }, reason);
+  } finally {
+    syncingCurrentWeek = false;
+  }
 
   if (notify && changed) showAlert("Semana actual abierta.");
 }
@@ -91,10 +100,17 @@ function shouldAutoOpenCurrentWeek(state) {
   return activeWeek.startDate !== currentRange.startDate;
 }
 
-function syncCurrentWeekOnLoad() {
+function syncCurrentWeek({ reason = "calendar-autofix" } = {}) {
+  if (syncingCurrentWeek) return;
   const state = getState();
   if (!shouldAutoOpenCurrentWeek(state)) return;
-  openCurrentWeek();
+  openCurrentWeek({ reason });
+}
+
+function syncCurrentWeekSoon(reason = "calendar-autofix") {
+  window.setTimeout(() => syncCurrentWeek({ reason }), 0);
+  window.setTimeout(() => syncCurrentWeek({ reason }), 900);
+  window.setTimeout(() => syncCurrentWeek({ reason }), 2500);
 }
 
 document.addEventListener("click", event => {
@@ -124,8 +140,15 @@ document.addEventListener("click", event => {
   }
 }, true);
 
-queueMicrotask(syncCurrentWeekOnLoad);
-window.addEventListener("focus", syncCurrentWeekOnLoad);
+subscribe((_, reason) => {
+  if (syncingCurrentWeek) return;
+  if (AUTO_SYNC_REASONS.has(reason)) syncCurrentWeekSoon(reason === "cloud-pull" ? "calendar-autofix-after-cloud" : "calendar-autofix");
+});
+
+syncCurrentWeekSoon("calendar-autofix-startup");
+window.addEventListener("load", () => syncCurrentWeekSoon("calendar-autofix-load"));
+window.addEventListener("focus", () => syncCurrentWeekSoon("calendar-autofix-focus"));
+window.addEventListener("online", () => syncCurrentWeekSoon("calendar-autofix-online"));
 
 window.GestorCalendarNavigation = {
   getState,
@@ -134,5 +157,5 @@ window.GestorCalendarNavigation = {
   selectCalendarWeek,
   createCalendarWeek,
   openCurrentWeek,
-  syncCurrentWeekOnLoad
+  syncCurrentWeek
 };
