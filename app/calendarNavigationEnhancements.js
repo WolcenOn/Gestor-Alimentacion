@@ -8,6 +8,30 @@ function stop(event) {
   event.stopImmediatePropagation();
 }
 
+function ensureWeekForRange(draft, range) {
+  const existingWeek = findWeekByStartDate(draft.weeks, range.startDate);
+  if (existingWeek) return existingWeek;
+
+  const week = withMeta({
+    id: range.id,
+    name: range.name,
+    startDate: range.startDate,
+    endDate: range.endDate,
+    isTypical: false,
+    plan: {},
+    ingredientPlan: {}
+  }, "week");
+  draft.weeks.push(week);
+  return week;
+}
+
+function applyActiveWeek(draft, week, { view = "week" } = {}) {
+  draft.activeWeekId = week.id;
+  draft.settings ||= {};
+  draft.settings.calendarView = view;
+  if (week.startDate) draft.settings.calendarMonth = week.startDate.slice(0, 7);
+}
+
 function setCalendarView(view) {
   updateState(draft => {
     draft.settings ||= {};
@@ -30,10 +54,7 @@ function selectCalendarWeek(weekId) {
   updateState(draft => {
     const week = draft.weeks.find(item => item.id === weekId);
     if (!week) throw new Error("No se encontró esa semana.");
-    draft.activeWeekId = week.id;
-    draft.settings ||= {};
-    draft.settings.calendarView = "week";
-    if (week.startDate) draft.settings.calendarMonth = week.startDate.slice(0, 7);
+    applyActiveWeek(draft, week);
   }, "calendar-week-select");
   showAlert("Semana abierta.");
 }
@@ -44,27 +65,36 @@ function createCalendarWeek(startDate) {
   const range = getWeekRange(date);
 
   updateState(draft => {
-    const existingWeek = findWeekByStartDate(draft.weeks, range.startDate);
-    if (existingWeek) {
-      draft.activeWeekId = existingWeek.id;
-    } else {
-      const week = withMeta({
-        id: range.id,
-        name: range.name,
-        startDate: range.startDate,
-        endDate: range.endDate,
-        isTypical: false,
-        plan: {},
-        ingredientPlan: {}
-      }, "week");
-      draft.weeks.push(week);
-      draft.activeWeekId = week.id;
-    }
-    draft.settings ||= {};
-    draft.settings.calendarView = "week";
-    draft.settings.calendarMonth = range.startDate.slice(0, 7);
+    const week = ensureWeekForRange(draft, range);
+    applyActiveWeek(draft, week);
   }, "calendar-week-create");
   showAlert("Semana creada y abierta.");
+}
+
+function openCurrentWeek({ notify = false } = {}) {
+  const range = getWeekRange();
+  let changed = false;
+
+  updateState(draft => {
+    const week = ensureWeekForRange(draft, range);
+    changed = draft.activeWeekId !== week.id || draft.settings?.calendarMonth !== range.startDate.slice(0, 7);
+    applyActiveWeek(draft, week, { view: draft.settings?.calendarView || "week" });
+  }, "calendar-current-week");
+
+  if (notify && changed) showAlert("Semana actual abierta.");
+}
+
+function shouldAutoOpenCurrentWeek(state) {
+  const currentRange = getWeekRange();
+  const activeWeek = state.weeks.find(week => week.id === state.activeWeekId);
+  if (!activeWeek) return true;
+  return activeWeek.startDate !== currentRange.startDate;
+}
+
+function syncCurrentWeekOnLoad() {
+  const state = getState();
+  if (!shouldAutoOpenCurrentWeek(state)) return;
+  openCurrentWeek();
 }
 
 document.addEventListener("click", event => {
@@ -88,12 +118,21 @@ document.addEventListener("click", event => {
     stop(event);
     createCalendarWeek(button.dataset.startDate);
   }
+  if (action === "open-current-week") {
+    stop(event);
+    openCurrentWeek({ notify: true });
+  }
 }, true);
+
+queueMicrotask(syncCurrentWeekOnLoad);
+window.addEventListener("focus", syncCurrentWeekOnLoad);
 
 window.GestorCalendarNavigation = {
   getState,
   setCalendarView,
   setCalendarMonth,
   selectCalendarWeek,
-  createCalendarWeek
+  createCalendarWeek,
+  openCurrentWeek,
+  syncCurrentWeekOnLoad
 };
