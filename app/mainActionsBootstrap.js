@@ -1,5 +1,6 @@
 import "./weekPlannerAssistant.js";
 import "./calendarNavigationEnhancements.js";
+import "./purchaseScanPriceEnhancements.js";
 import "./smartFoodTranslationEnhancements.js";
 import {
   newWeek,
