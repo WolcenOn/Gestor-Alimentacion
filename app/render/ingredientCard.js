@@ -161,30 +161,29 @@ function renderShopCard(state, ingredient, item) {
   const icon = item.status === "done" ? "✓" : item.status === "partial" ? "◐" : item.status === "skipped" ? "–" : "☐";
   const fastIcon = item.fastPurchase ? "⚡ " : "";
   const statusText = item.status === "done"
-    ? "Comprado completo"
+    ? "Completado"
     : item.status === "partial"
-      ? `Necesario: ${item.display.missing} · Comprado: ${item.display.purchased} · Falta: ${item.display.remaining}`
+      ? `Falta ${item.display.remaining} · comprado ${item.display.purchased}`
       : item.status === "skipped"
-        ? `Omitido en esta compra · Necesario originalmente: ${item.display.missing}`
-        : `Faltan: ${item.display.missing} · Tengo: ${item.display.stock}`;
-  const badgeClass = item.status === "partial" || item.status === "skipped" ? "warning" : "";
+        ? `No comprar · ${item.display.missing}`
+        : `Falta ${item.display.missing}`;
+  const badgeClass = item.status === "done" ? "success" : item.status === "partial" || item.status === "skipped" ? "warning" : "";
   const priceInfo = latestPriceInfo(state, ingredient);
+  const priceText = priceInfo ? ` · ${formatMoney(priceInfo.price)}` : "";
   const searchText = [item.name, item.family, item.zone, item.status, statusLabel(item.status), statusText, item.display?.missing, item.display?.stock, item.display?.remaining, item.fastPurchase ? "compra rápida" : "", priceInfo?.source, priceInfo?.price].join(" ");
   return `
-    <article class="item shopping-item supermarket-item ${escapeHtml(item.status)}" data-search="${escapeHtml(searchText)}">
-      <div>
-        <div class="item-title"><strong>${icon} ${escapeHtml(item.name)}</strong><span class="badge ${badgeClass}">${escapeHtml(statusLabel(item.status))}</span></div>
-        <p class="qty-line">${statusText}</p>
-        ${priceInfo ? `<p class="small muted">Precio guardado: ${formatMoney(priceInfo.price)} · ${escapeHtml(priceInfo.source || "manual")}</p>` : ""}
+    <article class="item shopping-item supermarket-item compact-shopping-item ${escapeHtml(item.status)}" data-search="${escapeHtml(searchText)}">
+      <div class="compact-shopping-main">
+        <div class="item-title compact-shopping-title">
+          <strong>${icon} ${escapeHtml(item.name)}</strong>
+          <span class="badge ${badgeClass}">${escapeHtml(statusLabel(item.status))}</span>
+        </div>
+        <p class="qty-line">${escapeHtml(statusText)}${priceText}</p>
       </div>
-      <details>
-        <summary>Ver nutrición</summary>
-        ${renderNutritionDetails(state, ingredient)}
-      </details>
-      <div class="row-actions no-print supermarket-actions">
+      <div class="row-actions no-print supermarket-actions compact-shopping-actions">
         ${item.status !== "done" && item.status !== "skipped" ? `
           <button data-action="scan-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Escanear</button>
-          <button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Añadir manual</button>
+          <button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">Manual</button>
           <button class="ghost" data-action="skip-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">No comprar</button>` : ""}
         ${item.status === "done" ? `<button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Añadir más</button>` : ""}
         ${item.status === "skipped" ? `<button class="secondary" data-action="reopen-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">Reactivar</button>` : ""}
