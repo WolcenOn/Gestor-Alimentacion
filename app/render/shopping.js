@@ -3,19 +3,34 @@ import { escapeHtml } from "../utils.js";
 import { isTrustedPurchaseEnabled } from "../fastPurchase.js";
 import { renderIngredientCard } from "./ingredientCard.js";
 
+const SHOPPING_FILTER_KEY = "gestorMenuSemanal.shoppingStatusFilter.v1";
+const FILTERS = [
+  { id: "open", label: "Por comprar", statuses: ["pending", "partial"] },
+  { id: "pending", label: "Pendientes", statuses: ["pending"] },
+  { id: "partial", label: "Parciales", statuses: ["partial"] },
+  { id: "done", label: "Comprados", statuses: ["done"] },
+  { id: "skipped", label: "No comprar", statuses: ["skipped"] },
+  { id: "all", label: "Todo", statuses: ["pending", "partial", "done", "skipped"] }
+];
+
 export function renderShopping(state) {
   const items = computeShoppingListWithProgress(state);
-  const pendingItems = items.filter(i => ["pending", "partial"].includes(i.status) && i.remainingQty > 0);
+  const activeFilter = getActiveShoppingFilter();
+  const filteredItems = filterShoppingItems(items, activeFilter);
+  const pendingItems = items.filter(i => i.status === "pending" && i.remainingQty > 0);
+  const partialItems = items.filter(i => i.status === "partial" && i.remainingQty > 0);
+  const openItems = items.filter(i => ["pending", "partial"].includes(i.status) && i.remainingQty > 0);
   const doneItems = items.filter(i => i.status === "done");
   const skippedItems = items.filter(i => i.status === "skipped");
-  const groups = groupShoppingItems(state, items);
+  const groups = groupShoppingItems(state, filteredItems);
+  const activeFilterLabel = FILTERS.find(filter => filter.id === activeFilter)?.label || "Por comprar";
 
   return `
     <div class="card-header">
       <div>
         <p class="eyebrow">Modo supermercado</p>
         <h2>Lista de la compra</h2>
-        <p class="muted">Calculada automáticamente: recetas planificadas - stock disponible - compras ya registradas. Agrupada por zonas para comprar más rápido.</p>
+        <p class="muted">Calculada automáticamente: recetas planificadas - stock disponible - compras ya registradas. Filtra por estado para ver solo lo que queda por comprar.</p>
       </div>
       <div class="actions">
         <button class="secondary" data-action="share-shopping">Compartir texto</button>
@@ -24,28 +39,67 @@ export function renderShopping(state) {
     </div>
 
     <section class="grid cols-3 shopping-summary">
-      <article class="card"><h3>Pendiente</h3><p class="metric">${pendingItems.length}</p><p class="muted">Productos por comprar o completar.</p></article>
-      <article class="card"><h3>Comprado</h3><p class="metric">${doneItems.length}</p><p class="muted">Ya cubiertos para esta semana.</p></article>
-      <article class="card"><h3>No comprar</h3><p class="metric">${skippedItems.length}</p><p class="muted">Omitidos solo en esta compra.</p></article>
+      <article class="card"><h3>Por comprar</h3><p class="metric">${openItems.length}</p><p class="muted">Pendientes + parciales.</p></article>
+      <article class="card"><h3>Pendientes</h3><p class="metric">${pendingItems.length}</p><p class="muted">Aún sin registrar compra.</p></article>
+      <article class="card"><h3>Parciales</h3><p class="metric">${partialItems.length}</p><p class="muted">Comprados parcialmente.</p></article>
+      <article class="card"><h3>Comprados</h3><p class="metric">${doneItems.length}</p><p class="muted">Ya cubiertos para esta semana.</p></article>
+      <article class="card"><h3>No comprar</h3><p class="metric">${skippedItems.length}</p><p class="muted">Omitidos en esta compra.</p></article>
     </section>
 
-    <section class="card supermarket-card">
+    <section class="card supermarket-card" data-shopping-filter-root data-active-shopping-filter="${escapeHtml(activeFilter)}">
       <div class="section-title-row">
         <div>
-          <h3>Recorrido de compra</h3>
-          <p class="muted">Usa botones grandes: escanear, añadir manualmente o saltar esta compra.</p>
+          <h3>Recorrido de compra · ${escapeHtml(activeFilterLabel)}</h3>
+          <p class="muted">Al registrar una compra, el producto cambia automáticamente de lista: pendiente, parcial o comprado.</p>
         </div>
-        <span class="badge">${items.length} líneas</span>
+        <span class="badge">${filteredItems.length}/${items.length} líneas</span>
+      </div>
+      <div class="shopping-filter-bar no-print" role="group" aria-label="Filtrar lista de compra por estado">
+        ${FILTERS.map(filter => renderFilterButton(filter, activeFilter, items)).join("")}
       </div>
       <label class="quick-search-label">Buscar en la compra
         <input type="search" class="quick-search" placeholder="Ej. tomate, lácteos, pendiente, comprado..." data-search-target=".supermarket-list .supermarket-item" data-empty-target="shoppingSearchEmpty">
       </label>
       <div id="shoppingSearchEmpty" class="search-empty muted" hidden>No hay líneas de compra que coincidan.</div>
-      ${items.length ? Object.values(groups).map(group => renderShoppingGroup(state, group)).join("") : `<p class="muted">Añade platos a la semana para generar la lista de compra.</p>`}
+      ${filteredItems.length ? Object.values(groups).map(group => renderShoppingGroup(state, group)).join("") : renderEmptyFilterState(activeFilter, items.length)}
     </section>
 
-    ${pendingItems.length ? "" : `<p class="alert">No queda nada pendiente de compra para esta semana.</p>`}
+    ${openItems.length ? "" : `<p class="alert">No queda nada pendiente de compra para esta semana.</p>`}
   `;
+}
+
+function getActiveShoppingFilter() {
+  try {
+    const saved = localStorage.getItem(SHOPPING_FILTER_KEY) || "open";
+    return FILTERS.some(filter => filter.id === saved) ? saved : "open";
+  } catch {
+    return "open";
+  }
+}
+
+function filterShoppingItems(items, filterId) {
+  const filter = FILTERS.find(item => item.id === filterId) || FILTERS[0];
+  return items.filter(item => filter.statuses.includes(item.status));
+}
+
+function countForFilter(items, filter) {
+  return items.filter(item => filter.statuses.includes(item.status)).length;
+}
+
+function renderFilterButton(filter, activeFilter, items) {
+  const active = filter.id === activeFilter;
+  const count = countForFilter(items, filter);
+  return `
+    <button type="button" class="${active ? "" : "secondary"}" data-action="set-shopping-filter" data-shopping-filter="${escapeHtml(filter.id)}" aria-pressed="${active ? "true" : "false"}">
+      ${escapeHtml(filter.label)} <span class="mini-badge">${count}</span>
+    </button>
+  `;
+}
+
+function renderEmptyFilterState(filterId, totalItems) {
+  if (!totalItems) return `<p class="muted">Añade platos a la semana para generar la lista de compra.</p>`;
+  const label = FILTERS.find(filter => filter.id === filterId)?.label || "este filtro";
+  return `<p class="muted">No hay productos en “${escapeHtml(label)}”. Cambia de filtro para ver otras líneas de compra.</p>`;
 }
 
 function groupShoppingItems(state, items) {
