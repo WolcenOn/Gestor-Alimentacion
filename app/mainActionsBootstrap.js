@@ -2,6 +2,7 @@ import "./weekPlannerAssistant.js";
 import "./calendarNavigationEnhancements.js";
 import "./purchaseScanPriceEnhancements.js";
 import "./shoppingFilterStyles.js";
+import "./compactUiEnhancements.js";
 import "./smartFoodTranslationEnhancements.js";
 import {
   newWeek,
