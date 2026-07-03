@@ -7,6 +7,7 @@ import { validatePack } from "./validation.js";
 
 let remotePackFiles = [];
 let pendingPackPreview = null;
+let listingRemotePacks = false;
 
 function stop(event) {
   event.preventDefault();
@@ -72,6 +73,7 @@ document.addEventListener("change", async event => {
     await importLocalPackPreview(event.target.files?.[0]);
   } catch (error) {
     console.error(error);
+    pendingPackPreview = null;
     showAlert(error.message || "No se pudo leer el pack local.", "error");
   } finally {
     event.target.value = "";
@@ -105,25 +107,42 @@ document.addEventListener("submit", event => {
 
 async function listPacksIntoUi() {
   const container = root();
-  if (!container) return;
-  container.innerHTML = `<p class="muted">Buscando packs...</p>`;
-  remotePackFiles = await listRemotePacks();
-  container.innerHTML = remotePackFiles.length
-    ? remotePackFiles.map((file, index) => {
-      const searchText = [file.name, file.path, file.path.replaceAll("/", " ").replaceAll("-", " ")].join(" ");
-      return `
-      <div class="item pack-file-item" data-search="${escapeText(searchText)}">
-        <strong>${escapeText(file.name)}</strong>
-        <p class="qty-line">${escapeText(file.path)}</p>
-        <button data-action="preview-remote-pack" data-index="${index}">Previsualizar</button>
-      </div>`;
-    }).join("")
-    : `<p class="muted">No se encontraron packs.</p>`;
+  if (!container) {
+    showAlert("Abre la sección Packs para cargar los packs remotos.", "error");
+    return;
+  }
+  if (listingRemotePacks) return;
+  listingRemotePacks = true;
+  pendingPackPreview = null;
+  remotePackFiles = [];
+  closeModal();
+  container.innerHTML = `<p class="muted">Buscando packs remotos...</p>`;
+  try {
+    remotePackFiles = await listRemotePacks();
+    container.innerHTML = remotePackFiles.length
+      ? remotePackFiles.map((file, index) => {
+        const searchText = [file.name, file.path, String(file.path || "").replaceAll("/", " ").replaceAll("-", " ")].join(" ");
+        return `
+        <div class="item pack-file-item" data-search="${escapeText(searchText)}">
+          <strong>${escapeText(file.name)}</strong>
+          <p class="qty-line">${escapeText(file.path)}</p>
+          <button data-action="preview-remote-pack" data-index="${index}">Previsualizar</button>
+        </div>`;
+      }).join("")
+      : `<p class="muted">No se encontraron packs remotos.</p>`;
+    showAlert(`${remotePackFiles.length} pack(s) remoto(s) encontrados.`);
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = `<p class="alert error">${escapeText(error.message || "No se pudieron cargar los packs remotos.")}</p>`;
+    throw error;
+  } finally {
+    listingRemotePacks = false;
+  }
 }
 
 async function previewRemotePack(index) {
   const file = remotePackFiles[Number(index)];
-  if (!file) throw new Error("Pack no encontrado.");
+  if (!file) throw new Error("Pack no encontrado. Vuelve a buscar packs remotos.");
   const pack = await loadRemotePack(file);
   pendingPackPreview = pack;
   openModal(renderPackPreview(pack, index));
@@ -135,6 +154,7 @@ async function importLocalPackPreview(file) {
   const text = await readFileAsText(file);
   const pack = normalizePack(safeJsonParse(text));
   validatePack(pack);
+  remotePackFiles = [];
   pendingPackPreview = pack;
   openModal(renderPackPreview(pack, "local"));
   showAlert(`Pack local cargado: ${pack.dishes.length} receta(s) disponibles.`);
@@ -169,6 +189,9 @@ function deleteInstalledPack(form) {
   let packName = "pack";
 
   updateState(draft => {
+    draft.dishPacks ||= [];
+    draft.dishes ||= [];
+    draft.weeks ||= [];
     const pack = draft.dishPacks.find(item => item.id === packId);
     if (!pack) throw new Error("Pack no encontrado.");
     packName = pack.name;
@@ -220,4 +243,4 @@ function escapeText(value) {
     .replace(/'/g, "&#039;");
 }
 
-window.__gestorPackDebug = { getState };
+window.__gestorPackDebug = { getState, listPacksIntoUi };
