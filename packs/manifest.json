@@ -1,5 +1,103 @@
 [
   {
+    "name": "ensaladas-light.json",
+    "path": "packs/Ensaladas/ensaladas-light.json",
+    "title": "Pack ensaladas light",
+    "description": "Ensaladas ligeras para menús saludables.",
+    "tags": ["ensalada", "light", "saludable"]
+  },
+  {
+    "name": "ensaladas_verano_frutos_secos_cebolla_crujiente.json",
+    "path": "packs/Ensaladas/ensaladas_verano_frutos_secos_cebolla_crujiente.json",
+    "title": "Pack ensaladas de verano",
+    "description": "Ensaladas de verano con frutos secos y cebolla crujiente.",
+    "tags": ["ensalada", "verano", "frutos secos"]
+  },
+  {
+    "name": "Postres-goma-xanthana.json",
+    "path": "packs/Postres/Postres-goma-xanthana.json",
+    "title": "Pack postres con goma xantana",
+    "description": "Postres que usan goma xantana para mejorar textura.",
+    "tags": ["postres", "goma xantana", "textura"]
+  },
+  {
+    "name": "Postres-light-goma-Xhantana",
+    "path": "packs/Postres/Postres-light-goma-Xhantana.json",
+    "title": "Pack postres light con goma xantana",
+    "description": "Postres light con goma xantana.",
+    "tags": ["postres", "light", "goma xantana"]
+  },
+  {
+    "name": "postres_sanos_sin_azucar_diabeticos.json",
+    "path": "packs/Postres/postres_sanos_sin_azucar_diabeticos.json",
+    "title": "Pack postres sanos sin azúcar",
+    "description": "Postres sanos sin azúcar orientados a personas con diabetes.",
+    "tags": ["postres", "sin azúcar", "diabetes"]
+  },
+  {
+    "name": "tuppers_trabajo_faciles_sabrosos.json",
+    "path": "packs/Tuppers/tuppers_trabajo_faciles_sabrosos.json",
+    "title": "Pack tuppers de trabajo",
+    "description": "Tuppers fáciles y sabrosos para llevar al trabajo.",
+    "tags": ["tupper", "trabajo", "fácil"]
+  },
+  {
+    "name": "andalucia-tradicional-provincias.json",
+    "path": "packs/andalucia/andalucia-tradicional-provincias.json",
+    "title": "Pack Andalucía tradicional",
+    "description": "Recetas tradicionales de Andalucía por provincias.",
+    "tags": ["andalucía", "tradicional", "provincias"]
+  },
+  {
+    "name": "cenas-rapidas.json",
+    "path": "packs/basicos/cenas-rapidas.json",
+    "title": "Pack cenas rápidas",
+    "description": "Cenas rápidas y básicas para el día a día.",
+    "tags": ["cenas", "rápido", "básicos"]
+  },
+  {
+    "name": "invierno-huelva.json",
+    "path": "packs/temporada-huelva/invierno-huelva.json",
+    "title": "Pack invierno Huelva",
+    "description": "Menú de temporada de invierno inspirado en Huelva.",
+    "tags": ["huelva", "invierno", "temporada"]
+  },
+  {
+    "name": "otono-huelva.json",
+    "path": "packs/temporada-huelva/otono-huelva.json",
+    "title": "Pack otoño Huelva",
+    "description": "Menú de temporada de otoño inspirado en Huelva.",
+    "tags": ["huelva", "otoño", "temporada"]
+  },
+  {
+    "name": "primavera-huelva.json",
+    "path": "packs/temporada-huelva/primavera-huelva.json",
+    "title": "Pack primavera Huelva",
+    "description": "Menú de temporada de primavera inspirado en Huelva.",
+    "tags": ["huelva", "primavera", "temporada"]
+  },
+  {
+    "name": "verano-huelva.json",
+    "path": "packs/temporada-huelva/verano-huelva.json",
+    "title": "Pack verano Huelva",
+    "description": "Menú de temporada de verano inspirado en Huelva.",
+    "tags": ["huelva", "verano", "temporada"]
+  },
+  {
+    "name": "pack-vegano-rapido-temporada.json",
+    "path": "packs/vegano/pack-vegano-rapido-temporada.json",
+    "title": "Pack vegano rápido de temporada",
+    "description": "Recetas veganas rápidas con productos de temporada.",
+    "tags": ["vegano", "rápido", "temporada"]
+  },
+  {
+    "name": "menu-verano-familiar-diabetes-colesterol.json",
+    "path": "packs/verano/menu-verano-familiar-diabetes-colesterol.json",
+    "title": "Pack verano familiar diabetes y colesterol",
+    "description": "Menú familiar de verano adaptado a diabetes y colesterol.",
+    "tags": ["verano", "familia", "diabetes", "colesterol"]
+  },
+  {
     "name": "desayunos-sanos-espana.json",
     "path": "packs/desayunos/desayunos-sanos-espana.json",
     "title": "Pack desayunos sanos estilo España",
