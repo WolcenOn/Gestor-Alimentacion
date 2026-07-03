@@ -1,0 +1,9 @@
+[
+  {
+    "name": "desayunos-sanos-espana.json",
+    "path": "packs/desayunos/desayunos-sanos-espana.json",
+    "title": "Pack desayunos sanos estilo España",
+    "description": "Desayunos habituales en España normalizados a 1 ración.",
+    "tags": ["desayuno", "saludable", "españa", "mediterráneo", "familiar", "rápido"]
+  }
+]
