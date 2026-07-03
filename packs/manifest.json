@@ -21,13 +21,6 @@
     "tags": ["postres", "goma xantana", "textura"]
   },
   {
-    "name": "Postres-light-goma-Xhantana",
-    "path": "packs/Postres/Postres-light-goma-Xhantana.json",
-    "title": "Pack postres light con goma xantana",
-    "description": "Postres light con goma xantana.",
-    "tags": ["postres", "light", "goma xantana"]
-  },
-  {
     "name": "postres_sanos_sin_azucar_diabeticos.json",
     "path": "packs/Postres/postres_sanos_sin_azucar_diabeticos.json",
     "title": "Pack postres sanos sin azúcar",
