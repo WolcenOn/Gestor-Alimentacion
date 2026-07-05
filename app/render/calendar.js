@@ -50,7 +50,7 @@ function renderWeekView(state, week) {
       </div>
     </section>
 
-    <div class="week-mobile-grid accessible-week-grid">
+    <div class="week-mobile-grid accessible-week-grid" data-week-planner-root data-week-id="${escapeHtml(week.id)}">
       ${DAYS.map(day => renderDayCard(state, week, day)).join("")}
     </div>
   `;
@@ -110,7 +110,7 @@ function renderMonthWeekRow(state, range) {
 function renderDayCard(state, week, day) {
   const status = dayPlanningStatus(state, week, day);
   return `
-    <details class="day-card accessible-day-card planning-day-card ${status.className}">
+    <details class="day-card accessible-day-card planning-day-card ${status.className}" data-week-day-details data-week-id="${escapeHtml(week.id)}" data-day="${escapeHtml(day)}">
       <summary class="day-card-header accessible-day-header planning-day-summary">
         <div>
           <h3>${escapeHtml(capitalize(day))}</h3>
@@ -129,7 +129,7 @@ function renderMealBlock(state, week, day, meal) {
   const visual = mealVisual(meal);
   const summary = mealSummary(state, week, day, meal);
   return `
-    <details class="meal-block accessible-meal-block ${visual.className}">
+    <details class="meal-block accessible-meal-block ${visual.className}" data-week-meal-details data-week-id="${escapeHtml(week.id)}" data-day="${escapeHtml(day)}" data-meal-id="${escapeHtml(meal.id)}">
       <summary class="meal-block-summary">
         <span class="meal-title-row">
           <span class="meal-icon" aria-hidden="true">${visual.icon}</span>
