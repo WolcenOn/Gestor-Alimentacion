@@ -3,7 +3,7 @@ import { normalizeUnit, stripDangerousText } from "../utils.js";
 
 export const PACK_SOURCE = Object.freeze({
   owner: "WolcenOn",
-  repo: "Gestor-Almentacion",
+  repo: "Gestor-Alimentacion",
   branch: "ux-semana-accesible-fusion",
   basePath: "packs"
 });
@@ -31,23 +31,17 @@ async function walk(url, files) {
     throw new Error(`No se pudieron listar los packs remotos. ${detail}`);
   }
   const entries = await response.json();
-  if (!Array.isArray(entries)) throw new Error("La respuesta de packs remotos no tiene el formato esperado.");
   for (const entry of entries) {
-    if (entry.type === "dir" && entry.url) await walk(entry.url, files);
-    if (entry.type === "file" && String(entry.path || "").endsWith(".json")) {
-      files.push({ name: entry.name || entry.path, path: entry.path, downloadUrl: entry.download_url || entry.url });
-    }
+    if (entry.type === "dir") await walk(entry.url, files);
+    if (entry.type === "file" && entry.path.endsWith(".json")) files.push({ name: entry.name, path: entry.path, downloadUrl: entry.download_url });
   }
 }
 
 export async function loadRemotePack(file) {
-  const relativePath = String(file.path || "").replace(`${PACK_SOURCE.basePath}/`, "");
+  const relativePath = file.path.replace(`${PACK_SOURCE.basePath}/`, "");
   assertSafePackPath(relativePath);
-  const response = await fetch(file.downloadUrl, {
-    cache: "no-store",
-    headers: { "Accept": "application/json" }
-  });
-  if (!response.ok) throw new Error(`No se pudo descargar el pack remoto (${response.status}).`);
+  const response = await fetch(file.downloadUrl, { headers: { "Accept": "application/json" } });
+  if (!response.ok) throw new Error("No se pudo descargar el pack.");
   const text = await response.text();
   if (/javascript:|<\s*script/gi.test(text)) throw new Error("Pack potencialmente inseguro.");
   const pack = normalizePack(JSON.parse(text));
@@ -180,9 +174,6 @@ export function summarizePack(pack) {
 export function mergePackIntoState(state, pack, options = {}) {
   const normalizedPack = normalizePack(pack);
   validatePack(normalizedPack);
-  state.ingredients ||= [];
-  state.dishes ||= [];
-  state.dishPacks ||= [];
   const selectedDishIds = new Set(options.selectedDishIds || normalizedPack.dishes.map(d => d.id));
   const selectedDishes = normalizedPack.dishes.filter(d => selectedDishIds.has(d.id));
   const requiredIngredientIds = new Set(selectedDishes.flatMap(d => d.recipe.map(line => line.ingredientId)));
