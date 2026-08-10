@@ -29,6 +29,7 @@ func NewRouter(cfg config.Config, dbHealth DBHealthChecker, appStore *store.Stor
 	mux.HandleFunc("GET /api/v1/version", versionHandler(cfg))
 	mux.HandleFunc("POST /api/v1/auth/register", registerHandler(cfg, appStore))
 	mux.HandleFunc("POST /api/v1/auth/login", loginHandler(cfg, appStore))
+	registerPasswordResetRoutes(mux, cfg, appStore)
 	mux.HandleFunc("GET /api/v1/me", meHandler(cfg, appStore))
 	mux.HandleFunc("GET /api/v1/households", listHouseholdsHandler(cfg, appStore))
 	mux.HandleFunc("POST /api/v1/households", createHouseholdHandler(cfg, appStore))
