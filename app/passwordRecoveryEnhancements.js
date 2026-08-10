@@ -1,6 +1,7 @@
 import { isCloudConfigured, requestPasswordReset, resetPassword } from "./apiClient.js";
 
 const RESET_PARAM = "reset-password";
+let resetNavigationDone = false;
 
 function getResetToken() {
   try {
@@ -175,13 +176,16 @@ function enhancePasswordRecovery() {
 }
 
 function openSettingsForReset() {
-  if (!getResetToken()) return;
+  if (resetNavigationDone || !getResetToken()) return;
   const settingsButton = document.querySelector('[data-tab="settings"]');
-  if (settingsButton instanceof HTMLElement) settingsButton.click();
+  if (settingsButton instanceof HTMLElement) {
+    resetNavigationDone = true;
+    settingsButton.click();
+  }
 }
 
 const observer = new MutationObserver(() => {
-  if (getResetToken()) openSettingsForReset();
+  openSettingsForReset();
   enhancePasswordRecovery();
 });
 
