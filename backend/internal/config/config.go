@@ -17,6 +17,12 @@ type Config struct {
 	JWTSecret          string
 	USDAAPIKey         string
 	CORSAllowedOrigins []string
+	SMTPHost           string
+	SMTPPort           string
+	SMTPUsername       string
+	SMTPPassword       string
+	SMTPFrom           string
+	PasswordResetURL   string
 }
 
 // Load reads configuration from environment variables. It keeps safe defaults for local development.
@@ -28,6 +34,12 @@ func Load() Config {
 		JWTSecret:          os.Getenv("JWT_SECRET"),
 		USDAAPIKey:         os.Getenv("USDA_API_KEY"),
 		CORSAllowedOrigins: splitCSV(env("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:8080")),
+		SMTPHost:           os.Getenv("SMTP_HOST"),
+		SMTPPort:           env("SMTP_PORT", "587"),
+		SMTPUsername:       os.Getenv("SMTP_USERNAME"),
+		SMTPPassword:       os.Getenv("SMTP_PASSWORD"),
+		SMTPFrom:           os.Getenv("SMTP_FROM"),
+		PasswordResetURL:   os.Getenv("PASSWORD_RESET_URL"),
 	}
 }
 
