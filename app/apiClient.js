@@ -125,6 +125,20 @@ export async function loginCloudAccount({ email, password }) {
   return payload;
 }
 
+export async function requestPasswordReset(email) {
+  return request("/auth/forgot-password", {
+    method: "POST",
+    body: { email }
+  });
+}
+
+export async function resetPassword({ token, password }) {
+  return request("/auth/reset-password", {
+    method: "POST",
+    body: { token, password }
+  });
+}
+
 export async function fetchCurrentCloudUser() {
   return request("/me");
 }
@@ -171,6 +185,8 @@ const GestorCloudAPI = {
   setCloudSession,
   registerCloudAccount,
   loginCloudAccount,
+  requestPasswordReset,
+  resetPassword,
   fetchCurrentCloudUser,
   listCloudHouseholds,
   createCloudHousehold,
