@@ -170,7 +170,7 @@ function enhancePasswordRecovery() {
   if (token) {
     buildResetPasswordForm(token, loginForm);
   } else {
-    loginForm.append(buildForgotPasswordForm(loginForm));
+    loginForm.after(buildForgotPasswordForm(loginForm));
   }
   return true;
 }
