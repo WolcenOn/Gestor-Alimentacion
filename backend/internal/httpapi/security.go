@@ -74,7 +74,15 @@ func retryAfterSeconds(duration time.Duration) string {
 }
 
 func isAuthWriteEndpoint(r *http.Request) bool {
-	return r.Method == http.MethodPost && (r.URL.Path == "/api/v1/auth/login" || r.URL.Path == "/api/v1/auth/register")
+	if r.Method != http.MethodPost {
+		return false
+	}
+	switch r.URL.Path {
+	case "/api/v1/auth/login", "/api/v1/auth/register", "/api/v1/auth/forgot-password", "/api/v1/auth/reset-password":
+		return true
+	default:
+		return false
+	}
 }
 
 func (l *authRateLimiter) allow(ip, path string) (time.Duration, bool) {
