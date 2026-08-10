@@ -1,4 +1,4 @@
-import { escapeHtml } from "../utils.js";
+import { escapeHtml, formatMoney } from "../utils.js";
 import { formatNutritionValue } from "../state/nutritionCalculator.js";
 import { getFastPurchaseProduct, getPackageQty, getPackageUnit, ingredientHasFastPurchaseData, isTrustedPurchaseEnabled } from "../fastPurchase.js";
 
@@ -57,6 +57,33 @@ function latestPackageInfo(state, ingredient) {
   return `${formatNumber(count)} envase(s) × ${formatNumber(packageQty)} ${packageUnit} = ${formatNumber(total)} ${product.lastPurchasedUnit || packageUnit || ingredient.unit}`;
 }
 
+function latestPriceInfo(state, ingredient) {
+  const lots = (state.purchaseLots || [])
+    .filter(lot => lot.ingredientId === ingredient.id && Number(lot.price) > 0)
+    .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+  const source = lots[0] || primaryProduct(ingredient);
+  if (!Number(source?.price || 0)) return null;
+  const rawSource = String(source.priceSourceLabel || source.priceSource || source.source || "manual");
+  const isOpenPrices = rawSource.toLowerCase().includes("open-prices") || rawSource.toLowerCase().includes("open prices");
+  return {
+    price: Number(source.price),
+    source: isOpenPrices ? "manual/local" : rawSource,
+    date: isOpenPrices ? "" : source.priceDate || "",
+    store: isOpenPrices ? "" : source.priceStoreName || ""
+  };
+}
+
+function renderPriceInfo(state, ingredient) {
+  const info = latestPriceInfo(state, ingredient);
+  if (!info) return "";
+  const details = [info.source, info.store, info.date].filter(Boolean).join(" · ");
+  return `
+    <div class="item small price-source-card">
+      <strong>Precio ${formatMoney(info.price)}</strong>
+      <p class="qty-line">${escapeHtml(details || "manual/local")}</p>
+    </div>`;
+}
+
 function renderFastPurchasePanel(ingredient) {
   const product = primaryProduct(ingredient);
   const enabled = isTrustedPurchaseEnabled(ingredient);
@@ -97,9 +124,10 @@ function renderManageCard(state, ingredient) {
   const productText = (ingredient.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit].filter(Boolean).join(" ")).join(" ");
   const packaging = ingredient.packagingType || ingredient.products?.find(p => p.packagingType || p.packaging)?.packagingType || ingredient.products?.find(p => p.packaging)?.packaging || "sin envase";
   const packageInfo = latestPackageInfo(state, ingredient);
-  const searchText = [ingredient.name, family, ingredient.qty, ingredient.unit, packageInfo, ingredient.expiryDate || "sin fecha", ingredient.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", fastEnabled ? "compra rápida confianza" : "compra normal", productText].join(" ");
+  const priceInfo = latestPriceInfo(state, ingredient);
+  const searchText = [ingredient.name, family, ingredient.qty, ingredient.unit, packageInfo, priceInfo?.source, priceInfo?.price, ingredient.expiryDate || "sin fecha", ingredient.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", fastEnabled ? "compra rápida confianza" : "compra normal", productText].join(" ");
   return `
-    <div class="item ingredient-item" data-search="${escapeHtml(searchText)}">
+    <div class="item ingredient-item" data-ingredient-id="${escapeHtml(ingredient.id)}" data-search="${escapeHtml(searchText)}">
       <div class="item-title">
         <div>
           <strong>${escapeHtml(ingredient.name)}</strong>
@@ -114,12 +142,14 @@ function renderManageCard(state, ingredient) {
         <span>Envase: ${escapeHtml(packaging)}</span>
         <span>Compra rápida: ${fastEnabled ? "activa" : "no"}${fastReady ? "" : " · incompleta"}</span>
       </div>
+      ${renderPriceInfo(state, ingredient)}
       ${renderFastPurchasePanel(ingredient)}
       <details>
         <summary>Ver nutrición activa</summary>
         ${renderNutritionDetails(state, ingredient)}
       </details>
       <div class="row-actions wrap">
+        <button class="secondary" data-action="open-ingredient-detail" data-ingredient-id="${escapeHtml(ingredient.id)}">Ver ficha</button>
         <button class="secondary" data-action="edit-stock" data-ingredient-id="${escapeHtml(ingredient.id)}">Editar stock</button>
         <button class="secondary" data-action="open-waste-modal" data-ingredient-id="${escapeHtml(ingredient.id)}">Tirar</button>
         <button class="danger" data-action="delete-ingredient" data-ingredient-id="${escapeHtml(ingredient.id)}">Eliminar</button>
@@ -131,28 +161,29 @@ function renderShopCard(state, ingredient, item) {
   const icon = item.status === "done" ? "✓" : item.status === "partial" ? "◐" : item.status === "skipped" ? "–" : "☐";
   const fastIcon = item.fastPurchase ? "⚡ " : "";
   const statusText = item.status === "done"
-    ? "Comprado completo"
+    ? "Completado"
     : item.status === "partial"
-      ? `Necesario: ${item.display.missing} · Comprado: ${item.display.purchased} · Falta: ${item.display.remaining}`
+      ? `Falta ${item.display.remaining} · comprado ${item.display.purchased}`
       : item.status === "skipped"
-        ? `Omitido en esta compra · Necesario originalmente: ${item.display.missing}`
-        : `Faltan: ${item.display.missing} · Tengo: ${item.display.stock}`;
-  const badgeClass = item.status === "partial" || item.status === "skipped" ? "warning" : "";
-  const searchText = [item.name, item.family, item.zone, item.status, statusLabel(item.status), statusText, item.display?.missing, item.display?.stock, item.display?.remaining, item.fastPurchase ? "compra rápida" : ""].join(" ");
+        ? `No comprar · ${item.display.missing}`
+        : `Falta ${item.display.missing}`;
+  const badgeClass = item.status === "done" ? "success" : item.status === "partial" || item.status === "skipped" ? "warning" : "";
+  const priceInfo = latestPriceInfo(state, ingredient);
+  const priceText = priceInfo ? ` · ${formatMoney(priceInfo.price)}` : "";
+  const searchText = [item.name, item.family, item.zone, item.status, statusLabel(item.status), statusText, item.display?.missing, item.display?.stock, item.display?.remaining, item.fastPurchase ? "compra rápida" : "", priceInfo?.source, priceInfo?.price].join(" ");
   return `
-    <article class="item shopping-item supermarket-item ${escapeHtml(item.status)}" data-search="${escapeHtml(searchText)}">
-      <div>
-        <div class="item-title"><strong>${icon} ${escapeHtml(item.name)}</strong><span class="badge ${badgeClass}">${escapeHtml(statusLabel(item.status))}</span></div>
-        <p class="qty-line">${statusText}</p>
+    <article class="item shopping-item supermarket-item compact-shopping-item ${escapeHtml(item.status)}" data-search="${escapeHtml(searchText)}">
+      <div class="compact-shopping-main">
+        <div class="item-title compact-shopping-title">
+          <strong>${icon} ${escapeHtml(item.name)}</strong>
+          <span class="badge ${badgeClass}">${escapeHtml(statusLabel(item.status))}</span>
+        </div>
+        <p class="qty-line">${escapeHtml(statusText)}${priceText}</p>
       </div>
-      <details>
-        <summary>Ver nutrición</summary>
-        ${renderNutritionDetails(state, ingredient)}
-      </details>
-      <div class="row-actions no-print supermarket-actions">
+      <div class="row-actions no-print supermarket-actions compact-shopping-actions">
         ${item.status !== "done" && item.status !== "skipped" ? `
           <button data-action="scan-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Escanear</button>
-          <button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Añadir manual</button>
+          <button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">Manual</button>
           <button class="ghost" data-action="skip-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">No comprar</button>` : ""}
         ${item.status === "done" ? `<button class="secondary" data-action="manual-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">${fastIcon}Añadir más</button>` : ""}
         ${item.status === "skipped" ? `<button class="secondary" data-action="reopen-shopping-item" data-ingredient-id="${escapeHtml(item.ingredientId)}">Reactivar</button>` : ""}

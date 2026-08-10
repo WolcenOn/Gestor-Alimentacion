@@ -3,15 +3,16 @@ import { withMeta } from "./models.js";
 import { showAlert } from "./render/ui.js";
 import { searchUsdaFoodData, nutritionProfileFromUsdaFood } from "./services/usdaFoodData.js";
 import { searchOpenFoodFacts, nutritionProfileFromOpenFoodFacts } from "./services/openFoodFacts.js";
+import { translateFoodQueryToEnglish } from "./services/foodTranslation.js";
 import { buildUsdaQueries, scoreFoodMatch, isBulkCandidateIngredient, normalizeFoodName } from "./services/foodNameNormalizer.js";
 
 const USDA_SESSION_KEY = "gestorMenuSemanal.usdaApiKey.session";
-const BATCH_CACHE_KEY = "gestorMenuSemanal.nutritionBatch.cache.v3";
+const BATCH_CACHE_KEY = "gestorMenuSemanal.nutritionBatch.cache.v4";
 const MIN_USDA_SCORE = 35;
 const MIN_OFF_SCORE = 35;
 
 function getUsdaKey() {
-  return sessionStorage.getItem(USDA_SESSION_KEY) || "DEMO_KEY";
+  return sessionStorage.getItem(USDA_SESSION_KEY) || "";
 }
 
 function getBatchCache() {
@@ -26,6 +27,14 @@ function setBatchCache(cache) {
 function candidateIngredients() {
   const state = getState();
   return state.ingredients.filter(ingredient => isBulkCandidateIngredient(ingredient, state.nutritionProfiles));
+}
+
+function buildTranslatedUsdaQueries(name) {
+  const translated = translateFoodQueryToEnglish(name);
+  const queries = [translated.query, ...buildUsdaQueries(translated.query || name), ...buildUsdaQueries(name)]
+    .map(query => String(query || "").trim())
+    .filter(Boolean);
+  return Array.from(new Set(queries)).slice(0, 5);
 }
 
 document.addEventListener("click", async event => {
@@ -83,8 +92,9 @@ async function scanNutritionCandidates() {
 
   for (let i = 0; i < ingredients.length; i += 1) {
     const ingredient = ingredients[i];
-    root.innerHTML = `<p class="muted">Procesando ${i + 1}/${ingredients.length}: ${escapeHtml(ingredient.name)}<br><small>Buscando varias coincidencias en Open Food Facts y USDA...</small></p>`;
-    const recordKey = `${ingredient.id}:${ingredient.name}:${ingredient.products?.length || 0}`;
+    const translated = translateFoodQueryToEnglish(ingredient.name);
+    root.innerHTML = `<p class="muted">Procesando ${i + 1}/${ingredients.length}: ${escapeHtml(ingredient.name)}<br><small>${translated.translated ? `USDA: ${escapeHtml(translated.query)}` : "Buscando varias coincidencias en Open Food Facts y USDA..."}</small></p>`;
+    const recordKey = `${ingredient.id}:${ingredient.name}:${ingredient.products?.length || 0}:dict-v4`;
     const cached = cache[recordKey];
     if (cached?.ingredientName === ingredient.name) {
       results[recordKey] = cached;
@@ -192,7 +202,7 @@ async function findOpenFoodFactsCandidates(ingredient) {
 
 async function findUsdaCandidates(ingredient) {
   const apiKey = getUsdaKey();
-  const queries = buildUsdaQueries(ingredient.name);
+  const queries = buildTranslatedUsdaQueries(ingredient.name);
   const candidates = [];
   const seen = new Set();
   for (const query of queries) {
@@ -201,7 +211,7 @@ async function findUsdaCandidates(ingredient) {
       for (const food of data.foods || []) {
         if (seen.has(food.fdcId)) continue;
         seen.add(food.fdcId);
-        const score = scoreFoodMatch(food, ingredient.name);
+        const score = Math.max(scoreFoodMatch(food, ingredient.name), scoreFoodMatch(food, query));
         if (score < MIN_USDA_SCORE) continue;
         candidates.push(makeCandidate({
           ingredient,

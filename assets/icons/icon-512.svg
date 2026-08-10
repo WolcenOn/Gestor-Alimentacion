@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Gestor de Menú Semanal">
+  <rect width="512" height="512" rx="112" fill="#2563eb"/>
+  <circle cx="256" cy="256" r="166" fill="#ffffff" opacity="0.96"/>
+  <path d="M163 195h186a27 27 0 0 1 27 27v123a27 27 0 0 1-27 27H163a27 27 0 0 1-27-27V222a27 27 0 0 1 27-27Z" fill="#dbeafe"/>
+  <path d="M187 147v82M256 147v82M325 147v82" stroke="#1d4ed8" stroke-width="27" stroke-linecap="round"/>
+  <path d="M181 269h150M181 323h101" stroke="#1e40af" stroke-width="27" stroke-linecap="round"/>
+  <path d="M360 152c32 59 29 121-8 171" fill="none" stroke="#16a34a" stroke-width="27" stroke-linecap="round"/>
+</svg>

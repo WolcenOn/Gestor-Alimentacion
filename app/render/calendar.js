@@ -1,4 +1,4 @@
-import { DAYS, escapeHtml } from "../utils.js";
+import { DAYS, escapeHtml, formatQty } from "../utils.js";
 import { addMonths, buildMonthWeeks, countPlannedSlots, findWeekByStartDate, getMonthKey, hasPlannedSlots, monthLabel } from "../state/calendarPeriods.js";
 
 export function renderCalendar(state) {
@@ -14,6 +14,7 @@ export function renderCalendar(state) {
         <p class="muted">Cambia entre vista mensual para navegar y vista semanal para editar con detalle.</p>
       </div>
       <div class="actions toolbar-actions">
+        <button class="secondary" data-action="open-current-week">Semana actual</button>
         <button class="${view === "week" ? "" : "secondary"}" data-action="calendar-view" data-calendar-view="week">Semana</button>
         <button class="${view === "month" ? "" : "secondary"}" data-action="calendar-view" data-calendar-view="month">Mes</button>
       </div>
@@ -23,7 +24,7 @@ export function renderCalendar(state) {
 }
 
 function renderWeekView(state, week) {
-  if (!week) return `<article class="card"><h2>No hay semana activa</h2><button data-action="new-week">Crear semana</button></article>`;
+  if (!week) return `<article class="card"><h2>No hay semana activa</h2><button data-action="open-current-week">Crear semana actual</button></article>`;
   return `
     <div class="card calendar-week-toolbar">
       <div>
@@ -31,6 +32,8 @@ function renderWeekView(state, week) {
         <p class="muted">${escapeHtml(week.startDate || "")} ${week.endDate ? `→ ${escapeHtml(week.endDate)}` : ""}</p>
       </div>
       <div class="actions toolbar-actions">
+        <button data-action="open-week-planner-assistant">Asistente</button>
+        <button class="secondary" data-action="open-current-week">Semana actual</button>
         <button class="secondary" data-action="new-week">Nueva</button>
         <button class="secondary" data-action="duplicate-week">Duplicar</button>
         <button class="secondary" data-action="clear-week">Limpiar</button>
@@ -38,7 +41,16 @@ function renderWeekView(state, week) {
       </div>
     </div>
 
-    <div class="week-mobile-grid">
+    <section class="card calendar-week-legend" aria-label="Leyenda de planificación">
+      <strong>Estado de la semana</strong>
+      <div class="meal-legend-list">
+        <span class="plan-status-chip plan-status-complete">Planificado todo</span>
+        <span class="plan-status-chip plan-status-partial">Faltan platos</span>
+        <span class="plan-status-chip plan-status-empty">Sin planificar</span>
+      </div>
+    </section>
+
+    <div class="week-mobile-grid accessible-week-grid" data-week-planner-root data-week-id="${escapeHtml(week.id)}">
       ${DAYS.map(day => renderDayCard(state, week, day)).join("")}
     </div>
   `;
@@ -55,7 +67,7 @@ function renderMonthView(state, monthKey) {
         </div>
         <div class="actions toolbar-actions">
           <button class="secondary" data-action="calendar-month" data-month="${escapeHtml(addMonths(monthKey, -1))}">← Mes anterior</button>
-          <button class="secondary" data-action="calendar-month" data-month="${escapeHtml(getMonthKey())}">Hoy</button>
+          <button class="secondary" data-action="open-current-week">Semana actual</button>
           <button class="secondary" data-action="calendar-month" data-month="${escapeHtml(addMonths(monthKey, 1))}">Mes siguiente →</button>
         </div>
       </div>
@@ -96,84 +108,139 @@ function renderMonthWeekRow(state, range) {
 }
 
 function renderDayCard(state, week, day) {
+  const status = dayPlanningStatus(state, week, day);
   return `
-    <article class="day-card">
-      <header class="day-card-header">
-        <h3>${escapeHtml(capitalize(day))}</h3>
-      </header>
-      <div class="day-meals">
+    <details class="day-card accessible-day-card planning-day-card ${status.className}" data-week-day-details data-week-id="${escapeHtml(week.id)}" data-day="${escapeHtml(day)}">
+      <summary class="day-card-header accessible-day-header planning-day-summary">
+        <div>
+          <h3>${escapeHtml(capitalize(day))}</h3>
+          <p class="qty-line">${escapeHtml(status.helpText)}</p>
+        </div>
+        <span class="plan-status-chip ${status.className}">${escapeHtml(status.label)}</span>
+      </summary>
+      <div class="day-meals accessible-day-meals">
         ${state.mealTypes.map(meal => renderMealBlock(state, week, day, meal)).join("")}
       </div>
-    </article>
+    </details>
   `;
 }
 
 function renderMealBlock(state, week, day, meal) {
+  const visual = mealVisual(meal);
+  const summary = mealSummary(state, week, day, meal);
   return `
-    <section class="meal-block">
-      <div class="meal-block-title">${escapeHtml(meal.name)}</div>
-      <div class="member-slots">
+    <details class="meal-block accessible-meal-block ${visual.className}" data-week-meal-details data-week-id="${escapeHtml(week.id)}" data-day="${escapeHtml(day)}" data-meal-id="${escapeHtml(meal.id)}">
+      <summary class="meal-block-summary">
+        <span class="meal-title-row">
+          <span class="meal-icon" aria-hidden="true">${visual.icon}</span>
+          <span>
+            <strong>${escapeHtml(meal.name)}</strong>
+            <small>${summary.memberCount ? `${summary.memberCount} miembro(s) con comida` : "Sin asignar"}</small>
+          </span>
+        </span>
+        <span class="badge ${summary.itemCount ? "success" : "warning"}">${summary.itemCount} item(s)</span>
+      </summary>
+      <div class="member-slots compact-member-slots">
         ${state.familyMembers.map(member => renderMemberSlot(state, week, day, meal, member)).join("")}
       </div>
-    </section>
+    </details>
   `;
 }
 
 function renderMemberSlot(state, week, day, meal, member) {
   const key = `${day}__${meal.id}__${member.id}`;
   const planned = week.plan[key] || [];
+  const ingredients = week.ingredientPlan?.[key] || [];
+  const totalItems = planned.length + ingredients.length;
+  const statusClass = totalItems ? "has-dishes" : "is-empty";
   return `
-    <div class="member-slot">
+    <div class="member-slot compact-member-slot ${statusClass}">
       <div class="member-slot-head">
         <strong>${escapeHtml(member.name)}</strong>
-        <span class="mini-badge">${planned.length}</span>
+        <span class="mini-badge">${totalItems}</span>
       </div>
       <div class="dish-stack">
-        ${planned.length ? planned.map(dishId => renderDishPill(state, key, dishId)).join("") : `<p class="empty-slot">Sin platos asignados</p>`}
+        ${planned.length ? planned.map(dishId => renderDishPill(state, key, dishId)).join("") : ""}
+        ${ingredients.length ? ingredients.map(line => renderIngredientPill(state, key, line)).join("") : ""}
+        ${totalItems ? "" : `<p class="empty-slot">Sin platos ni ingredientes asignados</p>`}
       </div>
-      <label class="add-dish-label">Añadir plato
-        <select data-action="add-dish-to-slot" data-slot="${escapeHtml(key)}">
-          <option value="">Seleccionar plato</option>
-          ${renderDishOptionsByCategory(state.dishes)}
-        </select>
-      </label>
+      <div class="actions wrap slot-actions">
+        <button type="button" class="secondary add-dish-button" data-action="open-dish-picker" data-slot="${escapeHtml(key)}">Añadir plato</button>
+        <button type="button" class="secondary add-ingredient-button" data-action="open-week-ingredient-picker" data-slot="${escapeHtml(key)}">Añadir ingrediente</button>
+      </div>
     </div>
   `;
 }
 
-function renderDishOptionsByCategory(dishes) {
-  const grouped = new Map();
-  const normalizedDishes = [...dishes].sort(compareDishByCategoryAndName);
-
-  for (const dish of normalizedDishes) {
-    const category = normalizeCategory(dish.category);
-    if (!grouped.has(category)) grouped.set(category, []);
-    grouped.get(category).push(dish);
+function mealSummary(state, week, day, meal) {
+  let itemCount = 0;
+  let dishCount = 0;
+  let ingredientCount = 0;
+  let memberCount = 0;
+  for (const member of state.familyMembers) {
+    const key = `${day}__${meal.id}__${member.id}`;
+    const dishes = week.plan[key] || [];
+    const ingredients = week.ingredientPlan?.[key] || [];
+    const slotItems = dishes.length + ingredients.length;
+    if (slotItems) {
+      memberCount += 1;
+      dishCount += dishes.length;
+      ingredientCount += ingredients.length;
+      itemCount += slotItems;
+    }
   }
-
-  return [...grouped.entries()].map(([category, categoryDishes]) => `
-    <optgroup label="${escapeHtml(category)}">
-      ${categoryDishes.map(dish => `<option value="${escapeHtml(dish.id)}">${escapeHtml(dish.name)}</option>`).join("")}
-    </optgroup>
-  `).join("");
+  return { dishCount, ingredientCount, itemCount, memberCount };
 }
 
-function compareDishByCategoryAndName(a, b) {
-  return normalizeCategory(a.category).localeCompare(normalizeCategory(b.category), "es", { sensitivity: "base" })
-    || String(a.name || "").localeCompare(String(b.name || ""), "es", { sensitivity: "base" });
+function dayPlanningStatus(state, week, day) {
+  const expected = expectedDaySlots(state);
+  const planned = countDayPlannedSlots(state, week, day);
+  const missing = Math.max(expected - planned, 0);
+  if (!planned) return { className: "plan-status-empty", label: "Sin planificar", helpText: `Faltan ${expected} comida(s)` };
+  if (!missing) return { className: "plan-status-complete", label: "Planificado todo", helpText: `${planned}/${expected} comida(s) asignada(s)` };
+  return { className: "plan-status-partial", label: `Faltan ${missing} comida(s)`, helpText: `${planned}/${expected} comida(s) asignada(s)` };
 }
 
-function normalizeCategory(category) {
-  const value = String(category || "").trim();
-  return value ? capitalize(value) : "Sin categoría";
+function expectedDaySlots(state) {
+  return Math.max((state.mealTypes?.length || 0) * (state.familyMembers?.length || 0), 1);
+}
+
+function countDayPlannedSlots(state, week, day) {
+  let total = 0;
+  for (const meal of state.mealTypes) {
+    for (const member of state.familyMembers) {
+      const key = `${day}__${meal.id}__${member.id}`;
+      if ((week.plan[key] || []).length || (week.ingredientPlan?.[key] || []).length) total += 1;
+    }
+  }
+  return total;
+}
+
+function mealVisual(meal) {
+  const value = `${meal.id || ""} ${meal.name || ""}`.toLowerCase();
+  if (/breakfast|desayuno/.test(value)) return { icon: "☀️", className: "meal-breakfast" };
+  if (/lunch|comida|almuerzo/.test(value)) return { icon: "🍽️", className: "meal-lunch" };
+  if (/snack|merienda/.test(value)) return { icon: "🧺", className: "meal-snack" };
+  if (/dinner|cena/.test(value)) return { icon: "🌙", className: "meal-dinner" };
+  return { icon: "🍴", className: "meal-other" };
 }
 
 function renderDishPill(state, key, dishId) {
   const dish = state.dishes.find(d => d.id === dishId);
   return `
     <span class="dish-pill">
-      <span>${escapeHtml(dish?.name || "Plato eliminado")}</span>
+      <button class="ghost dish-pill-name" data-action="open-dish-detail" data-dish-id="${escapeHtml(dishId)}" title="Ver ficha del plato">${escapeHtml(dish?.name || "Plato eliminado")}</button>
       <button class="ghost icon-button" aria-label="Quitar plato" data-action="remove-dish-from-slot" data-slot="${escapeHtml(key)}" data-dish-id="${escapeHtml(dishId)}">×</button>
+    </span>
+  `;
+}
+
+function renderIngredientPill(state, key, line) {
+  const ingredient = state.ingredients.find(item => item.id === line.ingredientId);
+  return `
+    <span class="dish-pill ingredient-pill">
+      <span class="dish-pill-name">${escapeHtml(ingredient?.name || "Ingrediente eliminado")} · ${escapeHtml(formatQty(line.qty, line.unit || ingredient?.unit || "g"))}</span>
+      <button class="ghost icon-button" aria-label="Quitar ingrediente" data-action="remove-ingredient-from-slot" data-slot="${escapeHtml(key)}" data-line-id="${escapeHtml(line.id || "")}">×</button>
     </span>
   `;
 }

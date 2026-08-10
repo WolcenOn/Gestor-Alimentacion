@@ -4,39 +4,82 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Menú Semanal">
   <title>Gestor de Menú Semanal</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.svg">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="side-menu.css">
+  <link rel="stylesheet" href="dashboard-compact.css">
+  <link rel="stylesheet" href="week-accessibility.css">
+  <link rel="stylesheet" href="dashboard-today.css">
+  <link rel="stylesheet" href="packs-ui.css">
 </head>
 <body>
   <a class="skip-link" href="#mainContent">Saltar al contenido</a>
 
-  <header class="app-header app-screen">
+  <header class="app-header app-screen simplified-header">
     <div>
       <p class="eyebrow">MVP familiar</p>
       <h1>Gestor de Menú Semanal</h1>
       <p class="muted">Planifica, compra, actualiza stock e imprime solo lo necesario.</p>
     </div>
     <div class="header-actions">
-      <button class="secondary" data-action="export-data">Exportar JSON</button>
-      <label class="button secondary file-button">
-        Importar JSON
-        <input id="importFile" type="file" accept="application/json,.json" hidden>
-      </label>
+      <button class="secondary menu-trigger" data-action="open-side-menu" aria-controls="sideMenu" aria-expanded="false" aria-label="Abrir menú lateral">☰</button>
     </div>
   </header>
 
-  <nav class="tabs app-screen" aria-label="Secciones principales">
-    <button data-tab="dashboard" class="active">Dashboard</button>
-    <button data-tab="ingredients">Ingredientes</button>
-    <button data-tab="dishes">Platos</button>
-    <button data-tab="calendar">Semana</button>
-    <button data-tab="shopping">Compra</button>
-    <button data-tab="packs">Packs</button>
-    <button data-tab="nutrition">Nutrición</button>
-    <button data-tab="metabolic">Metabólico</button>
-    <button data-tab="settings">Ajustes</button>
-    <button data-tab="help">Ayuda</button>
-  </nav>
+  <aside id="sideMenu" class="side-menu app-screen" aria-hidden="true">
+    <button type="button" class="side-menu-backdrop" data-action="close-side-menu" aria-label="Cerrar menú"></button>
+    <section class="side-menu-panel" role="dialog" aria-modal="true" aria-labelledby="sideMenuTitle">
+      <header class="side-menu-header">
+        <div>
+          <p class="eyebrow">Menú</p>
+          <h2 id="sideMenuTitle">Navegación</h2>
+          <p class="muted">Todas las secciones y herramientas de la app.</p>
+        </div>
+        <button type="button" class="secondary" data-action="close-side-menu" aria-label="Cerrar">×</button>
+      </header>
+      <div class="side-menu-section">
+        <p class="side-menu-section-title">Uso diario</p>
+        <div class="side-menu-list">
+          <button type="button" data-tab="dashboard" data-side-menu-item>Dashboard</button>
+          <button type="button" data-tab="ingredients" data-side-menu-item>Ingredientes</button>
+          <button type="button" data-tab="dishes" data-side-menu-item>Platos</button>
+          <button type="button" data-tab="calendar" data-side-menu-item>Semana</button>
+          <button type="button" data-tab="shopping" data-side-menu-item>Compra</button>
+          <button type="button" data-tab="nutrition" data-side-menu-item>Nutrición</button>
+        </div>
+      </div>
+      <div class="side-menu-section">
+        <p class="side-menu-section-title">Herramientas</p>
+        <div class="side-menu-list">
+          <button type="button" data-tab="settings" data-side-menu-item>Ajustes</button>
+          <button type="button" data-tab="packs" data-side-menu-item>Packs</button>
+          <button type="button" data-tab="metabolic" data-side-menu-item>Metabólico</button>
+          <button type="button" data-tab="help" data-side-menu-item>Ayuda</button>
+          <button type="button" data-action="create-snapshot" data-side-menu-item>Guardar snapshot</button>
+          <button type="button" data-action="export-data" data-side-menu-item>Exportar JSON</button>
+          <label class="button secondary side-menu-file" data-side-menu-item>
+            Importar JSON
+            <input id="importFile" type="file" accept="application/json,.json" hidden>
+          </label>
+        </div>
+      </div>
+      <div class="side-menu-section">
+        <p class="side-menu-section-title">Legal y estado</p>
+        <div class="side-menu-list">
+          <button type="button" data-action="open-legal-doc" data-legal-doc="privacy" data-side-menu-item>Privacidad</button>
+          <button type="button" data-action="open-legal-doc" data-legal-doc="terms" data-side-menu-item>Términos de servicio</button>
+          <button type="button" id="backendHealthBadge" data-side-menu-item>Comprobar backend</button>
+        </div>
+      </div>
+    </section>
+  </aside>
 
   <main id="mainContent" class="app-shell app-screen" tabindex="-1">
     <section id="alerts" class="alerts" aria-live="polite"></section>
@@ -47,10 +90,31 @@
   <div id="printShoppingView" class="print-view"></div>
   <div id="printWeekView" class="print-view"></div>
 
+  <script src="app/config.js"></script>
+  <script type="module" src="app/apiClient.js"></script>
+  <script type="module" src="app/backendHealthBadge.js"></script>
+  <script type="module" src="app/healthDisclaimer.js"></script>
+  <script type="module" src="app/cloudHouseholdEnhancements.js"></script>
+  <script type="module" src="app/cloudSync.js"></script>
+  <script type="module" src="app/cloudMembers.js"></script>
+  <script type="module" src="app/cloudSessionGuard.js"></script>
+  <script type="module" src="app/legalEnhancements.js"></script>
+  <script type="module" src="app/modalPositionFix.js"></script>
+  <script type="module" src="app/glucosaTrackFusionBootstrap.js"></script>
+  <script type="module" src="app/glucosaTrackFusionProfile.js"></script>
   <script type="module" src="app/metabolicPremiumModule.js"></script>
+  <script type="module" src="app/packManifestEnhancements.js?v=20260701-pack-manifest"></script>
   <script type="module" src="app/packEnhancements.js"></script>
+  <script type="module" src="app/dishRecipeSubmitFix.js"></script>
+  <script type="module" src="app/calendarNavigationEnhancements.js?v=20260701-compact-ui"></script>
+  <script type="module" src="app/compactUiEnhancements.js?v=20260701-compact-ui"></script>
   <script type="module" src="app/main.js"></script>
-  <script type="module" src="app/mainActionsBootstrap.js"></script>
+  <script type="module" src="app/sideMenu.js"></script>
+  <script type="module" src="app/recipeIngredientBuilder.js"></script>
+  <script type="module" src="app/detailCards.js"></script>
+  <script type="module" src="app/dishPickerEnhancements.js"></script>
+  <script type="module" src="app/foodTranslationEnhancements.js"></script>
+  <script type="module" src="app/mainActionsBootstrap.js?v=20260701-compact-ui"></script>
   <script type="module" src="app/searchEnhancements.js"></script>
   <script type="module" src="app/purchaseScanEnhancements.js"></script>
   <script type="module" src="app/ingredientEnhancements.js"></script>
@@ -62,5 +126,6 @@
   <script type="module" src="app/nutritionCurveEnhancements.js"></script>
   <script type="module" src="app/nutritionBatchEnhancements.js"></script>
   <script type="module" src="app/dishEnhancements.js"></script>
+  <script type="module" src="app/pwaRegister.js"></script>
 </body>
 </html>

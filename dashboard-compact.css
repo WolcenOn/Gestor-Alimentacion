@@ -1,0 +1,97 @@
+.dashboard-header-clean {
+  margin-bottom: .85rem;
+}
+
+.dashboard-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: .85rem;
+  align-items: stretch;
+}
+
+.dashboard-metric-grid {
+  margin-top: 1rem;
+}
+
+.dashboard-card-block {
+  margin-top: 1rem;
+}
+
+.compact-dashboard-card {
+  min-height: 0;
+  padding: .9rem;
+  display: grid;
+  gap: .55rem;
+  align-content: start;
+}
+
+.compact-dashboard-card h3 {
+  font-size: 1rem;
+}
+
+.compact-dashboard-card .metric {
+  font-size: clamp(1.45rem, 5vw, 2rem);
+  line-height: 1;
+  margin: 0;
+}
+
+.compact-dashboard-card p {
+  margin: 0;
+}
+
+.task-card.compact-dashboard-card {
+  min-height: 170px;
+}
+
+.task-card.compact-dashboard-card button {
+  align-self: end;
+  width: 100%;
+  margin-top: auto;
+}
+
+.dashboard-list-card .item {
+  padding: .6rem;
+  border-radius: 14px;
+}
+
+.compact-recycling-bars {
+  display: grid;
+  gap: .4rem;
+}
+
+.compact-recycling-bars div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5rem;
+  padding: .45rem .55rem;
+  border-radius: 12px;
+  background: rgba(248, 250, 252, .95);
+}
+
+@media (max-width: 560px) {
+  .dashboard-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .7rem;
+  }
+
+  .compact-dashboard-card {
+    padding: .75rem;
+    border-radius: 18px;
+  }
+
+  .task-card.compact-dashboard-card {
+    min-height: 155px;
+  }
+
+  .compact-dashboard-card .muted,
+  .compact-dashboard-card .qty-line {
+    font-size: .86rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .dashboard-card-grid {
+    grid-template-columns: 1fr;
+  }
+}

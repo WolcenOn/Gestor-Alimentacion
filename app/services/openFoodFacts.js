@@ -23,14 +23,16 @@ function normalizeProduct(barcode, p = {}, lang = "es") {
   const nutriments = p.nutriments || {};
   const quantity = p.quantity || "";
   const extracted = extractQtyFromQuantity(quantity);
+  const declaredPackage = normalizePackageQuantity(p.product_quantity, p.product_quantity_unit);
+  const declaredServing = normalizePackageQuantity(p.serving_quantity, p.serving_quantity_unit);
   const productName = firstNonEmpty(
     ...LOCALIZED_NAME_FIELDS.map(field => localizedValue(p, field, lang)),
     p.product_name,
     p.generic_name,
     "Producto sin nombre"
   );
-  const packageQty = Number(p.product_quantity) || extracted.qty || Number(p.serving_quantity) || 0;
-  const packageUnit = normalizeOffUnit(p.product_quantity_unit || extracted.unit || p.serving_quantity_unit || "g");
+  const packageQty = declaredPackage.qty || extracted.qty || declaredServing.qty || 0;
+  const packageUnit = declaredPackage.unit || extracted.unit || declaredServing.unit || "g";
 
   return {
     id: String(barcode || p.code || ""),
@@ -41,8 +43,8 @@ function normalizeProduct(barcode, p = {}, lang = "es") {
     quantity,
     packageQty,
     packageUnit,
-    servingQty: Number(p.serving_quantity) || 0,
-    servingUnit: normalizeOffUnit(p.serving_quantity_unit || "g"),
+    servingQty: declaredServing.qty || 0,
+    servingUnit: declaredServing.unit || "g",
     imageUrl: p.image_url || p.image_front_url || "",
     nutriments,
     nutriscore: p.nutriscore_grade || p.nutrition_grades || "",
@@ -82,16 +84,21 @@ function normalizeOffUnit(unit = "") {
   return value || "g";
 }
 
+function normalizePackageQuantity(qty, unit = "") {
+  let amount = Number(qty) || 0;
+  let normalizedUnit = normalizeOffUnit(unit || "");
+  const rawUnit = String(unit || "").toLowerCase().trim();
+  if (!amount) return { qty: 0, unit: normalizedUnit || "" };
+  if (rawUnit === "kg") { amount *= 1000; normalizedUnit = "g"; }
+  if (rawUnit === "l") { amount *= 1000; normalizedUnit = "ml"; }
+  if (rawUnit === "cl") { amount *= 10; normalizedUnit = "ml"; }
+  return { qty: amount, unit: normalizedUnit };
+}
+
 function extractQtyFromQuantity(quantity = "") {
   const match = String(quantity).toLowerCase().replace(",", ".").match(/([0-9]+(?:\.[0-9]+)?)\s*(kg|g|ml|l|cl|unidad|unidades|ud|uds)/);
   if (!match) return { qty: 0, unit: "" };
-  let qty = Number(match[1]);
-  let unit = match[2];
-  if (unit === "kg") { qty *= 1000; unit = "g"; }
-  if (unit === "l") { qty *= 1000; unit = "ml"; }
-  if (unit === "cl") { qty *= 10; unit = "ml"; }
-  if (["unidad", "ud", "uds"].includes(unit)) unit = "unidades";
-  return { qty, unit };
+  return normalizePackageQuantity(match[1], match[2]);
 }
 
 export function nutritionProfileFromOpenFoodFacts(product, ingredientId) {

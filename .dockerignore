@@ -1,0 +1,17 @@
+.git
+.github
+node_modules
+npm-debug.log
+.DS_Store
+.env
+.env.*
+
+# El frontend estático no se necesita dentro de la imagen del backend.
+app
+assets
+styles.css
+index.html
+
+# Documentación no necesaria en runtime.
+docs
+*.md

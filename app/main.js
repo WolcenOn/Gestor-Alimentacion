@@ -1,8 +1,8 @@
-import { getState, updateState, setState, subscribe, migrateData } from "./store.js";
+import { getState, updateState, setState, subscribe, migrateData, resetDemoData } from "./store.js";
 import { withMeta } from "./models.js";
 import { stripDangerousText, parseNumber, downloadTextFile, readFileAsText, safeJsonParse, normalizeUnit } from "./utils.js";
 import { validateState, validatePack } from "./validation.js";
-import { renderDashboard } from "./render/dashboard.js";
+import { renderDashboard, renderCookingReviewModal } from "./render/dashboard.js";
 import { renderIngredients } from "./render/ingredients.js";
 import { renderDishes } from "./render/dishes.js";
 import { renderCalendar } from "./render/calendar.js";
@@ -11,7 +11,7 @@ import { renderPacks } from "./render/packs.js";
 import { renderNutrition } from "./render/nutrition.js";
 import { renderHelp } from "./render/help.js";
 import { renderSettings } from "./render/settings.js";
-import { showAlert, closeModal, formToObject, getSubmitterValue } from "./render/ui.js";
+import { showAlert, closeModal, openModal, formToObject, getSubmitterValue } from "./render/ui.js";
 import { printShopping } from "./print/printShopping.js";
 import { printWeek } from "./print/printWeek.js";
 import { registerPurchase } from "./state/stock.js";
@@ -84,6 +84,7 @@ document.addEventListener("click", guarded(async event => {
       return;
     }
     activeTab = tab.dataset.tab;
+    closeModal();
     render();
     return;
   }
@@ -94,9 +95,11 @@ document.addEventListener("click", guarded(async event => {
   const state = getState();
 
   if (action === "close-modal") closeModal();
+  if (action === "open-cooking-review") openModal(renderCookingReviewModal(state, button.dataset.day));
   if (action === "print-shopping") printShopping(state);
   if (action === "print-week") printWeek(state);
   if (action === "export-data") exportData(state);
+  if (action === "reset-local-data") resetLocalData();
   if (action === "share-shopping") shareShoppingText(state);
   if (action === "create-snapshot") {
     updateState(draft => createWeeklySnapshot(draft), "snapshot");
@@ -185,8 +188,18 @@ function addIngredient(form) {
   showAlert("Ingrediente añadido.");
 }
 
-function addDish(form) {
-  const data = formToObject(form);
+function readRecipeFromForm(form, data) {
+  const fromBuilder = String(data.recipeJson || "").trim();
+  if (fromBuilder) {
+    try {
+      return JSON.parse(fromBuilder)
+        .map(line => ({ ingredientId: String(line.ingredientId || ""), qty: parseNumber(line.qty), unit: normalizeUnit(line.unit) }))
+        .filter(line => line.ingredientId && line.qty > 0);
+    } catch {
+      throw new Error("No se pudo leer la lista dinámica de ingredientes. Revisa la receta y vuelve a intentarlo.");
+    }
+  }
+
   const recipe = [];
   for (let i = 0; i < 6; i++) {
     if (!data[`ingredientId_${i}`]) continue;
@@ -194,7 +207,13 @@ function addDish(form) {
     if (qty <= 0) continue;
     recipe.push({ ingredientId: data[`ingredientId_${i}`], qty, unit: normalizeUnit(data[`unit_${i}`]) });
   }
-  if (!recipe.length) throw new Error("Añade al menos un ingrediente a la receta.");
+  return recipe;
+}
+
+function addDish(form) {
+  const data = formToObject(form);
+  const recipe = readRecipeFromForm(form, data);
+  if (!recipe.length) throw new Error("Añade al menos un ingrediente con cantidad a la receta.");
   updateState(draft => {
     draft.dishes.push(withMeta({
       name: stripDangerousText(data.name),
@@ -212,6 +231,7 @@ function addDish(form) {
     }, "dish"));
   }, "dish-add");
   form.reset();
+  form.querySelector("[data-recipe-json]")?.setAttribute("value", "[]");
   showAlert("Plato añadido.");
 }
 
@@ -337,6 +357,13 @@ async function scanIntoPurchaseForm() {
 
 function exportData(state) {
   downloadTextFile(`gestor-menu-semanal-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(state, null, 2));
+}
+
+function resetLocalData() {
+  const confirmed = confirm("Esto borra los datos locales de este navegador y reinicia la app con datos por defecto. No borra datos ya sincronizados en la nube. ¿Quieres continuar?");
+  if (!confirmed) return;
+  resetDemoData();
+  showAlert("Datos locales reiniciados. Si usas nube, descarga o sube datos solo cuando tengas claro qué estado quieres conservar.");
 }
 
 async function importDataFile(file) {

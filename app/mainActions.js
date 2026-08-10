@@ -236,13 +236,27 @@ export function importOffProduct(index, ingredientId = "") {
   if (!product) throw new Error("Producto no encontrado.");
   updateState(draft => {
     let ingredient = ingredientId ? draft.ingredients.find(i => i.id === ingredientId) : null;
+    const packageQty = Number(product.packageQty) || 0;
+    const packageUnit = normalizeUnit(product.packageUnit || "g");
     if (!ingredient) {
-      ingredient = withMeta({ name: stripDangerousText(product.productName), familyId: draft.ingredientFamilies[0]?.id || "family_other", qty: 0, unit: normalizeUnit(product.packageUnit || "g"), available: false, storageType: "pantry", expiryDate: "", dateType: "none", approxPrice: 0, packagingType: normalizePackagingType(product.packaging || ""), products: [] }, "ingredient");
+      ingredient = withMeta({
+        name: stripDangerousText(product.productName),
+        familyId: draft.ingredientFamilies[0]?.id || "family_other",
+        qty: packageQty,
+        unit: packageUnit,
+        available: packageQty > 0,
+        storageType: "pantry",
+        expiryDate: "",
+        dateType: "none",
+        approxPrice: 0,
+        packagingType: normalizePackagingType(product.packaging || product.packagingType || ""),
+        products: []
+      }, "ingredient");
       draft.ingredients.push(ingredient);
     }
     ingredient.products ||= [];
     if (!ingredient.products.some(p => p.barcode === product.barcode)) {
-      ingredient.products.push({ barcode: product.barcode, brand: stripDangerousText(product.brand || ""), productName: stripDangerousText(product.productName || ingredient.name), packageQty: Number(product.packageQty) || 0, packageUnit: normalizeUnit(product.packageUnit || ingredient.unit), price: 0, source: "openfoodfacts", packaging: stripDangerousText(product.packaging || ""), packagingType: normalizePackagingType(product.packaging || ""), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
+      ingredient.products.push({ barcode: product.barcode, brand: stripDangerousText(product.brand || ""), productName: stripDangerousText(product.productName || ingredient.name), packageQty, packageUnit, price: 0, source: "openfoodfacts", packaging: stripDangerousText(product.packaging || ""), packagingType: normalizePackagingType(product.packaging || product.packagingType || ""), createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
     }
     const nutrition = nutritionProfileFromOpenFoodFacts(product, ingredient.id);
     if ([nutrition.kcal, nutrition.carbs, nutrition.protein, nutrition.fat].some(Boolean)) {
@@ -250,7 +264,7 @@ export function importOffProduct(index, ingredientId = "") {
       draft.nutritionProfiles.push(withMeta(nutrition, "nutrition"));
     }
   }, "off-import");
-  showAlert(ingredientId ? "Producto asociado al ingrediente." : "Ingrediente creado desde Open Food Facts.");
+  showAlert(ingredientId ? "Producto asociado al ingrediente." : "Ingrediente creado desde Open Food Facts y añadido al stock.");
   closeModal();
 }
 

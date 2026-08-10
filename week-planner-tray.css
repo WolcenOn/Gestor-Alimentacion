@@ -1,0 +1,40 @@
+.planner-dish-picker-section {
+  border-left-width: 7px;
+}
+
+.planner-tray-section {
+  border-left-width: 7px;
+}
+
+.planner-tray-list {
+  display: grid;
+  gap: .55rem;
+}
+
+.planner-tray-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: .75rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-strong);
+  padding: .75rem;
+}
+
+.planner-tray-item strong {
+  display: block;
+}
+
+.planner-suggestion {
+  border-radius: 14px;
+  padding: .65rem .75rem;
+  background: var(--surface-strong);
+  font-weight: 800;
+}
+
+@media (max-width: 720px) {
+  .planner-tray-item {
+    align-items: stretch;
+  }
+}

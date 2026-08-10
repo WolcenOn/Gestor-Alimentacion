@@ -1,12 +1,13 @@
 import { getState, updateState } from "./store.js";
 import { readFileAsText, safeJsonParse } from "./utils.js";
 import { showAlert, openModal, closeModal, formToObject, getSubmitterValue } from "./render/ui.js";
-import { renderPackPreview } from "./render/packs.js";
+import { renderPackPreview, renderPackDeleteConfirmation } from "./render/packs.js";
 import { listRemotePacks, loadRemotePack, mergePackIntoState, normalizePack, buildPackPrompt } from "./services/packLoader.js";
 import { validatePack } from "./validation.js";
 
 let remotePackFiles = [];
 let pendingPackPreview = null;
+let listingRemotePacks = false;
 
 function stop(event) {
   event.preventDefault();
@@ -54,6 +55,11 @@ document.addEventListener("click", async event => {
       stop(event);
       await copyPackPrompt();
     }
+
+    if (action === "confirm-delete-pack") {
+      stop(event);
+      openDeletePackModal(button.dataset.packId || "");
+    }
   } catch (error) {
     console.error(error);
     showAlert(error.message || "No se pudo completar la acción de packs.", "error");
@@ -67,6 +73,7 @@ document.addEventListener("change", async event => {
     await importLocalPackPreview(event.target.files?.[0]);
   } catch (error) {
     console.error(error);
+    pendingPackPreview = null;
     showAlert(error.message || "No se pudo leer el pack local.", "error");
   } finally {
     event.target.value = "";
@@ -87,6 +94,11 @@ document.addEventListener("submit", event => {
       stop(event);
       generatePackPrompt(form);
     }
+
+    if (form.dataset.form === "delete-installed-pack") {
+      stop(event);
+      deleteInstalledPack(form);
+    }
   } catch (error) {
     console.error(error);
     showAlert(error.message || "No se pudo procesar el pack.", "error");
@@ -95,25 +107,42 @@ document.addEventListener("submit", event => {
 
 async function listPacksIntoUi() {
   const container = root();
-  if (!container) return;
-  container.innerHTML = `<p class="muted">Buscando packs...</p>`;
-  remotePackFiles = await listRemotePacks();
-  container.innerHTML = remotePackFiles.length
-    ? remotePackFiles.map((file, index) => {
-      const searchText = [file.name, file.path, file.path.replaceAll("/", " ").replaceAll("-", " ")].join(" ");
-      return `
-      <div class="item pack-file-item" data-search="${escapeText(searchText)}">
-        <strong>${escapeText(file.name)}</strong>
-        <p class="qty-line">${escapeText(file.path)}</p>
-        <button data-action="preview-remote-pack" data-index="${index}">Previsualizar</button>
-      </div>`;
-    }).join("")
-    : `<p class="muted">No se encontraron packs.</p>`;
+  if (!container) {
+    showAlert("Abre la sección Packs para cargar los packs remotos.", "error");
+    return;
+  }
+  if (listingRemotePacks) return;
+  listingRemotePacks = true;
+  pendingPackPreview = null;
+  remotePackFiles = [];
+  closeModal();
+  container.innerHTML = `<p class="muted">Buscando packs remotos...</p>`;
+  try {
+    remotePackFiles = await listRemotePacks();
+    container.innerHTML = remotePackFiles.length
+      ? remotePackFiles.map((file, index) => {
+        const searchText = [file.name, file.path, String(file.path || "").replaceAll("/", " ").replaceAll("-", " ")].join(" ");
+        return `
+        <div class="item pack-file-item" data-search="${escapeText(searchText)}">
+          <strong>${escapeText(file.name)}</strong>
+          <p class="qty-line">${escapeText(file.path)}</p>
+          <button data-action="preview-remote-pack" data-index="${index}">Previsualizar</button>
+        </div>`;
+      }).join("")
+      : `<p class="muted">No se encontraron packs remotos.</p>`;
+    showAlert(`${remotePackFiles.length} pack(s) remoto(s) encontrados.`);
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = `<p class="alert error">${escapeText(error.message || "No se pudieron cargar los packs remotos.")}</p>`;
+    throw error;
+  } finally {
+    listingRemotePacks = false;
+  }
 }
 
 async function previewRemotePack(index) {
   const file = remotePackFiles[Number(index)];
-  if (!file) throw new Error("Pack no encontrado.");
+  if (!file) throw new Error("Pack no encontrado. Vuelve a buscar packs remotos.");
   const pack = await loadRemotePack(file);
   pendingPackPreview = pack;
   openModal(renderPackPreview(pack, index));
@@ -125,6 +154,7 @@ async function importLocalPackPreview(file) {
   const text = await readFileAsText(file);
   const pack = normalizePack(safeJsonParse(text));
   validatePack(pack);
+  remotePackFiles = [];
   pendingPackPreview = pack;
   openModal(renderPackPreview(pack, "local"));
   showAlert(`Pack local cargado: ${pack.dishes.length} receta(s) disponibles.`);
@@ -144,6 +174,50 @@ function installPreviewedPack(form, event) {
   pendingPackPreview = null;
   closeModal();
   showAlert(`Pack ${installedName} instalado con ${total} receta(s).`);
+}
+
+function openDeletePackModal(packId) {
+  if (!packId) throw new Error("Pack no encontrado.");
+  openModal(renderPackDeleteConfirmation(getState(), packId));
+}
+
+function deleteInstalledPack(form) {
+  const packId = form.dataset.packId || "";
+  const removePlanning = Boolean(form.elements.removePlanning?.checked);
+  let deletedRecipes = 0;
+  let removedPlanning = 0;
+  let packName = "pack";
+
+  updateState(draft => {
+    draft.dishPacks ||= [];
+    draft.dishes ||= [];
+    draft.weeks ||= [];
+    const pack = draft.dishPacks.find(item => item.id === packId);
+    if (!pack) throw new Error("Pack no encontrado.");
+    packName = pack.name;
+    const dishIds = new Set(draft.dishes.filter(dish => dish.packId === packId).map(dish => dish.id));
+    deletedRecipes = dishIds.size;
+
+    if (removePlanning) {
+      for (const week of draft.weeks || []) {
+        for (const [slot, planned] of Object.entries(week.plan || {})) {
+          const next = (planned || []).filter(dishId => {
+            const remove = dishIds.has(dishId);
+            if (remove) removedPlanning += 1;
+            return !remove;
+          });
+          if (next.length) week.plan[slot] = next;
+          else delete week.plan[slot];
+        }
+      }
+    }
+
+    draft.dishes = draft.dishes.filter(dish => dish.packId !== packId);
+    draft.dishPacks = draft.dishPacks.filter(item => item.id !== packId);
+  }, removePlanning ? "pack-delete-with-planning" : "pack-delete-recipes-only");
+
+  closeModal();
+  showAlert(`${packName} eliminado: ${deletedRecipes} receta(s) quitadas${removePlanning ? ` y ${removedPlanning} referencia(s) de planificación borradas` : ""}.`);
 }
 
 function generatePackPrompt(form) {
@@ -169,4 +243,4 @@ function escapeText(value) {
     .replace(/'/g, "&#039;");
 }
 
-window.__gestorPackDebug = { getState };
+window.__gestorPackDebug = { getState, listPacksIntoUi };

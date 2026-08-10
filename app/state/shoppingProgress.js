@@ -10,9 +10,23 @@ export function setWeekProgress(state, weekId, progress) {
   state.shoppingProgress[getProgressKey(weekId)] = progress;
 }
 
+function addNeededLine(totals, ingredient, ingredientId, qty, unit) {
+  const base = toBaseQty(qty, unit);
+  const previous = totals.get(ingredientId);
+  if (previous && previous.unit !== base.unit) return;
+  totals.set(ingredientId, {
+    ingredientId,
+    name: ingredient.name,
+    familyId: ingredient.familyId,
+    neededQty: (previous?.neededQty || 0) + base.qty,
+    unit: base.unit
+  });
+}
+
 export function computeNeededByIngredient(state, weekId = state.activeWeekId) {
   const week = state.weeks.find(w => w.id === weekId);
   const dishMap = new Map(state.dishes.map(d => [d.id, d]));
+  const ingredientMap = new Map(state.ingredients.map(i => [i.id, i]));
   const totals = new Map();
   if (!week) return [];
 
@@ -21,21 +35,21 @@ export function computeNeededByIngredient(state, weekId = state.activeWeekId) {
       const dish = dishMap.get(dishId);
       if (!dish) continue;
       for (const line of dish.recipe || []) {
-        const ingredient = state.ingredients.find(i => i.id === line.ingredientId);
+        const ingredient = ingredientMap.get(line.ingredientId);
         if (!ingredient) continue;
-        const base = toBaseQty(line.qty, line.unit);
-        const previous = totals.get(line.ingredientId);
-        if (previous && previous.unit !== base.unit) continue;
-        totals.set(line.ingredientId, {
-          ingredientId: line.ingredientId,
-          name: ingredient.name,
-          familyId: ingredient.familyId,
-          neededQty: (previous?.neededQty || 0) + base.qty,
-          unit: base.unit
-        });
+        addNeededLine(totals, ingredient, line.ingredientId, line.qty, line.unit);
       }
     }
   }
+
+  for (const lines of Object.values(week.ingredientPlan || {})) {
+    for (const line of lines || []) {
+      const ingredient = ingredientMap.get(line.ingredientId);
+      if (!ingredient) continue;
+      addNeededLine(totals, ingredient, line.ingredientId, line.qty, line.unit || ingredient.unit);
+    }
+  }
+
   return Array.from(totals.values()).sort((a, b) => a.name.localeCompare(b.name, "es"));
 }
 

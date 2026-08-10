@@ -3,8 +3,8 @@ import { normalizeUnit, stripDangerousText } from "../utils.js";
 
 export const PACK_SOURCE = Object.freeze({
   owner: "WolcenOn",
-  repo: "Gestor-Almentacion",
-  branch: "main",
+  repo: "Gestor-Alimentacion",
+  branch: "ux-semana-accesible-fusion",
   basePath: "packs"
 });
 
@@ -14,12 +14,22 @@ export async function listRemotePacks() {
   const root = `${GITHUB_API}/repos/${PACK_SOURCE.owner}/${PACK_SOURCE.repo}/contents/${PACK_SOURCE.basePath}?ref=${PACK_SOURCE.branch}`;
   const files = [];
   await walk(root, files);
-  return files.filter(f => f.path.endsWith(".json") && !f.path.includes(".."));
+  return files.filter(f => String(f.path || "").endsWith(".json") && !String(f.path || "").includes(".."));
 }
 
 async function walk(url, files) {
-  const response = await fetch(url, { headers: { "Accept": "application/vnd.github+json" } });
-  if (!response.ok) throw new Error("No se pudieron listar los packs remotos.");
+  const response = await fetch(url, {
+    cache: "no-store",
+    headers: {
+      "Accept": "application/vnd.github+json"
+    }
+  });
+  if (!response.ok) {
+    const detail = response.status === 403
+      ? "GitHub ha limitado temporalmente las peticiones. Vuelve a intentarlo en unos minutos."
+      : `Respuesta ${response.status} al listar packs remotos.`;
+    throw new Error(`No se pudieron listar los packs remotos. ${detail}`);
+  }
   const entries = await response.json();
   for (const entry of entries) {
     if (entry.type === "dir") await walk(entry.url, files);
@@ -202,7 +212,7 @@ export function buildPackPrompt(formData = {}) {
   const preferences = stripDangerousText(formData.preferences || "recetas sencillas, económicas y saludables");
   const count = Math.max(1, Math.min(Number(formData.count) || 6, 30));
 
-  return `Genera un pack JSON válido para la aplicación Gestor de Menú Semanal.\n\nINSTRUCCIONES DEL USUARIO:\n- Tipo de cocina: ${cuisine}\n- Uso del pack: ${meals}\n- Número de recetas: ${count}\n- Raciones: ${servings}\n- Restricciones/alergias: ${restrictions}\n- Preferencias: ${preferences}\n\nREGLAS OBLIGATORIAS:\n1. Devuelve SOLO JSON válido, sin Markdown ni explicaciones.\n2. El objeto raíz debe tener: schemaVersion, type, id, name, description, tags, language, ingredients, dishes.\n3. Usa schemaVersion: 2 y type: \"meal-pack\".\n4. Todas las recetas deben estar normalizadas a 1 ración: en cada dish usa servings: 1 y recipe con cantidades para una persona/ración.\n5. Cada dish debe incluir instructions como array ordenado de pasos claros de elaboración.\n6. Cada ingredient usado en una receta debe existir en ingredients y tener id estable.\n7. Unidades permitidas: g, kg, ml, l, unidades.\n8. No incluyas HTML, scripts, comentarios, javascript:, claves privadas ni texto inseguro.\n9. Usa nombres de id simples: ingredient_lentejas, dish_lentejas_verduras, etc.\n10. No inventes códigos de barras. products debe ser [] salvo que el usuario los aporte.\n\nEJEMPLO DE ESTRUCTURA:\n{\n  \"schemaVersion\": 2,\n  \"type\": \"meal-pack\",\n  \"id\": \"pack_ejemplo\",\n  \"name\": \"Pack ejemplo\",\n  \"description\": \"Descripción breve\",\n  \"tags\": [\"familia\", \"saludable\"],\n  \"language\": \"es\",\n  \"ingredients\": [\n    {\"id\":\"ingredient_arroz\",\"name\":\"Arroz\",\"familyId\":\"family_pantry\",\"qty\":0,\"unit\":\"g\",\"available\":false,\"storageType\":\"pantry\",\"expiryDate\":\"\",\"dateType\":\"none\",\"approxPrice\":0,\"packagingType\":\"otro\",\"products\":[]}\n  ],\n  \"dishes\": [\n    {\"id\":\"dish_arroz_sencillo\",\"name\":\"Arroz sencillo\",\"servings\":1,\"unit\":\"ración\",\"category\":\"Comida\",\"tags\":[\"básico\"],\"prepTime\":\"25 min\",\"difficulty\":\"fácil\",\"notes\":\"\",\"instructions\":[\"Lava el arroz.\",\"Cuece con agua hasta que esté tierno.\"],\"recipe\":[{\"ingredientId\":\"ingredient_arroz\",\"qty\":80,\"unit\":\"g\"}]}\n  ]\n}\n\nGenera ahora el pack completo solicitado.`;
+  return `Genera un pack JSON válido para la aplicación Gestor de Menú Semanal.\n\nINSTRUCCIONES DEL USUARIO:\n- Tipo de cocina: ${cuisine}\n- Uso del pack: ${meals}\n- Número de recetas: ${count}\n- Raciones: ${servings}\n- Restricciones/alergias: ${restrictions}\n- Preferencias: ${preferences}\n\nREGLAS OBLIGATORIAS:\n1. Devuelve SOLO JSON válido, sin Markdown ni explicaciones.\n2. El objeto raíz debe tener: schemaVersion, type, id, name, description, tags, language, ingredients, dishes.\n3. Usa schemaVersion: 2 y type: "meal-pack".\n4. Todas las recetas deben estar normalizadas a 1 ración: en cada dish usa servings: 1 y recipe con cantidades para una persona/ración.\n5. Cada dish debe incluir instructions como array ordenado de pasos claros de elaboración.\n6. Cada ingredient usado en una receta debe existir en ingredients y tener id estable.\n7. Unidades permitidas: g, kg, ml, l, unidades.\n8. No incluyas HTML, scripts, comentarios, javascript:, claves privadas ni texto inseguro.\n9. Usa nombres de id simples: ingredient_lentejas, dish_lentejas_verduras, etc.\n10. No inventes códigos de barras. products debe ser [] salvo que el usuario los aporte.\n\nEJEMPLO DE ESTRUCTURA:\n{\n  "schemaVersion": 2,\n  "type": "meal-pack",\n  "id": "pack_ejemplo",\n  "name": "Pack ejemplo",\n  "description": "Descripción breve",\n  "tags": ["familia", "saludable"],\n  "language": "es",\n  "ingredients": [\n    {"id":"ingredient_arroz","name":"Arroz","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"otro","products":[]}\n  ],\n  "dishes": [\n    {"id":"dish_arroz_sencillo","name":"Arroz sencillo","servings":1,"unit":"ración","category":"Comida","tags":["básico"],"prepTime":"25 min","difficulty":"fácil","notes":"","instructions":["Lava el arroz.","Cuece con agua hasta que esté tierno."],"recipe":[{"ingredientId":"ingredient_arroz","qty":80,"unit":"g"}]}\n  ]\n}\n\nGenera ahora el pack completo solicitado.`;
 }
 
 function slugId(text) {
