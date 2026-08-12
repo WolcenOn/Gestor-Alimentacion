@@ -96,5 +96,20 @@
     "title": "Pack desayunos sanos estilo España",
     "description": "Desayunos habituales en España normalizados a 1 ración.",
     "tags": ["desayuno", "saludable", "españa", "mediterráneo", "familiar", "rápido"]
-  }
+  },
+  {
+  "name": "menu-gastroparesia-diabetes.json",
+  "path": "packs/gastroparesia/menu-gastroparesia-diabetes.json",
+  "title": "Mediterráneo suave para gastroparesia y diabetes",
+  "description": "30 comidas y cenas mediterráneas, bajas en grasa y fibra contenida, adaptadas a gastroparesia y diabetes.",
+  "tags": [
+    "gastroparesia",
+    "diabetes",
+    "mediterránea",
+    "pescado",
+    "poca fibra",
+    "poca grasa",
+    "comidas",
+    "cenas"
+}
 ]
