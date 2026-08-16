@@ -2,11 +2,17 @@ const viewRoot = document.getElementById("viewRoot");
 const syncBadge = document.getElementById("uxSyncStatus");
 
 const DASHBOARD_PRIMARY_COUNT = 4;
+let enhancementScheduled = false;
 
 function once(node, key) {
   if (!node || node.dataset[key]) return false;
   node.dataset[key] = "true";
   return true;
+}
+
+function setText(node, value) {
+  if (!node || node.textContent === value) return;
+  node.textContent = value;
 }
 
 function enhanceDashboard() {
@@ -16,18 +22,18 @@ function enhanceDashboard() {
   if (!header || !launcher) return;
 
   header.querySelector("h2")?.setAttribute("data-ux-week-title", "true");
-  const intro = header.querySelector(".muted");
-  if (intro) intro.textContent = "Lo importante de hoy y los siguientes pasos para tener la semana bajo control.";
+  setText(header.querySelector(".muted"), "Lo importante de hoy y los siguientes pasos para tener la semana bajo control.");
 
   launcher.classList.add("ux-primary-actions");
   const cards = [...launcher.querySelectorAll(":scope > .task-card")];
-  const assistantCard = cards.find(card => card.textContent.includes("Asistente semanal"));
+  const assistantCard = cards.find(card => {
+    const action = card.querySelector('[data-action="open-week-planner-assistant"]');
+    return Boolean(action);
+  });
   if (assistantCard) {
-    assistantCard.querySelector("h3").textContent = "Crear semana automáticamente";
-    const copy = assistantCard.querySelector(".muted");
-    if (copy) copy.textContent = "Completa huecos con tus platos y preferencias sin editar cada casilla.";
-    const button = assistantCard.querySelector("button");
-    if (button) button.textContent = "Crear propuesta";
+    setText(assistantCard.querySelector("h3"), "Crear semana automáticamente");
+    setText(assistantCard.querySelector(".muted"), "Completa huecos con tus platos y preferencias sin editar cada casilla.");
+    setText(assistantCard.querySelector("button"), "Crear propuesta");
   }
 
   if (cards.length > DASHBOARD_PRIMARY_COUNT && once(launcher, "uxGrouped")) {
@@ -65,10 +71,8 @@ function enhanceCalendar() {
     return !primaryActions.has(button.dataset.action);
   });
 
-  const assistant = actions.querySelector('[data-action="open-week-planner-assistant"]');
-  if (assistant) assistant.textContent = "Autocompletar semana";
-  const newWeek = actions.querySelector('[data-action="new-week"]');
-  if (newWeek) newWeek.textContent = "Nueva semana";
+  setText(actions.querySelector('[data-action="open-week-planner-assistant"]'), "Autocompletar semana");
+  setText(actions.querySelector('[data-action="new-week"]'), "Nueva semana");
 
   if (!secondaryButtons.length) return;
   const details = document.createElement("details");
@@ -84,10 +88,8 @@ function enhanceAssistant() {
   const form = modal?.querySelector('form[data-form="week-planner-assistant"]');
   if (!form || !once(form, "uxSimplified")) return;
 
-  const heading = modal.querySelector("h2");
-  if (heading) heading.textContent = "Crear una propuesta para la semana";
-  const intro = modal.querySelector("header .muted");
-  if (intro) intro.textContent = "Elige días y comidas, selecciona platos y aplica la propuesta. Puedes ajustar el resultado después desde Semana.";
+  setText(modal.querySelector("h2"), "Crear una propuesta para la semana");
+  setText(modal.querySelector("header .muted"), "Elige días y comidas, selecciona platos y aplica la propuesta. Puedes ajustar el resultado después desde Semana.");
 
   const sections = [...form.querySelectorAll(":scope > .planner-section")];
   const titles = [
@@ -99,20 +101,26 @@ function enhanceAssistant() {
     "6. Propuestas listas para usar"
   ];
   sections.forEach((section, index) => {
-    const title = section.querySelector("h3");
-    if (title && titles[index]) title.textContent = titles[index];
+    if (titles[index]) setText(section.querySelector("h3"), titles[index]);
   });
 
-  const fillButton = form.querySelector('[data-action="fill-planner-meal"]');
-  if (fillButton) fillButton.textContent = "Aplicar a la semana";
-  const saveButton = form.querySelector('[data-action="save-planner-combo"]');
-  if (saveButton) saveButton.textContent = "Guardar esta propuesta";
+  setText(form.querySelector('[data-action="fill-planner-meal"]'), "Aplicar a la semana");
+  setText(form.querySelector('[data-action="save-planner-combo"]'), "Guardar esta propuesta");
 }
 
 function enhanceCurrentView() {
   enhanceDashboard();
   enhanceCalendar();
   enhanceAssistant();
+}
+
+function scheduleEnhancement() {
+  if (enhancementScheduled) return;
+  enhancementScheduled = true;
+  window.requestAnimationFrame(() => {
+    enhancementScheduled = false;
+    enhanceCurrentView();
+  });
 }
 
 function syncLabel(status = {}) {
@@ -128,20 +136,21 @@ function syncLabel(status = {}) {
 function updateSyncBadge(status) {
   if (!syncBadge) return;
   const safeStatus = status || window.GestorCloudSync?.getStatus?.() || { mode: "local" };
-  syncBadge.dataset.mode = safeStatus.mode || "local";
-  syncBadge.textContent = syncLabel(safeStatus);
+  const mode = safeStatus.mode || "local";
+  if (syncBadge.dataset.mode !== mode) syncBadge.dataset.mode = mode;
+  setText(syncBadge, syncLabel(safeStatus));
   if (safeStatus.lastError) syncBadge.title = safeStatus.lastError;
   else syncBadge.removeAttribute("title");
 }
 
-const observer = new MutationObserver(() => queueMicrotask(enhanceCurrentView));
+const observer = new MutationObserver(scheduleEnhancement);
 if (viewRoot) observer.observe(viewRoot, { childList: true, subtree: true });
 const modalRoot = document.getElementById("modalRoot");
 if (modalRoot) observer.observe(modalRoot, { childList: true, subtree: true });
 
 window.addEventListener("gestor:cloud-sync-status", event => updateSyncBadge(event.detail));
 window.addEventListener("load", () => {
-  enhanceCurrentView();
+  scheduleEnhancement();
   updateSyncBadge();
   window.setTimeout(() => updateSyncBadge(), 900);
 });
