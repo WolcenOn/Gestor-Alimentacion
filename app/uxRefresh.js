@@ -3,6 +3,8 @@ const syncBadge = document.getElementById("uxSyncStatus");
 
 const DASHBOARD_PRIMARY_COUNT = 4;
 let enhancementScheduled = false;
+let assistantReplay = false;
+let assistantImportPromise = null;
 
 function once(node, key) {
   if (!node || node.dataset[key]) return false;
@@ -142,6 +144,35 @@ function updateSyncBadge(status) {
   if (safeStatus.lastError) syncBadge.title = safeStatus.lastError;
   else syncBadge.removeAttribute("title");
 }
+
+async function ensureAssistantAndReplay(button) {
+  try {
+    assistantImportPromise ||= import("./weekPlannerAssistant.js?v=20260816-ux3");
+    await assistantImportPromise;
+    assistantReplay = true;
+    button.click();
+  } catch (error) {
+    console.error("No se pudo cargar el asistente semanal", error);
+    const alerts = document.getElementById("alerts");
+    if (alerts) {
+      const box = document.createElement("div");
+      box.className = "alert error";
+      box.textContent = "No se pudo abrir el asistente semanal. Recarga la aplicación e inténtalo de nuevo.";
+      alerts.prepend(box);
+      window.setTimeout(() => box.remove(), 7000);
+    }
+  } finally {
+    assistantReplay = false;
+  }
+}
+
+document.addEventListener("click", event => {
+  const button = event.target.closest('[data-action="open-week-planner-assistant"]');
+  if (!button || assistantReplay) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  ensureAssistantAndReplay(button);
+}, true);
 
 const observer = new MutationObserver(scheduleEnhancement);
 if (viewRoot) observer.observe(viewRoot, { childList: true, subtree: true });
