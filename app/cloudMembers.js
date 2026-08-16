@@ -27,7 +27,10 @@ async function cloudRequest(path, options = {}) {
 
 function activeHouseholdId() {
   const session = getCloudSession();
-  return session?.households?.[0]?.id || "";
+  const households = Array.isArray(session?.households) ? session.households : [];
+  const activeId = session?.activeHouseholdId || window.GestorCloudSync?.getStatus?.()?.householdId || households[0]?.id || "";
+  if (activeId && households.some(household => household.id === activeId)) return activeId;
+  return households[0]?.id || activeId;
 }
 
 export async function listActiveHouseholdMembers() {
