@@ -1,6 +1,8 @@
 import { getState, updateState } from "./store.js";
 import { escapeHtml } from "./utils.js";
-import { openModal, showAlert } from "./render/ui.js";
+import { openModal, closeModal, showAlert } from "./render/ui.js";
+
+let pickerSession = null;
 
 function capitalize(value) {
   const text = String(value || "").trim();
@@ -63,9 +65,13 @@ function groupDishes(state) {
   return grouped;
 }
 
-function isDishInSlot(state, slot, dishId) {
+function currentSlotDishIds(state, slot) {
   const week = state.weeks.find(item => item.id === state.activeWeekId);
-  return Boolean(week?.plan?.[slot]?.includes(dishId));
+  return [...(week?.plan?.[slot] || [])];
+}
+
+function isDishInSlot(state, slot, dishId) {
+  return currentSlotDishIds(state, slot).includes(dishId);
 }
 
 function renderDishButton(state, dish, slot, context) {
@@ -89,53 +95,65 @@ function renderPicker(slot) {
   const context = mealContextForSlot(state, slot);
   if (!state.dishes.length) {
     return `
-      <header><div><h2>Añadir plato</h2><p class="muted">Todavía no hay platos guardados.</p></div><button class="secondary" data-action="close-modal">×</button></header>
+      <header class="dish-picker-header"><div><h2>Añadir plato</h2><p class="muted">Todavía no hay platos guardados.</p></div><button class="secondary" data-action="cancel-dish-picker">×</button></header>
       <p class="alert">Crea platos primero en la pestaña Platos.</p>
     `;
   }
 
   return `
-    <header>
-      <div>
-        <p class="eyebrow">Selector de platos</p>
-        <h2>Añadir plato a la semana</h2>
-        <p class="muted">Busca una receta y añádela. El selector permanece abierto para que puedas completar esta comida de una vez.</p>
-      </div>
-      <button class="secondary" data-action="close-modal" aria-label="Cerrar">×</button>
-    </header>
-    ${context ? `
-      <label class="dish-picker-context-filter">
-        <input type="checkbox" data-dish-picker-meal-filter checked>
-        <span><strong>Solo recetas para ${escapeHtml(context.name)}</strong><small>Usa la categoría o etiquetas declaradas en la receta. Desactívalo para ver todo.</small></span>
-      </label>
-    ` : ""}
-    <label class="quick-search-label">Buscar en los platos visibles
-      <input type="search" class="quick-search" data-dish-picker-global placeholder="Ej. salmón, ensalada, arroz, horno...">
-    </label>
-    <p class="small muted dish-picker-flow-status" data-dish-picker-status>${context ? `Mostrando primero recetas clasificadas para ${escapeHtml(context.name)}.` : "Puedes añadir varios platos sin cerrar este selector."}</p>
-    <div class="dish-picker-category-list">
-      ${[...grouped.entries()].map(([category, dishes], index) => `
-        <details class="dish-picker-category" ${index === 0 ? "open" : ""}>
-          <summary><strong>${escapeHtml(category)}</strong><span class="mini-badge" data-category-visible-count>${dishes.length}</span></summary>
-          <label class="quick-search-label category-search-label">Buscar dentro de ${escapeHtml(category)}
-            <input type="search" class="quick-search" data-dish-picker-category-search placeholder="Nombre o ingrediente dentro de esta categoría">
+    <div class="dish-picker-shell">
+      <header class="dish-picker-header">
+        <div>
+          <p class="eyebrow">Selector de platos</p>
+          <h2>${context ? `Añadir a ${escapeHtml(context.name)}` : "Añadir plato"}</h2>
+          <p class="muted dish-picker-header-help">Elige uno o varios platos y guarda cuando termines.</p>
+        </div>
+        <button class="secondary dish-picker-close" data-action="cancel-dish-picker" aria-label="Cancelar y cerrar">×</button>
+      </header>
+      <div class="dish-picker-controls">
+        ${context ? `
+          <label class="dish-picker-context-filter">
+            <input type="checkbox" data-dish-picker-meal-filter checked>
+            <span><strong>Solo ${escapeHtml(context.name)}</strong><small>Desactiva para ver todas las recetas</small></span>
           </label>
-          <div class="list dish-picker-options">
-            ${dishes.map(dish => renderDishButton(state, dish, slot, context)).join("")}
-          </div>
-          <p class="muted dish-picker-empty" hidden>No hay platos que coincidan en esta categoría.</p>
-        </details>
-      `).join("")}
+        ` : ""}
+        <label class="quick-search-label dish-picker-global-search">Buscar
+          <input type="search" class="quick-search" data-dish-picker-global placeholder="Nombre, ingrediente o etiqueta…">
+        </label>
+      </div>
+      <p class="small muted dish-picker-flow-status" data-dish-picker-status>${context ? `Mostrando recetas clasificadas para ${escapeHtml(context.name)}.` : "Puedes seleccionar varios platos."}</p>
+      <div class="dish-picker-category-list">
+        ${[...grouped.entries()].map(([category, dishes], index) => `
+          <details class="dish-picker-category" ${index === 0 ? "open" : ""}>
+            <summary><strong>${escapeHtml(category)}</strong><span class="mini-badge" data-category-visible-count>${dishes.length}</span></summary>
+            <label class="quick-search-label category-search-label">Buscar dentro de ${escapeHtml(category)}
+              <input type="search" class="quick-search" data-dish-picker-category-search placeholder="Nombre o ingrediente dentro de esta categoría">
+            </label>
+            <div class="list dish-picker-options">
+              ${dishes.map(dish => renderDishButton(state, dish, slot, context)).join("")}
+            </div>
+            <p class="muted dish-picker-empty" hidden>No hay platos que coincidan en esta categoría.</p>
+          </details>
+        `).join("")}
+      </div>
+      <p class="muted dish-picker-global-empty" data-dish-picker-global-empty hidden>No hay recetas que coincidan con estos filtros. Prueba a desactivar el filtro por tipo de comida.</p>
+      <div class="dish-picker-footer" role="group" aria-label="Finalizar selección">
+        <button type="button" class="secondary" data-action="cancel-dish-picker">Cancelar</button>
+        <button type="button" data-action="save-dish-picker">Guardar selección</button>
+      </div>
     </div>
-    <p class="muted dish-picker-global-empty" data-dish-picker-global-empty hidden>No hay recetas que coincidan con estos filtros. Prueba a desactivar el filtro por tipo de comida.</p>
   `;
 }
 
 function openDishPicker(slot) {
+  const state = getState();
+  pickerSession = {
+    slot,
+    initialDishIds: currentSlotDishIds(state, slot)
+  };
   openModal(renderPicker(slot));
   const modal = document.querySelector("#modalRoot .modal");
   if (modal) applyDishPickerFilters(modal);
-  document.querySelector("[data-dish-picker-global]")?.focus();
 }
 
 function addDishToSlot(slot, dishId, button) {
@@ -162,8 +180,29 @@ function addDishToSlot(slot, dishId, button) {
 
   const modal = button?.closest(".modal");
   const status = modal?.querySelector("[data-dish-picker-status]");
-  if (status) status.textContent = `${dish?.name || "Plato"} añadido. Puedes seguir añadiendo platos o cerrar cuando termines.`;
-  showAlert(dish ? `${dish.name} añadido a la semana.` : "Plato añadido a la semana.");
+  if (status) status.textContent = `${dish?.name || "Plato"} seleccionado.`;
+}
+
+function saveDishPicker() {
+  const slot = pickerSession?.slot;
+  const state = getState();
+  const selected = slot ? currentSlotDishIds(state, slot).length : 0;
+  pickerSession = null;
+  closeModal();
+  showAlert(`${selected} plato(s) guardado(s) en esta comida.`);
+}
+
+function cancelDishPicker() {
+  const session = pickerSession;
+  pickerSession = null;
+  if (session?.slot) {
+    updateState(draft => {
+      const week = draft.weeks.find(w => w.id === draft.activeWeekId);
+      if (!week) return;
+      week.plan[session.slot] = [...session.initialDishIds];
+    }, "plan-cancel-picker");
+  }
+  closeModal();
 }
 
 function applyDishPickerFilters(root) {
@@ -212,6 +251,18 @@ document.addEventListener("click", event => {
   if (pickButton) {
     event.preventDefault();
     addDishToSlot(pickButton.dataset.slot || "", pickButton.dataset.dishId || "", pickButton);
+    return;
+  }
+
+  if (event.target.closest('[data-action="save-dish-picker"]')) {
+    event.preventDefault();
+    saveDishPicker();
+    return;
+  }
+
+  if (event.target.closest('[data-action="cancel-dish-picker"]')) {
+    event.preventDefault();
+    cancelDishPicker();
   }
 }, true);
 
