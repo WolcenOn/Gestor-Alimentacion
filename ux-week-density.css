@@ -13,20 +13,9 @@
   padding: 14px;
   border-radius: 14px;
 }
-.task-launcher.ux-primary-actions .task-card h3 {
-  font-size: 1rem;
-  margin-bottom: 4px;
-}
-.task-launcher.ux-primary-actions .task-card .muted {
-  margin-block: 4px 10px;
-  font-size: .88rem;
-  line-height: 1.35;
-}
-.task-launcher.ux-primary-actions .task-card button {
-  min-height: 40px;
-  padding: .55rem .8rem;
-  align-self: flex-start;
-}
+.task-launcher.ux-primary-actions .task-card h3 { font-size: 1rem; margin-bottom: 4px; }
+.task-launcher.ux-primary-actions .task-card .muted { margin-block: 4px 10px; font-size: .88rem; line-height: 1.35; }
+.task-launcher.ux-primary-actions .task-card button { min-height: 40px; padding: .55rem .8rem; align-self: flex-start; }
 
 /* Week planning: member cards adapt to the available width instead of forcing narrow columns. */
 .accessible-meal-block .compact-member-slots {
@@ -42,24 +31,9 @@
   border-radius: 12px;
   background: #fff;
 }
-.compact-member-slot .member-slot-head {
-  margin-bottom: 8px;
-}
-.compact-member-slot .mini-badge {
-  min-width: 24px;
-  min-height: 24px;
-  padding: 3px 7px;
-  border-radius: 8px;
-  font-size: .78rem;
-}
-
-/* A dish gets the full width of its member card. */
-.compact-member-slot .dish-stack {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 7px;
-  margin-bottom: 9px;
-}
+.compact-member-slot .member-slot-head { margin-bottom: 8px; }
+.compact-member-slot .mini-badge { min-width: 24px; min-height: 24px; padding: 3px 7px; border-radius: 8px; font-size: .78rem; }
+.compact-member-slot .dish-stack { display: grid !important; grid-template-columns: 1fr !important; gap: 7px; margin-bottom: 9px; }
 .compact-member-slot .dish-pill {
   position: relative;
   display: grid;
@@ -76,118 +50,61 @@
   color: #0b5f59;
 }
 .compact-member-slot .dish-pill-name {
-  min-width: 0;
-  width: 100%;
-  min-height: 40px;
-  padding: 8px 10px;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: inherit;
-  box-shadow: none;
-  justify-content: flex-start;
-  text-align: left;
-  white-space: normal;
-  overflow-wrap: normal;
-  word-break: normal;
-  line-height: 1.3;
-  font-size: .84rem;
-  font-weight: 800;
+  min-width: 0; width: 100%; min-height: 40px; padding: 8px 10px; border: 0; border-radius: 0;
+  background: transparent; color: inherit; box-shadow: none; justify-content: flex-start; text-align: left;
+  white-space: normal; overflow-wrap: normal; word-break: normal; line-height: 1.3; font-size: .84rem; font-weight: 800;
 }
 .compact-member-slot .dish-pill > .icon-button {
-  width: 32px;
-  min-width: 32px;
-  min-height: 40px;
-  padding: 0;
-  border-radius: 0;
-  border-left: 1px solid rgba(15,118,110,.14);
-  background: rgba(15,118,110,.06);
-  color: #0b5f59;
-  box-shadow: none;
-  font-size: .95rem;
+  width: 32px; min-width: 32px; min-height: 40px; padding: 0; border-radius: 0;
+  border-left: 1px solid rgba(15,118,110,.14); background: rgba(15,118,110,.06); color: #0b5f59;
+  box-shadow: none; font-size: .95rem;
 }
-.compact-member-slot .dish-pill > .icon-button:hover {
-  transform: none;
-  background: rgba(15,118,110,.14);
-  box-shadow: none;
-}
-.compact-member-slot .ingredient-pill {
-  background: #fffaf0;
-  border-color: rgba(245,158,11,.22);
-  color: #854d0e;
-}
-.compact-member-slot .ingredient-pill > .icon-button {
-  border-left-color: rgba(245,158,11,.18);
-  background: rgba(245,158,11,.08);
-  color: #854d0e;
-}
-.compact-member-slot .empty-slot {
-  margin: 0;
-  padding: 8px;
-  border: 1px dashed var(--ux-border, #e5e7eb);
-  border-radius: 8px;
-  text-align: center;
-}
-.compact-member-slot .slot-actions {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 7px;
-}
-.compact-member-slot .slot-actions button {
-  width: 100%;
-  min-height: 36px;
-  padding: .45rem .5rem;
-  border-radius: 8px;
-  font-size: .76rem;
-  line-height: 1.2;
-}
+.compact-member-slot .dish-pill > .icon-button:hover { transform: none; background: rgba(15,118,110,.14); box-shadow: none; }
+.compact-member-slot .ingredient-pill { background: #fffaf0; border-color: rgba(245,158,11,.22); color: #854d0e; }
+.compact-member-slot .ingredient-pill > .icon-button { border-left-color: rgba(245,158,11,.18); background: rgba(245,158,11,.08); color: #854d0e; }
+.compact-member-slot .empty-slot { margin: 0; padding: 8px; border: 1px dashed var(--ux-border, #e5e7eb); border-radius: 8px; text-align: center; }
+.compact-member-slot .slot-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+.compact-member-slot .slot-actions button { width: 100%; min-height: 36px; padding: .45rem .5rem; border-radius: 8px; font-size: .76rem; line-height: 1.2; }
 
-/* Dish picker: contextual filter and smoother multi-add flow. */
-.dish-picker-context-filter {
+/* Dish picker: compact controls and explicit finish actions. */
+.dish-picker-shell { padding-bottom: 78px; }
+.dish-picker-header {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  margin: 4px 0 14px;
-  padding: 12px 13px;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.dish-picker-header h2 { margin: 2px 0 4px; }
+.dish-picker-header-help { margin: 0; }
+.dish-picker-close { flex: 0 0 auto; }
+.dish-picker-controls { display: grid; gap: 10px; }
+.dish-picker-context-filter {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  padding: 10px 12px;
   border: 1px solid rgba(15,118,110,.2);
-  border-radius: 14px;
+  border-radius: 12px;
   background: #f0fdfa;
   color: #0b5f59;
 }
 .dish-picker-context-filter input {
   width: 18px;
   height: 18px;
-  margin-top: 2px;
+  margin: 0;
   flex: 0 0 18px;
   accent-color: #0f766e;
 }
-.dish-picker-context-filter span {
-  display: grid;
-  gap: 3px;
-}
-.dish-picker-context-filter strong {
-  font-size: .92rem;
-}
-.dish-picker-context-filter small {
-  color: #52706d;
-  line-height: 1.35;
-}
-.dish-picker-flow-status {
-  margin: 8px 0 12px;
-}
-.dish-picker-category[hidden] {
-  display: none !important;
-}
-.dish-picker-option.is-added {
-  opacity: .62;
-  cursor: default;
-  background: #ecfdf5;
-  border-color: rgba(16,185,129,.22);
-}
-.dish-picker-option.is-added .mini-badge {
-  background: #d1fae5;
-  color: #047857;
-}
+.dish-picker-context-filter span { display: flex; align-items: baseline; flex-wrap: wrap; gap: 3px 8px; }
+.dish-picker-context-filter strong { font-size: .92rem; }
+.dish-picker-context-filter small { color: #52706d; line-height: 1.25; }
+.dish-picker-global-search { margin: 0; }
+.dish-picker-flow-status { margin: 7px 0 10px; }
+.dish-picker-category[hidden] { display: none !important; }
+.dish-picker-option.is-added { opacity: .62; cursor: default; background: #ecfdf5; border-color: rgba(16,185,129,.22); }
+.dish-picker-option.is-added .mini-badge { background: #d1fae5; color: #047857; }
 .dish-picker-global-empty {
   margin: 14px 0 0;
   padding: 13px;
@@ -195,37 +112,60 @@
   border-radius: 12px;
   text-align: center;
 }
+.dish-picker-footer {
+  position: sticky;
+  bottom: -1px;
+  z-index: 8;
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: 9px;
+  margin: 18px -2px -2px;
+  padding: 10px 2px 2px;
+  background: linear-gradient(180deg, rgba(255,255,255,0), #fff 22%);
+}
+.dish-picker-footer button { width: 100%; min-height: 46px; border-radius: 12px; font-weight: 800; }
 
 @media (max-width: 700px) {
-  .task-launcher.ux-primary-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+  .task-launcher.ux-primary-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .task-launcher.ux-primary-actions .task-card,
-  .task-launcher.ux-primary-actions .task-card:first-child {
-    min-height: 120px;
-    padding: 12px;
+  .task-launcher.ux-primary-actions .task-card:first-child { min-height: 120px; padding: 12px; }
+  .task-launcher.ux-primary-actions .task-card .muted { font-size: .8rem; }
+  .task-launcher.ux-primary-actions .task-card button { width: 100%; }
+  .accessible-meal-block .compact-member-slots { grid-template-columns: 1fr !important; padding: 8px; }
+
+  .dish-picker-shell { padding-bottom: 70px; }
+  .dish-picker-header {
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--ux-border, #e5e7eb);
   }
-  .task-launcher.ux-primary-actions .task-card .muted {
-    font-size: .8rem;
-  }
-  .task-launcher.ux-primary-actions .task-card button {
-    width: 100%;
-  }
-  .accessible-meal-block .compact-member-slots {
-    grid-template-columns: 1fr !important;
-    padding: 8px;
-  }
-  .dish-picker-context-filter {
-    margin-bottom: 10px;
-    padding: 10px 11px;
+  .dish-picker-header .eyebrow,
+  .dish-picker-header-help { display: none; }
+  .dish-picker-header h2 { margin: 0; font-size: 1.22rem; }
+  .dish-picker-close { width: 42px; min-width: 42px; height: 42px; padding: 0; border-radius: 50%; }
+  .dish-picker-controls { gap: 8px; }
+  .dish-picker-context-filter { padding: 8px 10px; border-radius: 10px; }
+  .dish-picker-context-filter span { display: block; }
+  .dish-picker-context-filter strong { display: block; font-size: .86rem; line-height: 1.2; }
+  .dish-picker-context-filter small { display: none; }
+  .dish-picker-global-search { font-size: .8rem; }
+  .dish-picker-global-search input { min-height: 46px; }
+  .dish-picker-flow-status { display: none; }
+  .dish-picker-category-list { margin-top: 8px; }
+  .dish-picker-category .category-search-label { margin-top: 6px; }
+  .dish-picker-footer {
+    position: sticky;
+    bottom: 0;
+    margin-top: 12px;
+    padding-top: 12px;
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
   }
 }
 
 @media (max-width: 430px) {
-  .task-launcher.ux-primary-actions {
-    grid-template-columns: 1fr;
-  }
-  .compact-member-slot .slot-actions {
-    grid-template-columns: 1fr;
-  }
+  .task-launcher.ux-primary-actions { grid-template-columns: 1fr; }
+  .compact-member-slot .slot-actions { grid-template-columns: 1fr; }
+  .dish-picker-footer { grid-template-columns: 1fr 1.25fr; }
+  .dish-picker-footer button { min-height: 44px; font-size: .9rem; }
 }
