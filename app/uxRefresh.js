@@ -85,6 +85,34 @@ function enhanceCalendar() {
   toolbar.after(details);
 }
 
+function enhanceMonthView() {
+  const monthCard = viewRoot?.querySelector(".calendar-month-card");
+  if (!monthCard || !once(monthCard, "uxSimplified")) return;
+
+  const topbar = viewRoot.querySelector(".calendar-topbar");
+  if (topbar) {
+    setText(topbar.querySelector(".muted"), "Elige una semana para abrirla o crearla.");
+    topbar.querySelector('[data-action="open-current-week"]')?.remove();
+  }
+
+  const titleRow = monthCard.querySelector(".section-title-row");
+  titleRow?.querySelector(".muted")?.remove();
+  titleRow?.querySelector('[data-action="open-current-week"]')?.remove();
+
+  monthCard.querySelectorAll(".calendar-month-head").forEach(node => node.remove());
+  monthCard.querySelectorAll(".calendar-month-days").forEach(node => node.remove());
+
+  const grid = monthCard.querySelector(".calendar-month-grid");
+  if (grid) {
+    grid.classList.add("ux-month-week-list");
+    grid.removeAttribute("role");
+  }
+
+  monthCard.querySelectorAll(".calendar-month-week").forEach(week => {
+    week.classList.add("ux-month-week-row");
+  });
+}
+
 function enhanceAssistant() {
   const modal = document.getElementById("modalRoot");
   const form = modal?.querySelector('form[data-form="week-planner-assistant"]');
@@ -113,6 +141,7 @@ function enhanceAssistant() {
 function enhanceCurrentView() {
   enhanceDashboard();
   enhanceCalendar();
+  enhanceMonthView();
   enhanceAssistant();
 }
 
