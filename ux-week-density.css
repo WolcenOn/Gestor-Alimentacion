@@ -142,6 +142,60 @@
   line-height: 1.2;
 }
 
+/* Dish picker: contextual filter and smoother multi-add flow. */
+.dish-picker-context-filter {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 4px 0 14px;
+  padding: 12px 13px;
+  border: 1px solid rgba(15,118,110,.2);
+  border-radius: 14px;
+  background: #f0fdfa;
+  color: #0b5f59;
+}
+.dish-picker-context-filter input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex: 0 0 18px;
+  accent-color: #0f766e;
+}
+.dish-picker-context-filter span {
+  display: grid;
+  gap: 3px;
+}
+.dish-picker-context-filter strong {
+  font-size: .92rem;
+}
+.dish-picker-context-filter small {
+  color: #52706d;
+  line-height: 1.35;
+}
+.dish-picker-flow-status {
+  margin: 8px 0 12px;
+}
+.dish-picker-category[hidden] {
+  display: none !important;
+}
+.dish-picker-option.is-added {
+  opacity: .62;
+  cursor: default;
+  background: #ecfdf5;
+  border-color: rgba(16,185,129,.22);
+}
+.dish-picker-option.is-added .mini-badge {
+  background: #d1fae5;
+  color: #047857;
+}
+.dish-picker-global-empty {
+  margin: 14px 0 0;
+  padding: 13px;
+  border: 1px dashed var(--ux-border, #e5e7eb);
+  border-radius: 12px;
+  text-align: center;
+}
+
 @media (max-width: 700px) {
   .task-launcher.ux-primary-actions {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -160,6 +214,10 @@
   .accessible-meal-block .compact-member-slots {
     grid-template-columns: 1fr !important;
     padding: 8px;
+  }
+  .dish-picker-context-filter {
+    margin-bottom: 10px;
+    padding: 10px 11px;
   }
 }
 
