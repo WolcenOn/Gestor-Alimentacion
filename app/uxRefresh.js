@@ -28,10 +28,7 @@ function enhanceDashboard() {
 
   launcher.classList.add("ux-primary-actions");
   const cards = [...launcher.querySelectorAll(":scope > .task-card")];
-  const assistantCard = cards.find(card => {
-    const action = card.querySelector('[data-action="open-week-planner-assistant"]');
-    return Boolean(action);
-  });
+  const assistantCard = cards.find(card => Boolean(card.querySelector('[data-action="open-week-planner-assistant"]')));
   if (assistantCard) {
     setText(assistantCard.querySelector("h3"), "Crear semana automáticamente");
     setText(assistantCard.querySelector(".muted"), "Completa huecos con tus platos y preferencias sin editar cada casilla.");
@@ -39,12 +36,11 @@ function enhanceDashboard() {
   }
 
   if (cards.length > DASHBOARD_PRIMARY_COUNT && once(launcher, "uxGrouped")) {
-    const extra = cards.slice(DASHBOARD_PRIMARY_COUNT);
     const details = document.createElement("details");
     details.className = "ux-dashboard-more";
     details.innerHTML = '<summary>Más acciones</summary><div class="ux-dashboard-more-content"></div>';
     const content = details.querySelector(".ux-dashboard-more-content");
-    extra.forEach(card => content.append(card));
+    cards.slice(DASHBOARD_PRIMARY_COUNT).forEach(card => content.append(card));
     launcher.after(details);
   }
 
@@ -60,19 +56,11 @@ function enhanceDashboard() {
 function enhanceCalendar() {
   const toolbar = viewRoot?.querySelector(".calendar-week-toolbar");
   if (!toolbar || !once(toolbar, "uxSimplified")) return;
-
   const actions = toolbar.querySelector(".toolbar-actions");
   if (!actions) return;
 
-  const primaryActions = new Set([
-    "open-week-planner-assistant",
-    "open-current-week",
-    "new-week"
-  ]);
-  const secondaryButtons = [...actions.querySelectorAll("button")].filter(button => {
-    return !primaryActions.has(button.dataset.action);
-  });
-
+  const primaryActions = new Set(["open-week-planner-assistant", "open-current-week", "new-week"]);
+  const secondaryButtons = [...actions.querySelectorAll("button")].filter(button => !primaryActions.has(button.dataset.action));
   setText(actions.querySelector('[data-action="open-week-planner-assistant"]'), "Autocompletar semana");
   setText(actions.querySelector('[data-action="new-week"]'), "Nueva semana");
 
@@ -98,19 +86,103 @@ function enhanceMonthView() {
   const titleRow = monthCard.querySelector(".section-title-row");
   titleRow?.querySelector(".muted")?.remove();
   titleRow?.querySelector('[data-action="open-current-week"]')?.remove();
-
-  monthCard.querySelectorAll(".calendar-month-head").forEach(node => node.remove());
-  monthCard.querySelectorAll(".calendar-month-days").forEach(node => node.remove());
+  monthCard.querySelectorAll(".calendar-month-head, .calendar-month-days").forEach(node => node.remove());
 
   const grid = monthCard.querySelector(".calendar-month-grid");
   if (grid) {
     grid.classList.add("ux-month-week-list");
     grid.removeAttribute("role");
   }
+  monthCard.querySelectorAll(".calendar-month-week").forEach(week => week.classList.add("ux-month-week-row"));
+}
 
-  monthCard.querySelectorAll(".calendar-month-week").forEach(week => {
-    week.classList.add("ux-month-week-row");
-  });
+function cardByHeading(text) {
+  return [...(viewRoot?.querySelectorAll(".settings-grid .card, #viewRoot > .card, #viewRoot article.card") || [])]
+    .find(card => card.querySelector("h3")?.textContent.trim() === text);
+}
+
+function wrapSettingCard(card, title, description, open = false) {
+  if (!card || card.closest(".ux-settings-disclosure")) return null;
+  const details = document.createElement("details");
+  details.className = "ux-settings-disclosure";
+  if (open) details.open = true;
+  details.innerHTML = `<summary><span><strong>${title}</strong><small>${description}</small></span><span class="ux-chevron" aria-hidden="true">⌄</span></summary><div class="ux-settings-disclosure-body"></div>`;
+  card.before(details);
+  details.querySelector(".ux-settings-disclosure-body").append(card);
+  return details;
+}
+
+function enhanceSettings() {
+  const header = viewRoot?.querySelector(".settings-header");
+  if (!header || !once(header, "uxSimplified")) return;
+
+  setText(header.querySelector("h2"), "Ajustes");
+  setText(header.querySelector(".muted"), "Configura tu hogar, la rutina de comidas y cómo se guardan tus datos.");
+  header.querySelector(".eyebrow")?.remove();
+
+  const family = cardByHeading("Miembros de la familia");
+  const meals = cardByHeading("Comidas registrables");
+  if (family) {
+    setText(family.querySelector("h3"), "Personas en casa");
+    setText(family.querySelector(".muted"), "Añade a quienes participan en la planificación semanal.");
+    family.classList.add("ux-settings-primary-card");
+  }
+  if (meals) {
+    setText(meals.querySelector("h3"), "Comidas del día");
+    setText(meals.querySelector(".muted"), "Elige las comidas que quieres planificar habitualmente.");
+    meals.classList.add("ux-settings-primary-card");
+  }
+
+  const cloud = cardByHeading("Nube y sincronización");
+  if (cloud) {
+    setText(cloud.querySelector("h3"), "Cuenta y sincronización");
+    setText(cloud.querySelector(".muted"), "Mantén tus datos disponibles entre dispositivos y miembros del hogar.");
+    cloud.classList.add("ux-settings-cloud-card");
+
+    const facts = cloud.querySelector(".mini-facts");
+    if (facts) facts.classList.add("ux-settings-technical");
+    cloud.querySelectorAll("code").forEach(code => code.closest("p")?.classList.add("ux-settings-technical"));
+    [...cloud.querySelectorAll("p")].forEach(p => {
+      if (/ID hogar sync|Última actualización en nube|Último intento|reintentos/i.test(p.textContent)) p.classList.add("ux-settings-technical");
+    });
+    [...cloud.querySelectorAll(".help-note")].forEach(note => note.classList.add("ux-settings-technical"));
+
+    if (!cloud.querySelector(".ux-sync-advanced-toggle")) {
+      const technical = [...cloud.querySelectorAll(".ux-settings-technical")];
+      if (technical.length) {
+        const details = document.createElement("details");
+        details.className = "ux-sync-advanced-toggle";
+        details.innerHTML = '<summary>Detalles técnicos de sincronización</summary><div class="ux-sync-advanced-body"></div>';
+        const body = details.querySelector(".ux-sync-advanced-body");
+        technical[0].before(details);
+        technical.forEach(node => body.append(node));
+      }
+    }
+  }
+
+  const privacy = cardByHeading("Privacidad y datos");
+  wrapSettingCard(privacy, "Datos y privacidad", "Copias, exportación y borrado local.");
+
+  const usda = cardByHeading("USDA FoodData Central");
+  wrapSettingCard(usda, "Fuentes nutricionales", "Configura fuentes externas solo si necesitas enriquecer datos nutricionales.");
+
+  const batch = cardByHeading("Enriquecimiento nutricional por lotes");
+  wrapSettingCard(batch, "Completar nutrición automáticamente", "Busca información nutricional para ingredientes pendientes.");
+
+  const exportCard = cardByHeading("Exportar e importar datos");
+  wrapSettingCard(exportCard, "Copias de seguridad", "Descarga o restaura una copia de tus datos.");
+
+  const primaryGrid = family?.closest(".settings-grid");
+  if (primaryGrid) primaryGrid.classList.add("ux-settings-primary-grid");
+
+  const advancedHeadingExists = viewRoot.querySelector(".ux-settings-advanced-heading");
+  const firstDisclosure = viewRoot.querySelector(".ux-settings-disclosure");
+  if (!advancedHeadingExists && firstDisclosure) {
+    const heading = document.createElement("div");
+    heading.className = "ux-settings-advanced-heading";
+    heading.innerHTML = '<h3>Datos y opciones avanzadas</h3><p class="muted">Estas opciones no suelen ser necesarias en el uso diario.</p>';
+    firstDisclosure.before(heading);
+  }
 }
 
 function enhanceAssistant() {
@@ -142,6 +214,7 @@ function enhanceCurrentView() {
   enhanceDashboard();
   enhanceCalendar();
   enhanceMonthView();
+  enhanceSettings();
   enhanceAssistant();
 }
 
