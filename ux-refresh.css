@@ -204,6 +204,62 @@ body {
   gap: 8px;
 }
 
+.calendar-month-card .section-title-row {
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.calendar-month-card .section-title-row > div:first-child {
+  display: flex;
+  align-items: center;
+}
+
+.calendar-month-card .section-title-row h3 {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+}
+
+.calendar-month-card .section-title-row .toolbar-actions {
+  margin-left: auto;
+}
+
+.ux-month-week-list {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px;
+}
+
+.ux-month-week-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--ux-border);
+  border-radius: 15px;
+  background: var(--ux-surface);
+}
+
+.ux-month-week-row.active {
+  border-color: rgba(37, 99, 235, .45);
+  background: #f8fbff;
+}
+
+.ux-month-week-row .calendar-month-week-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  min-width: 0;
+}
+
+.ux-month-week-row .actions {
+  justify-content: flex-end;
+}
+
+.ux-month-week-row button {
+  white-space: nowrap;
+}
+
 .planning-day-card {
   border-radius: var(--ux-radius);
 }
@@ -244,6 +300,31 @@ body {
   }
 
   .ux-bottom-nav button { font-size: .72rem; }
+
+  .calendar-month-card .section-title-row {
+    display: grid;
+    gap: 10px;
+  }
+
+  .calendar-month-card .section-title-row .toolbar-actions {
+    width: 100%;
+    margin-left: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ux-month-week-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .ux-month-week-row .actions {
+    justify-content: stretch;
+  }
+
+  .ux-month-week-row button {
+    width: 100%;
+  }
 }
 
 @media print {
