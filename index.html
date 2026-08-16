@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#2563eb">
+  <meta name="theme-color" content="#0f766e">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Menú Semanal">
@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="week-accessibility.css">
   <link rel="stylesheet" href="dashboard-today.css">
   <link rel="stylesheet" href="packs-ui.css">
-  <link rel="stylesheet" href="ux-refresh.css?v=20260816-ux5">
+  <link rel="stylesheet" href="ux-refresh.css?v=20260816-ux6">
 </head>
 <body>
   <a class="skip-link" href="#mainContent">Saltar al contenido</a>
@@ -97,11 +97,11 @@
   </main>
 
   <nav class="ux-bottom-nav app-screen" aria-label="Navegación principal">
-    <button type="button" data-tab="dashboard">Hoy</button>
-    <button type="button" data-tab="calendar">Semana</button>
-    <button type="button" data-tab="shopping">Compra</button>
-    <button type="button" data-tab="ingredients">Despensa</button>
-    <button type="button" data-action="open-side-menu" aria-controls="sideMenu">Más</button>
+    <button type="button" data-tab="dashboard"><span class="ux-nav-icon" aria-hidden="true">🏠</span><span>Hoy</span></button>
+    <button type="button" data-tab="calendar"><span class="ux-nav-icon" aria-hidden="true">📅</span><span>Semana</span></button>
+    <button type="button" data-tab="shopping"><span class="ux-nav-icon" aria-hidden="true">🛒</span><span>Compra</span></button>
+    <button type="button" data-tab="ingredients"><span class="ux-nav-icon" aria-hidden="true">🥕</span><span>Despensa</span></button>
+    <button type="button" data-action="open-side-menu" aria-controls="sideMenu"><span class="ux-nav-icon" aria-hidden="true">•••</span><span>Más</span></button>
   </nav>
 
   <div id="modalRoot" class="modal-root app-screen" aria-live="polite"></div>
@@ -114,7 +114,8 @@
   <script type="module" src="app/healthDisclaimer.js"></script>
   <script type="module" src="app/cloudHouseholdEnhancements.js"></script>
   <script type="module" src="app/cloudSync.js"></script>
-  <script type="module" src="app/cloudMembers.js"></script>
+  <script type="module" src="app/cloudMembers.js?v=20260816-ux6"></script>
+  <script type="module" src="app/cloudMembersUi.js?v=20260816-ux6"></script>
   <script type="module" src="app/cloudSessionGuard.js"></script>
   <script type="module" src="app/legalEnhancements.js"></script>
   <script type="module" src="app/modalPositionFix.js"></script>
