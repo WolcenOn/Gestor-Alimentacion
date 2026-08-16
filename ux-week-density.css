@@ -66,6 +66,31 @@
 .compact-member-slot .slot-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
 .compact-member-slot .slot-actions button { width: 100%; min-height: 36px; padding: .45rem .5rem; border-radius: 8px; font-size: .76rem; line-height: 1.2; }
 
+/* Direct week switching in the planner. */
+.ux-week-quick-nav {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ux-border, #e5e7eb);
+}
+.ux-week-quick-nav .ux-week-jump {
+  width: 100%;
+  min-height: 40px;
+  border-radius: 11px;
+  padding: .55rem .7rem;
+  font-size: .82rem;
+  line-height: 1.2;
+}
+.ux-week-quick-nav .ux-week-create {
+  background: #f0fdfa;
+  color: #0b5f59;
+  border: 1px dashed rgba(15,118,110,.35);
+  box-shadow: none;
+}
+
 /* Dish picker: compact controls and explicit finish actions. */
 .dish-picker-shell { padding-bottom: 78px; }
 .dish-picker-header {
@@ -125,6 +150,9 @@
 }
 .dish-picker-footer button { width: 100%; min-height: 46px; border-radius: 12px; font-weight: 800; }
 
+/* Print views must never leak into the normal application layout. */
+.print-view { display: none !important; }
+
 @media (max-width: 700px) {
   .task-launcher.ux-primary-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .task-launcher.ux-primary-actions .task-card,
@@ -132,6 +160,9 @@
   .task-launcher.ux-primary-actions .task-card .muted { font-size: .8rem; }
   .task-launcher.ux-primary-actions .task-card button { width: 100%; }
   .accessible-meal-block .compact-member-slots { grid-template-columns: 1fr !important; padding: 8px; }
+
+  .ux-week-quick-nav { gap: 6px; }
+  .ux-week-quick-nav .ux-week-jump { min-height: 38px; padding: .5rem .55rem; font-size: .75rem; }
 
   .dish-picker-shell { padding-bottom: 70px; }
   .dish-picker-header {
@@ -168,4 +199,18 @@
   .compact-member-slot .slot-actions { grid-template-columns: 1fr; }
   .dish-picker-footer { grid-template-columns: 1fr 1.25fr; }
   .dish-picker-footer button { min-height: 44px; font-size: .9rem; }
+}
+
+@media print {
+  body[data-print-mode="shopping"] .app-screen,
+  body[data-print-mode="shopping"] #printWeekView,
+  body[data-print-mode="week"] .app-screen,
+  body[data-print-mode="week"] #printShoppingView {
+    display: none !important;
+  }
+
+  body[data-print-mode="shopping"] #printShoppingView,
+  body[data-print-mode="week"] #printWeekView {
+    display: block !important;
+  }
 }
