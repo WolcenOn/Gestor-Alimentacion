@@ -1,4 +1,4 @@
-const CACHE_VERSION = "gestor-menu-v1.0.27";
+const CACHE_VERSION = "gestor-menu-v1.0.28-ux1";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -8,6 +8,8 @@ const APP_SHELL = [
   "./dashboard-today.css",
   "./week-accessibility.css",
   "./week-planner-assistant.css",
+  "./week-planner-tray.css",
+  "./ux-refresh.css",
   "./manifest.webmanifest",
   "./packs/manifest.json",
   "./packs/desayunos/desayunos-sanos-espana.json",
@@ -41,6 +43,7 @@ const APP_SHELL = [
   "./app/render/settings.js",
   "./app/render/calendar.js",
   "./app/render/ingredientCard.js",
+  "./app/uxRefresh.js",
   "./assets/icons/icon-192.svg",
   "./assets/icons/icon-512.svg"
 ];
