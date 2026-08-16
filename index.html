@@ -18,18 +18,19 @@
   <link rel="stylesheet" href="week-accessibility.css">
   <link rel="stylesheet" href="dashboard-today.css">
   <link rel="stylesheet" href="packs-ui.css">
+  <link rel="stylesheet" href="ux-refresh.css?v=20260816-ux1">
 </head>
 <body>
   <a class="skip-link" href="#mainContent">Saltar al contenido</a>
 
-  <header class="app-header app-screen simplified-header">
-    <div>
-      <p class="eyebrow">MVP familiar</p>
-      <h1>Gestor de Menú Semanal</h1>
-      <p class="muted">Planifica, compra, actualiza stock e imprime solo lo necesario.</p>
+  <header class="app-header app-screen simplified-header ux-header">
+    <div class="ux-brand-block">
+      <h1>Mi menú</h1>
+      <p class="muted">Planifica, compra y cocina sin perder de vista lo importante.</p>
     </div>
-    <div class="header-actions">
-      <button class="secondary menu-trigger" data-action="open-side-menu" aria-controls="sideMenu" aria-expanded="false" aria-label="Abrir menú lateral">☰</button>
+    <div class="header-actions ux-header-status">
+      <span id="uxSyncStatus" class="ux-sync-status" data-mode="local" aria-live="polite">Solo en este dispositivo</span>
+      <button class="secondary menu-trigger" data-action="open-side-menu" aria-controls="sideMenu" aria-expanded="false" aria-label="Abrir más opciones">☰</button>
     </div>
   </header>
 
@@ -38,45 +39,54 @@
     <section class="side-menu-panel" role="dialog" aria-modal="true" aria-labelledby="sideMenuTitle">
       <header class="side-menu-header">
         <div>
-          <p class="eyebrow">Menú</p>
-          <h2 id="sideMenuTitle">Navegación</h2>
-          <p class="muted">Todas las secciones y herramientas de la app.</p>
+          <p class="eyebrow">Más</p>
+          <h2 id="sideMenuTitle">Opciones</h2>
+          <p class="muted">Recetas, salud, ajustes y herramientas menos frecuentes.</p>
         </div>
         <button type="button" class="secondary" data-action="close-side-menu" aria-label="Cerrar">×</button>
       </header>
+
       <div class="side-menu-section">
-        <p class="side-menu-section-title">Uso diario</p>
+        <p class="side-menu-section-title">Tu alimentación</p>
         <div class="side-menu-list">
-          <button type="button" data-tab="dashboard" data-side-menu-item>Dashboard</button>
-          <button type="button" data-tab="ingredients" data-side-menu-item>Ingredientes</button>
-          <button type="button" data-tab="dishes" data-side-menu-item>Platos</button>
-          <button type="button" data-tab="calendar" data-side-menu-item>Semana</button>
-          <button type="button" data-tab="shopping" data-side-menu-item>Compra</button>
+          <button type="button" data-tab="dishes" data-side-menu-item>Recetas y platos</button>
           <button type="button" data-tab="nutrition" data-side-menu-item>Nutrición</button>
+          <button type="button" data-tab="metabolic" data-side-menu-item>Salud metabólica</button>
+          <button type="button" data-tab="packs" data-side-menu-item>Colecciones de recetas</button>
         </div>
       </div>
+
       <div class="side-menu-section">
-        <p class="side-menu-section-title">Herramientas</p>
+        <p class="side-menu-section-title">Cuenta y aplicación</p>
         <div class="side-menu-list">
-          <button type="button" data-tab="settings" data-side-menu-item>Ajustes</button>
-          <button type="button" data-tab="packs" data-side-menu-item>Packs</button>
-          <button type="button" data-tab="metabolic" data-side-menu-item>Metabólico</button>
+          <button type="button" data-tab="settings" data-side-menu-item>Ajustes y sincronización</button>
           <button type="button" data-tab="help" data-side-menu-item>Ayuda</button>
-          <button type="button" data-action="create-snapshot" data-side-menu-item>Guardar snapshot</button>
-          <button type="button" data-action="export-data" data-side-menu-item>Exportar JSON</button>
-          <label class="button secondary side-menu-file" data-side-menu-item>
-            Importar JSON
-            <input id="importFile" type="file" accept="application/json,.json" hidden>
-          </label>
         </div>
       </div>
-      <div class="side-menu-section">
-        <p class="side-menu-section-title">Legal y estado</p>
-        <div class="side-menu-list">
-          <button type="button" data-action="open-legal-doc" data-legal-doc="privacy" data-side-menu-item>Privacidad</button>
-          <button type="button" data-action="open-legal-doc" data-legal-doc="terms" data-side-menu-item>Términos de servicio</button>
-          <button type="button" id="backendHealthBadge" data-side-menu-item>Comprobar backend</button>
-        </div>
+
+      <div class="side-menu-section ux-advanced-section">
+        <details>
+          <summary>Datos y opciones avanzadas</summary>
+          <div class="side-menu-list">
+            <button type="button" data-action="create-snapshot" data-side-menu-item>Crear copia de seguridad</button>
+            <button type="button" data-action="export-data" data-side-menu-item>Descargar datos</button>
+            <label class="button secondary side-menu-file" data-side-menu-item>
+              Importar datos
+              <input id="importFile" type="file" accept="application/json,.json" hidden>
+            </label>
+            <button type="button" id="backendHealthBadge" data-side-menu-item>Estado del servicio</button>
+          </div>
+        </details>
+      </div>
+
+      <div class="side-menu-section ux-advanced-section">
+        <details>
+          <summary>Privacidad y condiciones</summary>
+          <div class="side-menu-list">
+            <button type="button" data-action="open-legal-doc" data-legal-doc="privacy" data-side-menu-item>Privacidad</button>
+            <button type="button" data-action="open-legal-doc" data-legal-doc="terms" data-side-menu-item>Términos de servicio</button>
+          </div>
+        </details>
       </div>
     </section>
   </aside>
@@ -85,6 +95,14 @@
     <section id="alerts" class="alerts" aria-live="polite"></section>
     <section id="viewRoot"></section>
   </main>
+
+  <nav class="ux-bottom-nav app-screen" aria-label="Navegación principal">
+    <button type="button" data-tab="dashboard">Hoy</button>
+    <button type="button" data-tab="calendar">Semana</button>
+    <button type="button" data-tab="shopping">Compra</button>
+    <button type="button" data-tab="ingredients">Despensa</button>
+    <button type="button" data-action="open-side-menu" aria-controls="sideMenu">Más</button>
+  </nav>
 
   <div id="modalRoot" class="modal-root app-screen" aria-live="polite"></div>
   <div id="printShoppingView" class="print-view"></div>
@@ -126,6 +144,7 @@
   <script type="module" src="app/nutritionCurveEnhancements.js"></script>
   <script type="module" src="app/nutritionBatchEnhancements.js"></script>
   <script type="module" src="app/dishEnhancements.js"></script>
+  <script type="module" src="app/uxRefresh.js?v=20260816-ux1"></script>
   <script type="module" src="app/pwaRegister.js"></script>
 </body>
 </html>
