@@ -1,4 +1,4 @@
-const CACHE_VERSION = "gestor-menu-v1.0.28-ux15";
+const CACHE_VERSION = "gestor-menu-v1.0.28-ux16";
 const APP_SHELL = [
   "./",
   "./index.html",
