@@ -20,10 +20,22 @@ export function renderDishes(state) {
           <form data-form="dish">
             <div class="form-grid">
               <label>Nombre<input name="name" required placeholder="Ej. Salmorejo completo"></label>
-              <label>Categoría<input name="category" placeholder="Cena ligera"></label>
+              <label>Categoría<input name="category" placeholder="Ej. Ensalada, pasta, tostada..."></label>
               <label>Raciones de referencia<input name="servings" type="number" min="1" value="1"></label>
               <label>Tiempo<input name="prepTime" placeholder="15 min"></label>
             </div>
+            <fieldset class="dish-meal-types-fieldset">
+              <legend>¿En qué comidas encaja esta receta?</legend>
+              <p class="small muted">Puedes marcar varias. Estas opciones salen de las comidas definidas en Ajustes.</p>
+              <div class="dish-meal-type-grid">
+                ${(state.mealTypes || []).map(meal => `
+                  <label class="check-row dish-meal-type-option">
+                    <input type="checkbox" name="mealTypes" value="${escapeHtml(meal.name)}">
+                    <span><strong>${escapeHtml(meal.name)}</strong></span>
+                  </label>
+                `).join("") || '<p class="muted">Añade primero una comida en Ajustes.</p>'}
+              </div>
+            </fieldset>
             <label>Etiquetas<input name="tags" placeholder="fácil, mediterránea"></label>
             <label>Notas<textarea name="notes"></textarea></label>
             <label>Pautas de elaboración<textarea name="instructions" placeholder="Un paso por línea. Ej.:
@@ -56,12 +68,12 @@ Servir frío."></textarea></label>
         <div class="section-title-row">
           <div>
             <h2>Recetario</h2>
-            <p class="muted">Busca por nombre, categoría, etiqueta, ingrediente o texto de elaboración.</p>
+            <p class="muted">Busca por nombre, categoría, comida, etiqueta, ingrediente o texto de elaboración.</p>
           </div>
           <span class="badge">${state.dishes.length} platos</span>
         </div>
         <label class="quick-search-label">Búsqueda rápida de platos
-          <input type="search" class="quick-search" placeholder="Ej. salmorejo, tupper, pollo, verano..." data-search-target=".dish-list .dish-item" data-empty-target="dishSearchEmpty">
+          <input type="search" class="quick-search" placeholder="Ej. desayuno, salmorejo, tupper, pollo..." data-search-target=".dish-list .dish-item" data-empty-target="dishSearchEmpty">
         </label>
         <div id="dishSearchEmpty" class="search-empty muted" hidden>No hay platos que coincidan con la búsqueda.</div>
         <div class="list dish-list">${state.dishes.map(d => renderDishItem(state, d)).join("")}</div>
@@ -92,11 +104,16 @@ function renderDishItem(state, d) {
   }).join(" · ");
   const ingredientNames = (d.recipe || []).map(line => state.ingredients.find(i => i.id === line.ingredientId)?.name || line.ingredientId).join(" ");
   const instructions = Array.isArray(d.instructions) ? d.instructions : [];
-  const searchText = [d.name, d.category, d.tags?.join(" "), d.prepTime, d.notes, ingredientNames, instructions.join(" ")].join(" ");
+  const mealTypes = Array.isArray(d.mealTypes) ? d.mealTypes : [];
+  const searchText = [d.name, d.category, mealTypes.join(" "), d.tags?.join(" "), d.prepTime, d.notes, ingredientNames, instructions.join(" ")].join(" ");
   return `
     <div class="item dish-item" data-search="${escapeHtml(searchText)}">
       <div class="item-title">
-        <div><strong>${escapeHtml(d.name)}</strong><p class="qty-line">${escapeHtml(d.category || "Sin categoría")} · ${escapeHtml(d.prepTime || "")}</p></div>
+        <div>
+          <strong>${escapeHtml(d.name)}</strong>
+          <p class="qty-line">${escapeHtml(d.category || "Sin categoría")} · ${escapeHtml(d.prepTime || "")}</p>
+          ${mealTypes.length ? `<div class="ux-meal-tags">${mealTypes.map(meal => `<span class="ux-meal-tag">${escapeHtml(meal)}</span>`).join("")}</div>` : `<p class="small muted">Sin comidas compatibles definidas.</p>`}
+        </div>
         <span class="badge">${Number(d.servings) || 1} ración</span>
       </div>
       <p class="small">${lines}</p>
