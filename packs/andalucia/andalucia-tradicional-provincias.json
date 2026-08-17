@@ -1,1 +1,2409 @@
-{"schemaVersion":2,"type":"meal-pack","id":"pack_andalucia_tradicional","name":"Andalucía tradicional: platos típicos por provincias","description":"Pack de 30 recetas tradicionales andaluzas con elaboración detallada, cubriendo platos representativos de Cádiz, Córdoba, Granada, Huelva, Jaén, Málaga, Sevilla y Almería. Todas las recetas están normalizadas a 1 ración.","tags":["Andalucía","tradicional","provincias","30 recetas","1 ración","elaboración detallada"],"language":"es","ingredients":[{"id":"ingredient_tomate","name":"Tomate maduro","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_pepino","name":"Pepino","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_pimiento_verde","name":"Pimiento verde","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_pimiento_rojo","name":"Pimiento rojo","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_ajo","name":"Ajo","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_cebolla","name":"Cebolla","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_pan","name":"Pan asentado","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_pan_rallado","name":"Pan rallado","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_harina","name":"Harina de trigo","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_harina_garbanzo","name":"Harina de garbanzo","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_almendra","name":"Almendra cruda pelada","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_aceite","name":"Aceite de oliva virgen extra","familyId":"family_pantry","qty":0,"unit":"ml","products":[]},{"id":"ingredient_vinagre","name":"Vinagre de Jerez","familyId":"family_pantry","qty":0,"unit":"ml","products":[]},{"id":"ingredient_sal","name":"Sal","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_pimenton","name":"Pimentón dulce","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_comino","name":"Comino molido","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_laurel","name":"Laurel","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_perejil","name":"Perejil fresco","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_limon","name":"Limón","familyId":"family_fruit","qty":0,"unit":"g","products":[]},{"id":"ingredient_naranja","name":"Naranja","familyId":"family_fruit","qty":0,"unit":"g","products":[]},{"id":"ingredient_uvas","name":"Uvas","familyId":"family_fruit","qty":0,"unit":"g","products":[]},{"id":"ingredient_patata","name":"Patata","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_zanahoria","name":"Zanahoria","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_calabacin","name":"Calabacín","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_berenjena","name":"Berenjena","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_calabaza","name":"Calabaza","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_espinacas","name":"Espinacas","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_acelgas","name":"Acelgas","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_habas","name":"Habas frescas","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_alcachofa","name":"Alcachofa","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_guisantes","name":"Guisantes","familyId":"family_vegetables","qty":0,"unit":"g","products":[]},{"id":"ingredient_arroz","name":"Arroz redondo","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_fideos","name":"Fideos gruesos","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_garbanzos","name":"Garbanzos cocidos","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_lentejas","name":"Lentejas cocidas","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_huevo","name":"Huevo","familyId":"family_protein","qty":0,"unit":"unidades","products":[]},{"id":"ingredient_jamon","name":"Jamón serrano","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_lomo_orza","name":"Lomo de orza","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_chorizo","name":"Chorizo","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_pollo","name":"Pollo","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_ternera","name":"Ternera o rabo de toro troceado","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_cerdo","name":"Lomo de cerdo","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_queso","name":"Queso","familyId":"family_dairy","qty":0,"unit":"g","products":[]},{"id":"ingredient_yogur","name":"Yogur natural","familyId":"family_dairy","qty":0,"unit":"g","products":[]},{"id":"ingredient_vino_blanco","name":"Vino blanco","familyId":"family_pantry","qty":0,"unit":"ml","products":[]},{"id":"ingredient_vino_tinto","name":"Vino tinto","familyId":"family_pantry","qty":0,"unit":"ml","products":[]},{"id":"ingredient_caldo","name":"Caldo suave","familyId":"family_pantry","qty":0,"unit":"ml","products":[]},{"id":"ingredient_miel_cana","name":"Miel de caña","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_aceitunas","name":"Aceitunas","familyId":"family_pantry","qty":0,"unit":"g","products":[]},{"id":"ingredient_bacalao","name":"Bacalao desalado","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_merluza","name":"Merluza","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_cazon","name":"Cazón o pescado blanco para adobo","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_pescado_frito","name":"Pescado pequeño variado","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_sardinas","name":"Sardinas","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_atun","name":"Atún fresco","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_choco","name":"Choco o sepia","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_caballa","name":"Caballa","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_urta","name":"Urta o pescado blanco de roca","familyId":"family_protein","qty":0,"unit":"g","products":[]},{"id":"ingredient_gambas","name":"Gambas","familyId":"family_protein","qty":0,"unit":"g","products":[]}],"dishes":[{"id":"dish_and_01_gazpacho","name":"Gazpacho andaluz tradicional","servings":1,"unit":"ración","category":"Sopa fría","tags":["Andalucía","Sevilla / Andalucía","clásico","verano"],"prepTime":"15 min","difficulty":"fácil","notes":"Ajustar ajo y vinagre al gusto.","instructions":["Lava las hortalizas y retira las partes duras.","Remoja el pan si está seco.","Tritura tomate, pepino, pimiento, ajo y pan.","Añade vinagre, sal y aceite en hilo fino.","Ajusta con agua fría si queda muy espeso.","Refrigera y sirve muy frío."],"recipe":[{"ingredientId":"ingredient_tomate","qty":300,"unit":"g"},{"ingredientId":"ingredient_pepino","qty":60,"unit":"g"},{"ingredientId":"ingredient_pimiento_verde","qty":35,"unit":"g"},{"ingredientId":"ingredient_ajo","qty":2,"unit":"g"},{"ingredientId":"ingredient_pan","qty":20,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":15,"unit":"ml"},{"ingredientId":"ingredient_vinagre","qty":8,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_02_salmorejo","name":"Salmorejo cordobés con huevo y jamón","servings":1,"unit":"ración","category":"Sopa fría","tags":["Andalucía","Córdoba","clásico"],"prepTime":"20 min","difficulty":"fácil","notes":"El pan marca la textura final.","instructions":["Tritura tomate, ajo y sal hasta obtener puré.","Añade el pan y deja hidratar cinco minutos.","Vuelve a triturar incorporando el aceite poco a poco.","Cuece el huevo, enfría y pica.","Sirve el salmorejo frío.","Termina con huevo y jamón por encima."],"recipe":[{"ingredientId":"ingredient_tomate","qty":320,"unit":"g"},{"ingredientId":"ingredient_pan","qty":45,"unit":"g"},{"ingredientId":"ingredient_ajo","qty":2,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":18,"unit":"ml"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_jamon","qty":15,"unit":"g"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_03_ajoblanco","name":"Ajoblanco malagueño con uvas","servings":1,"unit":"ración","category":"Sopa fría","tags":["Andalucía","Málaga / Granada","almendra","frío"],"prepTime":"15 min + reposo","difficulty":"fácil","notes":"Sopa fría tradicional de almendra.","instructions":["Remoja el pan en agua fría.","Tritura almendras, ajo y sal hasta formar pasta.","Añade el pan escurrido y bate.","Incorpora agua fría hasta lograr textura de sopa.","Emulsiona con aceite y ajusta con vinagre.","Enfría y sirve con uvas."],"recipe":[{"ingredientId":"ingredient_almendra","qty":45,"unit":"g"},{"ingredientId":"ingredient_pan","qty":35,"unit":"g"},{"ingredientId":"ingredient_ajo","qty":1,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":18,"unit":"ml"},{"ingredientId":"ingredient_vinagre","qty":6,"unit":"ml"},{"ingredientId":"ingredient_uvas","qty":80,"unit":"g"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_04_porra","name":"Porra antequerana","servings":1,"unit":"ración","category":"Sopa fría espesa","tags":["Andalucía","Málaga","Antequera","verano"],"prepTime":"20 min","difficulty":"fácil","notes":"Más espesa que el gazpacho.","instructions":["Tritura tomate, pimiento, ajo y sal.","Añade pan y deja que absorba jugos.","Bate hasta obtener una crema espesa.","Incorpora aceite en hilo fino.","Cuece y pica el huevo.","Sirve fría con huevo y atún."],"recipe":[{"ingredientId":"ingredient_tomate","qty":300,"unit":"g"},{"ingredientId":"ingredient_pan","qty":60,"unit":"g"},{"ingredientId":"ingredient_pimiento_verde","qty":30,"unit":"g"},{"ingredientId":"ingredient_ajo","qty":2,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":18,"unit":"ml"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_atun","qty":35,"unit":"g"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_05_remojon","name":"Remojón granadino de naranja y bacalao","servings":1,"unit":"ración","category":"Ensalada fría","tags":["Andalucía","Granada","invierno","bacalao"],"prepTime":"12 min","difficulty":"fácil","notes":"Revisar el punto de sal del bacalao.","instructions":["Pela la naranja retirando bien la parte blanca.","Corta en gajos o rodajas.","Desmiga el bacalao desalado.","Cuece el huevo si se usa y trocéalo.","Mezcla con aceitunas y cebolla si procede.","Aliña con aceite y deja reposar unos minutos."],"recipe":[{"ingredientId":"ingredient_naranja","qty":200,"unit":"g"},{"ingredientId":"ingredient_bacalao","qty":80,"unit":"g"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_aceitunas","qty":25,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":12,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_06_pio_antequerano","name":"Pío antequerano","servings":1,"unit":"ración","category":"Ensalada fría","tags":["Andalucía","Málaga","Antequera","naranja"],"prepTime":"10 min","difficulty":"fácil","notes":"Ensalada sencilla de naranja y bacalao.","instructions":["Pela la naranja retirando bien la parte blanca.","Corta en gajos o dados.","Desmiga el bacalao desalado.","Añade aceitunas y cebolla muy fina.","Riega con aceite de oliva.","Deja reposar unos minutos antes de servir."],"recipe":[{"ingredientId":"ingredient_naranja","qty":220,"unit":"g"},{"ingredientId":"ingredient_bacalao","qty":90,"unit":"g"},{"ingredientId":"ingredient_aceitunas","qty":25,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":12,"unit":"ml"},{"ingredientId":"ingredient_cebolla","qty":25,"unit":"g"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_07_espinacas_garbanzos","name":"Espinacas con garbanzos sevillanas","servings":1,"unit":"ración","category":"Tapa / guiso vegetal","tags":["Andalucía","Sevilla","legumbre","tapa"],"prepTime":"20 min","difficulty":"media","notes":"El majado da el sabor tradicional.","instructions":["Fríe o tuesta el pan con el ajo y resérvalo.","Maja pan, ajo, comino, pimentón y vinagre.","Saltea las espinacas hasta que bajen de volumen.","Añade garbanzos escurridos.","Incorpora el majado con un poco de agua.","Cocina hasta que quede trabado."],"recipe":[{"ingredientId":"ingredient_espinacas","qty":150,"unit":"g"},{"ingredientId":"ingredient_garbanzos","qty":170,"unit":"g"},{"ingredientId":"ingredient_pan","qty":20,"unit":"g"},{"ingredientId":"ingredient_ajo","qty":4,"unit":"g"},{"ingredientId":"ingredient_pimenton","qty":2,"unit":"g"},{"ingredientId":"ingredient_comino","qty":1,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":12,"unit":"ml"},{"ingredientId":"ingredient_vinagre","qty":5,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_08_huevos_flamenca","name":"Huevos a la flamenca","servings":1,"unit":"ración","category":"Cazuela","tags":["Andalucía","Sevilla","huevo","tradicional"],"prepTime":"25 min","difficulty":"media","notes":"Ajustar embutido según necesidades.","instructions":["Haz un sofrito espeso de tomate y pimiento.","Añade los guisantes y cocina unos minutos.","Pasa el sofrito a una cazuela individual.","Reparte jamón y chorizo en poca cantidad.","Casca los huevos encima.","Hornea o tapa hasta que la clara cuaje."],"recipe":[{"ingredientId":"ingredient_huevo","qty":2,"unit":"unidades"},{"ingredientId":"ingredient_tomate","qty":180,"unit":"g"},{"ingredientId":"ingredient_guisantes","qty":60,"unit":"g"},{"ingredientId":"ingredient_pimiento_rojo","qty":50,"unit":"g"},{"ingredientId":"ingredient_jamon","qty":20,"unit":"g"},{"ingredientId":"ingredient_chorizo","qty":20,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":8,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_09_flamenquin","name":"Flamenquín cordobés","servings":1,"unit":"ración","category":"Carne","tags":["Andalucía","Córdoba","frito","lomo"],"prepTime":"25 min","difficulty":"media","notes":"Ración individual.","instructions":["Aplana el filete de lomo.","Coloca jamón y queso en el centro.","Enrolla apretando para que no se abra.","Pasa por harina, huevo y pan rallado.","Fríe en aceite caliente hasta dorar.","Escurre y sirve cortado."],"recipe":[{"ingredientId":"ingredient_cerdo","qty":140,"unit":"g"},{"ingredientId":"ingredient_jamon","qty":30,"unit":"g"},{"ingredientId":"ingredient_queso","qty":25,"unit":"g"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_harina","qty":20,"unit":"g"},{"ingredientId":"ingredient_pan_rallado","qty":35,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":30,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_10_rabo_toro","name":"Rabo de toro cordobés guisado","servings":1,"unit":"ración","category":"Guiso de carne","tags":["Andalucía","Córdoba","guiso","carne"],"prepTime":"2 h","difficulty":"media","notes":"Ideal para batch cooking.","instructions":["Dora la carne por todos los lados.","Sofríe cebolla, zanahoria y ajo.","Devuelve la carne a la olla.","Añade vino tinto y reduce.","Incorpora caldo y laurel.","Cuece lento hasta que esté muy tierna."],"recipe":[{"ingredientId":"ingredient_ternera","qty":220,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":80,"unit":"g"},{"ingredientId":"ingredient_zanahoria","qty":80,"unit":"g"},{"ingredientId":"ingredient_ajo","qty":4,"unit":"g"},{"ingredientId":"ingredient_vino_tinto","qty":120,"unit":"ml"},{"ingredientId":"ingredient_caldo","qty":150,"unit":"ml"},{"ingredientId":"ingredient_aceite","qty":10,"unit":"ml"},{"ingredientId":"ingredient_laurel","qty":1,"unit":"g"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_11_pescaito","name":"Pescaíto frito andaluz","servings":1,"unit":"ración","category":"Fritura","tags":["Andalucía","Cádiz / Málaga / Huelva","costa","pescado"],"prepTime":"20 min","difficulty":"fácil","notes":"Freír en tandas pequeñas.","instructions":["Seca bien el pescado.","Sala ligeramente.","Pasa por harina y sacude el exceso.","Fríe en aceite caliente por tandas.","Retira cuando esté dorado y crujiente.","Escurre en papel y sirve al momento."],"recipe":[{"ingredientId":"ingredient_pescado_frito","qty":220,"unit":"g"},{"ingredientId":"ingredient_harina","qty":45,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":40,"unit":"ml"},{"ingredientId":"ingredient_limon","qty":20,"unit":"g"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_12_bienmesabe","name":"Bienmesabe o cazón en adobo","servings":1,"unit":"ración","category":"Pescado adobado","tags":["Andalucía","Cádiz","adobo","pescado"],"prepTime":"20 min + adobo","difficulty":"media","notes":"El adobo debe perfumar sin ocultar el pescado.","instructions":["Corta el pescado en dados medianos.","Mezcla vinagre, ajo, pimentón, comino y sal.","Cubre el pescado con el adobo y deja reposar en frío.","Escurre antes de freír.","Pasa por harina y sacude el exceso.","Fríe en aceite caliente hasta dorar."],"recipe":[{"ingredientId":"ingredient_cazon","qty":180,"unit":"g"},{"ingredientId":"ingredient_vinagre","qty":40,"unit":"ml"},{"ingredientId":"ingredient_ajo","qty":5,"unit":"g"},{"ingredientId":"ingredient_pimenton","qty":3,"unit":"g"},{"ingredientId":"ingredient_comino","qty":1,"unit":"g"},{"ingredientId":"ingredient_harina","qty":40,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":35,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_13_tortillitas_camarones","name":"Tortillitas de camarones","servings":1,"unit":"ración","category":"Fritura","tags":["Andalucía","Cádiz","camarones","tapa"],"prepTime":"25 min","difficulty":"media","notes":"Si no hay camarón, usar gamba picada fina.","instructions":["Pica cebolla y perejil muy finos.","Mezcla harinas con agua fría hasta una masa líquida.","Añade camarones o gamba picada.","Deja reposar diez minutos.","Vierte cucharadas finas en aceite caliente.","Fríe hasta que los bordes queden crujientes."],"recipe":[{"ingredientId":"ingredient_gambas","qty":70,"unit":"g"},{"ingredientId":"ingredient_harina","qty":35,"unit":"g"},{"ingredientId":"ingredient_harina_garbanzo","qty":20,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":25,"unit":"g"},{"ingredientId":"ingredient_perejil","qty":5,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":35,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_14_papas_choco","name":"Papas con choco","servings":1,"unit":"ración","category":"Guiso marinero","tags":["Andalucía","Huelva / Cádiz","choco"],"prepTime":"35 min","difficulty":"media","notes":"Guiso muy típico de la costa atlántica.","instructions":["Pica cebolla, pimiento y tomate.","Sofríe hasta que el fondo esté bien hecho.","Añade el choco y rehoga.","Incorpora vino blanco y deja evaporar.","Añade patata chascada y caldo.","Cuece hasta que la patata esté tierna."],"recipe":[{"ingredientId":"ingredient_choco","qty":180,"unit":"g"},{"ingredientId":"ingredient_patata","qty":220,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":70,"unit":"g"},{"ingredientId":"ingredient_pimiento_verde","qty":40,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":100,"unit":"g"},{"ingredientId":"ingredient_vino_blanco","qty":60,"unit":"ml"},{"ingredientId":"ingredient_caldo","qty":180,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_15_atun_encebollado","name":"Atún encebollado","servings":1,"unit":"ración","category":"Pescado","tags":["Andalucía","Cádiz / Huelva","atún","costa"],"prepTime":"25 min","difficulty":"fácil","notes":"No sobrecocinar el atún.","instructions":["Pocha mucha cebolla con ajo y aceite.","Añade laurel y vino blanco.","Reduce hasta que la cebolla quede melosa.","Corta el atún en dados grandes.","Añádelo al final y cocina poco tiempo.","Reposa tapado para que quede jugoso."],"recipe":[{"ingredientId":"ingredient_atun","qty":180,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":150,"unit":"g"},{"ingredientId":"ingredient_ajo","qty":4,"unit":"g"},{"ingredientId":"ingredient_vino_blanco","qty":60,"unit":"ml"},{"ingredientId":"ingredient_laurel","qty":1,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":12,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_16_urta_rotena","name":"Urta a la roteña","servings":1,"unit":"ración","category":"Pescado al horno","tags":["Andalucía","Cádiz","Rota","pescado"],"prepTime":"35 min","difficulty":"media","notes":"Usar pescado blanco firme si no hay urta.","instructions":["Corta cebolla y pimientos en tiras.","Sofríe las verduras con tomate.","Coloca el pescado en una fuente.","Cubre con el sofrito.","Añade vino blanco.","Hornea hasta que el pescado esté jugoso."],"recipe":[{"ingredientId":"ingredient_urta","qty":180,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":180,"unit":"g"},{"ingredientId":"ingredient_pimiento_rojo","qty":70,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":80,"unit":"g"},{"ingredientId":"ingredient_vino_blanco","qty":60,"unit":"ml"},{"ingredientId":"ingredient_aceite","qty":12,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_17_espetos","name":"Espeto de sardinas adaptado a plancha","servings":1,"unit":"ración","category":"Pescado","tags":["Andalucía","Málaga","sardinas"],"prepTime":"15 min","difficulty":"fácil","notes":"Adaptación doméstica del espeto malagueño.","instructions":["Limpia y seca las sardinas.","Sala ligeramente por ambos lados.","Calienta una plancha con poco aceite.","Cocina sin mover demasiado.","Da la vuelta cuando la piel esté dorada.","Sirve al momento con limón."],"recipe":[{"ingredientId":"ingredient_sardinas","qty":220,"unit":"g"},{"ingredientId":"ingredient_sal","qty":1,"unit":"g"},{"ingredientId":"ingredient_limon","qty":20,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":5,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_18_gazpachuelo","name":"Gazpachuelo malagueño sencillo","servings":1,"unit":"ración","category":"Sopa caliente","tags":["Andalucía","Málaga","sopa","pescado"],"prepTime":"30 min","difficulty":"media","notes":"No debe hervir tras añadir la emulsión.","instructions":["Cuece la patata en caldo suave.","Añade la merluza al final para que no se rompa.","Prepara una mayonesa con huevo, aceite y limón.","Templa la mayonesa con cucharadas de caldo caliente fuera del fuego.","Incorpora sin hervir para que no se corte.","Sirve caliente y cremoso."],"recipe":[{"ingredientId":"ingredient_merluza","qty":120,"unit":"g"},{"ingredientId":"ingredient_patata","qty":180,"unit":"g"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_aceite","qty":30,"unit":"ml"},{"ingredientId":"ingredient_limon","qty":10,"unit":"g"},{"ingredientId":"ingredient_caldo","qty":250,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_19_migas_almerienses","name":"Migas almerienses de harina","servings":1,"unit":"ración","category":"Migas","tags":["Andalucía","Almería","harina"],"prepTime":"35 min","difficulty":"media","notes":"Plato energético de ración moderada.","instructions":["Fríe ajos y pimiento; reserva parte.","Añade agua con sal a la sartén.","Cuando hierva incorpora harina poco a poco.","Remueve sin parar hasta formar migas.","Cocina hasta que queden sueltas.","Sirve con pimiento y sardinas."],"recipe":[{"ingredientId":"ingredient_harina","qty":90,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":18,"unit":"ml"},{"ingredientId":"ingredient_ajo","qty":6,"unit":"g"},{"ingredientId":"ingredient_pimiento_verde","qty":60,"unit":"g"},{"ingredientId":"ingredient_sardinas","qty":120,"unit":"g"},{"ingredientId":"ingredient_sal","qty":1,"unit":"g"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_20_olla_trigo","name":"Olla de trigo almeriense simplificada","servings":1,"unit":"ración","category":"Cuchara","tags":["Andalucía","Almería","cuchara"],"prepTime":"45 min","difficulty":"media","notes":"Versión simplificada compatible con ingredientes comunes.","instructions":["Calienta caldo en una olla.","Añade patata, habas y acelgas.","Incorpora garbanzos cocidos.","Añade la carne en dados pequeños.","Cuece hasta que la patata esté tierna.","Aplasta un poco de patata para trabar el caldo."],"recipe":[{"ingredientId":"ingredient_garbanzos","qty":150,"unit":"g"},{"ingredientId":"ingredient_patata","qty":100,"unit":"g"},{"ingredientId":"ingredient_habas","qty":80,"unit":"g"},{"ingredientId":"ingredient_acelgas","qty":80,"unit":"g"},{"ingredientId":"ingredient_cerdo","qty":80,"unit":"g"},{"ingredientId":"ingredient_caldo","qty":300,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_21_pipirrana","name":"Pipirrana jiennense","servings":1,"unit":"ración","category":"Ensalada fría","tags":["Andalucía","Jaén","tomate"],"prepTime":"15 min","difficulty":"media","notes":"El majado de yema es importante.","instructions":["Pela y pica el tomate.","Pica pimiento muy fino.","Cuece el huevo y separa yema y clara.","Maja yema, ajo, sal y aceite.","Mezcla tomate, pimiento, clara y atún.","Aliña con el majado."],"recipe":[{"ingredientId":"ingredient_tomate","qty":260,"unit":"g"},{"ingredientId":"ingredient_pimiento_verde","qty":50,"unit":"g"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_atun","qty":65,"unit":"g"},{"ingredientId":"ingredient_ajo","qty":2,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":12,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_22_andrajos","name":"Andrajos de Jaén con bacalao","servings":1,"unit":"ración","category":"Guiso con masa","tags":["Andalucía","Jaén","guiso"],"prepTime":"45 min","difficulty":"media","notes":"La masa debe quedar fina.","instructions":["Haz una masa con harina, agua y sal.","Estira muy fina y corta en trozos irregulares.","Prepara sofrito de cebolla, pimiento y tomate.","Añade caldo y deja hervir.","Incorpora masa y bacalao.","Cuece hasta que la masa esté tierna."],"recipe":[{"ingredientId":"ingredient_harina","qty":70,"unit":"g"},{"ingredientId":"ingredient_bacalao","qty":100,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":100,"unit":"g"},{"ingredientId":"ingredient_pimiento_rojo","qty":50,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":60,"unit":"g"},{"ingredientId":"ingredient_caldo","qty":300,"unit":"ml"},{"ingredientId":"ingredient_aceite","qty":10,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_23_alboronia","name":"Alboronía andaluza","servings":1,"unit":"ración","category":"Verduras guisadas","tags":["Andalucía","Andalucía oriental","verduras","andalusí"],"prepTime":"30 min","difficulty":"fácil","notes":"Guiso vegetal de raíz andalusí.","instructions":["Corta las verduras en dados medianos.","Sofríe la cebolla con aceite.","Añade berenjena, calabacín y calabaza.","Incorpora tomate y deja reducir.","Agrega garbanzos cocidos.","Cocina hasta que todo esté tierno pero no deshecho."],"recipe":[{"ingredientId":"ingredient_calabaza","qty":160,"unit":"g"},{"ingredientId":"ingredient_berenjena","qty":120,"unit":"g"},{"ingredientId":"ingredient_calabacin","qty":100,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":120,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":60,"unit":"g"},{"ingredientId":"ingredient_garbanzos","qty":100,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":12,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_24_alpujarreno","name":"Plato alpujarreño en ración moderada","servings":1,"unit":"ración","category":"Plato combinado","tags":["Andalucía","Granada / Almería","Alpujarra","contundente"],"prepTime":"35 min","difficulty":"media","notes":"Versión individual moderada.","instructions":["Cocina la patata en rodajas con aceite.","Dora el lomo y el chorizo aparte.","Cocina el huevo al gusto.","Coloca la patata como base.","Añade lomo, chorizo, jamón y huevo.","Sirve caliente y en cantidad moderada."],"recipe":[{"ingredientId":"ingredient_patata","qty":220,"unit":"g"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_jamon","qty":20,"unit":"g"},{"ingredientId":"ingredient_lomo_orza","qty":60,"unit":"g"},{"ingredientId":"ingredient_chorizo","qty":25,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":15,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_25_puchero","name":"Puchero andaluz sencillo","servings":1,"unit":"ración","category":"Cuchara","tags":["Andalucía","Andalucía","cuchara","hogar"],"prepTime":"50 min","difficulty":"fácil","notes":"Base de muchos hogares andaluces.","instructions":["Calienta caldo en una olla.","Añade verduras troceadas.","Incorpora garbanzos y pollo.","Cuece a fuego medio hasta que esté tierno.","Aplasta un poco de patata para trabar.","Sirve caliente y reposado."],"recipe":[{"ingredientId":"ingredient_garbanzos","qty":160,"unit":"g"},{"ingredientId":"ingredient_pollo","qty":120,"unit":"g"},{"ingredientId":"ingredient_zanahoria","qty":80,"unit":"g"},{"ingredientId":"ingredient_patata","qty":120,"unit":"g"},{"ingredientId":"ingredient_caldo","qty":350,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_26_pringa","name":"Pringá andaluza en montadito","servings":1,"unit":"ración","category":"Tapa","tags":["Andalucía","Sevilla / Andalucía","pringá","aprovechamiento"],"prepTime":"15 min","difficulty":"fácil","notes":"Pensado para aprovechar restos de puchero.","instructions":["Desmenuza carnes cocidas o guisadas.","Pica el chorizo muy fino.","Mezcla y calienta en sartén.","Tuesta ligeramente el pan.","Rellena con la mezcla caliente.","Sirve al momento."],"recipe":[{"ingredientId":"ingredient_pollo","qty":80,"unit":"g"},{"ingredientId":"ingredient_cerdo","qty":60,"unit":"g"},{"ingredientId":"ingredient_chorizo","qty":20,"unit":"g"},{"ingredientId":"ingredient_pan","qty":70,"unit":"g"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_27_berenjenas_miel","name":"Berenjenas fritas con miel de caña","servings":1,"unit":"ración","category":"Verdura frita","tags":["Andalucía","Málaga / Córdoba / Granada","berenjena","miel de caña"],"prepTime":"25 min","difficulty":"fácil","notes":"Clásico de muchas cartas andaluzas.","instructions":["Corta la berenjena fina.","Sala y deja reposar unos minutos.","Seca muy bien.","Pasa por harina y sacude exceso.","Fríe en aceite caliente.","Sirve con miel de caña."],"recipe":[{"ingredientId":"ingredient_berenjena","qty":220,"unit":"g"},{"ingredientId":"ingredient_harina","qty":40,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":35,"unit":"ml"},{"ingredientId":"ingredient_miel_cana","qty":15,"unit":"g"},{"ingredientId":"ingredient_sal","qty":1,"unit":"g"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_28_habas_jamon","name":"Habas con jamón","servings":1,"unit":"ración","category":"Salteado","tags":["Andalucía","Granada / Andalucía","habas","jamón"],"prepTime":"18 min","difficulty":"fácil","notes":"Añadir el jamón al final para no resecarlo.","instructions":["Pocha cebolla picada.","Añade las habas.","Cocina con un poco de agua si hace falta.","Cuando estén tiernas incorpora jamón.","Saltea brevemente.","Sirve caliente o templado."],"recipe":[{"ingredientId":"ingredient_habas","qty":180,"unit":"g"},{"ingredientId":"ingredient_jamon","qty":25,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":40,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":10,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_29_fideos_caballa","name":"Fideos con caballa","servings":1,"unit":"ración","category":"Guiso marinero","tags":["Andalucía","Cádiz / Málaga","caballa","fideos"],"prepTime":"30 min","difficulty":"fácil","notes":"Añadir la caballa al final para que no se rompa.","instructions":["Pica cebolla, ajo y pimiento muy finos.","Sofríe con aceite hasta que estén tiernos.","Añade tomate y cocina hasta reducir.","Incorpora fideos y caldo.","Añade la caballa al final.","Cuece hasta que quede tierno y sabroso."],"recipe":[{"ingredientId":"ingredient_fideos","qty":75,"unit":"g"},{"ingredientId":"ingredient_caballa","qty":140,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":120,"unit":"g"},{"ingredientId":"ingredient_pimiento_verde","qty":40,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":50,"unit":"g"},{"ingredientId":"ingredient_caldo","qty":300,"unit":"ml"},{"ingredientId":"ingredient_aceite","qty":10,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1},{"id":"dish_and_30_caballa_pirinaca","name":"Caballa con piriñaca","servings":1,"unit":"ración","category":"Pescado frío","tags":["Andalucía","Cádiz / Huelva","caballa","piriñaca"],"prepTime":"15 min","difficulty":"fácil","notes":"Muy apropiado para comidas de verano.","instructions":["Cocina la caballa a la plancha o cocida.","Deja templar y retira espinas visibles.","Pica tomate, pimiento y cebolla.","Aliña la piriñaca con aceite y vinagre.","Coloca la caballa en el plato.","Cubre con la piriñaca y sirve."],"recipe":[{"ingredientId":"ingredient_caballa","qty":160,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":150,"unit":"g"},{"ingredientId":"ingredient_pimiento_verde","qty":50,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":40,"unit":"g"},{"ingredientId":"ingredient_aceite","qty":10,"unit":"ml"},{"ingredientId":"ingredient_vinagre","qty":6,"unit":"ml"}],"packId":"pack_andalucia_tradicional","normalizedToServing":true,"originalServings":1,"schemaVersion":1}]}
+{
+  "schemaVersion": 2,
+  "type": "meal-pack",
+  "id": "pack_andalucia_tradicional",
+  "name": "Andalucía tradicional: platos típicos por provincias",
+  "description": "Pack de 30 recetas tradicionales andaluzas con elaboración detallada, cubriendo platos representativos de Cádiz, Córdoba, Granada, Huelva, Jaén, Málaga, Sevilla y Almería. Todas las recetas están normalizadas a 1 ración.",
+  "tags": [
+    "Andalucía",
+    "tradicional",
+    "provincias",
+    "30 recetas",
+    "1 ración",
+    "elaboración detallada"
+  ],
+  "language": "es",
+  "ingredients": [
+    {
+      "id": "ingredient_tomate",
+      "name": "Tomate maduro",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_pepino",
+      "name": "Pepino",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_pimiento_verde",
+      "name": "Pimiento verde",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_pimiento_rojo",
+      "name": "Pimiento rojo",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_ajo",
+      "name": "Ajo",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_cebolla",
+      "name": "Cebolla",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_pan",
+      "name": "Pan asentado",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_pan_rallado",
+      "name": "Pan rallado",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_harina",
+      "name": "Harina de trigo",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_harina_garbanzo",
+      "name": "Harina de garbanzo",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_almendra",
+      "name": "Almendra cruda pelada",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_aceite",
+      "name": "Aceite de oliva virgen extra",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "products": []
+    },
+    {
+      "id": "ingredient_vinagre",
+      "name": "Vinagre de Jerez",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "products": []
+    },
+    {
+      "id": "ingredient_sal",
+      "name": "Sal",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_pimenton",
+      "name": "Pimentón dulce",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_comino",
+      "name": "Comino molido",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_laurel",
+      "name": "Laurel",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_perejil",
+      "name": "Perejil fresco",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_limon",
+      "name": "Limón",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_naranja",
+      "name": "Naranja",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_uvas",
+      "name": "Uvas",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_patata",
+      "name": "Patata",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_zanahoria",
+      "name": "Zanahoria",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_calabacin",
+      "name": "Calabacín",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_berenjena",
+      "name": "Berenjena",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_calabaza",
+      "name": "Calabaza",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_espinacas",
+      "name": "Espinacas",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_acelgas",
+      "name": "Acelgas",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_habas",
+      "name": "Habas frescas",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_alcachofa",
+      "name": "Alcachofa",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_guisantes",
+      "name": "Guisantes",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_arroz",
+      "name": "Arroz redondo",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_fideos",
+      "name": "Fideos gruesos",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_garbanzos",
+      "name": "Garbanzos cocidos",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_lentejas",
+      "name": "Lentejas cocidas",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_huevo",
+      "name": "Huevo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "unidades",
+      "products": []
+    },
+    {
+      "id": "ingredient_jamon",
+      "name": "Jamón serrano",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_lomo_orza",
+      "name": "Lomo de orza",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_chorizo",
+      "name": "Chorizo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_pollo",
+      "name": "Pollo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_ternera",
+      "name": "Ternera o rabo de toro troceado",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_cerdo",
+      "name": "Lomo de cerdo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_queso",
+      "name": "Queso",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_yogur",
+      "name": "Yogur natural",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_vino_blanco",
+      "name": "Vino blanco",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "products": []
+    },
+    {
+      "id": "ingredient_vino_tinto",
+      "name": "Vino tinto",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "products": []
+    },
+    {
+      "id": "ingredient_caldo",
+      "name": "Caldo suave",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "products": []
+    },
+    {
+      "id": "ingredient_miel_cana",
+      "name": "Miel de caña",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_aceitunas",
+      "name": "Aceitunas",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_bacalao",
+      "name": "Bacalao desalado",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_merluza",
+      "name": "Merluza",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_cazon",
+      "name": "Cazón o pescado blanco para adobo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_pescado_frito",
+      "name": "Pescado pequeño variado",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_sardinas",
+      "name": "Sardinas",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_atun",
+      "name": "Atún fresco",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_choco",
+      "name": "Choco o sepia",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_caballa",
+      "name": "Caballa",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_urta",
+      "name": "Urta o pescado blanco de roca",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    },
+    {
+      "id": "ingredient_gambas",
+      "name": "Gambas",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "products": []
+    }
+  ],
+  "dishes": [
+    {
+      "id": "dish_and_01_gazpacho",
+      "name": "Gazpacho andaluz tradicional",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Sopa fría",
+      "tags": [
+        "Andalucía",
+        "Sevilla / Andalucía",
+        "clásico",
+        "verano"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Ajustar ajo y vinagre al gusto.",
+      "instructions": [
+        "Lava las hortalizas y retira las partes duras.",
+        "Remoja el pan si está seco.",
+        "Tritura tomate, pepino, pimiento, ajo y pan.",
+        "Añade vinagre, sal y aceite en hilo fino.",
+        "Ajusta con agua fría si queda muy espeso.",
+        "Refrigera y sirve muy frío."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 300,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_verde",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 2,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pan",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 15,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 8,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_02_salmorejo",
+      "name": "Salmorejo cordobés con huevo y jamón",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Sopa fría",
+      "tags": [
+        "Andalucía",
+        "Córdoba",
+        "clásico"
+      ],
+      "prepTime": "20 min",
+      "difficulty": "fácil",
+      "notes": "El pan marca la textura final.",
+      "instructions": [
+        "Tritura tomate, ajo y sal hasta obtener puré.",
+        "Añade el pan y deja hidratar cinco minutos.",
+        "Vuelve a triturar incorporando el aceite poco a poco.",
+        "Cuece el huevo, enfría y pica.",
+        "Sirve el salmorejo frío.",
+        "Termina con huevo y jamón por encima."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 320,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pan",
+          "qty": 45,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 2,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 18,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_jamon",
+          "qty": 15,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_03_ajoblanco",
+      "name": "Ajoblanco malagueño con uvas",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Sopa fría",
+      "tags": [
+        "Andalucía",
+        "Málaga / Granada",
+        "almendra",
+        "frío"
+      ],
+      "prepTime": "15 min + reposo",
+      "difficulty": "fácil",
+      "notes": "Sopa fría tradicional de almendra.",
+      "instructions": [
+        "Remoja el pan en agua fría.",
+        "Tritura almendras, ajo y sal hasta formar pasta.",
+        "Añade el pan escurrido y bate.",
+        "Incorpora agua fría hasta lograr textura de sopa.",
+        "Emulsiona con aceite y ajusta con vinagre.",
+        "Enfría y sirve con uvas."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_almendra",
+          "qty": 45,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pan",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 18,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 6,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_uvas",
+          "qty": 80,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_04_porra",
+      "name": "Porra antequerana",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Sopa fría espesa",
+      "tags": [
+        "Andalucía",
+        "Málaga",
+        "Antequera",
+        "verano"
+      ],
+      "prepTime": "20 min",
+      "difficulty": "fácil",
+      "notes": "Más espesa que el gazpacho.",
+      "instructions": [
+        "Tritura tomate, pimiento, ajo y sal.",
+        "Añade pan y deja que absorba jugos.",
+        "Bate hasta obtener una crema espesa.",
+        "Incorpora aceite en hilo fino.",
+        "Cuece y pica el huevo.",
+        "Sirve fría con huevo y atún."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 300,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pan",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_verde",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 2,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 18,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_atun",
+          "qty": 35,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_05_remojon",
+      "name": "Remojón granadino de naranja y bacalao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Ensalada fría",
+      "tags": [
+        "Andalucía",
+        "Granada",
+        "invierno",
+        "bacalao"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Revisar el punto de sal del bacalao.",
+      "instructions": [
+        "Pela la naranja retirando bien la parte blanca.",
+        "Corta en gajos o rodajas.",
+        "Desmiga el bacalao desalado.",
+        "Cuece el huevo si se usa y trocéalo.",
+        "Mezcla con aceitunas y cebolla si procede.",
+        "Aliña con aceite y deja reposar unos minutos."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_naranja",
+          "qty": 200,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bacalao",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_aceitunas",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 12,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_06_pio_antequerano",
+      "name": "Pío antequerano",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Ensalada fría",
+      "tags": [
+        "Andalucía",
+        "Málaga",
+        "Antequera",
+        "naranja"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Ensalada sencilla de naranja y bacalao.",
+      "instructions": [
+        "Pela la naranja retirando bien la parte blanca.",
+        "Corta en gajos o dados.",
+        "Desmiga el bacalao desalado.",
+        "Añade aceitunas y cebolla muy fina.",
+        "Riega con aceite de oliva.",
+        "Deja reposar unos minutos antes de servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_naranja",
+          "qty": 220,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bacalao",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceitunas",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 12,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 25,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_07_espinacas_garbanzos",
+      "name": "Espinacas con garbanzos sevillanas",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Tapa / guiso vegetal",
+      "tags": [
+        "Andalucía",
+        "Sevilla",
+        "legumbre",
+        "tapa"
+      ],
+      "prepTime": "20 min",
+      "difficulty": "media",
+      "notes": "El majado da el sabor tradicional.",
+      "instructions": [
+        "Fríe o tuesta el pan con el ajo y resérvalo.",
+        "Maja pan, ajo, comino, pimentón y vinagre.",
+        "Saltea las espinacas hasta que bajen de volumen.",
+        "Añade garbanzos escurridos.",
+        "Incorpora el majado con un poco de agua.",
+        "Cocina hasta que quede trabado."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_espinacas",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_garbanzos",
+          "qty": 170,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pan",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 4,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimenton",
+          "qty": 2,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_comino",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 12,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 5,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_08_huevos_flamenca",
+      "name": "Huevos a la flamenca",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cazuela",
+      "tags": [
+        "Andalucía",
+        "Sevilla",
+        "huevo",
+        "tradicional"
+      ],
+      "prepTime": "25 min",
+      "difficulty": "media",
+      "notes": "Ajustar embutido según necesidades.",
+      "instructions": [
+        "Haz un sofrito espeso de tomate y pimiento.",
+        "Añade los guisantes y cocina unos minutos.",
+        "Pasa el sofrito a una cazuela individual.",
+        "Reparte jamón y chorizo en poca cantidad.",
+        "Casca los huevos encima.",
+        "Hornea o tapa hasta que la clara cuaje."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 2,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_guisantes",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_rojo",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_jamon",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_chorizo",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 8,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_09_flamenquin",
+      "name": "Flamenquín cordobés",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Carne",
+      "tags": [
+        "Andalucía",
+        "Córdoba",
+        "frito",
+        "lomo"
+      ],
+      "prepTime": "25 min",
+      "difficulty": "media",
+      "notes": "Ración individual.",
+      "instructions": [
+        "Aplana el filete de lomo.",
+        "Coloca jamón y queso en el centro.",
+        "Enrolla apretando para que no se abra.",
+        "Pasa por harina, huevo y pan rallado.",
+        "Fríe en aceite caliente hasta dorar.",
+        "Escurre y sirve cortado."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cerdo",
+          "qty": 140,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_jamon",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_queso",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_harina",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pan_rallado",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 30,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_10_rabo_toro",
+      "name": "Rabo de toro cordobés guisado",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Guiso de carne",
+      "tags": [
+        "Andalucía",
+        "Córdoba",
+        "guiso",
+        "carne"
+      ],
+      "prepTime": "2 h",
+      "difficulty": "media",
+      "notes": "Ideal para batch cooking.",
+      "instructions": [
+        "Dora la carne por todos los lados.",
+        "Sofríe cebolla, zanahoria y ajo.",
+        "Devuelve la carne a la olla.",
+        "Añade vino tinto y reduce.",
+        "Incorpora caldo y laurel.",
+        "Cuece lento hasta que esté muy tierna."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_ternera",
+          "qty": 220,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_zanahoria",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 4,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vino_tinto",
+          "qty": 120,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_caldo",
+          "qty": 150,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 10,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_laurel",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_11_pescaito",
+      "name": "Pescaíto frito andaluz",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Fritura",
+      "tags": [
+        "Andalucía",
+        "Cádiz / Málaga / Huelva",
+        "costa",
+        "pescado"
+      ],
+      "prepTime": "20 min",
+      "difficulty": "fácil",
+      "notes": "Freír en tandas pequeñas.",
+      "instructions": [
+        "Seca bien el pescado.",
+        "Sala ligeramente.",
+        "Pasa por harina y sacude el exceso.",
+        "Fríe en aceite caliente por tandas.",
+        "Retira cuando esté dorado y crujiente.",
+        "Escurre en papel y sirve al momento."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pescado_frito",
+          "qty": 220,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_harina",
+          "qty": 45,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 40,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 20,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_12_bienmesabe",
+      "name": "Bienmesabe o cazón en adobo",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Pescado adobado",
+      "tags": [
+        "Andalucía",
+        "Cádiz",
+        "adobo",
+        "pescado"
+      ],
+      "prepTime": "20 min + adobo",
+      "difficulty": "media",
+      "notes": "El adobo debe perfumar sin ocultar el pescado.",
+      "instructions": [
+        "Corta el pescado en dados medianos.",
+        "Mezcla vinagre, ajo, pimentón, comino y sal.",
+        "Cubre el pescado con el adobo y deja reposar en frío.",
+        "Escurre antes de freír.",
+        "Pasa por harina y sacude el exceso.",
+        "Fríe en aceite caliente hasta dorar."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cazon",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 40,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimenton",
+          "qty": 3,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_comino",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_harina",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 35,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_13_tortillitas_camarones",
+      "name": "Tortillitas de camarones",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Fritura",
+      "tags": [
+        "Andalucía",
+        "Cádiz",
+        "camarones",
+        "tapa"
+      ],
+      "prepTime": "25 min",
+      "difficulty": "media",
+      "notes": "Si no hay camarón, usar gamba picada fina.",
+      "instructions": [
+        "Pica cebolla y perejil muy finos.",
+        "Mezcla harinas con agua fría hasta una masa líquida.",
+        "Añade camarones o gamba picada.",
+        "Deja reposar diez minutos.",
+        "Vierte cucharadas finas en aceite caliente.",
+        "Fríe hasta que los bordes queden crujientes."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_gambas",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_harina",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_harina_garbanzo",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_perejil",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 35,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_14_papas_choco",
+      "name": "Papas con choco",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Guiso marinero",
+      "tags": [
+        "Andalucía",
+        "Huelva / Cádiz",
+        "choco"
+      ],
+      "prepTime": "35 min",
+      "difficulty": "media",
+      "notes": "Guiso muy típico de la costa atlántica.",
+      "instructions": [
+        "Pica cebolla, pimiento y tomate.",
+        "Sofríe hasta que el fondo esté bien hecho.",
+        "Añade el choco y rehoga.",
+        "Incorpora vino blanco y deja evaporar.",
+        "Añade patata chascada y caldo.",
+        "Cuece hasta que la patata esté tierna."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_choco",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_patata",
+          "qty": 220,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_verde",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vino_blanco",
+          "qty": 60,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_caldo",
+          "qty": 180,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_15_atun_encebollado",
+      "name": "Atún encebollado",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Pescado",
+      "tags": [
+        "Andalucía",
+        "Cádiz / Huelva",
+        "atún",
+        "costa"
+      ],
+      "prepTime": "25 min",
+      "difficulty": "fácil",
+      "notes": "No sobrecocinar el atún.",
+      "instructions": [
+        "Pocha mucha cebolla con ajo y aceite.",
+        "Añade laurel y vino blanco.",
+        "Reduce hasta que la cebolla quede melosa.",
+        "Corta el atún en dados grandes.",
+        "Añádelo al final y cocina poco tiempo.",
+        "Reposa tapado para que quede jugoso."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_atun",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 4,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vino_blanco",
+          "qty": 60,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_laurel",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 12,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_16_urta_rotena",
+      "name": "Urta a la roteña",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Pescado al horno",
+      "tags": [
+        "Andalucía",
+        "Cádiz",
+        "Rota",
+        "pescado"
+      ],
+      "prepTime": "35 min",
+      "difficulty": "media",
+      "notes": "Usar pescado blanco firme si no hay urta.",
+      "instructions": [
+        "Corta cebolla y pimientos en tiras.",
+        "Sofríe las verduras con tomate.",
+        "Coloca el pescado en una fuente.",
+        "Cubre con el sofrito.",
+        "Añade vino blanco.",
+        "Hornea hasta que el pescado esté jugoso."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_urta",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_rojo",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vino_blanco",
+          "qty": 60,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 12,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_17_espetos",
+      "name": "Espeto de sardinas adaptado a plancha",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Pescado",
+      "tags": [
+        "Andalucía",
+        "Málaga",
+        "sardinas"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Adaptación doméstica del espeto malagueño.",
+      "instructions": [
+        "Limpia y seca las sardinas.",
+        "Sala ligeramente por ambos lados.",
+        "Calienta una plancha con poco aceite.",
+        "Cocina sin mover demasiado.",
+        "Da la vuelta cuando la piel esté dorada.",
+        "Sirve al momento con limón."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_sardinas",
+          "qty": 220,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_sal",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 5,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_18_gazpachuelo",
+      "name": "Gazpachuelo malagueño sencillo",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Sopa caliente",
+      "tags": [
+        "Andalucía",
+        "Málaga",
+        "sopa",
+        "pescado"
+      ],
+      "prepTime": "30 min",
+      "difficulty": "media",
+      "notes": "No debe hervir tras añadir la emulsión.",
+      "instructions": [
+        "Cuece la patata en caldo suave.",
+        "Añade la merluza al final para que no se rompa.",
+        "Prepara una mayonesa con huevo, aceite y limón.",
+        "Templa la mayonesa con cucharadas de caldo caliente fuera del fuego.",
+        "Incorpora sin hervir para que no se corte.",
+        "Sirve caliente y cremoso."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_merluza",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_patata",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 30,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_caldo",
+          "qty": 250,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_19_migas_almerienses",
+      "name": "Migas almerienses de harina",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Migas",
+      "tags": [
+        "Andalucía",
+        "Almería",
+        "harina"
+      ],
+      "prepTime": "35 min",
+      "difficulty": "media",
+      "notes": "Plato energético de ración moderada.",
+      "instructions": [
+        "Fríe ajos y pimiento; reserva parte.",
+        "Añade agua con sal a la sartén.",
+        "Cuando hierva incorpora harina poco a poco.",
+        "Remueve sin parar hasta formar migas.",
+        "Cocina hasta que queden sueltas.",
+        "Sirve con pimiento y sardinas."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_harina",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 18,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_verde",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_sardinas",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_sal",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_20_olla_trigo",
+      "name": "Olla de trigo almeriense simplificada",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cuchara",
+      "tags": [
+        "Andalucía",
+        "Almería",
+        "cuchara"
+      ],
+      "prepTime": "45 min",
+      "difficulty": "media",
+      "notes": "Versión simplificada compatible con ingredientes comunes.",
+      "instructions": [
+        "Calienta caldo en una olla.",
+        "Añade patata, habas y acelgas.",
+        "Incorpora garbanzos cocidos.",
+        "Añade la carne en dados pequeños.",
+        "Cuece hasta que la patata esté tierna.",
+        "Aplasta un poco de patata para trabar el caldo."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_garbanzos",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_patata",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_habas",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_acelgas",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cerdo",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_caldo",
+          "qty": 300,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_21_pipirrana",
+      "name": "Pipirrana jiennense",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Ensalada fría",
+      "tags": [
+        "Andalucía",
+        "Jaén",
+        "tomate"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "media",
+      "notes": "El majado de yema es importante.",
+      "instructions": [
+        "Pela y pica el tomate.",
+        "Pica pimiento muy fino.",
+        "Cuece el huevo y separa yema y clara.",
+        "Maja yema, ajo, sal y aceite.",
+        "Mezcla tomate, pimiento, clara y atún.",
+        "Aliña con el majado."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 260,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_verde",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_atun",
+          "qty": 65,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 2,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 12,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_22_andrajos",
+      "name": "Andrajos de Jaén con bacalao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Guiso con masa",
+      "tags": [
+        "Andalucía",
+        "Jaén",
+        "guiso"
+      ],
+      "prepTime": "45 min",
+      "difficulty": "media",
+      "notes": "La masa debe quedar fina.",
+      "instructions": [
+        "Haz una masa con harina, agua y sal.",
+        "Estira muy fina y corta en trozos irregulares.",
+        "Prepara sofrito de cebolla, pimiento y tomate.",
+        "Añade caldo y deja hervir.",
+        "Incorpora masa y bacalao.",
+        "Cuece hasta que la masa esté tierna."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_harina",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bacalao",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_rojo",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_caldo",
+          "qty": 300,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 10,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_23_alboronia",
+      "name": "Alboronía andaluza",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Verduras guisadas",
+      "tags": [
+        "Andalucía",
+        "Andalucía oriental",
+        "verduras",
+        "andalusí"
+      ],
+      "prepTime": "30 min",
+      "difficulty": "fácil",
+      "notes": "Guiso vegetal de raíz andalusí.",
+      "instructions": [
+        "Corta las verduras en dados medianos.",
+        "Sofríe la cebolla con aceite.",
+        "Añade berenjena, calabacín y calabaza.",
+        "Incorpora tomate y deja reducir.",
+        "Agrega garbanzos cocidos.",
+        "Cocina hasta que todo esté tierno pero no deshecho."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_calabaza",
+          "qty": 160,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_berenjena",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_calabacin",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_garbanzos",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 12,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_24_alpujarreno",
+      "name": "Plato alpujarreño en ración moderada",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Plato combinado",
+      "tags": [
+        "Andalucía",
+        "Granada / Almería",
+        "Alpujarra",
+        "contundente"
+      ],
+      "prepTime": "35 min",
+      "difficulty": "media",
+      "notes": "Versión individual moderada.",
+      "instructions": [
+        "Cocina la patata en rodajas con aceite.",
+        "Dora el lomo y el chorizo aparte.",
+        "Cocina el huevo al gusto.",
+        "Coloca la patata como base.",
+        "Añade lomo, chorizo, jamón y huevo.",
+        "Sirve caliente y en cantidad moderada."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_patata",
+          "qty": 220,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_jamon",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_lomo_orza",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_chorizo",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 15,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_25_puchero",
+      "name": "Puchero andaluz sencillo",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cuchara",
+      "tags": [
+        "Andalucía",
+        "Andalucía",
+        "cuchara",
+        "hogar"
+      ],
+      "prepTime": "50 min",
+      "difficulty": "fácil",
+      "notes": "Base de muchos hogares andaluces.",
+      "instructions": [
+        "Calienta caldo en una olla.",
+        "Añade verduras troceadas.",
+        "Incorpora garbanzos y pollo.",
+        "Cuece a fuego medio hasta que esté tierno.",
+        "Aplasta un poco de patata para trabar.",
+        "Sirve caliente y reposado."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_garbanzos",
+          "qty": 160,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pollo",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_zanahoria",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_patata",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_caldo",
+          "qty": 350,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_26_pringa",
+      "name": "Pringá andaluza en montadito",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Tapa",
+      "tags": [
+        "Andalucía",
+        "Sevilla / Andalucía",
+        "pringá",
+        "aprovechamiento"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Pensado para aprovechar restos de puchero.",
+      "instructions": [
+        "Desmenuza carnes cocidas o guisadas.",
+        "Pica el chorizo muy fino.",
+        "Mezcla y calienta en sartén.",
+        "Tuesta ligeramente el pan.",
+        "Rellena con la mezcla caliente.",
+        "Sirve al momento."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pollo",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cerdo",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_chorizo",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pan",
+          "qty": 70,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_27_berenjenas_miel",
+      "name": "Berenjenas fritas con miel de caña",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Verdura frita",
+      "tags": [
+        "Andalucía",
+        "Málaga / Córdoba / Granada",
+        "berenjena",
+        "miel de caña"
+      ],
+      "prepTime": "25 min",
+      "difficulty": "fácil",
+      "notes": "Clásico de muchas cartas andaluzas.",
+      "instructions": [
+        "Corta la berenjena fina.",
+        "Sala y deja reposar unos minutos.",
+        "Seca muy bien.",
+        "Pasa por harina y sacude exceso.",
+        "Fríe en aceite caliente.",
+        "Sirve con miel de caña."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_berenjena",
+          "qty": 220,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_harina",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 35,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_miel_cana",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_sal",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_28_habas_jamon",
+      "name": "Habas con jamón",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Salteado",
+      "tags": [
+        "Andalucía",
+        "Granada / Andalucía",
+        "habas",
+        "jamón"
+      ],
+      "prepTime": "18 min",
+      "difficulty": "fácil",
+      "notes": "Añadir el jamón al final para no resecarlo.",
+      "instructions": [
+        "Pocha cebolla picada.",
+        "Añade las habas.",
+        "Cocina con un poco de agua si hace falta.",
+        "Cuando estén tiernas incorpora jamón.",
+        "Saltea brevemente.",
+        "Sirve caliente o templado."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_habas",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_jamon",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 10,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_29_fideos_caballa",
+      "name": "Fideos con caballa",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Guiso marinero",
+      "tags": [
+        "Andalucía",
+        "Cádiz / Málaga",
+        "caballa",
+        "fideos"
+      ],
+      "prepTime": "30 min",
+      "difficulty": "fácil",
+      "notes": "Añadir la caballa al final para que no se rompa.",
+      "instructions": [
+        "Pica cebolla, ajo y pimiento muy finos.",
+        "Sofríe con aceite hasta que estén tiernos.",
+        "Añade tomate y cocina hasta reducir.",
+        "Incorpora fideos y caldo.",
+        "Añade la caballa al final.",
+        "Cuece hasta que quede tierno y sabroso."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_fideos",
+          "qty": 75,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_caballa",
+          "qty": 140,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_verde",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_caldo",
+          "qty": 300,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 10,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_and_30_caballa_pirinaca",
+      "name": "Caballa con piriñaca",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Pescado frío",
+      "tags": [
+        "Andalucía",
+        "Cádiz / Huelva",
+        "caballa",
+        "piriñaca"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Muy apropiado para comidas de verano.",
+      "instructions": [
+        "Cocina la caballa a la plancha o cocida.",
+        "Deja templar y retira espinas visibles.",
+        "Pica tomate, pimiento y cebolla.",
+        "Aliña la piriñaca con aceite y vinagre.",
+        "Coloca la caballa en el plato.",
+        "Cubre con la piriñaca y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_caballa",
+          "qty": 160,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_verde",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite",
+          "qty": 10,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_andalucia_tradicional",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida"
+      ]
+    }
+  ]
+}

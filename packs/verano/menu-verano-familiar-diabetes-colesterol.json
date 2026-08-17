@@ -4,35 +4,407 @@
   "id": "pack_verano_familiar_diabetes_colesterol",
   "name": "Verano familiar: diabetes, colesterol y tuppers fríos",
   "description": "Pack de platos de verano normalizados a 1 ración para dos miembros con necesidades diferentes: platos suaves y bajos en hidratos para diabetes/trastornos alimentarios, y tuppers fríos y cenas con proteína magra para mejorar hábitos de colesterol.",
-  "tags": ["verano", "familia", "tupper frío", "diabetes", "colesterol", "mediterráneo", "1 ración"],
+  "tags": [
+    "verano",
+    "familia",
+    "tupper frío",
+    "diabetes",
+    "colesterol",
+    "mediterráneo",
+    "1 ración"
+  ],
   "language": "es",
   "ingredients": [
-    { "id": "ingredient_calabacin", "name": "Calabacín", "familyId": "family_vegetables", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "none", "approxPrice": 0, "packagingType": "otro", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_zanahoria", "name": "Zanahoria", "familyId": "family_vegetables", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "none", "approxPrice": 0, "packagingType": "otro", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_acelgas", "name": "Acelgas", "familyId": "family_vegetables", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "none", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_brotes_tiernos", "name": "Brotes tiernos", "familyId": "family_vegetables", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "expiry", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_tomate", "name": "Tomate", "familyId": "family_vegetables", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "none", "approxPrice": 0, "packagingType": "otro", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_pepino", "name": "Pepino", "familyId": "family_vegetables", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "none", "approxPrice": 0, "packagingType": "otro", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_pimiento_rojo", "name": "Pimiento rojo", "familyId": "family_vegetables", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "none", "approxPrice": 0, "packagingType": "otro", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_aceite_oliva", "name": "Aceite de oliva virgen extra", "familyId": "family_pantry", "qty": 0, "unit": "ml", "available": false, "storageType": "pantry", "expiryDate": "", "dateType": "bestBefore", "approxPrice": 0, "packagingType": "vidrio", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_sal", "name": "Sal", "familyId": "family_pantry", "qty": 0, "unit": "g", "available": false, "storageType": "pantry", "expiryDate": "", "dateType": "none", "approxPrice": 0, "packagingType": "cartón/papel", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_vinagre", "name": "Vinagre", "familyId": "family_pantry", "qty": 0, "unit": "ml", "available": false, "storageType": "pantry", "expiryDate": "", "dateType": "bestBefore", "approxPrice": 0, "packagingType": "vidrio", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_huevo", "name": "Huevo", "familyId": "family_protein", "qty": 0, "unit": "unidades", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "bestBefore", "approxPrice": 0, "packagingType": "cartón/papel", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_jamon_serrano", "name": "Jamón serrano", "familyId": "family_protein", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "expiry", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_pan", "name": "Pan", "familyId": "family_pantry", "qty": 0, "unit": "g", "available": false, "storageType": "pantry", "expiryDate": "", "dateType": "bestBefore", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_ajo", "name": "Ajo", "familyId": "family_vegetables", "qty": 0, "unit": "g", "available": false, "storageType": "pantry", "expiryDate": "", "dateType": "none", "approxPrice": 0, "packagingType": "otro", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_pasta_integral", "name": "Pasta integral", "familyId": "family_pantry", "qty": 0, "unit": "g", "available": false, "storageType": "pantry", "expiryDate": "", "dateType": "bestBefore", "approxPrice": 0, "packagingType": "cartón/papel", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_garbanzos_cocidos", "name": "Garbanzos cocidos", "familyId": "family_pantry", "qty": 0, "unit": "g", "available": false, "storageType": "pantry", "expiryDate": "", "dateType": "bestBefore", "approxPrice": 0, "packagingType": "vidrio", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_pollo", "name": "Pechuga de pollo", "familyId": "family_protein", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "expiry", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_pavo", "name": "Pavo", "familyId": "family_protein", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "expiry", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_ternera_magra", "name": "Ternera magra", "familyId": "family_protein", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "expiry", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_queso_fresco", "name": "Queso fresco o tierno", "familyId": "family_dairy", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "expiry", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_atun", "name": "Atún al natural o en aceite escurrido", "familyId": "family_protein", "qty": 0, "unit": "g", "available": false, "storageType": "pantry", "expiryDate": "", "dateType": "bestBefore", "approxPrice": 0, "packagingType": "metal", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_salmon", "name": "Salmón", "familyId": "family_protein", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "expiry", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_merluza", "name": "Merluza", "familyId": "family_protein", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "expiry", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_bacalao", "name": "Bacalao desalado", "familyId": "family_protein", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "expiry", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_limon", "name": "Limón", "familyId": "family_fruit", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "none", "approxPrice": 0, "packagingType": "otro", "products": [], "schemaVersion": 1 },
-    { "id": "ingredient_yogur_natural", "name": "Yogur natural sin azúcar", "familyId": "family_dairy", "qty": 0, "unit": "g", "available": false, "storageType": "fridge", "expiryDate": "", "dateType": "expiry", "approxPrice": 0, "packagingType": "plástico", "products": [], "schemaVersion": 1 }
+    {
+      "id": "ingredient_calabacin",
+      "name": "Calabacín",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_zanahoria",
+      "name": "Zanahoria",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_acelgas",
+      "name": "Acelgas",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_brotes_tiernos",
+      "name": "Brotes tiernos",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_tomate",
+      "name": "Tomate",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_pepino",
+      "name": "Pepino",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_pimiento_rojo",
+      "name": "Pimiento rojo",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_aceite_oliva",
+      "name": "Aceite de oliva virgen extra",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_sal",
+      "name": "Sal",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_vinagre",
+      "name": "Vinagre",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_huevo",
+      "name": "Huevo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_jamon_serrano",
+      "name": "Jamón serrano",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_pan",
+      "name": "Pan",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_ajo",
+      "name": "Ajo",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_pasta_integral",
+      "name": "Pasta integral",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_garbanzos_cocidos",
+      "name": "Garbanzos cocidos",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_pollo",
+      "name": "Pechuga de pollo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_pavo",
+      "name": "Pavo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_ternera_magra",
+      "name": "Ternera magra",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_queso_fresco",
+      "name": "Queso fresco o tierno",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_atun",
+      "name": "Atún al natural o en aceite escurrido",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "metal",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_salmon",
+      "name": "Salmón",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_merluza",
+      "name": "Merluza",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_bacalao",
+      "name": "Bacalao desalado",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_limon",
+      "name": "Limón",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_yogur_natural",
+      "name": "Yogur natural sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    }
   ],
   "dishes": [
     {
@@ -41,7 +413,14 @@
       "servings": 1,
       "unit": "ración",
       "category": "Mediodía suave",
-      "tags": ["mujer", "diabetes", "bajo hidrato", "alimento seguro", "suave", "verano"],
+      "tags": [
+        "mujer",
+        "diabetes",
+        "bajo hidrato",
+        "alimento seguro",
+        "suave",
+        "verano"
+      ],
       "prepTime": "25 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -53,16 +432,39 @@
         "Añade el aceite de oliva al final y ajusta la sal con moderación."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_calabacin", "qty": 180, "unit": "g" },
-        { "ingredientId": "ingredient_zanahoria", "qty": 80, "unit": "g" },
-        { "ingredientId": "ingredient_acelgas", "qty": 80, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 8, "unit": "ml" },
-        { "ingredientId": "ingredient_sal", "qty": 0.5, "unit": "g" }
+        {
+          "ingredientId": "ingredient_calabacin",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_zanahoria",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_acelgas",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_sal",
+          "qty": 0.5,
+          "unit": "g"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida"
+      ]
     },
     {
       "id": "dish_brotes_atun_queso",
@@ -70,7 +472,14 @@
       "servings": 1,
       "unit": "ración",
       "category": "Cena ligera",
-      "tags": ["mujer", "diabetes", "bajo hidrato", "atún", "queso", "ensalada"],
+      "tags": [
+        "mujer",
+        "diabetes",
+        "bajo hidrato",
+        "atún",
+        "queso",
+        "ensalada"
+      ],
       "prepTime": "8 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -82,16 +491,39 @@
         "Servir frío recién preparado."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_brotes_tiernos", "qty": 60, "unit": "g" },
-        { "ingredientId": "ingredient_atun", "qty": 65, "unit": "g" },
-        { "ingredientId": "ingredient_queso_fresco", "qty": 70, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 8, "unit": "ml" },
-        { "ingredientId": "ingredient_vinagre", "qty": 5, "unit": "ml" }
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_atun",
+          "qty": 65,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_queso_fresco",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 5,
+          "unit": "ml"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
     },
     {
       "id": "dish_merluza_brotes_tiernos",
@@ -99,7 +531,13 @@
       "servings": 1,
       "unit": "ración",
       "category": "Cena ligera",
-      "tags": ["mujer", "diabetes", "pescado", "merluza", "bajo hidrato"],
+      "tags": [
+        "mujer",
+        "diabetes",
+        "pescado",
+        "merluza",
+        "bajo hidrato"
+      ],
       "prepTime": "15 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -111,15 +549,34 @@
         "Evita exceso de sal si el pescado ya viene condimentado."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_merluza", "qty": 150, "unit": "g" },
-        { "ingredientId": "ingredient_brotes_tiernos", "qty": 50, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 8, "unit": "ml" },
-        { "ingredientId": "ingredient_limon", "qty": 10, "unit": "g" }
+        {
+          "ingredientId": "ingredient_merluza",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 10,
+          "unit": "g"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
     },
     {
       "id": "dish_salmon_calabacin",
@@ -127,7 +584,13 @@
       "servings": 1,
       "unit": "ración",
       "category": "Cena pescado",
-      "tags": ["mujer", "diabetes", "salmón", "pescado", "bajo hidrato"],
+      "tags": [
+        "mujer",
+        "diabetes",
+        "salmón",
+        "pescado",
+        "bajo hidrato"
+      ],
       "prepTime": "18 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -139,15 +602,34 @@
         "Sirve con limón si se tolera."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_salmon", "qty": 140, "unit": "g" },
-        { "ingredientId": "ingredient_calabacin", "qty": 160, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 8, "unit": "ml" },
-        { "ingredientId": "ingredient_limon", "qty": 10, "unit": "g" }
+        {
+          "ingredientId": "ingredient_salmon",
+          "qty": 140,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_calabacin",
+          "qty": 160,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 10,
+          "unit": "g"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
     },
     {
       "id": "dish_bacalao_brotes",
@@ -155,7 +637,13 @@
       "servings": 1,
       "unit": "ración",
       "category": "Cena pescado",
-      "tags": ["mujer", "diabetes", "bacalao", "pescado", "bajo hidrato"],
+      "tags": [
+        "mujer",
+        "diabetes",
+        "bacalao",
+        "pescado",
+        "bajo hidrato"
+      ],
       "prepTime": "15 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -167,14 +655,29 @@
         "Sirve el bacalao con los brotes y aliña con aceite de oliva."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_bacalao", "qty": 140, "unit": "g" },
-        { "ingredientId": "ingredient_brotes_tiernos", "qty": 60, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 8, "unit": "ml" }
+        {
+          "ingredientId": "ingredient_bacalao",
+          "qty": 140,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
     },
     {
       "id": "dish_queso_brotes_pepino",
@@ -182,7 +685,13 @@
       "servings": 1,
       "unit": "ración",
       "category": "Cena muy simple",
-      "tags": ["mujer", "diabetes", "queso", "alimento seguro", "bajo hidrato"],
+      "tags": [
+        "mujer",
+        "diabetes",
+        "queso",
+        "alimento seguro",
+        "bajo hidrato"
+      ],
       "prepTime": "5 min",
       "difficulty": "muy fácil",
       "approxPrice": 0,
@@ -193,15 +702,34 @@
         "Aliña con aceite de oliva y sirve frío."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_queso_fresco", "qty": 90, "unit": "g" },
-        { "ingredientId": "ingredient_brotes_tiernos", "qty": 50, "unit": "g" },
-        { "ingredientId": "ingredient_pepino", "qty": 80, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 6, "unit": "ml" }
+        {
+          "ingredientId": "ingredient_queso_fresco",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
     },
     {
       "id": "dish_salmorejo_huevo_jamon_moderado",
@@ -209,7 +737,13 @@
       "servings": 1,
       "unit": "ración",
       "category": "Tupper frío",
-      "tags": ["usuario", "tupper frío", "verano", "salmorejo", "colesterol moderado"],
+      "tags": [
+        "usuario",
+        "tupper frío",
+        "verano",
+        "salmorejo",
+        "colesterol moderado"
+      ],
       "prepTime": "20 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -221,18 +755,49 @@
         "Sirve el salmorejo frío con el huevo y el jamón por encima."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_tomate", "qty": 300, "unit": "g" },
-        { "ingredientId": "ingredient_pan", "qty": 35, "unit": "g" },
-        { "ingredientId": "ingredient_ajo", "qty": 2, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 12, "unit": "ml" },
-        { "ingredientId": "ingredient_huevo", "qty": 1, "unit": "unidades" },
-        { "ingredientId": "ingredient_jamon_serrano", "qty": 15, "unit": "g" },
-        { "ingredientId": "ingredient_sal", "qty": 0.5, "unit": "g" }
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 300,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pan",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_ajo",
+          "qty": 2,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 12,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_jamon_serrano",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_sal",
+          "qty": 0.5,
+          "unit": "g"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida"
+      ]
     },
     {
       "id": "dish_ensalada_pasta_integral_pollo",
@@ -240,7 +805,14 @@
       "servings": 1,
       "unit": "ración",
       "category": "Tupper frío",
-      "tags": ["usuario", "tupper frío", "verano", "pasta integral", "pollo", "colesterol"],
+      "tags": [
+        "usuario",
+        "tupper frío",
+        "verano",
+        "pasta integral",
+        "pollo",
+        "colesterol"
+      ],
       "prepTime": "25 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -252,18 +824,49 @@
         "Mezcla todo con los brotes y aliña con aceite y vinagre justo antes de comer."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_pasta_integral", "qty": 75, "unit": "g" },
-        { "ingredientId": "ingredient_pollo", "qty": 120, "unit": "g" },
-        { "ingredientId": "ingredient_tomate", "qty": 120, "unit": "g" },
-        { "ingredientId": "ingredient_pepino", "qty": 80, "unit": "g" },
-        { "ingredientId": "ingredient_brotes_tiernos", "qty": 40, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 10, "unit": "ml" },
-        { "ingredientId": "ingredient_vinagre", "qty": 8, "unit": "ml" }
+        {
+          "ingredientId": "ingredient_pasta_integral",
+          "qty": 75,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pollo",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 10,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 8,
+          "unit": "ml"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida"
+      ]
     },
     {
       "id": "dish_ensalada_garbanzos_mediterranea",
@@ -271,7 +874,14 @@
       "servings": 1,
       "unit": "ración",
       "category": "Tupper frío",
-      "tags": ["usuario", "tupper frío", "verano", "legumbres", "fibra", "colesterol"],
+      "tags": [
+        "usuario",
+        "tupper frío",
+        "verano",
+        "legumbres",
+        "fibra",
+        "colesterol"
+      ],
       "prepTime": "12 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -284,19 +894,54 @@
         "Aliña con aceite de oliva y vinagre justo antes de comer."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_garbanzos_cocidos", "qty": 160, "unit": "g" },
-        { "ingredientId": "ingredient_tomate", "qty": 120, "unit": "g" },
-        { "ingredientId": "ingredient_pepino", "qty": 80, "unit": "g" },
-        { "ingredientId": "ingredient_pimiento_rojo", "qty": 50, "unit": "g" },
-        { "ingredientId": "ingredient_brotes_tiernos", "qty": 40, "unit": "g" },
-        { "ingredientId": "ingredient_huevo", "qty": 1, "unit": "unidades" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 10, "unit": "ml" },
-        { "ingredientId": "ingredient_vinagre", "qty": 8, "unit": "ml" }
+        {
+          "ingredientId": "ingredient_garbanzos_cocidos",
+          "qty": 160,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_rojo",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 10,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 8,
+          "unit": "ml"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida"
+      ]
     },
     {
       "id": "dish_brotes_pollo_huevo",
@@ -304,7 +949,14 @@
       "servings": 1,
       "unit": "ración",
       "category": "Tupper frío",
-      "tags": ["usuario", "tupper frío", "brotes", "pollo", "proteína", "colesterol"],
+      "tags": [
+        "usuario",
+        "tupper frío",
+        "brotes",
+        "pollo",
+        "proteína",
+        "colesterol"
+      ],
       "prepTime": "20 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -316,18 +968,49 @@
         "Mezcla todo y aliña con aceite de oliva y vinagre antes de comer."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_brotes_tiernos", "qty": 80, "unit": "g" },
-        { "ingredientId": "ingredient_pollo", "qty": 130, "unit": "g" },
-        { "ingredientId": "ingredient_huevo", "qty": 1, "unit": "unidades" },
-        { "ingredientId": "ingredient_tomate", "qty": 100, "unit": "g" },
-        { "ingredientId": "ingredient_pepino", "qty": 80, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 10, "unit": "ml" },
-        { "ingredientId": "ingredient_vinagre", "qty": 8, "unit": "ml" }
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pollo",
+          "qty": 130,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 10,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 8,
+          "unit": "ml"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida"
+      ]
     },
     {
       "id": "dish_pavo_limon_calabacin",
@@ -335,7 +1018,13 @@
       "servings": 1,
       "unit": "ración",
       "category": "Cena carne magra",
-      "tags": ["usuario", "cena", "pavo", "carne magra", "colesterol"],
+      "tags": [
+        "usuario",
+        "cena",
+        "pavo",
+        "carne magra",
+        "colesterol"
+      ],
       "prepTime": "18 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -347,15 +1036,34 @@
         "Evita salsas grasas para mantenerlo ligero."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_pavo", "qty": 150, "unit": "g" },
-        { "ingredientId": "ingredient_calabacin", "qty": 180, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 8, "unit": "ml" },
-        { "ingredientId": "ingredient_limon", "qty": 15, "unit": "g" }
+        {
+          "ingredientId": "ingredient_pavo",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_calabacin",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 15,
+          "unit": "g"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
     },
     {
       "id": "dish_pollo_yogur_limon_pepino",
@@ -363,7 +1071,13 @@
       "servings": 1,
       "unit": "ración",
       "category": "Tupper frío",
-      "tags": ["usuario", "tupper frío", "pollo", "verano", "colesterol"],
+      "tags": [
+        "usuario",
+        "tupper frío",
+        "pollo",
+        "verano",
+        "colesterol"
+      ],
       "prepTime": "20 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -375,16 +1089,39 @@
         "Sirve el pollo frío con la salsa aparte para añadir justo antes de comer."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_pollo", "qty": 140, "unit": "g" },
-        { "ingredientId": "ingredient_yogur_natural", "qty": 80, "unit": "g" },
-        { "ingredientId": "ingredient_pepino", "qty": 80, "unit": "g" },
-        { "ingredientId": "ingredient_limon", "qty": 10, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 5, "unit": "ml" }
+        {
+          "ingredientId": "ingredient_pollo",
+          "qty": 140,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 5,
+          "unit": "ml"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Comida"
+      ]
     },
     {
       "id": "dish_ternera_magra_tomate_brotes",
@@ -392,7 +1129,13 @@
       "servings": 1,
       "unit": "ración",
       "category": "Cena carne",
-      "tags": ["usuario", "cena", "ternera magra", "carne", "ocasional"],
+      "tags": [
+        "usuario",
+        "cena",
+        "ternera magra",
+        "carne",
+        "ocasional"
+      ],
       "prepTime": "15 min",
       "difficulty": "fácil",
       "approxPrice": 0,
@@ -404,16 +1147,39 @@
         "Sirve la carne junto a la ensalada."
       ],
       "recipe": [
-        { "ingredientId": "ingredient_ternera_magra", "qty": 130, "unit": "g" },
-        { "ingredientId": "ingredient_tomate", "qty": 150, "unit": "g" },
-        { "ingredientId": "ingredient_brotes_tiernos", "qty": 60, "unit": "g" },
-        { "ingredientId": "ingredient_aceite_oliva", "qty": 8, "unit": "ml" },
-        { "ingredientId": "ingredient_vinagre", "qty": 6, "unit": "ml" }
+        {
+          "ingredientId": "ingredient_ternera_magra",
+          "qty": 130,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 6,
+          "unit": "ml"
+        }
       ],
       "packId": "pack_verano_familiar_diabetes_colesterol",
       "normalizedToServing": true,
       "originalServings": 1,
-      "schemaVersion": 1
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
     }
   ]
 }

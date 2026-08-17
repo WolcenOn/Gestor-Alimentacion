@@ -1,2503 +1,2593 @@
 {
-"schemaVersion": 2,
-"type": "meal-pack",
-"id": "pack_ensaladas_verano_ligeras",
-"name": "Ensaladas de verano variadas y ligeras",
-"description": "Pack de cenas rápidas tipo ensalada con brotes tiernos, proteínas variadas y aliños ligeros. Las recetas están pensadas con raciones moderadas de hidratos y sin azúcares añadidos.",
-"tags": [
-"ensaladas",
-"verano",
-"cena",
-"ligero",
-"diabetes"
-],
-"language": "es",
-"ingredients": [
-{
-"id": "ingredient_brotes_tiernos",
-"name": "brotes tiernos",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_canonigos",
-"name": "canónigos",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_tomates_cherry",
-"name": "tomates cherry",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_aguacate",
-"name": "aguacate",
-"familyId": "family_fruit",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_caballa",
-"name": "caballa al natural",
-"familyId": "family_protein",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "metal",
-"products": []
-},
-{
-"id": "ingredient_atun",
-"name": "atún al natural",
-"familyId": "family_protein",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "metal",
-"products": []
-},
-{
-"id": "ingredient_salmon",
-"name": "salmón cocido",
-"familyId": "family_protein",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_mozzarella_fresca",
-"name": "mozzarella fresca",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_queso_cremoso",
-"name": "queso cremoso ligero",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_salsa_cesar_light",
-"name": "salsa césar light",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_vinagre_jerez",
-"name": "vinagre de Jerez",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "vidrio",
-"products": []
-},
-{
-"id": "ingredient_fiambre_pavo",
-"name": "fiambre de pavo",
-"familyId": "family_protein",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_pollo_asado",
-"name": "pollo asado",
-"familyId": "family_protein",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_salsa_pesto",
-"name": "salsa pesto",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "vidrio",
-"products": []
-},
-{
-"id": "ingredient_pasta_integral",
-"name": "pasta integral cocida",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "cartón/papel",
-"products": []
-},
-{
-"id": "ingredient_maiz",
-"name": "maíz cocido",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "metal",
-"products": []
-},
-{
-"id": "ingredient_picatostes_integrales",
-"name": "picatostes integrales",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "cartón/papel",
-"products": []
-},
-{
-"id": "ingredient_cebolla_morada",
-"name": "cebolla morada",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_anchoas",
-"name": "anchoas",
-"familyId": "family_protein",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "metal",
-"products": []
-},
-{
-"id": "ingredient_burrata",
-"name": "burrata",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_zanahoria",
-"name": "zanahoria",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_tomate_seco",
-"name": "tomate seco",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "vidrio",
-"products": []
-},
-{
-"id": "ingredient_parmesano",
-"name": "parmesano",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_vinagre_modena",
-"name": "vinagre de Módena",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "vidrio",
-"products": []
-},
-{
-"id": "ingredient_salsa_yogur",
-"name": "salsa de yogur ligera",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_pimiento_rojo",
-"name": "pimiento rojo crudo",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_huevo_cocido",
-"name": "huevo cocido",
-"familyId": "family_protein",
-"qty": 0,
-"unit": "unidades",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_queso_fresco",
-"name": "queso fresco",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_pepino",
-"name": "pepino",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_aceite_oliva",
-"name": "aceite de oliva virgen extra",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "vidrio",
-"products": []
-},
-{
-"id": "ingredient_limon",
-"name": "limón",
-"familyId": "family_fruit",
-"qty": 0,
-"unit": "unidades",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_rucula",
-"name": "rúcula",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_lentejas_cocidas",
-"name": "lentejas cocidas",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "vidrio",
-"products": []
-},
-{
-"id": "ingredient_garbanzos_cocidos",
-"name": "garbanzos cocidos",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "vidrio",
-"products": []
-},
-{
-"id": "ingredient_nueces",
-"name": "nueces",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "cartón/papel",
-"products": []
-},
-{
-"id": "ingredient_semillas_calabaza",
-"name": "semillas de calabaza",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "cartón/papel",
-"products": []
-},
-{
-"id": "ingredient_yogur_natural",
-"name": "yogur natural sin azúcar",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_mostaza",
-"name": "mostaza sin azúcar",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "vidrio",
-"products": []
-},
-{
-"id": "ingredient_albahaca",
-"name": "albahaca fresca",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_calabacin",
-"name": "calabacín crudo",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_judias_verdes",
-"name": "judías verdes cocidas",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_edamame",
-"name": "edamame cocido",
-"familyId": "family_protein",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "freezer",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "plástico",
-"products": []
-},
-{
-"id": "ingredient_quinoa_cocida",
-"name": "quinoa cocida",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "cartón/papel",
-"products": []
-},
-{
-"id": "ingredient_espinacas",
-"name": "espinacas baby",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_apio",
-"name": "apio",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-},
-{
-"id": "ingredient_perejil",
-"name": "perejil fresco",
-"familyId": "family_veg",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "orgánico",
-"products": []
-}
-],
-"dishes": [
-{
-"id": "dish_ensalada_caballa_aguacate_cherry",
-"name": "Ensalada de caballa, aguacate y cherry",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"rápida",
-"baja en azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Cena saciante con grasa saludable y proteína.",
-"instructions": [
-"Lava y seca los brotes tiernos.",
-"Corta el aguacate y los tomates cherry.",
-"Añade la caballa escurrida.",
-"Aliña con vinagre de Jerez, limón y aceite de oliva.",
-"Mezcla suavemente y sirve."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_aguacate",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_caballa",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_jerez",
-"qty": 10,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 8,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_atun_mozzarella_pimiento",
-"name": "Ensalada de atún, mozzarella y pimiento rojo",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"rápida",
-"proteica"
-],
-"prepTime": "10 min",
-"difficulty": "muy fácil",
-"notes": "Usa atún al natural para una versión ligera.",
-"instructions": [
-"Coloca los brotes tiernos en un bol.",
-"Añade tomates cherry partidos y pimiento rojo en tiras.",
-"Incorpora el atún escurrido y la mozzarella.",
-"Aliña con vinagre de Módena y aceite de oliva.",
-"Remueve justo antes de servir."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_atun",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_mozzarella_fresca",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pimiento_rojo",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_modena",
-"qty": 8,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_salmon_canonigos_yogur",
-"name": "Ensalada de salmón con canónigos y salsa de yogur",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"ligera",
-"omega_3"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Mantén la salsa de yogur en cantidad moderada.",
-"instructions": [
-"Pon los canónigos en el plato.",
-"Añade salmón en lascas, pepino y zanahoria rallada.",
-"Mezcla la salsa de yogur con unas gotas de limón.",
-"Aliña la ensalada con la salsa.",
-"Sirve fría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_canonigos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salmon",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_zanahoria",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salsa_yogur",
-"qty": 25,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_pollo_asado_cesar_light",
-"name": "Ensalada césar light con pollo asado",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"césar_light",
-"saciante"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Reduce los picatostes para controlar hidratos.",
-"instructions": [
-"Coloca los brotes tiernos en un bol.",
-"Añade pollo asado desmenuzado.",
-"Incorpora parmesano y pocos picatostes.",
-"Añade salsa césar light.",
-"Mezcla y sirve al momento."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pollo_asado",
-"qty": 100,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_parmesano",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_picatostes_integrales",
-"qty": 15,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salsa_cesar_light",
-"qty": 25,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_pavo_queso_fresco_aguacate",
-"name": "Ensalada de pavo, queso fresco y aguacate",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"rápida",
-"baja_en_azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "muy fácil",
-"notes": "Elige fiambre de pavo con alto porcentaje de carne.",
-"instructions": [
-"Extiende los brotes tiernos.",
-"Corta el pavo, el queso fresco y el aguacate.",
-"Añade tomate cherry y cebolla morada fina.",
-"Aliña con limón y aceite.",
-"Mezcla con cuidado."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_fiambre_pavo",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_queso_fresco",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_aguacate",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_cebolla_morada",
-"qty": 20,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_pasta_integral_pesto_pollo",
-"name": "Ensalada templada de pasta integral, pesto y pollo",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"templada",
-"control_hidratos"
-],
-"prepTime": "15 min",
-"difficulty": "fácil",
-"notes": "Ración moderada de pasta integral para una cena equilibrada.",
-"instructions": [
-"Mezcla la pasta integral cocida con el pesto.",
-"Añade pollo asado desmenuzado.",
-"Incorpora brotes tiernos y tomates cherry.",
-"Añade parmesano por encima.",
-"Sirve templada o fría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_pasta_integral",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salsa_pesto",
-"qty": 18,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pollo_asado",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_parmesano",
-"qty": 8,
-"unit": "g"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_burrata_tomate_seco_rucula",
-"name": "Ensalada de burrata, tomate seco y rúcula",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"especial",
-"vegetariana"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Usa poca cantidad de tomate seco por su intensidad.",
-"instructions": [
-"Coloca rúcula y brotes en el plato.",
-"Añade burrata en trozos.",
-"Corta tomate seco en tiras finas.",
-"Aliña con vinagre de Jerez y aceite.",
-"Termina con albahaca fresca."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_rucula",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 40,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_burrata",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomate_seco",
-"qty": 20,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_jerez",
-"qty": 8,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_albahaca",
-"qty": 5,
-"unit": "g"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_anchoas_huevo_pimiento",
-"name": "Ensalada de anchoas, huevo y pimiento rojo",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"proteica",
-"rápida"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Las anchoas aportan sal; no añadas sal extra.",
-"instructions": [
-"Coloca los canónigos como base.",
-"Añade huevo cocido en cuartos.",
-"Incorpora pimiento rojo, pepino y anchoas.",
-"Aliña con vinagre de Módena y aceite.",
-"Sirve fría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_canonigos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_huevo_cocido",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_pimiento_rojo",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_anchoas",
-"qty": 25,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_modena",
-"qty": 8,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_caballa_zanahoria_maiz",
-"name": "Ensalada de caballa con zanahoria y maíz",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"rápida",
-"moderada_en_hidratos"
-],
-"prepTime": "10 min",
-"difficulty": "muy fácil",
-"notes": "Cantidad pequeña de maíz para limitar azúcares.",
-"instructions": [
-"Pon brotes tiernos en un bol.",
-"Añade caballa escurrida.",
-"Incorpora zanahoria rallada y maíz.",
-"Aliña con yogur natural, limón y mostaza.",
-"Mezcla y sirve."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_caballa",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_zanahoria",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_maiz",
-"qty": 35,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_yogur_natural",
-"qty": 35,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_mostaza",
-"qty": 5,
-"unit": "g"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_atun_canónigos_queso_cremoso",
-"name": "Ensalada cremosa ligera de atún y canónigos",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"cremosa",
-"ligera"
-],
-"prepTime": "10 min",
-"difficulty": "muy fácil",
-"notes": "El queso cremoso ligero sustituye salsas más calóricas.",
-"instructions": [
-"Mezcla queso cremoso ligero con limón.",
-"Coloca los canónigos y el pepino en un bol.",
-"Añade el atún escurrido y tomate cherry.",
-"Incorpora la crema ligera.",
-"Remueve hasta integrar."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_canonigos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_atun",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_queso_cremoso",
-"qty": 35,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_salmon_aguacate_edamame",
-"name": "Ensalada de salmón, aguacate y edamame",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"alta_proteína",
-"saciante"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Buena opción sin picatostes ni pasta.",
-"instructions": [
-"Coloca brotes tiernos y espinacas baby.",
-"Añade salmón en lascas.",
-"Incorpora aguacate y edamame.",
-"Aliña con vinagre de Jerez y aceite.",
-"Mezcla suavemente."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_espinacas",
-"qty": 40,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salmon",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_aguacate",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_edamame",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_jerez",
-"qty": 8,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_pollo_pesto_tomate_cherry",
-"name": "Ensalada de pollo, pesto y tomates cherry",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"rápida",
-"aromática"
-],
-"prepTime": "10 min",
-"difficulty": "muy fácil",
-"notes": "Usa pesto en poca cantidad como aliño intenso.",
-"instructions": [
-"Pon brotes tiernos en el plato.",
-"Añade pollo asado en tiras.",
-"Incorpora tomates cherry y mozzarella.",
-"Mezcla el pesto con limón.",
-"Aliña y sirve."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pollo_asado",
-"qty": 100,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_mozzarella_fresca",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salsa_pesto",
-"qty": 15,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_pavo_huevo_mostaza",
-"name": "Ensalada de pavo, huevo y mostaza suave",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"proteica",
-"sin_azúcar"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Aliño sin azúcar añadido.",
-"instructions": [
-"Coloca canónigos y brotes tiernos.",
-"Añade pavo en tiras y huevo cocido.",
-"Incorpora pepino y cebolla morada.",
-"Mezcla mostaza, yogur y limón.",
-"Aliña y sirve fría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_canonigos",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 40,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_fiambre_pavo",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_huevo_cocido",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_cebolla_morada",
-"qty": 20,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_mostaza",
-"qty": 7,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_yogur_natural",
-"qty": 30,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_lentejas_mozzarella_cherry",
-"name": "Ensalada de lentejas, mozzarella y cherry",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"legumbre",
-"saciante"
-],
-"prepTime": "10 min",
-"difficulty": "muy fácil",
-"notes": "Legumbre moderada para aportar fibra.",
-"instructions": [
-"Enjuaga y escurre las lentejas cocidas.",
-"Mezcla con brotes tiernos y tomates cherry.",
-"Añade mozzarella y pimiento rojo.",
-"Aliña con vinagre de Jerez y aceite.",
-"Sirve fría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_lentejas_cocidas",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_mozzarella_fresca",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pimiento_rojo",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_jerez",
-"qty": 8,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_garbanzos_atun_cebolla",
-"name": "Ensalada de garbanzos, atún y cebolla morada",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"legumbre",
-"proteica"
-],
-"prepTime": "10 min",
-"difficulty": "muy fácil",
-"notes": "Ración moderada de garbanzos para controlar hidratos.",
-"instructions": [
-"Enjuaga los garbanzos cocidos.",
-"Mézclalos con brotes tiernos y atún.",
-"Añade cebolla morada, pepino y tomate cherry.",
-"Aliña con limón, vinagre y aceite.",
-"Sirve fría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_garbanzos_cocidos",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_atun",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_cebolla_morada",
-"qty": 20,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_vinagre_jerez",
-"qty": 6,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_quinoa_salmon_yogur",
-"name": "Ensalada de quinoa, salmón y yogur",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"equilibrada",
-"sin_azúcar"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Usa quinoa cocida en cantidad moderada.",
-"instructions": [
-"Coloca brotes tiernos en el bol.",
-"Añade quinoa cocida y salmón.",
-"Incorpora pepino y zanahoria.",
-"Mezcla yogur con limón y mostaza.",
-"Aliña y remueve."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_quinoa_cocida",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salmon",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_zanahoria",
-"qty": 45,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_yogur_natural",
-"qty": 30,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_mostaza",
-"qty": 5,
-"unit": "g"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_mozzarella_anchoas_tomate",
-"name": "Ensalada mediterránea de mozzarella y anchoas",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"mediterránea",
-"rápida"
-],
-"prepTime": "10 min",
-"difficulty": "muy fácil",
-"notes": "Sin pan añadido para una versión más ligera.",
-"instructions": [
-"Coloca brotes y rúcula en un plato.",
-"Añade tomates cherry y mozzarella.",
-"Incorpora anchoas y albahaca.",
-"Aliña con vinagre de Módena y aceite.",
-"Sirve al momento."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_rucula",
-"qty": 40,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 100,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_mozzarella_fresca",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_anchoas",
-"qty": 20,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_albahaca",
-"qty": 5,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_modena",
-"qty": 8,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_pollo_maiz_cesar_light",
-"name": "Ensalada césar ligera con pollo y maíz",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"césar_light",
-"rápida"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Maíz y picatostes en poca cantidad.",
-"instructions": [
-"Pon brotes tiernos en un bol.",
-"Añade pollo asado y maíz.",
-"Incorpora parmesano y pocos picatostes.",
-"Añade salsa césar light.",
-"Mezcla y sirve."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pollo_asado",
-"qty": 100,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_maiz",
-"qty": 30,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_parmesano",
-"qty": 8,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_picatostes_integrales",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salsa_cesar_light",
-"qty": 22,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_queso_fresco_tomate_seco_aguacate",
-"name": "Ensalada de queso fresco, tomate seco y aguacate",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"vegetariana",
-"baja_en_azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "muy fácil",
-"notes": "Sacia sin añadir ingredientes dulces.",
-"instructions": [
-"Coloca canónigos y espinacas en el plato.",
-"Añade queso fresco en dados.",
-"Incorpora aguacate y tomate seco picado.",
-"Aliña con limón y aceite.",
-"Mezcla suavemente."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_canonigos",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_espinacas",
-"qty": 40,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_queso_fresco",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_aguacate",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomate_seco",
-"qty": 18,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_pasta_atun_pimiento",
-"name": "Ensalada de pasta integral con atún y pimiento",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"control_hidratos",
-"rápida"
-],
-"prepTime": "15 min",
-"difficulty": "fácil",
-"notes": "Pasta integral en ración moderada.",
-"instructions": [
-"Mezcla pasta integral cocida con brotes tiernos.",
-"Añade atún, pimiento rojo y tomate cherry.",
-"Incorpora pepino en dados.",
-"Aliña con vinagre de Jerez y aceite.",
-"Sirve fría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_pasta_integral",
-"qty": 85,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_atun",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pimiento_rojo",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_jerez",
-"qty": 8,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_caballa_burrata_cherry",
-"name": "Ensalada de caballa, burrata y cherry",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"especial",
-"proteica"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Cena completa con burrata en cantidad moderada.",
-"instructions": [
-"Coloca brotes tiernos y rúcula.",
-"Añade tomates cherry partidos.",
-"Incorpora caballa escurrida y burrata.",
-"Aliña con vinagre de Módena y aceite.",
-"Sirve sin remover demasiado."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_rucula",
-"qty": 30,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_caballa",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_burrata",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_modena",
-"qty": 8,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 5,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_huevo_aguacate_canónigos",
-"name": "Ensalada de huevo, aguacate y canónigos",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"vegetariana",
-"saciante"
-],
-"prepTime": "12 min",
-"difficulty": "muy fácil",
-"notes": "Buena opción sin salsas dulces.",
-"instructions": [
-"Coloca canónigos en un bol.",
-"Añade huevo cocido en cuartos.",
-"Incorpora aguacate, pepino y pimiento rojo.",
-"Aliña con limón y aceite.",
-"Sirve fría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_canonigos",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_huevo_cocido",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_aguacate",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pimiento_rojo",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_salmon_mozzarella_pesto",
-"name": "Ensalada de salmón, mozzarella y pesto",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"aromática",
-"omega_3"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Pesto en cantidad pequeña para aligerar.",
-"instructions": [
-"Coloca brotes tiernos en el plato.",
-"Añade salmón y mozzarella.",
-"Incorpora tomate cherry y albahaca.",
-"Diluye el pesto con limón.",
-"Aliña y sirve."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salmon",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_mozzarella_fresca",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_albahaca",
-"qty": 5,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salsa_pesto",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_pollo_queso_cremoso_zanahoria",
-"name": "Ensalada cremosa de pollo y zanahoria",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"cremosa",
-"proteica"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Crema ligera sin azúcar añadido.",
-"instructions": [
-"Mezcla queso cremoso ligero con yogur y limón.",
-"Coloca brotes tiernos en un bol.",
-"Añade pollo asado y zanahoria rallada.",
-"Incorpora pepino en medias lunas.",
-"Aliña con la crema ligera."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_queso_cremoso",
-"qty": 25,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_yogur_natural",
-"qty": 25,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pollo_asado",
-"qty": 100,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_zanahoria",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 70,
-"unit": "g"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_pavo_mozzarella_tomate_seco",
-"name": "Ensalada de pavo, mozzarella y tomate seco",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"rápida",
-"proteica"
-],
-"prepTime": "10 min",
-"difficulty": "muy fácil",
-"notes": "Aporta sabor intenso con poco tomate seco.",
-"instructions": [
-"Coloca canónigos como base.",
-"Añade pavo en tiras y mozzarella.",
-"Incorpora tomate seco picado y tomate cherry.",
-"Aliña con vinagre de Jerez y aceite.",
-"Mezcla y sirve."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_canonigos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_fiambre_pavo",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_mozzarella_fresca",
-"qty": 55,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomate_seco",
-"qty": 15,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_jerez",
-"qty": 8,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 5,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_atun_huevo_salsa_yogur",
-"name": "Ensalada de atún, huevo y salsa de yogur",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"proteica",
-"ligera"
-],
-"prepTime": "12 min",
-"difficulty": "muy fácil",
-"notes": "Salsa ligera y sin azúcar añadido.",
-"instructions": [
-"Coloca brotes tiernos y espinacas.",
-"Añade atún escurrido y huevo cocido.",
-"Incorpora pepino y cebolla morada.",
-"Añade salsa de yogur ligera.",
-"Mezcla y sirve."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_espinacas",
-"qty": 30,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_atun",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_huevo_cocido",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_cebolla_morada",
-"qty": 20,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salsa_yogur",
-"qty": 25,
-"unit": "g"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_caballa_judias_verdes",
-"name": "Ensalada de caballa con judías verdes",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"baja_en_hidratos",
-"proteica"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Muy ligera y con verduras saciantes.",
-"instructions": [
-"Coloca las judías verdes cocidas y frías en un bol.",
-"Añade brotes tiernos y caballa.",
-"Incorpora tomate cherry y cebolla morada.",
-"Aliña con vinagre de Jerez y aceite.",
-"Mezcla con suavidad."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_judias_verdes",
-"qty": 120,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_caballa",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_cebolla_morada",
-"qty": 20,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vinagre_jerez",
-"qty": 8,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_burrata_pesto_calabacin",
-"name": "Ensalada de burrata, pesto y calabacín crudo",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"vegetariana",
-"rápida"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Corta el calabacín muy fino para comerlo crudo.",
-"instructions": [
-"Haz láminas finas de calabacín.",
-"Coloca brotes tiernos y rúcula en el plato.",
-"Añade burrata y tomates cherry.",
-"Aliña con pesto y limón.",
-"Sirve al momento."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_calabacin",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_rucula",
-"qty": 30,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_burrata",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_tomates_cherry",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salsa_pesto",
-"qty": 15,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_pollo_quinoa_aguacate",
-"name": "Ensalada de pollo, quinoa y aguacate",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"saciante",
-"equilibrada"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Completa y moderada en hidratos.",
-"instructions": [
-"Coloca brotes tiernos en el bol.",
-"Añade quinoa cocida y pollo asado.",
-"Incorpora aguacate, pepino y pimiento rojo.",
-"Aliña con limón y aceite.",
-"Mezcla suavemente."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_quinoa_cocida",
-"qty": 75,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pollo_asado",
-"qty": 90,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_aguacate",
-"qty": 55,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 60,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pimiento_rojo",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 0.25,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_aceite_oliva",
-"qty": 6,
-"unit": "ml"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-},
-{
-"id": "dish_parmesano_anchoas_cesar_sin_pasta",
-"name": "Ensalada césar ligera con anchoas y parmesano",
-"servings": 1,
-"unit": "ración",
-"category": "cena",
-"tags": [
-"verano",
-"césar_light",
-"baja_en_hidratos"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Versión sin pasta y con pocos picatostes.",
-"instructions": [
-"Coloca brotes tiernos y espinacas baby.",
-"Añade anchoas troceadas y parmesano.",
-"Incorpora pepino para aligerar.",
-"Añade salsa césar light y pocos picatostes.",
-"Mezcla y sirve."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_brotes_tiernos",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_espinacas",
-"qty": 30,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_anchoas",
-"qty": 20,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_parmesano",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_pepino",
-"qty": 70,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_salsa_cesar_light",
-"qty": 22,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_picatostes_integrales",
-"qty": 10,
-"unit": "g"
-}
-],
-"originalServings": 1,
-"normalizedToServing": true
-}
-]
+  "schemaVersion": 2,
+  "type": "meal-pack",
+  "id": "pack_ensaladas_verano_ligeras",
+  "name": "Ensaladas de verano variadas y ligeras",
+  "description": "Pack de cenas rápidas tipo ensalada con brotes tiernos, proteínas variadas y aliños ligeros. Las recetas están pensadas con raciones moderadas de hidratos y sin azúcares añadidos.",
+  "tags": [
+    "ensaladas",
+    "verano",
+    "cena",
+    "ligero",
+    "diabetes"
+  ],
+  "language": "es",
+  "ingredients": [
+    {
+      "id": "ingredient_brotes_tiernos",
+      "name": "brotes tiernos",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_canonigos",
+      "name": "canónigos",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_tomates_cherry",
+      "name": "tomates cherry",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_aguacate",
+      "name": "aguacate",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_caballa",
+      "name": "caballa al natural",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "metal",
+      "products": []
+    },
+    {
+      "id": "ingredient_atun",
+      "name": "atún al natural",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "metal",
+      "products": []
+    },
+    {
+      "id": "ingredient_salmon",
+      "name": "salmón cocido",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_mozzarella_fresca",
+      "name": "mozzarella fresca",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_queso_cremoso",
+      "name": "queso cremoso ligero",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_salsa_cesar_light",
+      "name": "salsa césar light",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_vinagre_jerez",
+      "name": "vinagre de Jerez",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_fiambre_pavo",
+      "name": "fiambre de pavo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_pollo_asado",
+      "name": "pollo asado",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_salsa_pesto",
+      "name": "salsa pesto",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_pasta_integral",
+      "name": "pasta integral cocida",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_maiz",
+      "name": "maíz cocido",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "metal",
+      "products": []
+    },
+    {
+      "id": "ingredient_picatostes_integrales",
+      "name": "picatostes integrales",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_cebolla_morada",
+      "name": "cebolla morada",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_anchoas",
+      "name": "anchoas",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "metal",
+      "products": []
+    },
+    {
+      "id": "ingredient_burrata",
+      "name": "burrata",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_zanahoria",
+      "name": "zanahoria",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_tomate_seco",
+      "name": "tomate seco",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_parmesano",
+      "name": "parmesano",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_vinagre_modena",
+      "name": "vinagre de Módena",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_salsa_yogur",
+      "name": "salsa de yogur ligera",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_pimiento_rojo",
+      "name": "pimiento rojo crudo",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_huevo_cocido",
+      "name": "huevo cocido",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_queso_fresco",
+      "name": "queso fresco",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_pepino",
+      "name": "pepino",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_aceite_oliva",
+      "name": "aceite de oliva virgen extra",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_limon",
+      "name": "limón",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_rucula",
+      "name": "rúcula",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_lentejas_cocidas",
+      "name": "lentejas cocidas",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_garbanzos_cocidos",
+      "name": "garbanzos cocidos",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_nueces",
+      "name": "nueces",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_semillas_calabaza",
+      "name": "semillas de calabaza",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_yogur_natural",
+      "name": "yogur natural sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_mostaza",
+      "name": "mostaza sin azúcar",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_albahaca",
+      "name": "albahaca fresca",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_calabacin",
+      "name": "calabacín crudo",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_judias_verdes",
+      "name": "judías verdes cocidas",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_edamame",
+      "name": "edamame cocido",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "freezer",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_quinoa_cocida",
+      "name": "quinoa cocida",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_espinacas",
+      "name": "espinacas baby",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_apio",
+      "name": "apio",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_perejil",
+      "name": "perejil fresco",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    }
+  ],
+  "dishes": [
+    {
+      "id": "dish_ensalada_caballa_aguacate_cherry",
+      "name": "Ensalada de caballa, aguacate y cherry",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "rápida",
+        "baja en azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Cena saciante con grasa saludable y proteína.",
+      "instructions": [
+        "Lava y seca los brotes tiernos.",
+        "Corta el aguacate y los tomates cherry.",
+        "Añade la caballa escurrida.",
+        "Aliña con vinagre de Jerez, limón y aceite de oliva.",
+        "Mezcla suavemente y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aguacate",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_caballa",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_jerez",
+          "qty": 10,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_atun_mozzarella_pimiento",
+      "name": "Ensalada de atún, mozzarella y pimiento rojo",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "rápida",
+        "proteica"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "muy fácil",
+      "notes": "Usa atún al natural para una versión ligera.",
+      "instructions": [
+        "Coloca los brotes tiernos en un bol.",
+        "Añade tomates cherry partidos y pimiento rojo en tiras.",
+        "Incorpora el atún escurrido y la mozzarella.",
+        "Aliña con vinagre de Módena y aceite de oliva.",
+        "Remueve justo antes de servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_atun",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_mozzarella_fresca",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_rojo",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_modena",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_salmon_canonigos_yogur",
+      "name": "Ensalada de salmón con canónigos y salsa de yogur",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "ligera",
+        "omega_3"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Mantén la salsa de yogur en cantidad moderada.",
+      "instructions": [
+        "Pon los canónigos en el plato.",
+        "Añade salmón en lascas, pepino y zanahoria rallada.",
+        "Mezcla la salsa de yogur con unas gotas de limón.",
+        "Aliña la ensalada con la salsa.",
+        "Sirve fría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_canonigos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salmon",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_zanahoria",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salsa_yogur",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pollo_asado_cesar_light",
+      "name": "Ensalada césar light con pollo asado",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "césar_light",
+        "saciante"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Reduce los picatostes para controlar hidratos.",
+      "instructions": [
+        "Coloca los brotes tiernos en un bol.",
+        "Añade pollo asado desmenuzado.",
+        "Incorpora parmesano y pocos picatostes.",
+        "Añade salsa césar light.",
+        "Mezcla y sirve al momento."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pollo_asado",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_parmesano",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_picatostes_integrales",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salsa_cesar_light",
+          "qty": 25,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pavo_queso_fresco_aguacate",
+      "name": "Ensalada de pavo, queso fresco y aguacate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "rápida",
+        "baja_en_azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "muy fácil",
+      "notes": "Elige fiambre de pavo con alto porcentaje de carne.",
+      "instructions": [
+        "Extiende los brotes tiernos.",
+        "Corta el pavo, el queso fresco y el aguacate.",
+        "Añade tomate cherry y cebolla morada fina.",
+        "Aliña con limón y aceite.",
+        "Mezcla con cuidado."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_fiambre_pavo",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_queso_fresco",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aguacate",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla_morada",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pasta_integral_pesto_pollo",
+      "name": "Ensalada templada de pasta integral, pesto y pollo",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "templada",
+        "control_hidratos"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Ración moderada de pasta integral para una cena equilibrada.",
+      "instructions": [
+        "Mezcla la pasta integral cocida con el pesto.",
+        "Añade pollo asado desmenuzado.",
+        "Incorpora brotes tiernos y tomates cherry.",
+        "Añade parmesano por encima.",
+        "Sirve templada o fría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pasta_integral",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salsa_pesto",
+          "qty": 18,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pollo_asado",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_parmesano",
+          "qty": 8,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_burrata_tomate_seco_rucula",
+      "name": "Ensalada de burrata, tomate seco y rúcula",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "especial",
+        "vegetariana"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Usa poca cantidad de tomate seco por su intensidad.",
+      "instructions": [
+        "Coloca rúcula y brotes en el plato.",
+        "Añade burrata en trozos.",
+        "Corta tomate seco en tiras finas.",
+        "Aliña con vinagre de Jerez y aceite.",
+        "Termina con albahaca fresca."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_rucula",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_burrata",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate_seco",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_jerez",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_albahaca",
+          "qty": 5,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_anchoas_huevo_pimiento",
+      "name": "Ensalada de anchoas, huevo y pimiento rojo",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "proteica",
+        "rápida"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Las anchoas aportan sal; no añadas sal extra.",
+      "instructions": [
+        "Coloca los canónigos como base.",
+        "Añade huevo cocido en cuartos.",
+        "Incorpora pimiento rojo, pepino y anchoas.",
+        "Aliña con vinagre de Módena y aceite.",
+        "Sirve fría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_canonigos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo_cocido",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_rojo",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_anchoas",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_modena",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_caballa_zanahoria_maiz",
+      "name": "Ensalada de caballa con zanahoria y maíz",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "rápida",
+        "moderada_en_hidratos"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "muy fácil",
+      "notes": "Cantidad pequeña de maíz para limitar azúcares.",
+      "instructions": [
+        "Pon brotes tiernos en un bol.",
+        "Añade caballa escurrida.",
+        "Incorpora zanahoria rallada y maíz.",
+        "Aliña con yogur natural, limón y mostaza.",
+        "Mezcla y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_caballa",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_zanahoria",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_maiz",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_mostaza",
+          "qty": 5,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_atun_canónigos_queso_cremoso",
+      "name": "Ensalada cremosa ligera de atún y canónigos",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "cremosa",
+        "ligera"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "muy fácil",
+      "notes": "El queso cremoso ligero sustituye salsas más calóricas.",
+      "instructions": [
+        "Mezcla queso cremoso ligero con limón.",
+        "Coloca los canónigos y el pepino en un bol.",
+        "Añade el atún escurrido y tomate cherry.",
+        "Incorpora la crema ligera.",
+        "Remueve hasta integrar."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_canonigos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_atun",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_queso_cremoso",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_salmon_aguacate_edamame",
+      "name": "Ensalada de salmón, aguacate y edamame",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "alta_proteína",
+        "saciante"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Buena opción sin picatostes ni pasta.",
+      "instructions": [
+        "Coloca brotes tiernos y espinacas baby.",
+        "Añade salmón en lascas.",
+        "Incorpora aguacate y edamame.",
+        "Aliña con vinagre de Jerez y aceite.",
+        "Mezcla suavemente."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_espinacas",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salmon",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aguacate",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_edamame",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_jerez",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pollo_pesto_tomate_cherry",
+      "name": "Ensalada de pollo, pesto y tomates cherry",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "rápida",
+        "aromática"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "muy fácil",
+      "notes": "Usa pesto en poca cantidad como aliño intenso.",
+      "instructions": [
+        "Pon brotes tiernos en el plato.",
+        "Añade pollo asado en tiras.",
+        "Incorpora tomates cherry y mozzarella.",
+        "Mezcla el pesto con limón.",
+        "Aliña y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pollo_asado",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_mozzarella_fresca",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salsa_pesto",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pavo_huevo_mostaza",
+      "name": "Ensalada de pavo, huevo y mostaza suave",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "proteica",
+        "sin_azúcar"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Aliño sin azúcar añadido.",
+      "instructions": [
+        "Coloca canónigos y brotes tiernos.",
+        "Añade pavo en tiras y huevo cocido.",
+        "Incorpora pepino y cebolla morada.",
+        "Mezcla mostaza, yogur y limón.",
+        "Aliña y sirve fría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_canonigos",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_fiambre_pavo",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo_cocido",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla_morada",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_mostaza",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_lentejas_mozzarella_cherry",
+      "name": "Ensalada de lentejas, mozzarella y cherry",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "legumbre",
+        "saciante"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "muy fácil",
+      "notes": "Legumbre moderada para aportar fibra.",
+      "instructions": [
+        "Enjuaga y escurre las lentejas cocidas.",
+        "Mezcla con brotes tiernos y tomates cherry.",
+        "Añade mozzarella y pimiento rojo.",
+        "Aliña con vinagre de Jerez y aceite.",
+        "Sirve fría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_lentejas_cocidas",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_mozzarella_fresca",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_rojo",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_jerez",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_garbanzos_atun_cebolla",
+      "name": "Ensalada de garbanzos, atún y cebolla morada",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "legumbre",
+        "proteica"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "muy fácil",
+      "notes": "Ración moderada de garbanzos para controlar hidratos.",
+      "instructions": [
+        "Enjuaga los garbanzos cocidos.",
+        "Mézclalos con brotes tiernos y atún.",
+        "Añade cebolla morada, pepino y tomate cherry.",
+        "Aliña con limón, vinagre y aceite.",
+        "Sirve fría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_garbanzos_cocidos",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_atun",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla_morada",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_jerez",
+          "qty": 6,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_quinoa_salmon_yogur",
+      "name": "Ensalada de quinoa, salmón y yogur",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "equilibrada",
+        "sin_azúcar"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Usa quinoa cocida en cantidad moderada.",
+      "instructions": [
+        "Coloca brotes tiernos en el bol.",
+        "Añade quinoa cocida y salmón.",
+        "Incorpora pepino y zanahoria.",
+        "Mezcla yogur con limón y mostaza.",
+        "Aliña y remueve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_quinoa_cocida",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salmon",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_zanahoria",
+          "qty": 45,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_mostaza",
+          "qty": 5,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_mozzarella_anchoas_tomate",
+      "name": "Ensalada mediterránea de mozzarella y anchoas",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "mediterránea",
+        "rápida"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "muy fácil",
+      "notes": "Sin pan añadido para una versión más ligera.",
+      "instructions": [
+        "Coloca brotes y rúcula en un plato.",
+        "Añade tomates cherry y mozzarella.",
+        "Incorpora anchoas y albahaca.",
+        "Aliña con vinagre de Módena y aceite.",
+        "Sirve al momento."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_rucula",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_mozzarella_fresca",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_anchoas",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_albahaca",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_modena",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pollo_maiz_cesar_light",
+      "name": "Ensalada césar ligera con pollo y maíz",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "césar_light",
+        "rápida"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Maíz y picatostes en poca cantidad.",
+      "instructions": [
+        "Pon brotes tiernos en un bol.",
+        "Añade pollo asado y maíz.",
+        "Incorpora parmesano y pocos picatostes.",
+        "Añade salsa césar light.",
+        "Mezcla y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pollo_asado",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_maiz",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_parmesano",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_picatostes_integrales",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salsa_cesar_light",
+          "qty": 22,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_queso_fresco_tomate_seco_aguacate",
+      "name": "Ensalada de queso fresco, tomate seco y aguacate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "vegetariana",
+        "baja_en_azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "muy fácil",
+      "notes": "Sacia sin añadir ingredientes dulces.",
+      "instructions": [
+        "Coloca canónigos y espinacas en el plato.",
+        "Añade queso fresco en dados.",
+        "Incorpora aguacate y tomate seco picado.",
+        "Aliña con limón y aceite.",
+        "Mezcla suavemente."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_canonigos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_espinacas",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_queso_fresco",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aguacate",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate_seco",
+          "qty": 18,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pasta_atun_pimiento",
+      "name": "Ensalada de pasta integral con atún y pimiento",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "control_hidratos",
+        "rápida"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Pasta integral en ración moderada.",
+      "instructions": [
+        "Mezcla pasta integral cocida con brotes tiernos.",
+        "Añade atún, pimiento rojo y tomate cherry.",
+        "Incorpora pepino en dados.",
+        "Aliña con vinagre de Jerez y aceite.",
+        "Sirve fría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pasta_integral",
+          "qty": 85,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_atun",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_rojo",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_jerez",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_caballa_burrata_cherry",
+      "name": "Ensalada de caballa, burrata y cherry",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "especial",
+        "proteica"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Cena completa con burrata en cantidad moderada.",
+      "instructions": [
+        "Coloca brotes tiernos y rúcula.",
+        "Añade tomates cherry partidos.",
+        "Incorpora caballa escurrida y burrata.",
+        "Aliña con vinagre de Módena y aceite.",
+        "Sirve sin remover demasiado."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_rucula",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_caballa",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_burrata",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_modena",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 5,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_huevo_aguacate_canónigos",
+      "name": "Ensalada de huevo, aguacate y canónigos",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "vegetariana",
+        "saciante"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "muy fácil",
+      "notes": "Buena opción sin salsas dulces.",
+      "instructions": [
+        "Coloca canónigos en un bol.",
+        "Añade huevo cocido en cuartos.",
+        "Incorpora aguacate, pepino y pimiento rojo.",
+        "Aliña con limón y aceite.",
+        "Sirve fría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_canonigos",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo_cocido",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_aguacate",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_rojo",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_salmon_mozzarella_pesto",
+      "name": "Ensalada de salmón, mozzarella y pesto",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "aromática",
+        "omega_3"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Pesto en cantidad pequeña para aligerar.",
+      "instructions": [
+        "Coloca brotes tiernos en el plato.",
+        "Añade salmón y mozzarella.",
+        "Incorpora tomate cherry y albahaca.",
+        "Diluye el pesto con limón.",
+        "Aliña y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salmon",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_mozzarella_fresca",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_albahaca",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salsa_pesto",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pollo_queso_cremoso_zanahoria",
+      "name": "Ensalada cremosa de pollo y zanahoria",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "cremosa",
+        "proteica"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Crema ligera sin azúcar añadido.",
+      "instructions": [
+        "Mezcla queso cremoso ligero con yogur y limón.",
+        "Coloca brotes tiernos en un bol.",
+        "Añade pollo asado y zanahoria rallada.",
+        "Incorpora pepino en medias lunas.",
+        "Aliña con la crema ligera."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_queso_cremoso",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pollo_asado",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_zanahoria",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 70,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pavo_mozzarella_tomate_seco",
+      "name": "Ensalada de pavo, mozzarella y tomate seco",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "rápida",
+        "proteica"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "muy fácil",
+      "notes": "Aporta sabor intenso con poco tomate seco.",
+      "instructions": [
+        "Coloca canónigos como base.",
+        "Añade pavo en tiras y mozzarella.",
+        "Incorpora tomate seco picado y tomate cherry.",
+        "Aliña con vinagre de Jerez y aceite.",
+        "Mezcla y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_canonigos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_fiambre_pavo",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_mozzarella_fresca",
+          "qty": 55,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate_seco",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_jerez",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 5,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_atun_huevo_salsa_yogur",
+      "name": "Ensalada de atún, huevo y salsa de yogur",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "proteica",
+        "ligera"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "muy fácil",
+      "notes": "Salsa ligera y sin azúcar añadido.",
+      "instructions": [
+        "Coloca brotes tiernos y espinacas.",
+        "Añade atún escurrido y huevo cocido.",
+        "Incorpora pepino y cebolla morada.",
+        "Añade salsa de yogur ligera.",
+        "Mezcla y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_espinacas",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_atun",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo_cocido",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla_morada",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salsa_yogur",
+          "qty": 25,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_caballa_judias_verdes",
+      "name": "Ensalada de caballa con judías verdes",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "baja_en_hidratos",
+        "proteica"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Muy ligera y con verduras saciantes.",
+      "instructions": [
+        "Coloca las judías verdes cocidas y frías en un bol.",
+        "Añade brotes tiernos y caballa.",
+        "Incorpora tomate cherry y cebolla morada.",
+        "Aliña con vinagre de Jerez y aceite.",
+        "Mezcla con suavidad."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_judias_verdes",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_caballa",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla_morada",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vinagre_jerez",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_burrata_pesto_calabacin",
+      "name": "Ensalada de burrata, pesto y calabacín crudo",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "vegetariana",
+        "rápida"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Corta el calabacín muy fino para comerlo crudo.",
+      "instructions": [
+        "Haz láminas finas de calabacín.",
+        "Coloca brotes tiernos y rúcula en el plato.",
+        "Añade burrata y tomates cherry.",
+        "Aliña con pesto y limón.",
+        "Sirve al momento."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_calabacin",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_rucula",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_burrata",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomates_cherry",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salsa_pesto",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pollo_quinoa_aguacate",
+      "name": "Ensalada de pollo, quinoa y aguacate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "saciante",
+        "equilibrada"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Completa y moderada en hidratos.",
+      "instructions": [
+        "Coloca brotes tiernos en el bol.",
+        "Añade quinoa cocida y pollo asado.",
+        "Incorpora aguacate, pepino y pimiento rojo.",
+        "Aliña con limón y aceite.",
+        "Mezcla suavemente."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_quinoa_cocida",
+          "qty": 75,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pollo_asado",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aguacate",
+          "qty": 55,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pimiento_rojo",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_parmesano_anchoas_cesar_sin_pasta",
+      "name": "Ensalada césar ligera con anchoas y parmesano",
+      "servings": 1,
+      "unit": "ración",
+      "category": "cena",
+      "tags": [
+        "verano",
+        "césar_light",
+        "baja_en_hidratos"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Versión sin pasta y con pocos picatostes.",
+      "instructions": [
+        "Coloca brotes tiernos y espinacas baby.",
+        "Añade anchoas troceadas y parmesano.",
+        "Incorpora pepino para aligerar.",
+        "Añade salsa césar light y pocos picatostes.",
+        "Mezcla y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_espinacas",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_anchoas",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_parmesano",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salsa_cesar_light",
+          "qty": 22,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_picatostes_integrales",
+          "qty": 10,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Cena"
+      ]
+    }
+  ]
 }

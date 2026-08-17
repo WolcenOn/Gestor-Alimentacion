@@ -1,1 +1,1953 @@
-{"schemaVersion":2,"type":"meal-pack","id":"pack_postres_sanos_sin_azucar_diabeticos","name":"Postres sanos sin azúcar para diabéticos","description":"Pack de postres individuales sin azúcar añadido, con fruta entera, lácteos naturales, frutos secos y semillas. Las raciones están pensadas para controlar hidratos y favorecer saciedad.","tags":["postres","sin_azúcar","diabetes","saludable","ración_individual"],"language":"es","ingredients":[{"id":"ingredient_yogur_griego","name":"yogur griego natural sin azúcar","familyId":"family_dairy","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"plástico","products":[]},{"id":"ingredient_queso_fresco_batido","name":"queso fresco batido sin azúcar","familyId":"family_dairy","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"plástico","products":[]},{"id":"ingredient_leche_desnatada","name":"leche desnatada","familyId":"family_dairy","qty":0,"unit":"ml","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_bebida_almendra","name":"bebida de almendra sin azúcar","familyId":"family_pantry","qty":0,"unit":"ml","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_chia","name":"semillas de chía","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_avena","name":"copos de avena integrales","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_harina_almendra","name":"harina de almendra","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_cacao_puro","name":"cacao puro sin azúcar","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_canela","name":"canela molida","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"vidrio","products":[]},{"id":"ingredient_vainilla","name":"vainilla sin azúcar","familyId":"family_pantry","qty":0,"unit":"ml","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"vidrio","products":[]},{"id":"ingredient_eritritol","name":"eritritol","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_frutos_rojos","name":"frutos rojos","familyId":"family_fruit","qty":0,"unit":"g","available":false,"storageType":"freezer","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"plástico","products":[]},{"id":"ingredient_fresas","name":"fresas","familyId":"family_fruit","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"orgánico","products":[]},{"id":"ingredient_manzana","name":"manzana","familyId":"family_fruit","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"orgánico","products":[]},{"id":"ingredient_pera","name":"pera","familyId":"family_fruit","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"orgánico","products":[]},{"id":"ingredient_kiwi","name":"kiwi","familyId":"family_fruit","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"orgánico","products":[]},{"id":"ingredient_limon","name":"limón","familyId":"family_fruit","qty":0,"unit":"unidades","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"orgánico","products":[]},{"id":"ingredient_aguacate","name":"aguacate","familyId":"family_fruit","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"orgánico","products":[]},{"id":"ingredient_huevo","name":"huevo","familyId":"family_protein","qty":0,"unit":"unidades","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"orgánico","products":[]},{"id":"ingredient_claras_huevo","name":"claras de huevo","familyId":"family_protein","qty":0,"unit":"ml","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"plástico","products":[]},{"id":"ingredient_nueces","name":"nueces","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_almendras","name":"almendras naturales","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_avellanas","name":"avellanas naturales","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_crema_cacahuete","name":"crema de cacahuete 100%","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"vidrio","products":[]},{"id":"ingredient_coco_rallado","name":"coco rallado sin azúcar","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"plástico","products":[]},{"id":"ingredient_gelatina_neutra","name":"gelatina neutra","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_calabaza_asada","name":"calabaza asada","familyId":"family_veg","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"orgánico","products":[]},{"id":"ingredient_zanahoria","name":"zanahoria","familyId":"family_veg","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"orgánico","products":[]},{"id":"ingredient_chocolate_85","name":"chocolate negro 85% sin azúcar añadido","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[]},{"id":"ingredient_ricotta","name":"ricotta","familyId":"family_dairy","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"plástico","products":[]}],"dishes":[{"id":"dish_pudding_chia_frutos_rojos","name":"Pudding de chía con frutos rojos","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","diabetes","frío"],"prepTime":"8 min","difficulty":"muy fácil","notes":"Postre rico en fibra; deja reposar para espesar.","instructions":["Mezcla chía, bebida de almendra y canela.","Refrigera hasta que espese.","Añade frutos rojos antes de servir."],"recipe":[{"ingredientId":"ingredient_chia","qty":18,"unit":"g"},{"ingredientId":"ingredient_bebida_almendra","qty":120,"unit":"ml"},{"ingredientId":"ingredient_frutos_rojos","qty":60,"unit":"g"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_yogur_nueces_canela","name":"Yogur griego con nueces y canela","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","rápido","proteico"],"prepTime":"5 min","difficulty":"muy fácil","notes":"Elige yogur natural sin azúcar.","instructions":["Sirve el yogur en un cuenco.","Añade nueces troceadas.","Espolvorea canela y sirve."],"recipe":[{"ingredientId":"ingredient_yogur_griego","qty":150,"unit":"g"},{"ingredientId":"ingredient_nueces","qty":12,"unit":"g"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_mousse_cacao_aguacate","name":"Mousse de cacao y aguacate","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","cremoso","diabetes"],"prepTime":"10 min","difficulty":"fácil","notes":"Usa poca cantidad de eritritol si necesitas más dulzor.","instructions":["Tritura el aguacate con cacao y bebida de almendra.","Añade vainilla y eritritol.","Refrigera antes de servir."],"recipe":[{"ingredientId":"ingredient_aguacate","qty":80,"unit":"g"},{"ingredientId":"ingredient_cacao_puro","qty":8,"unit":"g"},{"ingredientId":"ingredient_bebida_almendra","qty":30,"unit":"ml"},{"ingredientId":"ingredient_eritritol","qty":5,"unit":"g"},{"ingredientId":"ingredient_vainilla","qty":2,"unit":"ml"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_manzana_asada_canela_almendras","name":"Manzana asada con canela y almendras","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","horno","fibra"],"prepTime":"20 min","difficulty":"fácil","notes":"Media manzana grande o una pequeña ayuda a controlar la ración.","instructions":["Corta la manzana en láminas.","Hornea con canela hasta ablandar.","Añade almendras picadas al final."],"recipe":[{"ingredientId":"ingredient_manzana","qty":120,"unit":"g"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"},{"ingredientId":"ingredient_almendras","qty":10,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_vasito_queso_fresco_fresas","name":"Vasito de queso fresco batido y fresas","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","rápido","fruta"],"prepTime":"6 min","difficulty":"muy fácil","notes":"Postre fresco con proteína y fruta entera.","instructions":["Mezcla el queso con vainilla.","Añade fresas troceadas.","Termina con chía y sirve frío."],"recipe":[{"ingredientId":"ingredient_queso_fresco_batido","qty":150,"unit":"g"},{"ingredientId":"ingredient_fresas","qty":80,"unit":"g"},{"ingredientId":"ingredient_chia","qty":8,"unit":"g"},{"ingredientId":"ingredient_vainilla","qty":2,"unit":"ml"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_gelatina_limon_yogur","name":"Gelatina de limón con yogur","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","frío","ligero"],"prepTime":"12 min","difficulty":"fácil","notes":"No uses zumos ni azúcar añadido.","instructions":["Disuelve la gelatina según indicaciones.","Añade limón y eritritol.","Sirve con yogur cuando cuaje."],"recipe":[{"ingredientId":"ingredient_gelatina_neutra","qty":5,"unit":"g"},{"ingredientId":"ingredient_limon","qty":0.5,"unit":"unidades"},{"ingredientId":"ingredient_yogur_griego","qty":80,"unit":"g"},{"ingredientId":"ingredient_eritritol","qty":4,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_crema_ricotta_cacao","name":"Crema de ricotta y cacao","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","cremoso","rápido"],"prepTime":"7 min","difficulty":"muy fácil","notes":"Textura tipo crema sin harinas refinadas.","instructions":["Mezcla ricotta, cacao y eritritol.","Bate hasta obtener crema.","Añade avellanas picadas."],"recipe":[{"ingredientId":"ingredient_ricotta","qty":120,"unit":"g"},{"ingredientId":"ingredient_cacao_puro","qty":7,"unit":"g"},{"ingredientId":"ingredient_eritritol","qty":5,"unit":"g"},{"ingredientId":"ingredient_avellanas","qty":8,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_pera_canela_nueces","name":"Pera templada con canela y nueces","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","templado","fibra"],"prepTime":"12 min","difficulty":"fácil","notes":"Usa una ración pequeña de fruta entera.","instructions":["Corta la pera en dados.","Calienta con limón y canela.","Añade nueces al servir."],"recipe":[{"ingredientId":"ingredient_pera","qty":120,"unit":"g"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"},{"ingredientId":"ingredient_nueces","qty":10,"unit":"g"},{"ingredientId":"ingredient_limon","qty":0.25,"unit":"unidades"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_tortita_avena_claras_cacao","name":"Tortita de avena, claras y cacao","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","saciante","control_hidratos"],"prepTime":"12 min","difficulty":"fácil","notes":"Ración moderada de avena integral.","instructions":["Mezcla todos los ingredientes.","Cocina en sartén antiadherente.","Sirve templada."],"recipe":[{"ingredientId":"ingredient_avena","qty":25,"unit":"g"},{"ingredientId":"ingredient_claras_huevo","qty":100,"unit":"ml"},{"ingredientId":"ingredient_cacao_puro","qty":5,"unit":"g"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_flan_huevo_vainilla_sin_azucar","name":"Flan de huevo y vainilla sin azúcar","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","proteico","horno"],"prepTime":"25 min","difficulty":"media","notes":"Sin caramelo para evitar azúcares añadidos.","instructions":["Bate huevo, leche, vainilla y eritritol.","Vierte en un molde pequeño.","Hornea al baño María hasta cuajar."],"recipe":[{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_leche_desnatada","qty":120,"unit":"ml"},{"ingredientId":"ingredient_vainilla","qty":2,"unit":"ml"},{"ingredientId":"ingredient_eritritol","qty":6,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_helado_yogur_frutos_rojos","name":"Helado rápido de yogur y frutos rojos","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","frío","verano"],"prepTime":"8 min","difficulty":"muy fácil","notes":"Tritura fruta congelada sin añadir zumo.","instructions":["Tritura yogur y frutos rojos congelados.","Sirve en un cuenco.","Añade almendras picadas."],"recipe":[{"ingredientId":"ingredient_yogur_griego","qty":120,"unit":"g"},{"ingredientId":"ingredient_frutos_rojos","qty":80,"unit":"g"},{"ingredientId":"ingredient_almendras","qty":8,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_bombon_chocolate_almendra","name":"Bombón de chocolate 85% y almendra","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar_añadido","pequeña_ración","capricho"],"prepTime":"10 min","difficulty":"fácil","notes":"Usa chocolate 85% sin azúcar añadido y porción pequeña.","instructions":["Funde el chocolate suavemente.","Mezcla con almendras picadas.","Enfría en porción pequeña."],"recipe":[{"ingredientId":"ingredient_chocolate_85","qty":15,"unit":"g"},{"ingredientId":"ingredient_almendras","qty":8,"unit":"g"},{"ingredientId":"ingredient_coco_rallado","qty":3,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_crema_calabaza_canela_yogur","name":"Crema dulce de calabaza, canela y yogur","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","fibra","otoño"],"prepTime":"8 min","difficulty":"fácil","notes":"La calabaza aporta dulzor natural en ración moderada.","instructions":["Tritura calabaza con yogur y canela.","Sirve fría o templada.","Añade nueces picadas."],"recipe":[{"ingredientId":"ingredient_calabaza_asada","qty":100,"unit":"g"},{"ingredientId":"ingredient_yogur_griego","qty":80,"unit":"g"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"},{"ingredientId":"ingredient_nueces","qty":8,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_kiwi_yogur_chia","name":"Kiwi con yogur y chía","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","rápido","fruta"],"prepTime":"5 min","difficulty":"muy fácil","notes":"Postre sencillo con fruta entera y proteína.","instructions":["Corta el kiwi.","Sirve sobre yogur natural.","Añade chía y mezcla."],"recipe":[{"ingredientId":"ingredient_kiwi","qty":80,"unit":"g"},{"ingredientId":"ingredient_yogur_griego","qty":120,"unit":"g"},{"ingredientId":"ingredient_chia","qty":8,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_natillas_cacao_sin_azucar","name":"Natillas de cacao sin azúcar","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","cremoso","postre"],"prepTime":"15 min","difficulty":"media","notes":"Espesa con huevo y cacao, sin galletas.","instructions":["Calienta la leche con vainilla.","Añade huevo batido y cacao sin hervir fuerte.","Remueve hasta espesar y enfría."],"recipe":[{"ingredientId":"ingredient_leche_desnatada","qty":150,"unit":"ml"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_cacao_puro","qty":6,"unit":"g"},{"ingredientId":"ingredient_eritritol","qty":6,"unit":"g"},{"ingredientId":"ingredient_vainilla","qty":2,"unit":"ml"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_barrita_avena_cacahuete","name":"Barrita blanda de avena y cacahuete","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","saciante","control_hidratos"],"prepTime":"12 min","difficulty":"fácil","notes":"Una ración pequeña para controlar hidratos.","instructions":["Mezcla todos los ingredientes.","Compacta en forma de barrita.","Refrigera hasta endurecer."],"recipe":[{"ingredientId":"ingredient_avena","qty":25,"unit":"g"},{"ingredientId":"ingredient_crema_cacahuete","qty":15,"unit":"g"},{"ingredientId":"ingredient_chia","qty":5,"unit":"g"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_vasito_yogur_cacao_vainilla","name":"Vasito de yogur, cacao y vainilla","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","frío","rápido"],"prepTime":"7 min","difficulty":"muy fácil","notes":"Tipo crema de cacao ligera sin galleta.","instructions":["Mezcla yogur con cacao y vainilla.","Añade eritritol si lo necesitas.","Sirve frío."],"recipe":[{"ingredientId":"ingredient_yogur_griego","qty":140,"unit":"g"},{"ingredientId":"ingredient_cacao_puro","qty":5,"unit":"g"},{"ingredientId":"ingredient_vainilla","qty":2,"unit":"ml"},{"ingredientId":"ingredient_eritritol","qty":4,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_zanahoria_almendra_canela","name":"Mini pastel de zanahoria y almendra","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","horno","fibra"],"prepTime":"25 min","difficulty":"media","notes":"Sin cobertura y con harina de almendra.","instructions":["Ralla la zanahoria.","Mezcla con huevo, almendra y canela.","Hornea en molde pequeño."],"recipe":[{"ingredientId":"ingredient_zanahoria","qty":60,"unit":"g"},{"ingredientId":"ingredient_harina_almendra","qty":25,"unit":"g"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"},{"ingredientId":"ingredient_eritritol","qty":5,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_coco_chia_vainilla","name":"Pudding de coco, chía y vainilla","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","frío","fibra"],"prepTime":"8 min","difficulty":"muy fácil","notes":"Coco en poca cantidad para controlar calorías.","instructions":["Mezcla chía, bebida de almendra y vainilla.","Refrigera hasta espesar.","Añade coco rallado al servir."],"recipe":[{"ingredientId":"ingredient_chia","qty":18,"unit":"g"},{"ingredientId":"ingredient_bebida_almendra","qty":120,"unit":"ml"},{"ingredientId":"ingredient_coco_rallado","qty":6,"unit":"g"},{"ingredientId":"ingredient_vainilla","qty":2,"unit":"ml"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_fresas_chocolate_85","name":"Fresas con chocolate 85%","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar_añadido","fruta","capricho"],"prepTime":"10 min","difficulty":"fácil","notes":"Usa poca cantidad de chocolate negro.","instructions":["Funde el chocolate.","Baña parcialmente las fresas.","Añade almendra picada y enfría."],"recipe":[{"ingredientId":"ingredient_fresas","qty":100,"unit":"g"},{"ingredientId":"ingredient_chocolate_85","qty":12,"unit":"g"},{"ingredientId":"ingredient_almendras","qty":5,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_queso_batido_avellanas_cacao","name":"Queso batido con avellanas y cacao","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","proteico","rápido"],"prepTime":"5 min","difficulty":"muy fácil","notes":"Evita cacao soluble azucarado.","instructions":["Sirve el queso batido.","Añade cacao y canela.","Termina con avellanas troceadas."],"recipe":[{"ingredientId":"ingredient_queso_fresco_batido","qty":150,"unit":"g"},{"ingredientId":"ingredient_avellanas","qty":10,"unit":"g"},{"ingredientId":"ingredient_cacao_puro","qty":5,"unit":"g"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_mini_cheesecake_frio","name":"Mini cheesecake frío sin azúcar","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","frío","postre"],"prepTime":"15 min","difficulty":"media","notes":"Sin base de galleta para reducir harinas refinadas.","instructions":["Mezcla queso, yogur y eritritol.","Añade gelatina disuelta.","Cubre con fresas y refrigera."],"recipe":[{"ingredientId":"ingredient_queso_fresco_batido","qty":100,"unit":"g"},{"ingredientId":"ingredient_yogur_griego","qty":60,"unit":"g"},{"ingredientId":"ingredient_gelatina_neutra","qty":4,"unit":"g"},{"ingredientId":"ingredient_fresas","qty":60,"unit":"g"},{"ingredientId":"ingredient_eritritol","qty":5,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_mugcake_almendra_cacao","name":"Mugcake de almendra y cacao","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","rápido","microondas"],"prepTime":"8 min","difficulty":"fácil","notes":"Postre individual sin harina refinada.","instructions":["Mezcla todo en una taza.","Cocina en microondas hasta cuajar.","Deja templar antes de comer."],"recipe":[{"ingredientId":"ingredient_harina_almendra","qty":25,"unit":"g"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_cacao_puro","qty":6,"unit":"g"},{"ingredientId":"ingredient_bebida_almendra","qty":20,"unit":"ml"},{"ingredientId":"ingredient_eritritol","qty":5,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_pera_ricotta_canela","name":"Pera con ricotta y canela","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","fruta","proteico"],"prepTime":"7 min","difficulty":"muy fácil","notes":"Combina fruta con proteína para mayor saciedad.","instructions":["Corta la pera en láminas.","Añade ricotta encima.","Termina con canela y almendras."],"recipe":[{"ingredientId":"ingredient_pera","qty":100,"unit":"g"},{"ingredientId":"ingredient_ricotta","qty":80,"unit":"g"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"},{"ingredientId":"ingredient_almendras","qty":8,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_crema_cacahuete_yogur_cacao","name":"Crema de yogur, cacahuete y cacao","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","saciante","rápido"],"prepTime":"6 min","difficulty":"muy fácil","notes":"Usa crema de cacahuete 100% sin azúcar.","instructions":["Mezcla yogur con crema de cacahuete.","Añade cacao puro.","Sirve frío."],"recipe":[{"ingredientId":"ingredient_yogur_griego","qty":130,"unit":"g"},{"ingredientId":"ingredient_crema_cacahuete","qty":12,"unit":"g"},{"ingredientId":"ingredient_cacao_puro","qty":5,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_gelatina_frutos_rojos_chia","name":"Gelatina de frutos rojos con chía","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","frío","fibra"],"prepTime":"15 min","difficulty":"fácil","notes":"Usa fruta entera triturada, no zumo.","instructions":["Tritura los frutos rojos con limón.","Añade gelatina disuelta.","Agrega chía y refrigera."],"recipe":[{"ingredientId":"ingredient_frutos_rojos","qty":80,"unit":"g"},{"ingredientId":"ingredient_gelatina_neutra","qty":5,"unit":"g"},{"ingredientId":"ingredient_chia","qty":6,"unit":"g"},{"ingredientId":"ingredient_limon","qty":0.25,"unit":"unidades"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_crepes_claras_cacao","name":"Crepes de claras y cacao","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","proteico","rápido"],"prepTime":"12 min","difficulty":"fácil","notes":"Sin azúcar ni siropes.","instructions":["Bate claras, cacao y almendra.","Cocina crepes finos.","Rellena con yogur natural."],"recipe":[{"ingredientId":"ingredient_claras_huevo","qty":120,"unit":"ml"},{"ingredientId":"ingredient_cacao_puro","qty":5,"unit":"g"},{"ingredientId":"ingredient_harina_almendra","qty":12,"unit":"g"},{"ingredientId":"ingredient_yogur_griego","qty":60,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_manzana_yogur_avena","name":"Vasito de manzana, yogur y avena","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","fibra","control_hidratos"],"prepTime":"8 min","difficulty":"fácil","notes":"Avena moderada y fruta entera.","instructions":["Corta la manzana en dados pequeños.","Mezcla yogur con canela.","Añade avena y manzana."],"recipe":[{"ingredientId":"ingredient_manzana","qty":80,"unit":"g"},{"ingredientId":"ingredient_yogur_griego","qty":120,"unit":"g"},{"ingredientId":"ingredient_avena","qty":15,"unit":"g"},{"ingredientId":"ingredient_canela","qty":1,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_trufas_aguacate_cacao","name":"Trufas de aguacate y cacao","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","capricho","frío"],"prepTime":"15 min","difficulty":"media","notes":"Porción pequeña y saciante.","instructions":["Tritura aguacate con cacao y eritritol.","Añade harina de almendra hasta compactar.","Forma trufas y enfría."],"recipe":[{"ingredientId":"ingredient_aguacate","qty":60,"unit":"g"},{"ingredientId":"ingredient_cacao_puro","qty":10,"unit":"g"},{"ingredientId":"ingredient_harina_almendra","qty":15,"unit":"g"},{"ingredientId":"ingredient_eritritol","qty":5,"unit":"g"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_batido_espeso_fresas_chia","name":"Batido espeso de fresas y chía","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","frío","rápido"],"prepTime":"6 min","difficulty":"muy fácil","notes":"No uses zumo; usa fruta entera y yogur.","instructions":["Tritura fresas, yogur y bebida de almendra.","Añade chía.","Deja reposar unos minutos y sirve."],"recipe":[{"ingredientId":"ingredient_fresas","qty":100,"unit":"g"},{"ingredientId":"ingredient_yogur_griego","qty":100,"unit":"g"},{"ingredientId":"ingredient_chia","qty":8,"unit":"g"},{"ingredientId":"ingredient_bebida_almendra","qty":40,"unit":"ml"}],"originalServings":1,"normalizedToServing":true},{"id":"dish_mini_brownie_almendra_cacao","name":"Mini brownie de almendra y cacao","servings":1,"unit":"ración","category":"postre","tags":["sin_azúcar","horno","capricho"],"prepTime":"25 min","difficulty":"media","notes":"Ración individual sin azúcar añadido.","instructions":["Mezcla huevo, almendra, cacao y eritritol.","Añade chocolate troceado.","Hornea en molde pequeño."],"recipe":[{"ingredientId":"ingredient_harina_almendra","qty":25,"unit":"g"},{"ingredientId":"ingredient_huevo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_cacao_puro","qty":8,"unit":"g"},{"ingredientId":"ingredient_chocolate_85","qty":8,"unit":"g"},{"ingredientId":"ingredient_eritritol","qty":6,"unit":"g"}],"originalServings":1,"normalizedToServing":true}]}
+{
+  "schemaVersion": 2,
+  "type": "meal-pack",
+  "id": "pack_postres_sanos_sin_azucar_diabeticos",
+  "name": "Postres sanos sin azúcar para diabéticos",
+  "description": "Pack de postres individuales sin azúcar añadido, con fruta entera, lácteos naturales, frutos secos y semillas. Las raciones están pensadas para controlar hidratos y favorecer saciedad.",
+  "tags": [
+    "postres",
+    "sin_azúcar",
+    "diabetes",
+    "saludable",
+    "ración_individual"
+  ],
+  "language": "es",
+  "ingredients": [
+    {
+      "id": "ingredient_yogur_griego",
+      "name": "yogur griego natural sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_queso_fresco_batido",
+      "name": "queso fresco batido sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_leche_desnatada",
+      "name": "leche desnatada",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_bebida_almendra",
+      "name": "bebida de almendra sin azúcar",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_chia",
+      "name": "semillas de chía",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_avena",
+      "name": "copos de avena integrales",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_harina_almendra",
+      "name": "harina de almendra",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_cacao_puro",
+      "name": "cacao puro sin azúcar",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_canela",
+      "name": "canela molida",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_vainilla",
+      "name": "vainilla sin azúcar",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_eritritol",
+      "name": "eritritol",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_frutos_rojos",
+      "name": "frutos rojos",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "freezer",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_fresas",
+      "name": "fresas",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_manzana",
+      "name": "manzana",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_pera",
+      "name": "pera",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_kiwi",
+      "name": "kiwi",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_limon",
+      "name": "limón",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_aguacate",
+      "name": "aguacate",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_huevo",
+      "name": "huevo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_claras_huevo",
+      "name": "claras de huevo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_nueces",
+      "name": "nueces",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_almendras",
+      "name": "almendras naturales",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_avellanas",
+      "name": "avellanas naturales",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_crema_cacahuete",
+      "name": "crema de cacahuete 100%",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_coco_rallado",
+      "name": "coco rallado sin azúcar",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_gelatina_neutra",
+      "name": "gelatina neutra",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_calabaza_asada",
+      "name": "calabaza asada",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_zanahoria",
+      "name": "zanahoria",
+      "familyId": "family_veg",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "orgánico",
+      "products": []
+    },
+    {
+      "id": "ingredient_chocolate_85",
+      "name": "chocolate negro 85% sin azúcar añadido",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_ricotta",
+      "name": "ricotta",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": []
+    }
+  ],
+  "dishes": [
+    {
+      "id": "dish_pudding_chia_frutos_rojos",
+      "name": "Pudding de chía con frutos rojos",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "diabetes",
+        "frío"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "muy fácil",
+      "notes": "Postre rico en fibra; deja reposar para espesar.",
+      "instructions": [
+        "Mezcla chía, bebida de almendra y canela.",
+        "Refrigera hasta que espese.",
+        "Añade frutos rojos antes de servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_chia",
+          "qty": 18,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bebida_almendra",
+          "qty": 120,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_frutos_rojos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_yogur_nueces_canela",
+      "name": "Yogur griego con nueces y canela",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "rápido",
+        "proteico"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "muy fácil",
+      "notes": "Elige yogur natural sin azúcar.",
+      "instructions": [
+        "Sirve el yogur en un cuenco.",
+        "Añade nueces troceadas.",
+        "Espolvorea canela y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_nueces",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_mousse_cacao_aguacate",
+      "name": "Mousse de cacao y aguacate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "cremoso",
+        "diabetes"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Usa poca cantidad de eritritol si necesitas más dulzor.",
+      "instructions": [
+        "Tritura el aguacate con cacao y bebida de almendra.",
+        "Añade vainilla y eritritol.",
+        "Refrigera antes de servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_aguacate",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bebida_almendra",
+          "qty": 30,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_manzana_asada_canela_almendras",
+      "name": "Manzana asada con canela y almendras",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "horno",
+        "fibra"
+      ],
+      "prepTime": "20 min",
+      "difficulty": "fácil",
+      "notes": "Media manzana grande o una pequeña ayuda a controlar la ración.",
+      "instructions": [
+        "Corta la manzana en láminas.",
+        "Hornea con canela hasta ablandar.",
+        "Añade almendras picadas al final."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_manzana",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_almendras",
+          "qty": 10,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_vasito_queso_fresco_fresas",
+      "name": "Vasito de queso fresco batido y fresas",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "rápido",
+        "fruta"
+      ],
+      "prepTime": "6 min",
+      "difficulty": "muy fácil",
+      "notes": "Postre fresco con proteína y fruta entera.",
+      "instructions": [
+        "Mezcla el queso con vainilla.",
+        "Añade fresas troceadas.",
+        "Termina con chía y sirve frío."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_queso_fresco_batido",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_fresas",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_chia",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_gelatina_limon_yogur",
+      "name": "Gelatina de limón con yogur",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "frío",
+        "ligero"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "No uses zumos ni azúcar añadido.",
+      "instructions": [
+        "Disuelve la gelatina según indicaciones.",
+        "Añade limón y eritritol.",
+        "Sirve con yogur cuando cuaje."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_gelatina_neutra",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.5,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 4,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_crema_ricotta_cacao",
+      "name": "Crema de ricotta y cacao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "cremoso",
+        "rápido"
+      ],
+      "prepTime": "7 min",
+      "difficulty": "muy fácil",
+      "notes": "Textura tipo crema sin harinas refinadas.",
+      "instructions": [
+        "Mezcla ricotta, cacao y eritritol.",
+        "Bate hasta obtener crema.",
+        "Añade avellanas picadas."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_ricotta",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_avellanas",
+          "qty": 8,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pera_canela_nueces",
+      "name": "Pera templada con canela y nueces",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "templado",
+        "fibra"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Usa una ración pequeña de fruta entera.",
+      "instructions": [
+        "Corta la pera en dados.",
+        "Calienta con limón y canela.",
+        "Añade nueces al servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pera",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_nueces",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_tortita_avena_claras_cacao",
+      "name": "Tortita de avena, claras y cacao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "saciante",
+        "control_hidratos"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Ración moderada de avena integral.",
+      "instructions": [
+        "Mezcla todos los ingredientes.",
+        "Cocina en sartén antiadherente.",
+        "Sirve templada."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_avena",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_claras_huevo",
+          "qty": 100,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_flan_huevo_vainilla_sin_azucar",
+      "name": "Flan de huevo y vainilla sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "proteico",
+        "horno"
+      ],
+      "prepTime": "25 min",
+      "difficulty": "media",
+      "notes": "Sin caramelo para evitar azúcares añadidos.",
+      "instructions": [
+        "Bate huevo, leche, vainilla y eritritol.",
+        "Vierte en un molde pequeño.",
+        "Hornea al baño María hasta cuajar."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_leche_desnatada",
+          "qty": 120,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 6,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_helado_yogur_frutos_rojos",
+      "name": "Helado rápido de yogur y frutos rojos",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "frío",
+        "verano"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "muy fácil",
+      "notes": "Tritura fruta congelada sin añadir zumo.",
+      "instructions": [
+        "Tritura yogur y frutos rojos congelados.",
+        "Sirve en un cuenco.",
+        "Añade almendras picadas."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_frutos_rojos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_almendras",
+          "qty": 8,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_bombon_chocolate_almendra",
+      "name": "Bombón de chocolate 85% y almendra",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar_añadido",
+        "pequeña_ración",
+        "capricho"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Usa chocolate 85% sin azúcar añadido y porción pequeña.",
+      "instructions": [
+        "Funde el chocolate suavemente.",
+        "Mezcla con almendras picadas.",
+        "Enfría en porción pequeña."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_chocolate_85",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_almendras",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_coco_rallado",
+          "qty": 3,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_crema_calabaza_canela_yogur",
+      "name": "Crema dulce de calabaza, canela y yogur",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "fibra",
+        "otoño"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "fácil",
+      "notes": "La calabaza aporta dulzor natural en ración moderada.",
+      "instructions": [
+        "Tritura calabaza con yogur y canela.",
+        "Sirve fría o templada.",
+        "Añade nueces picadas."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_calabaza_asada",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_nueces",
+          "qty": 8,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_kiwi_yogur_chia",
+      "name": "Kiwi con yogur y chía",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "rápido",
+        "fruta"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "muy fácil",
+      "notes": "Postre sencillo con fruta entera y proteína.",
+      "instructions": [
+        "Corta el kiwi.",
+        "Sirve sobre yogur natural.",
+        "Añade chía y mezcla."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_kiwi",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_chia",
+          "qty": 8,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_natillas_cacao_sin_azucar",
+      "name": "Natillas de cacao sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "cremoso",
+        "postre"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "media",
+      "notes": "Espesa con huevo y cacao, sin galletas.",
+      "instructions": [
+        "Calienta la leche con vainilla.",
+        "Añade huevo batido y cacao sin hervir fuerte.",
+        "Remueve hasta espesar y enfría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_desnatada",
+          "qty": 150,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_barrita_avena_cacahuete",
+      "name": "Barrita blanda de avena y cacahuete",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "saciante",
+        "control_hidratos"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Una ración pequeña para controlar hidratos.",
+      "instructions": [
+        "Mezcla todos los ingredientes.",
+        "Compacta en forma de barrita.",
+        "Refrigera hasta endurecer."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_avena",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_crema_cacahuete",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_chia",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_vasito_yogur_cacao_vainilla",
+      "name": "Vasito de yogur, cacao y vainilla",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "frío",
+        "rápido"
+      ],
+      "prepTime": "7 min",
+      "difficulty": "muy fácil",
+      "notes": "Tipo crema de cacao ligera sin galleta.",
+      "instructions": [
+        "Mezcla yogur con cacao y vainilla.",
+        "Añade eritritol si lo necesitas.",
+        "Sirve frío."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 140,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 4,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_zanahoria_almendra_canela",
+      "name": "Mini pastel de zanahoria y almendra",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "horno",
+        "fibra"
+      ],
+      "prepTime": "25 min",
+      "difficulty": "media",
+      "notes": "Sin cobertura y con harina de almendra.",
+      "instructions": [
+        "Ralla la zanahoria.",
+        "Mezcla con huevo, almendra y canela.",
+        "Hornea en molde pequeño."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_zanahoria",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_harina_almendra",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 5,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_coco_chia_vainilla",
+      "name": "Pudding de coco, chía y vainilla",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "frío",
+        "fibra"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "muy fácil",
+      "notes": "Coco en poca cantidad para controlar calorías.",
+      "instructions": [
+        "Mezcla chía, bebida de almendra y vainilla.",
+        "Refrigera hasta espesar.",
+        "Añade coco rallado al servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_chia",
+          "qty": 18,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bebida_almendra",
+          "qty": 120,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_coco_rallado",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_fresas_chocolate_85",
+      "name": "Fresas con chocolate 85%",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar_añadido",
+        "fruta",
+        "capricho"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Usa poca cantidad de chocolate negro.",
+      "instructions": [
+        "Funde el chocolate.",
+        "Baña parcialmente las fresas.",
+        "Añade almendra picada y enfría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_fresas",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_chocolate_85",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_almendras",
+          "qty": 5,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_queso_batido_avellanas_cacao",
+      "name": "Queso batido con avellanas y cacao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "proteico",
+        "rápido"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "muy fácil",
+      "notes": "Evita cacao soluble azucarado.",
+      "instructions": [
+        "Sirve el queso batido.",
+        "Añade cacao y canela.",
+        "Termina con avellanas troceadas."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_queso_fresco_batido",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_avellanas",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_mini_cheesecake_frio",
+      "name": "Mini cheesecake frío sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "frío",
+        "postre"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "media",
+      "notes": "Sin base de galleta para reducir harinas refinadas.",
+      "instructions": [
+        "Mezcla queso, yogur y eritritol.",
+        "Añade gelatina disuelta.",
+        "Cubre con fresas y refrigera."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_queso_fresco_batido",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_gelatina_neutra",
+          "qty": 4,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_fresas",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 5,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_mugcake_almendra_cacao",
+      "name": "Mugcake de almendra y cacao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "rápido",
+        "microondas"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "fácil",
+      "notes": "Postre individual sin harina refinada.",
+      "instructions": [
+        "Mezcla todo en una taza.",
+        "Cocina en microondas hasta cuajar.",
+        "Deja templar antes de comer."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_harina_almendra",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bebida_almendra",
+          "qty": 20,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 5,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pera_ricotta_canela",
+      "name": "Pera con ricotta y canela",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "fruta",
+        "proteico"
+      ],
+      "prepTime": "7 min",
+      "difficulty": "muy fácil",
+      "notes": "Combina fruta con proteína para mayor saciedad.",
+      "instructions": [
+        "Corta la pera en láminas.",
+        "Añade ricotta encima.",
+        "Termina con canela y almendras."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pera",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_ricotta",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_almendras",
+          "qty": 8,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_crema_cacahuete_yogur_cacao",
+      "name": "Crema de yogur, cacahuete y cacao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "saciante",
+        "rápido"
+      ],
+      "prepTime": "6 min",
+      "difficulty": "muy fácil",
+      "notes": "Usa crema de cacahuete 100% sin azúcar.",
+      "instructions": [
+        "Mezcla yogur con crema de cacahuete.",
+        "Añade cacao puro.",
+        "Sirve frío."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 130,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_crema_cacahuete",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 5,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_gelatina_frutos_rojos_chia",
+      "name": "Gelatina de frutos rojos con chía",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "frío",
+        "fibra"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Usa fruta entera triturada, no zumo.",
+      "instructions": [
+        "Tritura los frutos rojos con limón.",
+        "Añade gelatina disuelta.",
+        "Agrega chía y refrigera."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_frutos_rojos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_gelatina_neutra",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_chia",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 0.25,
+          "unit": "unidades"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_crepes_claras_cacao",
+      "name": "Crepes de claras y cacao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "proteico",
+        "rápido"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Sin azúcar ni siropes.",
+      "instructions": [
+        "Bate claras, cacao y almendra.",
+        "Cocina crepes finos.",
+        "Rellena con yogur natural."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_claras_huevo",
+          "qty": 120,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_harina_almendra",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 60,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_manzana_yogur_avena",
+      "name": "Vasito de manzana, yogur y avena",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "fibra",
+        "control_hidratos"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "fácil",
+      "notes": "Avena moderada y fruta entera.",
+      "instructions": [
+        "Corta la manzana en dados pequeños.",
+        "Mezcla yogur con canela.",
+        "Añade avena y manzana."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_manzana",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_avena",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_trufas_aguacate_cacao",
+      "name": "Trufas de aguacate y cacao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "capricho",
+        "frío"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "media",
+      "notes": "Porción pequeña y saciante.",
+      "instructions": [
+        "Tritura aguacate con cacao y eritritol.",
+        "Añade harina de almendra hasta compactar.",
+        "Forma trufas y enfría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_aguacate",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_harina_almendra",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 5,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_batido_espeso_fresas_chia",
+      "name": "Batido espeso de fresas y chía",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "frío",
+        "rápido"
+      ],
+      "prepTime": "6 min",
+      "difficulty": "muy fácil",
+      "notes": "No uses zumo; usa fruta entera y yogur.",
+      "instructions": [
+        "Tritura fresas, yogur y bebida de almendra.",
+        "Añade chía.",
+        "Deja reposar unos minutos y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_fresas",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_chia",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bebida_almendra",
+          "qty": 40,
+          "unit": "ml"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_mini_brownie_almendra_cacao",
+      "name": "Mini brownie de almendra y cacao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "postre",
+      "tags": [
+        "sin_azúcar",
+        "horno",
+        "capricho"
+      ],
+      "prepTime": "25 min",
+      "difficulty": "media",
+      "notes": "Ración individual sin azúcar añadido.",
+      "instructions": [
+        "Mezcla huevo, almendra, cacao y eritritol.",
+        "Añade chocolate troceado.",
+        "Hornea en molde pequeño."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_harina_almendra",
+          "qty": 25,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_chocolate_85",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 6,
+          "unit": "g"
+        }
+      ],
+      "originalServings": 1,
+      "normalizedToServing": true,
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    }
+  ]
+}

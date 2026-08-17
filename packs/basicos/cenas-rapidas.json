@@ -4,38 +4,779 @@
   "id": "pack_cenas_rapidas",
   "name": "Cenas rápidas",
   "description": "Platos sencillos para días laborables, normalizados a 1 ración. Incluye cenas de pasta, huevo, pollo, pavo, pescado, ensaladas y cremas.",
-  "tags": ["rápido", "familia", "cena", "1 ración"],
+  "tags": [
+    "rápido",
+    "familia",
+    "cena",
+    "1 ración"
+  ],
   "language": "es",
   "ingredients": [
-    {"id":"ingredient_pasta","name":"Pasta","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"bestBefore","approxPrice":0.002,"packagingType":"cartón/papel","products":[],"schemaVersion":1},
-    {"id":"ingredient_salsa_tomate","name":"Salsa de tomate","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"bestBefore","approxPrice":0.004,"packagingType":"vidrio","products":[],"schemaVersion":1},
-    {"id":"ingredient_huevo","name":"Huevo","familyId":"family_protein","qty":0,"unit":"unidades","available":false,"storageType":"fridge","expiryDate":"","dateType":"bestBefore","approxPrice":0,"packagingType":"cartón/papel","products":[],"schemaVersion":1},
-    {"id":"ingredient_calabacin","name":"Calabacín","familyId":"family_vegetables","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"otro","products":[],"schemaVersion":1},
-    {"id":"ingredient_cebolla","name":"Cebolla","familyId":"family_vegetables","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"otro","products":[],"schemaVersion":1},
-    {"id":"ingredient_brotes_tiernos","name":"Brotes tiernos","familyId":"family_vegetables","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"expiry","approxPrice":0,"packagingType":"plástico","products":[],"schemaVersion":1},
-    {"id":"ingredient_tomate","name":"Tomate","familyId":"family_vegetables","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"otro","products":[],"schemaVersion":1},
-    {"id":"ingredient_pepino","name":"Pepino","familyId":"family_vegetables","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"otro","products":[],"schemaVersion":1},
-    {"id":"ingredient_pollo","name":"Pechuga de pollo","familyId":"family_protein","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"expiry","approxPrice":0,"packagingType":"plástico","products":[],"schemaVersion":1},
-    {"id":"ingredient_pavo","name":"Pavo","familyId":"family_protein","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"expiry","approxPrice":0,"packagingType":"plástico","products":[],"schemaVersion":1},
-    {"id":"ingredient_merluza","name":"Merluza","familyId":"family_protein","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"expiry","approxPrice":0,"packagingType":"plástico","products":[],"schemaVersion":1},
-    {"id":"ingredient_atun","name":"Atún","familyId":"family_protein","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"bestBefore","approxPrice":0,"packagingType":"metal","products":[],"schemaVersion":1},
-    {"id":"ingredient_queso_fresco","name":"Queso fresco o tierno","familyId":"family_dairy","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"expiry","approxPrice":0,"packagingType":"plástico","products":[],"schemaVersion":1},
-    {"id":"ingredient_yogur_natural","name":"Yogur natural sin azúcar","familyId":"family_dairy","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"expiry","approxPrice":0,"packagingType":"plástico","products":[],"schemaVersion":1},
-    {"id":"ingredient_garbanzos_cocidos","name":"Garbanzos cocidos","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"bestBefore","approxPrice":0,"packagingType":"vidrio","products":[],"schemaVersion":1},
-    {"id":"ingredient_tortilla_trigo","name":"Tortilla de trigo o maíz","familyId":"family_pantry","qty":0,"unit":"unidades","available":false,"storageType":"pantry","expiryDate":"","dateType":"bestBefore","approxPrice":0,"packagingType":"plástico","products":[],"schemaVersion":1},
-    {"id":"ingredient_aceite_oliva","name":"Aceite de oliva virgen extra","familyId":"family_pantry","qty":0,"unit":"ml","available":false,"storageType":"pantry","expiryDate":"","dateType":"bestBefore","approxPrice":0,"packagingType":"vidrio","products":[],"schemaVersion":1},
-    {"id":"ingredient_vinagre","name":"Vinagre","familyId":"family_pantry","qty":0,"unit":"ml","available":false,"storageType":"pantry","expiryDate":"","dateType":"bestBefore","approxPrice":0,"packagingType":"vidrio","products":[],"schemaVersion":1},
-    {"id":"ingredient_limon","name":"Limón","familyId":"family_fruit","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"otro","products":[],"schemaVersion":1},
-    {"id":"ingredient_sal","name":"Sal","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"cartón/papel","products":[],"schemaVersion":1}
+    {
+      "id": "ingredient_pasta",
+      "name": "Pasta",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0.002,
+      "packagingType": "cartón/papel",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_salsa_tomate",
+      "name": "Salsa de tomate",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0.004,
+      "packagingType": "vidrio",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_huevo",
+      "name": "Huevo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_calabacin",
+      "name": "Calabacín",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_cebolla",
+      "name": "Cebolla",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_brotes_tiernos",
+      "name": "Brotes tiernos",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_tomate",
+      "name": "Tomate",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_pepino",
+      "name": "Pepino",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_pollo",
+      "name": "Pechuga de pollo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_pavo",
+      "name": "Pavo",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_merluza",
+      "name": "Merluza",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_atun",
+      "name": "Atún",
+      "familyId": "family_protein",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "metal",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_queso_fresco",
+      "name": "Queso fresco o tierno",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_yogur_natural",
+      "name": "Yogur natural sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "expiry",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_garbanzos_cocidos",
+      "name": "Garbanzos cocidos",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_tortilla_trigo",
+      "name": "Tortilla de trigo o maíz",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "plástico",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_aceite_oliva",
+      "name": "Aceite de oliva virgen extra",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_vinagre",
+      "name": "Vinagre",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "bestBefore",
+      "approxPrice": 0,
+      "packagingType": "vidrio",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_limon",
+      "name": "Limón",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "schemaVersion": 1
+    },
+    {
+      "id": "ingredient_sal",
+      "name": "Sal",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "cartón/papel",
+      "products": [],
+      "schemaVersion": 1
+    }
   ],
   "dishes": [
-    {"id":"dish_pasta_tomate","name":"Pasta con tomate","servings":1,"unit":"ración","category":"Cena rápida","tags":["rápido","familia","pasta"],"prepTime":"15 min","difficulty":"fácil","approxPrice":1.25,"notes":"Añadir queso si se desea.","instructions":["Cuece la pasta en agua con sal hasta que esté al dente.","Calienta la salsa de tomate en una sartén o cazo.","Mezcla la pasta escurrida con la salsa y sirve caliente."],"recipe":[{"ingredientId":"ingredient_pasta","qty":100,"unit":"g"},{"ingredientId":"ingredient_salsa_tomate","qty":75,"unit":"g"}],"packId":"pack_cenas_rapidas","normalizedToServing":true,"originalServings":1,"schemaVersion":1},
-    {"id":"dish_tortilla_calabacin","name":"Tortilla rápida de calabacín","servings":1,"unit":"ración","category":"Cena rápida","tags":["rápido","huevo","verdura"],"prepTime":"15 min","difficulty":"fácil","approxPrice":0,"notes":"Cena sencilla y adaptable.","instructions":["Corta el calabacín y la cebolla en trozos pequeños.","Saltea con aceite hasta que estén tiernos.","Bate los huevos y mezcla con la verdura.","Cuaja la tortilla en sartén antiadherente por ambos lados."],"recipe":[{"ingredientId":"ingredient_huevo","qty":2,"unit":"unidades"},{"ingredientId":"ingredient_calabacin","qty":150,"unit":"g"},{"ingredientId":"ingredient_cebolla","qty":30,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva","qty":8,"unit":"ml"},{"ingredientId":"ingredient_sal","qty":0.5,"unit":"g"}],"packId":"pack_cenas_rapidas","normalizedToServing":true,"originalServings":1,"schemaVersion":1},
-    {"id":"dish_ensalada_atun_queso","name":"Ensalada de brotes con atún y queso","servings":1,"unit":"ración","category":"Cena fría","tags":["rápido","frío","ensalada","atún"],"prepTime":"7 min","difficulty":"muy fácil","approxPrice":0,"notes":"Cena fría sin cocción.","instructions":["Lava y escurre los brotes tiernos.","Corta tomate y pepino.","Añade atún escurrido y queso fresco o tierno.","Aliña con aceite y vinagre justo antes de servir."],"recipe":[{"ingredientId":"ingredient_brotes_tiernos","qty":70,"unit":"g"},{"ingredientId":"ingredient_atun","qty":65,"unit":"g"},{"ingredientId":"ingredient_queso_fresco","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":100,"unit":"g"},{"ingredientId":"ingredient_pepino","qty":60,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva","qty":8,"unit":"ml"},{"ingredientId":"ingredient_vinagre","qty":6,"unit":"ml"}],"packId":"pack_cenas_rapidas","normalizedToServing":true,"originalServings":1,"schemaVersion":1},
-    {"id":"dish_pollo_limon_ensalada","name":"Pollo al limón con ensalada","servings":1,"unit":"ración","category":"Cena carne magra","tags":["rápido","pollo","proteína"],"prepTime":"18 min","difficulty":"fácil","approxPrice":0,"notes":"Cena ligera de proteína magra.","instructions":["Cocina la pechuga de pollo a la plancha con aceite.","Añade limón al final para dar sabor.","Prepara una ensalada con brotes, tomate y pepino.","Sirve el pollo con la ensalada aliñada."],"recipe":[{"ingredientId":"ingredient_pollo","qty":150,"unit":"g"},{"ingredientId":"ingredient_brotes_tiernos","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":120,"unit":"g"},{"ingredientId":"ingredient_pepino","qty":60,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva","qty":10,"unit":"ml"},{"ingredientId":"ingredient_limon","qty":15,"unit":"g"}],"packId":"pack_cenas_rapidas","normalizedToServing":true,"originalServings":1,"schemaVersion":1},
-    {"id":"dish_pavo_wrap_yogur","name":"Wrap rápido de pavo con salsa de yogur","servings":1,"unit":"ración","category":"Cena rápida","tags":["rápido","wrap","pavo"],"prepTime":"12 min","difficulty":"fácil","approxPrice":0,"notes":"Puede tomarse frío o templado.","instructions":["Cocina el pavo a la plancha y córtalo en tiras.","Mezcla yogur con limón y una pizca de sal para la salsa.","Coloca brotes, tomate y pavo sobre la tortilla.","Añade la salsa, enrolla y sirve."],"recipe":[{"ingredientId":"ingredient_tortilla_trigo","qty":1,"unit":"unidades"},{"ingredientId":"ingredient_pavo","qty":120,"unit":"g"},{"ingredientId":"ingredient_yogur_natural","qty":50,"unit":"g"},{"ingredientId":"ingredient_brotes_tiernos","qty":40,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":80,"unit":"g"},{"ingredientId":"ingredient_limon","qty":10,"unit":"g"}],"packId":"pack_cenas_rapidas","normalizedToServing":true,"originalServings":1,"schemaVersion":1},
-    {"id":"dish_merluza_limon_brotes","name":"Merluza al limón con brotes","servings":1,"unit":"ración","category":"Cena pescado","tags":["rápido","pescado","ligero"],"prepTime":"15 min","difficulty":"fácil","approxPrice":0,"notes":"Cena suave y ligera.","instructions":["Cocina la merluza a la plancha o al vapor.","Añade limón y un poco de aceite al final.","Prepara los brotes con tomate y pepino.","Sirve la merluza con la ensalada."],"recipe":[{"ingredientId":"ingredient_merluza","qty":150,"unit":"g"},{"ingredientId":"ingredient_brotes_tiernos","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":100,"unit":"g"},{"ingredientId":"ingredient_pepino","qty":60,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva","qty":8,"unit":"ml"},{"ingredientId":"ingredient_limon","qty":15,"unit":"g"}],"packId":"pack_cenas_rapidas","normalizedToServing":true,"originalServings":1,"schemaVersion":1},
-    {"id":"dish_garbanzos_yogur_limon","name":"Garbanzos rápidos con yogur y limón","servings":1,"unit":"ración","category":"Cena rápida","tags":["rápido","legumbres","frío"],"prepTime":"8 min","difficulty":"muy fácil","approxPrice":0,"notes":"Cena fría o templada con legumbre.","instructions":["Enjuaga y escurre bien los garbanzos cocidos.","Mezcla yogur, limón, aceite y una pizca de sal.","Corta tomate y pepino en dados.","Mezcla todo en un bol y sirve frío o templado."],"recipe":[{"ingredientId":"ingredient_garbanzos_cocidos","qty":160,"unit":"g"},{"ingredientId":"ingredient_yogur_natural","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":100,"unit":"g"},{"ingredientId":"ingredient_pepino","qty":70,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva","qty":8,"unit":"ml"},{"ingredientId":"ingredient_limon","qty":10,"unit":"g"}],"packId":"pack_cenas_rapidas","normalizedToServing":true,"originalServings":1,"schemaVersion":1},
-    {"id":"dish_queso_brotes_pepino","name":"Queso con brotes y pepino","servings":1,"unit":"ración","category":"Cena muy simple","tags":["rápido","frío","queso","sin cocción"],"prepTime":"5 min","difficulty":"muy fácil","approxPrice":0,"notes":"Opción de mínima preparación.","instructions":["Lava los brotes tiernos.","Corta el pepino y el tomate.","Coloca el queso junto con las verduras.","Aliña con aceite y sirve frío."],"recipe":[{"ingredientId":"ingredient_queso_fresco","qty":90,"unit":"g"},{"ingredientId":"ingredient_brotes_tiernos","qty":60,"unit":"g"},{"ingredientId":"ingredient_pepino","qty":80,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":80,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva","qty":6,"unit":"ml"}],"packId":"pack_cenas_rapidas","normalizedToServing":true,"originalServings":1,"schemaVersion":1}
+    {
+      "id": "dish_pasta_tomate",
+      "name": "Pasta con tomate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cena rápida",
+      "tags": [
+        "rápido",
+        "familia",
+        "pasta"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "approxPrice": 1.25,
+      "notes": "Añadir queso si se desea.",
+      "instructions": [
+        "Cuece la pasta en agua con sal hasta que esté al dente.",
+        "Calienta la salsa de tomate en una sartén o cazo.",
+        "Mezcla la pasta escurrida con la salsa y sirve caliente."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pasta",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_salsa_tomate",
+          "qty": 75,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_cenas_rapidas",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_tortilla_calabacin",
+      "name": "Tortilla rápida de calabacín",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cena rápida",
+      "tags": [
+        "rápido",
+        "huevo",
+        "verdura"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "approxPrice": 0,
+      "notes": "Cena sencilla y adaptable.",
+      "instructions": [
+        "Corta el calabacín y la cebolla en trozos pequeños.",
+        "Saltea con aceite hasta que estén tiernos.",
+        "Bate los huevos y mezcla con la verdura.",
+        "Cuaja la tortilla en sartén antiadherente por ambos lados."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_huevo",
+          "qty": 2,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_calabacin",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cebolla",
+          "qty": 30,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_sal",
+          "qty": 0.5,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_cenas_rapidas",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_ensalada_atun_queso",
+      "name": "Ensalada de brotes con atún y queso",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cena fría",
+      "tags": [
+        "rápido",
+        "frío",
+        "ensalada",
+        "atún"
+      ],
+      "prepTime": "7 min",
+      "difficulty": "muy fácil",
+      "approxPrice": 0,
+      "notes": "Cena fría sin cocción.",
+      "instructions": [
+        "Lava y escurre los brotes tiernos.",
+        "Corta tomate y pepino.",
+        "Añade atún escurrido y queso fresco o tierno.",
+        "Aliña con aceite y vinagre justo antes de servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_atun",
+          "qty": 65,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_queso_fresco",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vinagre",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_cenas_rapidas",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pollo_limon_ensalada",
+      "name": "Pollo al limón con ensalada",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cena carne magra",
+      "tags": [
+        "rápido",
+        "pollo",
+        "proteína"
+      ],
+      "prepTime": "18 min",
+      "difficulty": "fácil",
+      "approxPrice": 0,
+      "notes": "Cena ligera de proteína magra.",
+      "instructions": [
+        "Cocina la pechuga de pollo a la plancha con aceite.",
+        "Añade limón al final para dar sabor.",
+        "Prepara una ensalada con brotes, tomate y pepino.",
+        "Sirve el pollo con la ensalada aliñada."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pollo",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 10,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 15,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_cenas_rapidas",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pavo_wrap_yogur",
+      "name": "Wrap rápido de pavo con salsa de yogur",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cena rápida",
+      "tags": [
+        "rápido",
+        "wrap",
+        "pavo"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "approxPrice": 0,
+      "notes": "Puede tomarse frío o templado.",
+      "instructions": [
+        "Cocina el pavo a la plancha y córtalo en tiras.",
+        "Mezcla yogur con limón y una pizca de sal para la salsa.",
+        "Coloca brotes, tomate y pavo sobre la tortilla.",
+        "Añade la salsa, enrolla y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_tortilla_trigo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_pavo",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 10,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_cenas_rapidas",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_merluza_limon_brotes",
+      "name": "Merluza al limón con brotes",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cena pescado",
+      "tags": [
+        "rápido",
+        "pescado",
+        "ligero"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "approxPrice": 0,
+      "notes": "Cena suave y ligera.",
+      "instructions": [
+        "Cocina la merluza a la plancha o al vapor.",
+        "Añade limón y un poco de aceite al final.",
+        "Prepara los brotes con tomate y pepino.",
+        "Sirve la merluza con la ensalada."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_merluza",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 15,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_cenas_rapidas",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_garbanzos_yogur_limon",
+      "name": "Garbanzos rápidos con yogur y limón",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cena rápida",
+      "tags": [
+        "rápido",
+        "legumbres",
+        "frío"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "muy fácil",
+      "approxPrice": 0,
+      "notes": "Cena fría o templada con legumbre.",
+      "instructions": [
+        "Enjuaga y escurre bien los garbanzos cocidos.",
+        "Mezcla yogur, limón, aceite y una pizca de sal.",
+        "Corta tomate y pepino en dados.",
+        "Mezcla todo en un bol y sirve frío o templado."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_garbanzos_cocidos",
+          "qty": 160,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 100,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 10,
+          "unit": "g"
+        }
+      ],
+      "packId": "pack_cenas_rapidas",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_queso_brotes_pepino",
+      "name": "Queso con brotes y pepino",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Cena muy simple",
+      "tags": [
+        "rápido",
+        "frío",
+        "queso",
+        "sin cocción"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "muy fácil",
+      "approxPrice": 0,
+      "notes": "Opción de mínima preparación.",
+      "instructions": [
+        "Lava los brotes tiernos.",
+        "Corta el pepino y el tomate.",
+        "Coloca el queso junto con las verduras.",
+        "Aliña con aceite y sirve frío."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_queso_fresco",
+          "qty": 90,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_brotes_tiernos",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_pepino",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva",
+          "qty": 6,
+          "unit": "ml"
+        }
+      ],
+      "packId": "pack_cenas_rapidas",
+      "normalizedToServing": true,
+      "originalServings": 1,
+      "schemaVersion": 1,
+      "mealTypes": [
+        "Cena"
+      ]
+    }
   ]
 }

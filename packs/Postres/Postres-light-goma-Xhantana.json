@@ -1,2331 +1,2517 @@
 {
-"schemaVersion": 2,
-"type": "meal-pack",
-"id": "pack_postres_xantana_sin_azucar",
-"name": "Postres fáciles sin azúcar con goma xantana",
-"description": "Pack de 30 recetas sencillas, económicas y saludables de postres sin azúcar, normalizadas a 1 ración y endulzadas con eritritol.",
-"tags": [
-"postres",
-"sin azúcar",
-"eritritol",
-"goma xantana",
-"familiar",
-"saludable",
-"económico",
-"sencillo"
-],
-"language": "es",
-"ingredients": [
-{
-"id": "ingredient_nata_montar",
-"name": "Nata para montar fría",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_cacao_puro",
-"name": "Cacao puro en polvo sin azúcar",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_eritritol",
-"name": "Eritritol",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_goma_xantana",
-"name": "Goma xantana",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_vainilla",
-"name": "Esencia de vainilla",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_fresas_congeladas",
-"name": "Fresas congeladas",
-"familyId": "family_fruit",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "freezer",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_yogur_griego",
-"name": "Yogur griego natural sin azúcar",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_leche_almendras",
-"name": "Leche de almendras sin azúcar",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_yema_huevo",
-"name": "Yema de huevo",
-"familyId": "family_eggs",
-"qty": 0,
-"unit": "unidades",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_canela_rama",
-"name": "Canela en rama",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "unidades",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_limon",
-"name": "Limón",
-"familyId": "family_fruit",
-"qty": 0,
-"unit": "unidades",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_cafe_frio",
-"name": "Café frío",
-"familyId": "family_drinks",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_leche_vegetal",
-"name": "Leche vegetal sin azúcar",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_hielo",
-"name": "Hielo",
-"familyId": "family_freezer",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "freezer",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_sirope_caramelo_sin_azucar",
-"name": "Sirope de caramelo sin azúcar",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_queso_crema",
-"name": "Queso crema",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_agua",
-"name": "Agua",
-"familyId": "family_drinks",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_frutos_rojos",
-"name": "Frutos rojos",
-"familyId": "family_fruit",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "freezer",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_leche_desnatada",
-"name": "Leche desnatada",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_colorante_amarillo",
-"name": "Colorante amarillo",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_mascarpone",
-"name": "Queso mascarpone",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_coco_rallado",
-"name": "Coco rallado",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_kefir",
-"name": "Kéfir natural sin azúcar",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "ml",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_canela_polvo",
-"name": "Canela en polvo",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_queso_batido",
-"name": "Queso batido 0% sin azúcar",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_fresas",
-"name": "Fresas frescas",
-"familyId": "family_fruit",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_requeson",
-"name": "Requesón desnatado",
-"familyId": "family_dairy",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_arandanos",
-"name": "Arándanos",
-"familyId": "family_fruit",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_frambuesas",
-"name": "Frambuesas",
-"familyId": "family_fruit",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_manzana",
-"name": "Manzana",
-"familyId": "family_fruit",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_pera",
-"name": "Pera",
-"familyId": "family_fruit",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_avena",
-"name": "Copos de avena",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_chia",
-"name": "Semillas de chía",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_gelatina_neutra",
-"name": "Gelatina neutra",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_huevo",
-"name": "Huevo",
-"familyId": "family_eggs",
-"qty": 0,
-"unit": "unidades",
-"available": false,
-"storageType": "fridge",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-},
-{
-"id": "ingredient_harina_almendra",
-"name": "Harina de almendra",
-"familyId": "family_pantry",
-"qty": 0,
-"unit": "g",
-"available": false,
-"storageType": "pantry",
-"expiryDate": "",
-"dateType": "none",
-"approxPrice": 0,
-"packagingType": "otro",
-"products": []
-}
-],
-"dishes": [
-{
-"id": "dish_mousse_chocolate_express",
-"name": "Mousse de chocolate express",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"sin azúcar",
-"chocolate",
-"rápido"
-],
-"prepTime": "10 min + frío",
-"difficulty": "fácil",
-"notes": "Endulzado con eritritol.",
-"instructions": [
-"Mezcla en seco el cacao, el eritritol y la goma xantana.",
-"Añade la nata fría y la vainilla.",
-"Bate con varillas hasta obtener una textura firme y aireada.",
-"Sirve en un vaso y refrigera al menos 30 minutos."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_nata_montar",
-"qty": 100,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_cacao_puro",
-"qty": 5,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 3,
-"unit": "ml"
-}
-]
-},
-{
-"id": "dish_helado_cremoso_fresa",
-"name": "Helado cremoso de fresa sin mantecadora",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"fresa",
-"sin azúcar",
-"frío"
-],
-"prepTime": "15 min + congelación",
-"difficulty": "fácil",
-"notes": "Puede tomarse al momento con textura cremosa.",
-"instructions": [
-"Coloca las fresas congeladas, el yogur griego y el eritritol en una batidora potente.",
-"Tritura hasta obtener una pasta cremosa.",
-"Espolvorea la goma xantana y bate 1 minuto más.",
-"Sirve al momento o congela para una textura más firme."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_fresas_congeladas",
-"qty": 75,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_yogur_griego",
-"qty": 38,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_natillas_vainilla_sin_almidon",
-"name": "Natillas caseras de vainilla sin almidón",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"natillas",
-"vainilla",
-"sin azúcar"
-],
-"prepTime": "15 min",
-"difficulty": "fácil",
-"notes": "La goma xantana sustituye el espesado con almidón.",
-"instructions": [
-"Infusiona la leche con la canela en rama y el limón a fuego lento durante 5 minutos.",
-"Retira la canela y el limón.",
-"Bate la yema con el eritritol y la goma xantana.",
-"Añade la leche templada poco a poco sin dejar de remover.",
-"Cocina a fuego muy bajo hasta que espese, sin hervir, y enfría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_almendras",
-"qty": 135,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_yema_huevo",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_canela_rama",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 2,
-"unit": "ml"
-}
-]
-},
-{
-"id": "dish_batido_frosty_cafe_caramelo",
-"name": "Batido frosty de café y caramelo",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"café",
-"batido",
-"rápido"
-],
-"prepTime": "5 min",
-"difficulty": "fácil",
-"notes": "Usa café descafeinado si se sirve por la noche.",
-"instructions": [
-"Introduce el café, la leche vegetal, el hielo y el eritritol en la batidora.",
-"Añade el sirope de caramelo sin azúcar.",
-"Espolvorea la goma xantana por encima.",
-"Bate a máxima potencia durante 60 segundos y sirve frío."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_cafe_frio",
-"qty": 240,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_leche_vegetal",
-"qty": 120,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_hielo",
-"qty": 120,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 8,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_sirope_caramelo_sin_azucar",
-"qty": 10,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_pudin_limon_queso_crema",
-"name": "Pudin de limón y queso crema",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"limón",
-"cheesecake",
-"sin azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Textura estilo cheesecake sin base.",
-"instructions": [
-"Mezcla el queso crema con el zumo y la ralladura de limón.",
-"Añade el agua y el eritritol y bate hasta integrar.",
-"Espolvorea la goma xantana y bate 1 minuto.",
-"Sirve en un molde individual y enfría antes de tomar."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_queso_crema",
-"qty": 75,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_agua",
-"qty": 30,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_coulis_frutos_rojos",
-"name": "Coulis rápido de frutos rojos",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"frutos rojos",
-"mermelada",
-"sin azúcar"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Sirve como salsa para yogur o queso batido.",
-"instructions": [
-"Coloca los frutos rojos, el agua y el eritritol en un cazo.",
-"Cocina a fuego medio 8 minutos, aplastando la fruta.",
-"Retira del fuego y tritura si deseas una textura fina.",
-"Espolvorea la goma xantana mientras remueves y deja reposar 5 minutos."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_frutos_rojos",
-"qty": 125,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_agua",
-"qty": 15,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_crema_pastelera_fit",
-"name": "Crema pastelera fit de vainilla",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"crema",
-"vainilla",
-"relleno"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Apta para comer sola o como relleno.",
-"instructions": [
-"Calienta la leche con la vainilla y el eritritol.",
-"Antes de que hierva, baja el fuego al mínimo.",
-"Espolvorea la goma xantana poco a poco mientras bates con varillas.",
-"Añade el colorante si lo usas y cocina removiendo 2 minutos.",
-"Enfría para que espese."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_desnatada",
-"qty": 125,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 2,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_colorante_amarillo",
-"qty": 1,
-"unit": "ml"
-}
-]
-},
-{
-"id": "dish_trufas_coco_mascarpone",
-"name": "Trufas de coco y mascarpone",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"coco",
-"trufas",
-"sin azúcar"
-],
-"prepTime": "15 min + frío",
-"difficulty": "fácil",
-"notes": "La ración equivale a 3 trufas pequeñas.",
-"instructions": [
-"Mezcla el mascarpone con el eritritol y el coco rallado.",
-"Añade la goma xantana y mezcla hasta obtener una masa manejable.",
-"Forma 3 bolitas pequeñas con las manos.",
-"Reboza con un poco de coco rallado y enfría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_mascarpone",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_coco_rallado",
-"qty": 18,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 9,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_yogur_texturizado_vainilla_canela",
-"name": "Yogur texturizado de vainilla y canela",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"yogur",
-"canela",
-"rápido"
-],
-"prepTime": "5 min",
-"difficulty": "fácil",
-"notes": "Textura cremosa sin añadir azúcar.",
-"instructions": [
-"Introduce el kéfir en una batidora.",
-"Añade la canela, la vainilla y el eritritol.",
-"Espolvorea la goma xantana.",
-"Bate 30 segundos y sirve frío."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_kefir",
-"qty": 200,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_canela_polvo",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 2,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 8,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_petit_suisse_fresa",
-"name": "Petit suisse casero de fresa",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"fresa",
-"infantil",
-"sin azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Conservar en frío.",
-"instructions": [
-"Tritura las fresas con el agua y el eritritol.",
-"Mezcla el puré con el queso batido usando varillas.",
-"Espolvorea la goma xantana.",
-"Bate 1 minuto hasta obtener una crema densa y refrigera."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_queso_batido",
-"qty": 85,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_fresas",
-"qty": 35,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_agua",
-"qty": 20,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_mousse_chocolate_cafe",
-"name": "Mousse de chocolate y café",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"chocolate",
-"café",
-"sin azúcar"
-],
-"prepTime": "10 min + frío",
-"difficulty": "fácil",
-"notes": "Versión con café frío para sabor más intenso.",
-"instructions": [
-"Mezcla el cacao, el eritritol y la goma xantana en un bol.",
-"Añade la nata fría, la vainilla y el café frío.",
-"Bate con varillas hasta que espese y quede aireado.",
-"Refrigera 30 minutos antes de servir."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_nata_montar",
-"qty": 90,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_cafe_frio",
-"qty": 20,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_cacao_puro",
-"qty": 6,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 2,
-"unit": "ml"
-}
-]
-},
-{
-"id": "dish_mousse_vainilla_canela",
-"name": "Mousse de vainilla y canela",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"vainilla",
-"canela",
-"sin azúcar"
-],
-"prepTime": "10 min + frío",
-"difficulty": "fácil",
-"notes": "Alternativa sin cacao.",
-"instructions": [
-"Mezcla el eritritol, la canela y la goma xantana.",
-"Añade la nata fría y la vainilla.",
-"Bate hasta que monte y quede cremosa.",
-"Sirve en vaso individual y refrigera."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_nata_montar",
-"qty": 100,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 3,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_canela_polvo",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_helado_arandanos_yogur",
-"name": "Helado de arándanos y yogur",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"arándanos",
-"helado",
-"sin azúcar"
-],
-"prepTime": "15 min + congelación",
-"difficulty": "fácil",
-"notes": "Se puede preparar con fruta congelada.",
-"instructions": [
-"Pon los arándanos, el yogur y el eritritol en la batidora.",
-"Tritura hasta conseguir una mezcla uniforme.",
-"Añade la goma xantana espolvoreada.",
-"Bate 1 minuto y congela o sirve tipo crema helada."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_arandanos",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_yogur_griego",
-"qty": 45,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_helado_frambuesa_cremoso",
-"name": "Helado cremoso de frambuesa",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"frambuesa",
-"helado",
-"rápido"
-],
-"prepTime": "15 min + congelación",
-"difficulty": "fácil",
-"notes": "Postre ácido y ligero.",
-"instructions": [
-"Tritura las frambuesas con el yogur y el eritritol.",
-"Bate hasta que no queden trozos grandes.",
-"Espolvorea la goma xantana y bate 1 minuto.",
-"Sirve al momento o congela en un recipiente individual."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_frambuesas",
-"qty": 80,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_yogur_griego",
-"qty": 45,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_natillas_chocolate",
-"name": "Natillas de chocolate sin azúcar",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"natillas",
-"chocolate",
-"sin azúcar"
-],
-"prepTime": "15 min",
-"difficulty": "fácil",
-"notes": "Versión de cacao con textura cremosa.",
-"instructions": [
-"Calienta la leche a fuego bajo con la vainilla.",
-"Bate la yema con el eritritol, el cacao y la goma xantana.",
-"Añade la leche templada poco a poco mientras remueves.",
-"Devuelve al cazo y cocina a fuego bajo hasta espesar sin hervir.",
-"Enfría antes de servir."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_desnatada",
-"qty": 140,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_yema_huevo",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_cacao_puro",
-"qty": 5,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 2,
-"unit": "ml"
-}
-]
-},
-{
-"id": "dish_natillas_canela_limon",
-"name": "Natillas de canela y limón",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"natillas",
-"canela",
-"limón"
-],
-"prepTime": "15 min",
-"difficulty": "fácil",
-"notes": "Sabor clásico sin azúcar.",
-"instructions": [
-"Infusiona la leche con la canela en rama y el limón.",
-"Retira los aromáticos tras 5 minutos.",
-"Bate la yema con el eritritol y la goma xantana.",
-"Añade la leche templada y remueve.",
-"Cocina a fuego bajo hasta espesar y enfría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_almendras",
-"qty": 140,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_yema_huevo",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_canela_rama",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 1,
-"unit": "unidades"
-}
-]
-},
-{
-"id": "dish_batido_frosty_chocolate",
-"name": "Batido frosty de chocolate",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"batido",
-"chocolate",
-"frío"
-],
-"prepTime": "5 min",
-"difficulty": "fácil",
-"notes": "Muy rápido para una cena familiar.",
-"instructions": [
-"Añade la leche vegetal, el hielo, el cacao y el eritritol al vaso de batidora.",
-"Espolvorea la goma xantana.",
-"Bate 60 segundos hasta que quede denso.",
-"Sirve inmediatamente."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_vegetal",
-"qty": 220,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_hielo",
-"qty": 120,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_cacao_puro",
-"qty": 7,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_batido_frosty_vainilla",
-"name": "Batido frosty de vainilla",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"batido",
-"vainilla",
-"sin azúcar"
-],
-"prepTime": "5 min",
-"difficulty": "fácil",
-"notes": "Opción suave para niños y adultos.",
-"instructions": [
-"Pon la leche vegetal, el hielo, la vainilla y el eritritol en la batidora.",
-"Añade la goma xantana de forma uniforme.",
-"Bate a máxima potencia durante 60 segundos.",
-"Sirve frío en vaso individual."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_vegetal",
-"qty": 240,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_hielo",
-"qty": 120,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 4,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_pudin_arandanos_queso_crema",
-"name": "Pudin de arándanos y queso crema",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"arándanos",
-"queso crema",
-"sin azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Textura densa tipo cheesecake.",
-"instructions": [
-"Tritura los arándanos con el agua y el eritritol.",
-"Mezcla el puré con el queso crema.",
-"Espolvorea la goma xantana y bate 1 minuto.",
-"Sirve en un vaso y refrigera."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_queso_crema",
-"qty": 75,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_arandanos",
-"qty": 40,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_agua",
-"qty": 20,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_pudin_limon_yogur",
-"name": "Pudin ligero de limón y yogur",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"limón",
-"yogur",
-"ligero"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Más ligero que la versión con queso crema.",
-"instructions": [
-"Mezcla el yogur con el zumo y ralladura de limón.",
-"Añade el eritritol y remueve.",
-"Espolvorea la goma xantana.",
-"Bate 1 minuto y deja enfriar antes de comer."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_yogur_griego",
-"qty": 125,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_mermelada_fresa_rapida",
-"name": "Mermelada rápida de fresa sin azúcar",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"fresa",
-"mermelada",
-"sin azúcar"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Ideal para acompañar yogur o requesón.",
-"instructions": [
-"Cocina las fresas con el agua y el eritritol durante 8 minutos.",
-"Aplasta la fruta con un tenedor.",
-"Retira del fuego y añade la goma xantana espolvoreada.",
-"Remueve bien y deja reposar 5 minutos."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_fresas",
-"qty": 125,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_agua",
-"qty": 15,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_mermelada_arandanos_rapida",
-"name": "Mermelada rápida de arándanos sin azúcar",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"arándanos",
-"mermelada",
-"sin azúcar"
-],
-"prepTime": "12 min",
-"difficulty": "fácil",
-"notes": "Espesa sin largas cocciones.",
-"instructions": [
-"Calienta los arándanos con el agua y el eritritol.",
-"Cocina 8 minutos hasta que suelten jugo.",
-"Tritura ligeramente si deseas una textura fina.",
-"Espolvorea la goma xantana, remueve y deja reposar."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_arandanos",
-"qty": 125,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_agua",
-"qty": 15,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_crema_pastelera_chocolate",
-"name": "Crema pastelera fit de chocolate",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"crema",
-"chocolate",
-"sin azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Para tomar sola o como relleno.",
-"instructions": [
-"Calienta la leche con el eritritol y la vainilla.",
-"Añade el cacao y mezcla hasta disolver.",
-"Espolvorea la goma xantana mientras bates con varillas.",
-"Cocina 2 minutos a fuego bajo y enfría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_desnatada",
-"qty": 125,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_cacao_puro",
-"qty": 6,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 2,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_crema_pastelera_limon",
-"name": "Crema pastelera fit de limón",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"crema",
-"limón",
-"sin azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Versión aromática y ligera.",
-"instructions": [
-"Calienta la leche con el eritritol y la ralladura de limón.",
-"Baja el fuego antes de que hierva.",
-"Espolvorea la goma xantana mientras bates con varillas.",
-"Cocina 2 minutos y deja enfriar."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_desnatada",
-"qty": 125,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 12,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_trufas_chocolate_coco",
-"name": "Trufas de chocolate y coco sin azúcar",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"trufas",
-"chocolate",
-"coco"
-],
-"prepTime": "15 min + frío",
-"difficulty": "fácil",
-"notes": "La ración equivale a 3 trufas pequeñas.",
-"instructions": [
-"Mezcla el mascarpone con el eritritol y el cacao.",
-"Añade el coco rallado y la goma xantana.",
-"Amasa brevemente hasta que tenga consistencia.",
-"Forma 3 bolitas y enfría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_mascarpone",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_coco_rallado",
-"qty": 15,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_cacao_puro",
-"qty": 4,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 9,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_trufas_limon_coco",
-"name": "Trufas de limón y coco",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"trufas",
-"limón",
-"coco"
-],
-"prepTime": "15 min + frío",
-"difficulty": "fácil",
-"notes": "Postre fresco sin azúcar.",
-"instructions": [
-"Mezcla el mascarpone con el eritritol y ralladura de limón.",
-"Añade el coco rallado y la goma xantana.",
-"Forma 3 bolitas pequeñas.",
-"Refrigera hasta que estén firmes."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_mascarpone",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_coco_rallado",
-"qty": 18,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 9,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_yogur_cacao_texturizado",
-"name": "Yogur texturizado de cacao",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"yogur",
-"cacao",
-"rápido"
-],
-"prepTime": "5 min",
-"difficulty": "fácil",
-"notes": "Postre sencillo con textura espesa.",
-"instructions": [
-"Pon el kéfir en la batidora.",
-"Añade el cacao y el eritritol.",
-"Espolvorea la goma xantana.",
-"Bate 30 segundos y sirve frío."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_kefir",
-"qty": 200,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_cacao_puro",
-"qty": 6,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_yogur_fresa_texturizado",
-"name": "Yogur texturizado de fresa",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"yogur",
-"fresa",
-"sin azúcar"
-],
-"prepTime": "5 min",
-"difficulty": "fácil",
-"notes": "Alternativa rápida al yogur comercial.",
-"instructions": [
-"Tritura las fresas con el eritritol.",
-"Añade el kéfir y mezcla.",
-"Espolvorea la goma xantana.",
-"Bate 30 segundos y refrigera."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_kefir",
-"qty": 180,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_fresas",
-"qty": 50,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 8,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_petit_suisse_arandanos",
-"name": "Petit suisse casero de arándanos",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"arándanos",
-"queso batido",
-"sin azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Conservar en frío.",
-"instructions": [
-"Tritura los arándanos con el agua y el eritritol.",
-"Mezcla el puré con el queso batido.",
-"Añade la goma xantana espolvoreada.",
-"Bate 1 minuto hasta que espese."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_queso_batido",
-"qty": 85,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_arandanos",
-"qty": 40,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_agua",
-"qty": 20,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_petit_suisse_frambuesa",
-"name": "Petit suisse casero de frambuesa",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"frambuesa",
-"queso batido",
-"sin azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Postre familiar de textura densa.",
-"instructions": [
-"Tritura las frambuesas con el agua y el eritritol.",
-"Incorpora el queso batido y mezcla con varillas.",
-"Espolvorea la goma xantana.",
-"Bate 1 minuto y enfría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_queso_batido",
-"qty": 85,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_frambuesas",
-"qty": 40,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_agua",
-"qty": 20,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_crema_requeson_canela",
-"name": "Crema de requesón con canela",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"requesón",
-"canela",
-"económico"
-],
-"prepTime": "5 min",
-"difficulty": "fácil",
-"notes": "Postre proteico y sencillo.",
-"instructions": [
-"Coloca el requesón en un bol.",
-"Añade la leche, la canela y el eritritol.",
-"Espolvorea la goma xantana.",
-"Bate hasta obtener una crema lisa y sirve frío."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_requeson",
-"qty": 120,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_leche_desnatada",
-"qty": 30,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_canela_polvo",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 8,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_crema_requeson_limon",
-"name": "Crema de requesón y limón",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"requesón",
-"limón",
-"sin azúcar"
-],
-"prepTime": "5 min",
-"difficulty": "fácil",
-"notes": "Crema fresca para después de comer.",
-"instructions": [
-"Mezcla el requesón con el zumo y la ralladura de limón.",
-"Añade el eritritol y la leche.",
-"Espolvorea la goma xantana.",
-"Bate hasta que quede cremoso y enfría."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_requeson",
-"qty": 120,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_limon",
-"qty": 1,
-"unit": "unidades"
-},
-{
-"ingredientId": "ingredient_leche_desnatada",
-"qty": 30,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 8,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_compota_manzana_canela_sin_azucar",
-"name": "Compota rápida de manzana y canela sin azúcar",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"manzana",
-"canela",
-"económico"
-],
-"prepTime": "15 min",
-"difficulty": "fácil",
-"notes": "Endulzada con eritritol.",
-"instructions": [
-"Trocea la manzana y ponla en un cazo con el agua.",
-"Añade el eritritol y la canela.",
-"Cocina 10 minutos hasta que la fruta esté blanda.",
-"Tritura o aplasta con tenedor.",
-"Añade la goma xantana, remueve y deja reposar 5 minutos."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_manzana",
-"qty": 150,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_agua",
-"qty": 30,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 8,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_canela_polvo",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_compota_pera_vainilla_sin_azucar",
-"name": "Compota rápida de pera y vainilla sin azúcar",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"pera",
-"vainilla",
-"económico"
-],
-"prepTime": "15 min",
-"difficulty": "fácil",
-"notes": "Postre suave para toda la familia.",
-"instructions": [
-"Trocea la pera y ponla en un cazo con el agua.",
-"Añade el eritritol y la vainilla.",
-"Cocina 10 minutos hasta que esté tierna.",
-"Aplasta la fruta o tritura.",
-"Espolvorea la goma xantana, remueve y deja templar."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_pera",
-"qty": 150,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_agua",
-"qty": 30,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 8,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 2,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_pudin_chia_vainilla",
-"name": "Pudin de chía, vainilla y xantana",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"chía",
-"vainilla",
-"saludable"
-],
-"prepTime": "5 min + reposo",
-"difficulty": "fácil",
-"notes": "Preparar con antelación para mejor textura.",
-"instructions": [
-"Mezcla la leche de almendras con el eritritol y la vainilla.",
-"Añade las semillas de chía y remueve.",
-"Espolvorea la goma xantana y vuelve a mezclar.",
-"Refrigera al menos 2 horas antes de servir."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_almendras",
-"qty": 160,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_chia",
-"qty": 20,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 8,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_vainilla",
-"qty": 2,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_pudin_chia_cacao",
-"name": "Pudin de chía y cacao sin azúcar",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"chía",
-"cacao",
-"sin azúcar"
-],
-"prepTime": "5 min + reposo",
-"difficulty": "fácil",
-"notes": "Postre saciante y económico.",
-"instructions": [
-"Mezcla la leche de almendras con el cacao y el eritritol.",
-"Añade la chía y remueve bien.",
-"Espolvorea la goma xantana y mezcla de nuevo.",
-"Refrigera al menos 2 horas y sirve frío."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_almendras",
-"qty": 160,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_chia",
-"qty": 20,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_cacao_puro",
-"qty": 6,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_gachas_avena_canela_sin_azucar",
-"name": "Gachas de avena y canela sin azúcar",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"avena",
-"canela",
-"económico"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Postre templado para comidas familiares.",
-"instructions": [
-"Calienta la leche con la avena, la canela y el eritritol.",
-"Cocina a fuego medio 6 minutos removiendo.",
-"Baja el fuego y espolvorea la goma xantana.",
-"Remueve hasta espesar y sirve templado."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_desnatada",
-"qty": 180,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_avena",
-"qty": 35,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_canela_polvo",
-"qty": 1,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 8,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-},
-{
-"id": "dish_gachas_avena_cacao_sin_azucar",
-"name": "Gachas de avena y cacao sin azúcar",
-"servings": 1,
-"unit": "ración",
-"category": "Postre",
-"tags": [
-"avena",
-"cacao",
-"sin azúcar"
-],
-"prepTime": "10 min",
-"difficulty": "fácil",
-"notes": "Opción sencilla con cacao puro.",
-"instructions": [
-"Calienta la leche con la avena, el cacao y el eritritol.",
-"Cocina 6 minutos removiendo.",
-"Añade la goma xantana espolvoreada.",
-"Remueve hasta conseguir textura cremosa y sirve."
-],
-"recipe": [
-{
-"ingredientId": "ingredient_leche_desnatada",
-"qty": 180,
-"unit": "ml"
-},
-{
-"ingredientId": "ingredient_avena",
-"qty": 35,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_cacao_puro",
-"qty": 6,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_eritritol",
-"qty": 10,
-"unit": "g"
-},
-{
-"ingredientId": "ingredient_goma_xantana",
-"qty": 1,
-"unit": "g"
-}
-]
-}
-]
+  "schemaVersion": 2,
+  "type": "meal-pack",
+  "id": "pack_postres_xantana_sin_azucar",
+  "name": "Postres fáciles sin azúcar con goma xantana",
+  "description": "Pack de 30 recetas sencillas, económicas y saludables de postres sin azúcar, normalizadas a 1 ración y endulzadas con eritritol.",
+  "tags": [
+    "postres",
+    "sin azúcar",
+    "eritritol",
+    "goma xantana",
+    "familiar",
+    "saludable",
+    "económico",
+    "sencillo"
+  ],
+  "language": "es",
+  "ingredients": [
+    {
+      "id": "ingredient_nata_montar",
+      "name": "Nata para montar fría",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_cacao_puro",
+      "name": "Cacao puro en polvo sin azúcar",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_eritritol",
+      "name": "Eritritol",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_goma_xantana",
+      "name": "Goma xantana",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_vainilla",
+      "name": "Esencia de vainilla",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_fresas_congeladas",
+      "name": "Fresas congeladas",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "freezer",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_yogur_griego",
+      "name": "Yogur griego natural sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_leche_almendras",
+      "name": "Leche de almendras sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_yema_huevo",
+      "name": "Yema de huevo",
+      "familyId": "family_eggs",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_canela_rama",
+      "name": "Canela en rama",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_limon",
+      "name": "Limón",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_cafe_frio",
+      "name": "Café frío",
+      "familyId": "family_drinks",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_leche_vegetal",
+      "name": "Leche vegetal sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_hielo",
+      "name": "Hielo",
+      "familyId": "family_freezer",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "freezer",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_sirope_caramelo_sin_azucar",
+      "name": "Sirope de caramelo sin azúcar",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_queso_crema",
+      "name": "Queso crema",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_agua",
+      "name": "Agua",
+      "familyId": "family_drinks",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_frutos_rojos",
+      "name": "Frutos rojos",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "freezer",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_leche_desnatada",
+      "name": "Leche desnatada",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_colorante_amarillo",
+      "name": "Colorante amarillo",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_mascarpone",
+      "name": "Queso mascarpone",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_coco_rallado",
+      "name": "Coco rallado",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_kefir",
+      "name": "Kéfir natural sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_canela_polvo",
+      "name": "Canela en polvo",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_queso_batido",
+      "name": "Queso batido 0% sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_fresas",
+      "name": "Fresas frescas",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_requeson",
+      "name": "Requesón desnatado",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_arandanos",
+      "name": "Arándanos",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_frambuesas",
+      "name": "Frambuesas",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_manzana",
+      "name": "Manzana",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_pera",
+      "name": "Pera",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_avena",
+      "name": "Copos de avena",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_chia",
+      "name": "Semillas de chía",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_gelatina_neutra",
+      "name": "Gelatina neutra",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_huevo",
+      "name": "Huevo",
+      "familyId": "family_eggs",
+      "qty": 0,
+      "unit": "unidades",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_harina_almendra",
+      "name": "Harina de almendra",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": []
+    }
+  ],
+  "dishes": [
+    {
+      "id": "dish_mousse_chocolate_express",
+      "name": "Mousse de chocolate express",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "sin azúcar",
+        "chocolate",
+        "rápido"
+      ],
+      "prepTime": "10 min + frío",
+      "difficulty": "fácil",
+      "notes": "Endulzado con eritritol.",
+      "instructions": [
+        "Mezcla en seco el cacao, el eritritol y la goma xantana.",
+        "Añade la nata fría y la vainilla.",
+        "Bate con varillas hasta obtener una textura firme y aireada.",
+        "Sirve en un vaso y refrigera al menos 30 minutos."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_nata_montar",
+          "qty": 100,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 3,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_helado_cremoso_fresa",
+      "name": "Helado cremoso de fresa sin mantecadora",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "fresa",
+        "sin azúcar",
+        "frío"
+      ],
+      "prepTime": "15 min + congelación",
+      "difficulty": "fácil",
+      "notes": "Puede tomarse al momento con textura cremosa.",
+      "instructions": [
+        "Coloca las fresas congeladas, el yogur griego y el eritritol en una batidora potente.",
+        "Tritura hasta obtener una pasta cremosa.",
+        "Espolvorea la goma xantana y bate 1 minuto más.",
+        "Sirve al momento o congela para una textura más firme."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_fresas_congeladas",
+          "qty": 75,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 38,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_natillas_vainilla_sin_almidon",
+      "name": "Natillas caseras de vainilla sin almidón",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "natillas",
+        "vainilla",
+        "sin azúcar"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "La goma xantana sustituye el espesado con almidón.",
+      "instructions": [
+        "Infusiona la leche con la canela en rama y el limón a fuego lento durante 5 minutos.",
+        "Retira la canela y el limón.",
+        "Bate la yema con el eritritol y la goma xantana.",
+        "Añade la leche templada poco a poco sin dejar de remover.",
+        "Cocina a fuego muy bajo hasta que espese, sin hervir, y enfría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_almendras",
+          "qty": 135,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_yema_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela_rama",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_batido_frosty_cafe_caramelo",
+      "name": "Batido frosty de café y caramelo",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "café",
+        "batido",
+        "rápido"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "fácil",
+      "notes": "Usa café descafeinado si se sirve por la noche.",
+      "instructions": [
+        "Introduce el café, la leche vegetal, el hielo y el eritritol en la batidora.",
+        "Añade el sirope de caramelo sin azúcar.",
+        "Espolvorea la goma xantana por encima.",
+        "Bate a máxima potencia durante 60 segundos y sirve frío."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe_frio",
+          "qty": 240,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_leche_vegetal",
+          "qty": 120,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_hielo",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_sirope_caramelo_sin_azucar",
+          "qty": 10,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pudin_limon_queso_crema",
+      "name": "Pudin de limón y queso crema",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "limón",
+        "cheesecake",
+        "sin azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Textura estilo cheesecake sin base.",
+      "instructions": [
+        "Mezcla el queso crema con el zumo y la ralladura de limón.",
+        "Añade el agua y el eritritol y bate hasta integrar.",
+        "Espolvorea la goma xantana y bate 1 minuto.",
+        "Sirve en un molde individual y enfría antes de tomar."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_queso_crema",
+          "qty": 75,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_agua",
+          "qty": 30,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_coulis_frutos_rojos",
+      "name": "Coulis rápido de frutos rojos",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "frutos rojos",
+        "mermelada",
+        "sin azúcar"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Sirve como salsa para yogur o queso batido.",
+      "instructions": [
+        "Coloca los frutos rojos, el agua y el eritritol en un cazo.",
+        "Cocina a fuego medio 8 minutos, aplastando la fruta.",
+        "Retira del fuego y tritura si deseas una textura fina.",
+        "Espolvorea la goma xantana mientras remueves y deja reposar 5 minutos."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_frutos_rojos",
+          "qty": 125,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_agua",
+          "qty": 15,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_crema_pastelera_fit",
+      "name": "Crema pastelera fit de vainilla",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "crema",
+        "vainilla",
+        "relleno"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Apta para comer sola o como relleno.",
+      "instructions": [
+        "Calienta la leche con la vainilla y el eritritol.",
+        "Antes de que hierva, baja el fuego al mínimo.",
+        "Espolvorea la goma xantana poco a poco mientras bates con varillas.",
+        "Añade el colorante si lo usas y cocina removiendo 2 minutos.",
+        "Enfría para que espese."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_desnatada",
+          "qty": 125,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_colorante_amarillo",
+          "qty": 1,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_trufas_coco_mascarpone",
+      "name": "Trufas de coco y mascarpone",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "coco",
+        "trufas",
+        "sin azúcar"
+      ],
+      "prepTime": "15 min + frío",
+      "difficulty": "fácil",
+      "notes": "La ración equivale a 3 trufas pequeñas.",
+      "instructions": [
+        "Mezcla el mascarpone con el eritritol y el coco rallado.",
+        "Añade la goma xantana y mezcla hasta obtener una masa manejable.",
+        "Forma 3 bolitas pequeñas con las manos.",
+        "Reboza con un poco de coco rallado y enfría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_mascarpone",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_coco_rallado",
+          "qty": 18,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 9,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_yogur_texturizado_vainilla_canela",
+      "name": "Yogur texturizado de vainilla y canela",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "yogur",
+        "canela",
+        "rápido"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "fácil",
+      "notes": "Textura cremosa sin añadir azúcar.",
+      "instructions": [
+        "Introduce el kéfir en una batidora.",
+        "Añade la canela, la vainilla y el eritritol.",
+        "Espolvorea la goma xantana.",
+        "Bate 30 segundos y sirve frío."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_kefir",
+          "qty": 200,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_canela_polvo",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_petit_suisse_fresa",
+      "name": "Petit suisse casero de fresa",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "fresa",
+        "infantil",
+        "sin azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Conservar en frío.",
+      "instructions": [
+        "Tritura las fresas con el agua y el eritritol.",
+        "Mezcla el puré con el queso batido usando varillas.",
+        "Espolvorea la goma xantana.",
+        "Bate 1 minuto hasta obtener una crema densa y refrigera."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_queso_batido",
+          "qty": 85,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_fresas",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_agua",
+          "qty": 20,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_mousse_chocolate_cafe",
+      "name": "Mousse de chocolate y café",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "chocolate",
+        "café",
+        "sin azúcar"
+      ],
+      "prepTime": "10 min + frío",
+      "difficulty": "fácil",
+      "notes": "Versión con café frío para sabor más intenso.",
+      "instructions": [
+        "Mezcla el cacao, el eritritol y la goma xantana en un bol.",
+        "Añade la nata fría, la vainilla y el café frío.",
+        "Bate con varillas hasta que espese y quede aireado.",
+        "Refrigera 30 minutos antes de servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_nata_montar",
+          "qty": 90,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_cafe_frio",
+          "qty": 20,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_mousse_vainilla_canela",
+      "name": "Mousse de vainilla y canela",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "vainilla",
+        "canela",
+        "sin azúcar"
+      ],
+      "prepTime": "10 min + frío",
+      "difficulty": "fácil",
+      "notes": "Alternativa sin cacao.",
+      "instructions": [
+        "Mezcla el eritritol, la canela y la goma xantana.",
+        "Añade la nata fría y la vainilla.",
+        "Bate hasta que monte y quede cremosa.",
+        "Sirve en vaso individual y refrigera."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_nata_montar",
+          "qty": 100,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 3,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_canela_polvo",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_helado_arandanos_yogur",
+      "name": "Helado de arándanos y yogur",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "arándanos",
+        "helado",
+        "sin azúcar"
+      ],
+      "prepTime": "15 min + congelación",
+      "difficulty": "fácil",
+      "notes": "Se puede preparar con fruta congelada.",
+      "instructions": [
+        "Pon los arándanos, el yogur y el eritritol en la batidora.",
+        "Tritura hasta conseguir una mezcla uniforme.",
+        "Añade la goma xantana espolvoreada.",
+        "Bate 1 minuto y congela o sirve tipo crema helada."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_arandanos",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 45,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_helado_frambuesa_cremoso",
+      "name": "Helado cremoso de frambuesa",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "frambuesa",
+        "helado",
+        "rápido"
+      ],
+      "prepTime": "15 min + congelación",
+      "difficulty": "fácil",
+      "notes": "Postre ácido y ligero.",
+      "instructions": [
+        "Tritura las frambuesas con el yogur y el eritritol.",
+        "Bate hasta que no queden trozos grandes.",
+        "Espolvorea la goma xantana y bate 1 minuto.",
+        "Sirve al momento o congela en un recipiente individual."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_frambuesas",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 45,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_natillas_chocolate",
+      "name": "Natillas de chocolate sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "natillas",
+        "chocolate",
+        "sin azúcar"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Versión de cacao con textura cremosa.",
+      "instructions": [
+        "Calienta la leche a fuego bajo con la vainilla.",
+        "Bate la yema con el eritritol, el cacao y la goma xantana.",
+        "Añade la leche templada poco a poco mientras remueves.",
+        "Devuelve al cazo y cocina a fuego bajo hasta espesar sin hervir.",
+        "Enfría antes de servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_desnatada",
+          "qty": 140,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_yema_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 5,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_natillas_canela_limon",
+      "name": "Natillas de canela y limón",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "natillas",
+        "canela",
+        "limón"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Sabor clásico sin azúcar.",
+      "instructions": [
+        "Infusiona la leche con la canela en rama y el limón.",
+        "Retira los aromáticos tras 5 minutos.",
+        "Bate la yema con el eritritol y la goma xantana.",
+        "Añade la leche templada y remueve.",
+        "Cocina a fuego bajo hasta espesar y enfría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_almendras",
+          "qty": 140,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_yema_huevo",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela_rama",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 1,
+          "unit": "unidades"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_batido_frosty_chocolate",
+      "name": "Batido frosty de chocolate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "batido",
+        "chocolate",
+        "frío"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "fácil",
+      "notes": "Muy rápido para una cena familiar.",
+      "instructions": [
+        "Añade la leche vegetal, el hielo, el cacao y el eritritol al vaso de batidora.",
+        "Espolvorea la goma xantana.",
+        "Bate 60 segundos hasta que quede denso.",
+        "Sirve inmediatamente."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_vegetal",
+          "qty": 220,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_hielo",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_batido_frosty_vainilla",
+      "name": "Batido frosty de vainilla",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "batido",
+        "vainilla",
+        "sin azúcar"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "fácil",
+      "notes": "Opción suave para niños y adultos.",
+      "instructions": [
+        "Pon la leche vegetal, el hielo, la vainilla y el eritritol en la batidora.",
+        "Añade la goma xantana de forma uniforme.",
+        "Bate a máxima potencia durante 60 segundos.",
+        "Sirve frío en vaso individual."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_vegetal",
+          "qty": 240,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_hielo",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 4,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pudin_arandanos_queso_crema",
+      "name": "Pudin de arándanos y queso crema",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "arándanos",
+        "queso crema",
+        "sin azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Textura densa tipo cheesecake.",
+      "instructions": [
+        "Tritura los arándanos con el agua y el eritritol.",
+        "Mezcla el puré con el queso crema.",
+        "Espolvorea la goma xantana y bate 1 minuto.",
+        "Sirve en un vaso y refrigera."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_queso_crema",
+          "qty": 75,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_arandanos",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_agua",
+          "qty": 20,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pudin_limon_yogur",
+      "name": "Pudin ligero de limón y yogur",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "limón",
+        "yogur",
+        "ligero"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Más ligero que la versión con queso crema.",
+      "instructions": [
+        "Mezcla el yogur con el zumo y ralladura de limón.",
+        "Añade el eritritol y remueve.",
+        "Espolvorea la goma xantana.",
+        "Bate 1 minuto y deja enfriar antes de comer."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_yogur_griego",
+          "qty": 125,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_mermelada_fresa_rapida",
+      "name": "Mermelada rápida de fresa sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "fresa",
+        "mermelada",
+        "sin azúcar"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Ideal para acompañar yogur o requesón.",
+      "instructions": [
+        "Cocina las fresas con el agua y el eritritol durante 8 minutos.",
+        "Aplasta la fruta con un tenedor.",
+        "Retira del fuego y añade la goma xantana espolvoreada.",
+        "Remueve bien y deja reposar 5 minutos."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_fresas",
+          "qty": 125,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_agua",
+          "qty": 15,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_mermelada_arandanos_rapida",
+      "name": "Mermelada rápida de arándanos sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "arándanos",
+        "mermelada",
+        "sin azúcar"
+      ],
+      "prepTime": "12 min",
+      "difficulty": "fácil",
+      "notes": "Espesa sin largas cocciones.",
+      "instructions": [
+        "Calienta los arándanos con el agua y el eritritol.",
+        "Cocina 8 minutos hasta que suelten jugo.",
+        "Tritura ligeramente si deseas una textura fina.",
+        "Espolvorea la goma xantana, remueve y deja reposar."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_arandanos",
+          "qty": 125,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_agua",
+          "qty": 15,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_crema_pastelera_chocolate",
+      "name": "Crema pastelera fit de chocolate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "crema",
+        "chocolate",
+        "sin azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Para tomar sola o como relleno.",
+      "instructions": [
+        "Calienta la leche con el eritritol y la vainilla.",
+        "Añade el cacao y mezcla hasta disolver.",
+        "Espolvorea la goma xantana mientras bates con varillas.",
+        "Cocina 2 minutos a fuego bajo y enfría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_desnatada",
+          "qty": 125,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_crema_pastelera_limon",
+      "name": "Crema pastelera fit de limón",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "crema",
+        "limón",
+        "sin azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Versión aromática y ligera.",
+      "instructions": [
+        "Calienta la leche con el eritritol y la ralladura de limón.",
+        "Baja el fuego antes de que hierva.",
+        "Espolvorea la goma xantana mientras bates con varillas.",
+        "Cocina 2 minutos y deja enfriar."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_desnatada",
+          "qty": 125,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 12,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_trufas_chocolate_coco",
+      "name": "Trufas de chocolate y coco sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "trufas",
+        "chocolate",
+        "coco"
+      ],
+      "prepTime": "15 min + frío",
+      "difficulty": "fácil",
+      "notes": "La ración equivale a 3 trufas pequeñas.",
+      "instructions": [
+        "Mezcla el mascarpone con el eritritol y el cacao.",
+        "Añade el coco rallado y la goma xantana.",
+        "Amasa brevemente hasta que tenga consistencia.",
+        "Forma 3 bolitas y enfría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_mascarpone",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_coco_rallado",
+          "qty": 15,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 4,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 9,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_trufas_limon_coco",
+      "name": "Trufas de limón y coco",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "trufas",
+        "limón",
+        "coco"
+      ],
+      "prepTime": "15 min + frío",
+      "difficulty": "fácil",
+      "notes": "Postre fresco sin azúcar.",
+      "instructions": [
+        "Mezcla el mascarpone con el eritritol y ralladura de limón.",
+        "Añade el coco rallado y la goma xantana.",
+        "Forma 3 bolitas pequeñas.",
+        "Refrigera hasta que estén firmes."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_mascarpone",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_coco_rallado",
+          "qty": 18,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 9,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_yogur_cacao_texturizado",
+      "name": "Yogur texturizado de cacao",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "yogur",
+        "cacao",
+        "rápido"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "fácil",
+      "notes": "Postre sencillo con textura espesa.",
+      "instructions": [
+        "Pon el kéfir en la batidora.",
+        "Añade el cacao y el eritritol.",
+        "Espolvorea la goma xantana.",
+        "Bate 30 segundos y sirve frío."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_kefir",
+          "qty": 200,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_yogur_fresa_texturizado",
+      "name": "Yogur texturizado de fresa",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "yogur",
+        "fresa",
+        "sin azúcar"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "fácil",
+      "notes": "Alternativa rápida al yogur comercial.",
+      "instructions": [
+        "Tritura las fresas con el eritritol.",
+        "Añade el kéfir y mezcla.",
+        "Espolvorea la goma xantana.",
+        "Bate 30 segundos y refrigera."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_kefir",
+          "qty": 180,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_fresas",
+          "qty": 50,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_petit_suisse_arandanos",
+      "name": "Petit suisse casero de arándanos",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "arándanos",
+        "queso batido",
+        "sin azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Conservar en frío.",
+      "instructions": [
+        "Tritura los arándanos con el agua y el eritritol.",
+        "Mezcla el puré con el queso batido.",
+        "Añade la goma xantana espolvoreada.",
+        "Bate 1 minuto hasta que espese."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_queso_batido",
+          "qty": 85,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_arandanos",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_agua",
+          "qty": 20,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_petit_suisse_frambuesa",
+      "name": "Petit suisse casero de frambuesa",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "frambuesa",
+        "queso batido",
+        "sin azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Postre familiar de textura densa.",
+      "instructions": [
+        "Tritura las frambuesas con el agua y el eritritol.",
+        "Incorpora el queso batido y mezcla con varillas.",
+        "Espolvorea la goma xantana.",
+        "Bate 1 minuto y enfría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_queso_batido",
+          "qty": 85,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_frambuesas",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_agua",
+          "qty": 20,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_crema_requeson_canela",
+      "name": "Crema de requesón con canela",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "requesón",
+        "canela",
+        "económico"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "fácil",
+      "notes": "Postre proteico y sencillo.",
+      "instructions": [
+        "Coloca el requesón en un bol.",
+        "Añade la leche, la canela y el eritritol.",
+        "Espolvorea la goma xantana.",
+        "Bate hasta obtener una crema lisa y sirve frío."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_requeson",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_desnatada",
+          "qty": 30,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_canela_polvo",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_crema_requeson_limon",
+      "name": "Crema de requesón y limón",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "requesón",
+        "limón",
+        "sin azúcar"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "fácil",
+      "notes": "Crema fresca para después de comer.",
+      "instructions": [
+        "Mezcla el requesón con el zumo y la ralladura de limón.",
+        "Añade el eritritol y la leche.",
+        "Espolvorea la goma xantana.",
+        "Bate hasta que quede cremoso y enfría."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_requeson",
+          "qty": 120,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_limon",
+          "qty": 1,
+          "unit": "unidades"
+        },
+        {
+          "ingredientId": "ingredient_leche_desnatada",
+          "qty": 30,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_compota_manzana_canela_sin_azucar",
+      "name": "Compota rápida de manzana y canela sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "manzana",
+        "canela",
+        "económico"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Endulzada con eritritol.",
+      "instructions": [
+        "Trocea la manzana y ponla en un cazo con el agua.",
+        "Añade el eritritol y la canela.",
+        "Cocina 10 minutos hasta que la fruta esté blanda.",
+        "Tritura o aplasta con tenedor.",
+        "Añade la goma xantana, remueve y deja reposar 5 minutos."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_manzana",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_agua",
+          "qty": 30,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela_polvo",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_compota_pera_vainilla_sin_azucar",
+      "name": "Compota rápida de pera y vainilla sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "pera",
+        "vainilla",
+        "económico"
+      ],
+      "prepTime": "15 min",
+      "difficulty": "fácil",
+      "notes": "Postre suave para toda la familia.",
+      "instructions": [
+        "Trocea la pera y ponla en un cazo con el agua.",
+        "Añade el eritritol y la vainilla.",
+        "Cocina 10 minutos hasta que esté tierna.",
+        "Aplasta la fruta o tritura.",
+        "Espolvorea la goma xantana, remueve y deja templar."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pera",
+          "qty": 150,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_agua",
+          "qty": 30,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pudin_chia_vainilla",
+      "name": "Pudin de chía, vainilla y xantana",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "chía",
+        "vainilla",
+        "saludable"
+      ],
+      "prepTime": "5 min + reposo",
+      "difficulty": "fácil",
+      "notes": "Preparar con antelación para mejor textura.",
+      "instructions": [
+        "Mezcla la leche de almendras con el eritritol y la vainilla.",
+        "Añade las semillas de chía y remueve.",
+        "Espolvorea la goma xantana y vuelve a mezclar.",
+        "Refrigera al menos 2 horas antes de servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_almendras",
+          "qty": 160,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_chia",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_vainilla",
+          "qty": 2,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_pudin_chia_cacao",
+      "name": "Pudin de chía y cacao sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "chía",
+        "cacao",
+        "sin azúcar"
+      ],
+      "prepTime": "5 min + reposo",
+      "difficulty": "fácil",
+      "notes": "Postre saciante y económico.",
+      "instructions": [
+        "Mezcla la leche de almendras con el cacao y el eritritol.",
+        "Añade la chía y remueve bien.",
+        "Espolvorea la goma xantana y mezcla de nuevo.",
+        "Refrigera al menos 2 horas y sirve frío."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_almendras",
+          "qty": 160,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_chia",
+          "qty": 20,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    },
+    {
+      "id": "dish_gachas_avena_canela_sin_azucar",
+      "name": "Gachas de avena y canela sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "avena",
+        "canela",
+        "económico"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Postre templado para comidas familiares.",
+      "instructions": [
+        "Calienta la leche con la avena, la canela y el eritritol.",
+        "Cocina a fuego medio 6 minutos removiendo.",
+        "Baja el fuego y espolvorea la goma xantana.",
+        "Remueve hasta espesar y sirve templado."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_desnatada",
+          "qty": 180,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_avena",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_canela_polvo",
+          "qty": 1,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 8,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida"
+      ]
+    },
+    {
+      "id": "dish_gachas_avena_cacao_sin_azucar",
+      "name": "Gachas de avena y cacao sin azúcar",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Postre",
+      "tags": [
+        "avena",
+        "cacao",
+        "sin azúcar"
+      ],
+      "prepTime": "10 min",
+      "difficulty": "fácil",
+      "notes": "Opción sencilla con cacao puro.",
+      "instructions": [
+        "Calienta la leche con la avena, el cacao y el eritritol.",
+        "Cocina 6 minutos removiendo.",
+        "Añade la goma xantana espolvoreada.",
+        "Remueve hasta conseguir textura cremosa y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_leche_desnatada",
+          "qty": 180,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_avena",
+          "qty": 35,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_cacao_puro",
+          "qty": 6,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_eritritol",
+          "qty": 10,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_goma_xantana",
+          "qty": 1,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Comida",
+        "Merienda",
+        "Cena"
+      ]
+    }
+  ]
 }

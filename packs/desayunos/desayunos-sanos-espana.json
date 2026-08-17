@@ -4,52 +4,1251 @@
   "id": "pack_desayunos_sanos_espana",
   "name": "Pack desayunos sanos estilo España",
   "description": "Desayunos habituales en España: cafés con distintas leches, tostadas con aceite y tomate, jamón york, cereales integrales, avena, yogur y fruta. Todo está normalizado a 1 ración.",
-  "tags": ["desayuno", "saludable", "españa", "mediterráneo", "familiar", "rápido"],
+  "tags": [
+    "desayuno",
+    "saludable",
+    "españa",
+    "mediterráneo",
+    "familiar",
+    "rápido"
+  ],
   "language": "es",
   "ingredients": [
-    {"id":"ingredient_cafe","name":"Café","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.018,"packagingType":"otro","products":[]},
-    {"id":"ingredient_leche_semidesnatada","name":"Leche semidesnatada","familyId":"family_dairy","qty":0,"unit":"ml","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0.0012,"packagingType":"brik","products":[]},
-    {"id":"ingredient_leche_sin_lactosa","name":"Leche sin lactosa","familyId":"family_dairy","qty":0,"unit":"ml","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0.0015,"packagingType":"brik","products":[]},
-    {"id":"ingredient_bebida_avena","name":"Bebida de avena sin azúcar","familyId":"family_dairy","qty":0,"unit":"ml","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.0018,"packagingType":"brik","products":[]},
-    {"id":"ingredient_bebida_almendras","name":"Bebida de almendras sin azúcar","familyId":"family_dairy","qty":0,"unit":"ml","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.002,"packagingType":"brik","products":[]},
-    {"id":"ingredient_pan_integral","name":"Pan integral","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.004,"packagingType":"plástico","products":[]},
-    {"id":"ingredient_tomate","name":"Tomate","familyId":"family_vegetables","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.003,"packagingType":"otro","products":[]},
-    {"id":"ingredient_aceite_oliva_virgen_extra","name":"Aceite de oliva virgen extra","familyId":"family_pantry","qty":0,"unit":"ml","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.009,"packagingType":"vidrio","products":[]},
-    {"id":"ingredient_jamon_york","name":"Jamón york","familyId":"family_meat","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0.012,"packagingType":"plástico","products":[]},
-    {"id":"ingredient_queso_fresco","name":"Queso fresco","familyId":"family_dairy","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0.009,"packagingType":"plástico","products":[]},
-    {"id":"ingredient_aguacate","name":"Aguacate","familyId":"family_fruit","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.008,"packagingType":"otro","products":[]},
-    {"id":"ingredient_cereales_integrales","name":"Cereales integrales sin azúcar","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.006,"packagingType":"cartón/papel","products":[]},
-    {"id":"ingredient_muesli_sin_azucar","name":"Muesli sin azúcar","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.007,"packagingType":"cartón/papel","products":[]},
-    {"id":"ingredient_copos_avena","name":"Copos de avena","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.003,"packagingType":"cartón/papel","products":[]},
-    {"id":"ingredient_yogur_natural","name":"Yogur natural","familyId":"family_dairy","qty":0,"unit":"g","available":false,"storageType":"fridge","expiryDate":"","dateType":"none","approxPrice":0.003,"packagingType":"plástico","products":[]},
-    {"id":"ingredient_platano","name":"Plátano","familyId":"family_fruit","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.0025,"packagingType":"otro","products":[]},
-    {"id":"ingredient_fruta_variada","name":"Fruta variada","familyId":"family_fruit","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0.003,"packagingType":"otro","products":[]}
+    {
+      "id": "ingredient_cafe",
+      "name": "Café",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.018,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_leche_semidesnatada",
+      "name": "Leche semidesnatada",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.0012,
+      "packagingType": "brik",
+      "products": []
+    },
+    {
+      "id": "ingredient_leche_sin_lactosa",
+      "name": "Leche sin lactosa",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.0015,
+      "packagingType": "brik",
+      "products": []
+    },
+    {
+      "id": "ingredient_bebida_avena",
+      "name": "Bebida de avena sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.0018,
+      "packagingType": "brik",
+      "products": []
+    },
+    {
+      "id": "ingredient_bebida_almendras",
+      "name": "Bebida de almendras sin azúcar",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.002,
+      "packagingType": "brik",
+      "products": []
+    },
+    {
+      "id": "ingredient_pan_integral",
+      "name": "Pan integral",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.004,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_tomate",
+      "name": "Tomate",
+      "familyId": "family_vegetables",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.003,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_aceite_oliva_virgen_extra",
+      "name": "Aceite de oliva virgen extra",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "ml",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.009,
+      "packagingType": "vidrio",
+      "products": []
+    },
+    {
+      "id": "ingredient_jamon_york",
+      "name": "Jamón york",
+      "familyId": "family_meat",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.012,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_queso_fresco",
+      "name": "Queso fresco",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.009,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_aguacate",
+      "name": "Aguacate",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.008,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_cereales_integrales",
+      "name": "Cereales integrales sin azúcar",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.006,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_muesli_sin_azucar",
+      "name": "Muesli sin azúcar",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.007,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_copos_avena",
+      "name": "Copos de avena",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.003,
+      "packagingType": "cartón/papel",
+      "products": []
+    },
+    {
+      "id": "ingredient_yogur_natural",
+      "name": "Yogur natural",
+      "familyId": "family_dairy",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "fridge",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.003,
+      "packagingType": "plástico",
+      "products": []
+    },
+    {
+      "id": "ingredient_platano",
+      "name": "Plátano",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.0025,
+      "packagingType": "otro",
+      "products": []
+    },
+    {
+      "id": "ingredient_fruta_variada",
+      "name": "Fruta variada",
+      "familyId": "family_fruit",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0.003,
+      "packagingType": "otro",
+      "products": []
+    }
   ],
   "dishes": [
-    {"id":"dish_cafe_solo","name":"Café solo","servings":1,"unit":"ración","category":"Desayuno","tags":["bebida","café"],"prepTime":"3 min","difficulty":"fácil","approxPrice":0.13,"notes":"Café clásico sin leche.","instructions":["Prepara el café al gusto.","Sirve caliente."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"}]},
-    {"id":"dish_cortado_semidesnatada","name":"Café cortado con leche semidesnatada","servings":1,"unit":"ración","category":"Desayuno","tags":["bebida","café","leche"],"prepTime":"4 min","difficulty":"fácil","approxPrice":0.17,"notes":"Bebida corta de desayuno.","instructions":["Prepara el café.","Añade una pequeña cantidad de leche semidesnatada caliente o templada."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_leche_semidesnatada","qty":40,"unit":"ml"}]},
-    {"id":"dish_cafe_leche_semidesnatada","name":"Café con leche semidesnatada","servings":1,"unit":"ración","category":"Desayuno","tags":["bebida","café","leche"],"prepTime":"4 min","difficulty":"fácil","approxPrice":0.34,"notes":"Café con leche habitual.","instructions":["Prepara el café.","Calienta la leche y mezcla."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_leche_semidesnatada","qty":180,"unit":"ml"}]},
-    {"id":"dish_cafe_leche_sin_lactosa","name":"Café con leche sin lactosa","servings":1,"unit":"ración","category":"Desayuno","tags":["bebida","café","sin lactosa"],"prepTime":"4 min","difficulty":"fácil","approxPrice":0.4,"notes":"Alternativa sin lactosa.","instructions":["Prepara el café.","Añade leche sin lactosa caliente o templada."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_leche_sin_lactosa","qty":180,"unit":"ml"}]},
-    {"id":"dish_cafe_leche_avena","name":"Café con bebida de avena","servings":1,"unit":"ración","category":"Desayuno","tags":["bebida","café","vegetal"],"prepTime":"4 min","difficulty":"fácil","approxPrice":0.45,"notes":"Usar bebida de avena sin azúcar añadido.","instructions":["Prepara el café.","Añade bebida de avena caliente o fría al gusto."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_bebida_avena","qty":180,"unit":"ml"}]},
-    {"id":"dish_cafe_leche_almendras","name":"Café con bebida de almendras","servings":1,"unit":"ración","category":"Desayuno","tags":["bebida","café","vegetal"],"prepTime":"4 min","difficulty":"fácil","approxPrice":0.49,"notes":"Usar bebida de almendras sin azúcar añadido.","instructions":["Prepara el café.","Añade bebida de almendras caliente o fría al gusto."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_bebida_almendras","qty":180,"unit":"ml"}]},
-    {"id":"dish_tostada_integral_aceite_tomate","name":"Tostada integral con aceite de oliva y tomate","servings":1,"unit":"ración","category":"Desayuno","tags":["tostada","mediterráneo","saludable"],"prepTime":"7 min","difficulty":"fácil","approxPrice":0.57,"notes":"Clásica tostada española.","instructions":["Tuesta el pan integral.","Ralla o tritura el tomate.","Añade tomate y aceite de oliva virgen extra justo antes de servir."],"recipe":[{"ingredientId":"ingredient_pan_integral","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":80,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva_virgen_extra","qty":10,"unit":"ml"}]},
-    {"id":"dish_tostada_tomate_jamon_york","name":"Tostada integral con tomate y jamón york","servings":1,"unit":"ración","category":"Desayuno","tags":["tostada","jamón york","rápido"],"prepTime":"7 min","difficulty":"fácil","approxPrice":0.96,"notes":"Tostada sencilla con proteína ligera.","instructions":["Tuesta el pan integral.","Añade tomate rallado o triturado.","Coloca el jamón york encima y sirve."],"recipe":[{"ingredientId":"ingredient_pan_integral","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":80,"unit":"g"},{"ingredientId":"ingredient_jamon_york","qty":40,"unit":"g"}]},
-    {"id":"dish_tostada_aceite_tomate_jamon_york","name":"Tostada integral con aceite, tomate y jamón york","servings":1,"unit":"ración","category":"Desayuno","tags":["tostada","jamón york","mediterráneo"],"prepTime":"8 min","difficulty":"fácil","approxPrice":1.03,"notes":"Versión más completa de la tostada con tomate.","instructions":["Tuesta el pan integral.","Añade tomate rallado y aceite.","Coloca el jamón york encima."],"recipe":[{"ingredientId":"ingredient_pan_integral","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":80,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva_virgen_extra","qty":8,"unit":"ml"},{"ingredientId":"ingredient_jamon_york","qty":40,"unit":"g"}]},
-    {"id":"dish_tostada_tomate_queso_fresco","name":"Tostada integral con tomate y queso fresco","servings":1,"unit":"ración","category":"Desayuno","tags":["tostada","queso fresco","saludable"],"prepTime":"7 min","difficulty":"fácil","approxPrice":0.9,"notes":"Opción fresca y saciante.","instructions":["Tuesta el pan.","Añade tomate rallado.","Coloca queso fresco en láminas."],"recipe":[{"ingredientId":"ingredient_pan_integral","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":70,"unit":"g"},{"ingredientId":"ingredient_queso_fresco","qty":50,"unit":"g"}]},
-    {"id":"dish_tostada_aguacate_tomate","name":"Tostada integral con aguacate y tomate","servings":1,"unit":"ración","category":"Desayuno","tags":["tostada","aguacate","saludable"],"prepTime":"8 min","difficulty":"fácil","approxPrice":0.87,"notes":"Desayuno con grasas saludables.","instructions":["Tuesta el pan.","Machaca el aguacate.","Añade tomate en rodajas o rallado."],"recipe":[{"ingredientId":"ingredient_pan_integral","qty":60,"unit":"g"},{"ingredientId":"ingredient_aguacate","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":50,"unit":"g"}]},
-    {"id":"dish_tostada_aceite_jamon_york","name":"Tostada integral con aceite de oliva y jamón york","servings":1,"unit":"ración","category":"Desayuno","tags":["tostada","jamón york"],"prepTime":"6 min","difficulty":"fácil","approxPrice":0.79,"notes":"Tostada rápida para diario.","instructions":["Tuesta el pan.","Añade aceite de oliva.","Coloca el jamón york encima."],"recipe":[{"ingredientId":"ingredient_pan_integral","qty":60,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva_virgen_extra","qty":8,"unit":"ml"},{"ingredientId":"ingredient_jamon_york","qty":40,"unit":"g"}]},
-    {"id":"dish_cereales_leche_semidesnatada","name":"Cereales integrales con leche semidesnatada","servings":1,"unit":"ración","category":"Desayuno","tags":["cereales","rápido","sin azúcar añadido"],"prepTime":"3 min","difficulty":"fácil","approxPrice":0.48,"notes":"Usar cereales integrales sin azúcar o bajos en azúcar.","instructions":["Sirve los cereales en un bol.","Añade la leche semidesnatada.","Consume al momento."],"recipe":[{"ingredientId":"ingredient_cereales_integrales","qty":40,"unit":"g"},{"ingredientId":"ingredient_leche_semidesnatada","qty":200,"unit":"ml"}]},
-    {"id":"dish_cereales_leche_sin_lactosa","name":"Cereales integrales con leche sin lactosa","servings":1,"unit":"ración","category":"Desayuno","tags":["cereales","sin lactosa","rápido"],"prepTime":"3 min","difficulty":"fácil","approxPrice":0.54,"notes":"Alternativa sin lactosa.","instructions":["Sirve los cereales en un bol.","Añade leche sin lactosa.","Consume al momento."],"recipe":[{"ingredientId":"ingredient_cereales_integrales","qty":40,"unit":"g"},{"ingredientId":"ingredient_leche_sin_lactosa","qty":200,"unit":"ml"}]},
-    {"id":"dish_cereales_leche_avena","name":"Cereales integrales con bebida de avena","servings":1,"unit":"ración","category":"Desayuno","tags":["cereales","vegetal","rápido"],"prepTime":"3 min","difficulty":"fácil","approxPrice":0.6,"notes":"Usar bebida de avena sin azúcar añadido.","instructions":["Sirve los cereales en un bol.","Añade bebida de avena.","Consume al momento."],"recipe":[{"ingredientId":"ingredient_cereales_integrales","qty":40,"unit":"g"},{"ingredientId":"ingredient_bebida_avena","qty":200,"unit":"ml"}]},
-    {"id":"dish_muesli_yogur","name":"Muesli sin azúcar con yogur natural","servings":1,"unit":"ración","category":"Desayuno","tags":["muesli","yogur","saludable"],"prepTime":"3 min","difficulty":"fácil","approxPrice":0.66,"notes":"Desayuno rápido con textura crujiente.","instructions":["Sirve el yogur natural en un bol.","Añade muesli sin azúcar.","Mezcla justo antes de comer."],"recipe":[{"ingredientId":"ingredient_muesli_sin_azucar","qty":40,"unit":"g"},{"ingredientId":"ingredient_yogur_natural","qty":125,"unit":"g"}]},
-    {"id":"dish_avena_leche_semidesnatada","name":"Copos de avena con leche semidesnatada","servings":1,"unit":"ración","category":"Desayuno","tags":["avena","saciante"],"prepTime":"6 min","difficulty":"fácil","approxPrice":0.4,"notes":"Puede tomarse templado o frío.","instructions":["Calienta la leche si prefieres la avena templada.","Añade los copos de avena y mezcla.","Deja reposar unos minutos hasta que espese al gusto."],"recipe":[{"ingredientId":"ingredient_copos_avena","qty":45,"unit":"g"},{"ingredientId":"ingredient_leche_semidesnatada","qty":220,"unit":"ml"}]},
-    {"id":"dish_yogur_platano","name":"Yogur natural con plátano","servings":1,"unit":"ración","category":"Desayuno","tags":["fruta","yogur","rápido"],"prepTime":"3 min","difficulty":"fácil","approxPrice":0.68,"notes":"Opción sencilla para desayuno o media mañana.","instructions":["Sirve el yogur en un bol.","Corta el plátano en rodajas.","Mezcla y sirve."],"recipe":[{"ingredientId":"ingredient_yogur_natural","qty":125,"unit":"g"},{"ingredientId":"ingredient_platano","qty":120,"unit":"g"}]},
-    {"id":"dish_fruta_yogur","name":"Fruta variada con yogur natural","servings":1,"unit":"ración","category":"Desayuno","tags":["fruta","yogur","saludable"],"prepTime":"5 min","difficulty":"fácil","approxPrice":0.92,"notes":"Usa fruta de temporada.","instructions":["Lava y corta la fruta.","Sirve con yogur natural.","Mezcla justo antes de comer."],"recipe":[{"ingredientId":"ingredient_fruta_variada","qty":180,"unit":"g"},{"ingredientId":"ingredient_yogur_natural","qty":125,"unit":"g"}]},
-    {"id":"dish_combo_cafe_leche_tostada_tomate","name":"Café con leche semidesnatada + tostada con aceite y tomate","servings":1,"unit":"ración","category":"Desayuno","tags":["combinación","desayuno completo","españa"],"prepTime":"8 min","difficulty":"fácil","approxPrice":0.91,"notes":"Desayuno completo clásico.","instructions":["Prepara el café con leche.","Tuesta el pan y añade tomate y aceite.","Sirve junto."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_leche_semidesnatada","qty":180,"unit":"ml"},{"ingredientId":"ingredient_pan_integral","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":80,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva_virgen_extra","qty":10,"unit":"ml"}]},
-    {"id":"dish_combo_cortado_tostada_jamon_york","name":"Cortado + tostada con tomate y jamón york","servings":1,"unit":"ración","category":"Desayuno","tags":["combinación","jamón york","españa"],"prepTime":"8 min","difficulty":"fácil","approxPrice":1.13,"notes":"Combinación habitual de desayuno salado.","instructions":["Prepara el cortado.","Monta la tostada con tomate y jamón york.","Sirve junto."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_leche_semidesnatada","qty":40,"unit":"ml"},{"ingredientId":"ingredient_pan_integral","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":80,"unit":"g"},{"ingredientId":"ingredient_jamon_york","qty":40,"unit":"g"}]},
-    {"id":"dish_combo_cafe_sin_lactosa_cereales","name":"Café con leche sin lactosa + cereales integrales","servings":1,"unit":"ración","category":"Desayuno","tags":["combinación","sin lactosa","cereales"],"prepTime":"7 min","difficulty":"fácil","approxPrice":0.94,"notes":"Desayuno completo sin lactosa.","instructions":["Prepara el café con leche sin lactosa.","Sirve los cereales con leche sin lactosa.","Sirve junto."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_leche_sin_lactosa","qty":380,"unit":"ml"},{"ingredientId":"ingredient_cereales_integrales","qty":40,"unit":"g"}]},
-    {"id":"dish_combo_cafe_avena_tostada_tomate","name":"Café con bebida de avena + tostada integral con tomate","servings":1,"unit":"ración","category":"Desayuno","tags":["combinación","bebida vegetal","tostada"],"prepTime":"8 min","difficulty":"fácil","approxPrice":0.96,"notes":"Opción con bebida vegetal.","instructions":["Prepara el café con bebida de avena.","Tuesta el pan y añade tomate y aceite.","Sirve junto."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_bebida_avena","qty":180,"unit":"ml"},{"ingredientId":"ingredient_pan_integral","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":80,"unit":"g"},{"ingredientId":"ingredient_aceite_oliva_virgen_extra","qty":8,"unit":"ml"}]},
-    {"id":"dish_combo_cafe_yogur_platano","name":"Café con leche semidesnatada + yogur natural con plátano","servings":1,"unit":"ración","category":"Desayuno","tags":["combinación","fruta","yogur"],"prepTime":"6 min","difficulty":"fácil","approxPrice":1.02,"notes":"Combinación rápida con fruta.","instructions":["Prepara el café con leche.","Sirve yogur con plátano en rodajas.","Sirve junto."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_leche_semidesnatada","qty":180,"unit":"ml"},{"ingredientId":"ingredient_yogur_natural","qty":125,"unit":"g"},{"ingredientId":"ingredient_platano","qty":120,"unit":"g"}]},
-    {"id":"dish_combo_descafeinado_avena_tostada","name":"Descafeinado con bebida de avena + tostada con tomate y jamón york","servings":1,"unit":"ración","category":"Desayuno","tags":["combinación","descafeinado","jamón york"],"prepTime":"8 min","difficulty":"fácil","approxPrice":1.3,"notes":"Desayuno completo con bebida vegetal.","instructions":["Prepara el descafeinado con bebida de avena.","Monta la tostada con tomate y jamón york.","Sirve junto."],"recipe":[{"ingredientId":"ingredient_cafe","qty":7,"unit":"g"},{"ingredientId":"ingredient_bebida_avena","qty":180,"unit":"ml"},{"ingredientId":"ingredient_pan_integral","qty":60,"unit":"g"},{"ingredientId":"ingredient_tomate","qty":80,"unit":"g"},{"ingredientId":"ingredient_jamon_york","qty":40,"unit":"g"}]}
+    {
+      "id": "dish_cafe_solo",
+      "name": "Café solo",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "bebida",
+        "café"
+      ],
+      "prepTime": "3 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.13,
+      "notes": "Café clásico sin leche.",
+      "instructions": [
+        "Prepara el café al gusto.",
+        "Sirve caliente."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_cortado_semidesnatada",
+      "name": "Café cortado con leche semidesnatada",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "bebida",
+        "café",
+        "leche"
+      ],
+      "prepTime": "4 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.17,
+      "notes": "Bebida corta de desayuno.",
+      "instructions": [
+        "Prepara el café.",
+        "Añade una pequeña cantidad de leche semidesnatada caliente o templada."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_semidesnatada",
+          "qty": 40,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_cafe_leche_semidesnatada",
+      "name": "Café con leche semidesnatada",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "bebida",
+        "café",
+        "leche"
+      ],
+      "prepTime": "4 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.34,
+      "notes": "Café con leche habitual.",
+      "instructions": [
+        "Prepara el café.",
+        "Calienta la leche y mezcla."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_semidesnatada",
+          "qty": 180,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_cafe_leche_sin_lactosa",
+      "name": "Café con leche sin lactosa",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "bebida",
+        "café",
+        "sin lactosa"
+      ],
+      "prepTime": "4 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.4,
+      "notes": "Alternativa sin lactosa.",
+      "instructions": [
+        "Prepara el café.",
+        "Añade leche sin lactosa caliente o templada."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_sin_lactosa",
+          "qty": 180,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_cafe_leche_avena",
+      "name": "Café con bebida de avena",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "bebida",
+        "café",
+        "vegetal"
+      ],
+      "prepTime": "4 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.45,
+      "notes": "Usar bebida de avena sin azúcar añadido.",
+      "instructions": [
+        "Prepara el café.",
+        "Añade bebida de avena caliente o fría al gusto."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bebida_avena",
+          "qty": 180,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_cafe_leche_almendras",
+      "name": "Café con bebida de almendras",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "bebida",
+        "café",
+        "vegetal"
+      ],
+      "prepTime": "4 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.49,
+      "notes": "Usar bebida de almendras sin azúcar añadido.",
+      "instructions": [
+        "Prepara el café.",
+        "Añade bebida de almendras caliente o fría al gusto."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bebida_almendras",
+          "qty": 180,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_tostada_integral_aceite_tomate",
+      "name": "Tostada integral con aceite de oliva y tomate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "tostada",
+        "mediterráneo",
+        "saludable"
+      ],
+      "prepTime": "7 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.57,
+      "notes": "Clásica tostada española.",
+      "instructions": [
+        "Tuesta el pan integral.",
+        "Ralla o tritura el tomate.",
+        "Añade tomate y aceite de oliva virgen extra justo antes de servir."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pan_integral",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva_virgen_extra",
+          "qty": 10,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_tostada_tomate_jamon_york",
+      "name": "Tostada integral con tomate y jamón york",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "tostada",
+        "jamón york",
+        "rápido"
+      ],
+      "prepTime": "7 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.96,
+      "notes": "Tostada sencilla con proteína ligera.",
+      "instructions": [
+        "Tuesta el pan integral.",
+        "Añade tomate rallado o triturado.",
+        "Coloca el jamón york encima y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pan_integral",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_jamon_york",
+          "qty": 40,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_tostada_aceite_tomate_jamon_york",
+      "name": "Tostada integral con aceite, tomate y jamón york",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "tostada",
+        "jamón york",
+        "mediterráneo"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "fácil",
+      "approxPrice": 1.03,
+      "notes": "Versión más completa de la tostada con tomate.",
+      "instructions": [
+        "Tuesta el pan integral.",
+        "Añade tomate rallado y aceite.",
+        "Coloca el jamón york encima."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pan_integral",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva_virgen_extra",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_jamon_york",
+          "qty": 40,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_tostada_tomate_queso_fresco",
+      "name": "Tostada integral con tomate y queso fresco",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "tostada",
+        "queso fresco",
+        "saludable"
+      ],
+      "prepTime": "7 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.9,
+      "notes": "Opción fresca y saciante.",
+      "instructions": [
+        "Tuesta el pan.",
+        "Añade tomate rallado.",
+        "Coloca queso fresco en láminas."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pan_integral",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 70,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_queso_fresco",
+          "qty": 50,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_tostada_aguacate_tomate",
+      "name": "Tostada integral con aguacate y tomate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "tostada",
+        "aguacate",
+        "saludable"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.87,
+      "notes": "Desayuno con grasas saludables.",
+      "instructions": [
+        "Tuesta el pan.",
+        "Machaca el aguacate.",
+        "Añade tomate en rodajas o rallado."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pan_integral",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aguacate",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 50,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_tostada_aceite_jamon_york",
+      "name": "Tostada integral con aceite de oliva y jamón york",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "tostada",
+        "jamón york"
+      ],
+      "prepTime": "6 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.79,
+      "notes": "Tostada rápida para diario.",
+      "instructions": [
+        "Tuesta el pan.",
+        "Añade aceite de oliva.",
+        "Coloca el jamón york encima."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_pan_integral",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva_virgen_extra",
+          "qty": 8,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_jamon_york",
+          "qty": 40,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_cereales_leche_semidesnatada",
+      "name": "Cereales integrales con leche semidesnatada",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "cereales",
+        "rápido",
+        "sin azúcar añadido"
+      ],
+      "prepTime": "3 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.48,
+      "notes": "Usar cereales integrales sin azúcar o bajos en azúcar.",
+      "instructions": [
+        "Sirve los cereales en un bol.",
+        "Añade la leche semidesnatada.",
+        "Consume al momento."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cereales_integrales",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_semidesnatada",
+          "qty": 200,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_cereales_leche_sin_lactosa",
+      "name": "Cereales integrales con leche sin lactosa",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "cereales",
+        "sin lactosa",
+        "rápido"
+      ],
+      "prepTime": "3 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.54,
+      "notes": "Alternativa sin lactosa.",
+      "instructions": [
+        "Sirve los cereales en un bol.",
+        "Añade leche sin lactosa.",
+        "Consume al momento."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cereales_integrales",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_sin_lactosa",
+          "qty": 200,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_cereales_leche_avena",
+      "name": "Cereales integrales con bebida de avena",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "cereales",
+        "vegetal",
+        "rápido"
+      ],
+      "prepTime": "3 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.6,
+      "notes": "Usar bebida de avena sin azúcar añadido.",
+      "instructions": [
+        "Sirve los cereales en un bol.",
+        "Añade bebida de avena.",
+        "Consume al momento."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cereales_integrales",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bebida_avena",
+          "qty": 200,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_muesli_yogur",
+      "name": "Muesli sin azúcar con yogur natural",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "muesli",
+        "yogur",
+        "saludable"
+      ],
+      "prepTime": "3 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.66,
+      "notes": "Desayuno rápido con textura crujiente.",
+      "instructions": [
+        "Sirve el yogur natural en un bol.",
+        "Añade muesli sin azúcar.",
+        "Mezcla justo antes de comer."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_muesli_sin_azucar",
+          "qty": 40,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 125,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_avena_leche_semidesnatada",
+      "name": "Copos de avena con leche semidesnatada",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "avena",
+        "saciante"
+      ],
+      "prepTime": "6 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.4,
+      "notes": "Puede tomarse templado o frío.",
+      "instructions": [
+        "Calienta la leche si prefieres la avena templada.",
+        "Añade los copos de avena y mezcla.",
+        "Deja reposar unos minutos hasta que espese al gusto."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_copos_avena",
+          "qty": 45,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_semidesnatada",
+          "qty": 220,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_yogur_platano",
+      "name": "Yogur natural con plátano",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "fruta",
+        "yogur",
+        "rápido"
+      ],
+      "prepTime": "3 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.68,
+      "notes": "Opción sencilla para desayuno o media mañana.",
+      "instructions": [
+        "Sirve el yogur en un bol.",
+        "Corta el plátano en rodajas.",
+        "Mezcla y sirve."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 125,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_platano",
+          "qty": 120,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_fruta_yogur",
+      "name": "Fruta variada con yogur natural",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "fruta",
+        "yogur",
+        "saludable"
+      ],
+      "prepTime": "5 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.92,
+      "notes": "Usa fruta de temporada.",
+      "instructions": [
+        "Lava y corta la fruta.",
+        "Sirve con yogur natural.",
+        "Mezcla justo antes de comer."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_fruta_variada",
+          "qty": 180,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 125,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_combo_cafe_leche_tostada_tomate",
+      "name": "Café con leche semidesnatada + tostada con aceite y tomate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "combinación",
+        "desayuno completo",
+        "españa"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.91,
+      "notes": "Desayuno completo clásico.",
+      "instructions": [
+        "Prepara el café con leche.",
+        "Tuesta el pan y añade tomate y aceite.",
+        "Sirve junto."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_semidesnatada",
+          "qty": 180,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_pan_integral",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva_virgen_extra",
+          "qty": 10,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_combo_cortado_tostada_jamon_york",
+      "name": "Cortado + tostada con tomate y jamón york",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "combinación",
+        "jamón york",
+        "españa"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "fácil",
+      "approxPrice": 1.13,
+      "notes": "Combinación habitual de desayuno salado.",
+      "instructions": [
+        "Prepara el cortado.",
+        "Monta la tostada con tomate y jamón york.",
+        "Sirve junto."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_semidesnatada",
+          "qty": 40,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_pan_integral",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_jamon_york",
+          "qty": 40,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_combo_cafe_sin_lactosa_cereales",
+      "name": "Café con leche sin lactosa + cereales integrales",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "combinación",
+        "sin lactosa",
+        "cereales"
+      ],
+      "prepTime": "7 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.94,
+      "notes": "Desayuno completo sin lactosa.",
+      "instructions": [
+        "Prepara el café con leche sin lactosa.",
+        "Sirve los cereales con leche sin lactosa.",
+        "Sirve junto."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_sin_lactosa",
+          "qty": 380,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_cereales_integrales",
+          "qty": 40,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_combo_cafe_avena_tostada_tomate",
+      "name": "Café con bebida de avena + tostada integral con tomate",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "combinación",
+        "bebida vegetal",
+        "tostada"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "fácil",
+      "approxPrice": 0.96,
+      "notes": "Opción con bebida vegetal.",
+      "instructions": [
+        "Prepara el café con bebida de avena.",
+        "Tuesta el pan y añade tomate y aceite.",
+        "Sirve junto."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bebida_avena",
+          "qty": 180,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_pan_integral",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_aceite_oliva_virgen_extra",
+          "qty": 8,
+          "unit": "ml"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_combo_cafe_yogur_platano",
+      "name": "Café con leche semidesnatada + yogur natural con plátano",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "combinación",
+        "fruta",
+        "yogur"
+      ],
+      "prepTime": "6 min",
+      "difficulty": "fácil",
+      "approxPrice": 1.02,
+      "notes": "Combinación rápida con fruta.",
+      "instructions": [
+        "Prepara el café con leche.",
+        "Sirve yogur con plátano en rodajas.",
+        "Sirve junto."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_leche_semidesnatada",
+          "qty": 180,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_yogur_natural",
+          "qty": 125,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_platano",
+          "qty": 120,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    },
+    {
+      "id": "dish_combo_descafeinado_avena_tostada",
+      "name": "Descafeinado con bebida de avena + tostada con tomate y jamón york",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Desayuno",
+      "tags": [
+        "combinación",
+        "descafeinado",
+        "jamón york"
+      ],
+      "prepTime": "8 min",
+      "difficulty": "fácil",
+      "approxPrice": 1.3,
+      "notes": "Desayuno completo con bebida vegetal.",
+      "instructions": [
+        "Prepara el descafeinado con bebida de avena.",
+        "Monta la tostada con tomate y jamón york.",
+        "Sirve junto."
+      ],
+      "recipe": [
+        {
+          "ingredientId": "ingredient_cafe",
+          "qty": 7,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_bebida_avena",
+          "qty": 180,
+          "unit": "ml"
+        },
+        {
+          "ingredientId": "ingredient_pan_integral",
+          "qty": 60,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_tomate",
+          "qty": 80,
+          "unit": "g"
+        },
+        {
+          "ingredientId": "ingredient_jamon_york",
+          "qty": 40,
+          "unit": "g"
+        }
+      ],
+      "mealTypes": [
+        "Desayuno"
+      ]
+    }
   ]
 }
