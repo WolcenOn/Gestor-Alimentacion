@@ -26,7 +26,7 @@ export function renderPacks(state) {
         <div class="section-title-row">
           <div>
             <h2>Packs instalados</h2>
-            <p class="muted">Consulta qué recetas instaló cada pack y elimina packs con advertencia si ya no los quieres.</p>
+            <p class="muted">Cada receta conserva sus comidas compatibles y solo se guardan las recetas que seleccionaste al instalar.</p>
           </div>
           <span class="badge">${state.dishPacks.length} packs</span>
         </div>
@@ -49,12 +49,12 @@ export function renderPacks(state) {
         <span class="summary-hint">Desplegar</span>
       </summary>
       <div class="collapsible-body">
-        <p class="muted">Rellena el formulario y genera un prompt que obliga a la IA a devolver JSON válido, con recetas a 1 ración y pautas de elaboración.</p>
+        <p class="muted">El prompt pide que cada receta indique sus comidas compatibles. Un mismo pack puede mezclar desayunos, comidas, meriendas y cenas.</p>
         <form data-form="pack-prompt" class="pack-prompt-form">
           <div class="form-grid">
             <label>Tipo de cocina<input name="cuisine" placeholder="Mediterránea, vegetariana, infantil..."></label>
             <label>Número de recetas<input name="count" type="number" min="1" max="30" value="6"></label>
-            <label>Uso del pack<input name="meals" placeholder="Cenas rápidas, comidas de tupper..."></label>
+            <label>Uso del pack<input name="meals" placeholder="Desayunos, comidas, cenas, mixto..."></label>
             <label>Raciones<input name="servings" value="1 ración por plato"></label>
           </div>
           <label>Restricciones, alergias o alimentos excluidos<textarea name="restrictions" placeholder="Sin frutos secos, sin lactosa, bajo en sal..."></textarea></label>
@@ -68,10 +68,16 @@ export function renderPacks(state) {
   `;
 }
 
+function mealTypeTags(dish) {
+  const values = Array.isArray(dish.mealTypes) ? dish.mealTypes.filter(Boolean) : [];
+  if (!values.length) return '<span class="ux-meal-tag ux-meal-unassigned">Sin tipo de comida</span>';
+  return values.map(value => `<span class="ux-meal-tag">${escapeHtml(value)}</span>`).join("");
+}
+
 function renderInstalledPack(state, pack) {
   const dishes = state.dishes.filter(dish => dish.packId === pack.id);
   const plannedCount = countPackPlanningReferences(state, dishes.map(dish => dish.id));
-  const searchText = [pack.name, pack.description, pack.tags?.join(" "), dishes.map(d => d.name).join(" ")].join(" ");
+  const searchText = [pack.name, pack.description, pack.tags?.join(" "), dishes.map(d => `${d.name} ${(d.mealTypes || []).join(" ")}`).join(" ")].join(" ");
   return `
     <article class="item installed-pack-item pack-installed-card" data-search="${escapeHtml(searchText)}">
       <div class="item-title pack-card-title">
@@ -84,7 +90,7 @@ function renderInstalledPack(state, pack) {
       </div>
       <details>
         <summary>Ver recetas instaladas del pack</summary>
-        ${dishes.length ? `<ul class="pack-installed-dish-list">${dishes.map(dish => `<li><strong>${escapeHtml(dish.name)}</strong><span>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</span></li>`).join("")}</ul>` : `<p class="muted">Este pack no tiene recetas instaladas o ya fueron eliminadas.</p>`}
+        ${dishes.length ? `<ul class="pack-installed-dish-list">${dishes.map(dish => `<li><strong>${escapeHtml(dish.name)}</strong><span>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</span><span class="ux-meal-tags">${mealTypeTags(dish)}</span></li>`).join("")}</ul>` : `<p class="muted">Este pack no tiene recetas instaladas o ya fueron eliminadas.</p>`}
       </details>
     </article>
   `;
@@ -153,17 +159,17 @@ export function renderPackPreview(pack, sourceIndex = "local") {
     <form data-form="pack-install" data-pack-index="${escapeHtml(String(sourceIndex))}">
       <div class="item success">
         <strong>Pack cargado correctamente</strong>
-        <p class="qty-line">Se han detectado ${dishCount} receta(s). El botón principal instala el pack completo.</p>
+        <p class="qty-line">Revisa el tipo de comida de cada receta y desmarca las que no quieras conservar. Solo se instalarán las seleccionadas.</p>
       </div>
       <label class="quick-search-label">Buscar recetas dentro del pack
-        <input type="search" class="quick-search" placeholder="Ej. gazpacho, pollo, tupper..." data-search-target=".pack-preview-list .pack-dish-preview" data-empty-target="packPreviewSearchEmpty">
+        <input type="search" class="quick-search" placeholder="Ej. desayuno, gazpacho, pollo, cena..." data-search-target=".pack-preview-list .pack-dish-preview" data-empty-target="packPreviewSearchEmpty">
       </label>
       <div id="packPreviewSearchEmpty" class="search-empty muted" hidden>No hay recetas del pack que coincidan con la búsqueda.</div>
       <div class="actions wrap">
         <button type="button" class="secondary" data-action="select-all-pack-dishes">Seleccionar todas</button>
         <button type="button" class="secondary" data-action="clear-pack-dishes">Desmarcar todas</button>
       </div>
-      <p class="muted">Puedes revisar las recetas y desmarcar alguna si no quieres importarla. Todas las cantidades están normalizadas a <strong>1 ración</strong>.</p>
+      <p class="muted">Todas las cantidades están normalizadas a <strong>1 ración</strong>. El campo de comida pertenece a cada receta, no al pack completo.</p>
       <div class="list pack-preview-list">
         ${pack.dishes.map((dish, index) => renderPackDishPreview(dish, ingredientsById, index)).join("")}
       </div>
@@ -183,12 +189,17 @@ function renderPackDishPreview(dish, ingredientsById, index) {
   }).join("");
   const ingredientNames = (dish.recipe || []).map(line => ingredientsById.get(line.ingredientId)?.name || line.ingredientId).join(" ");
   const steps = (dish.instructions || []).map((step, i) => `<li><strong>${i + 1}.</strong> ${escapeHtml(step)}</li>`).join("");
-  const searchText = [dish.name, dish.category, dish.tags?.join(" "), dish.prepTime, dish.notes, ingredientNames, (dish.instructions || []).join(" ")].join(" ");
+  const mealTypes = Array.isArray(dish.mealTypes) ? dish.mealTypes : [];
+  const searchText = [dish.name, dish.category, mealTypes.join(" "), dish.tags?.join(" "), dish.prepTime, dish.notes, ingredientNames, (dish.instructions || []).join(" ")].join(" ");
   return `
     <article class="item pack-dish-preview" data-search="${escapeHtml(searchText)}">
       <label class="check-row">
         <input type="checkbox" name="dishIds" value="${escapeHtml(dish.id)}" checked>
-        <span><strong>${index + 1}. ${escapeHtml(dish.name)}</strong><small>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</small></span>
+        <span>
+          <strong>${index + 1}. ${escapeHtml(dish.name)}</strong>
+          <small>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</small>
+          <span class="ux-meal-tags">${mealTypeTags(dish)}</span>
+        </span>
       </label>
       <details>
         <summary>Ver ingredientes y elaboración</summary>
