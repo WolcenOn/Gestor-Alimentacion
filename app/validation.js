@@ -54,6 +54,10 @@ export function validateDish(dish, ingredients = []) {
   validateNoDangerousText(dish.name, "Nombre de plato");
   validateNoDangerousText(dish.notes || "", "Notas del plato");
   (dish.instructions || []).forEach(step => validateNoDangerousText(step, "Paso de elaboración"));
+  if (dish.mealTypes !== undefined) {
+    if (!Array.isArray(dish.mealTypes)) throw new Error(`mealTypes debe ser array en ${dish.name || "el plato"}.`);
+    dish.mealTypes.forEach(value => validateNoDangerousText(value, "Tipo de comida del plato"));
+  }
   if (!dish.name?.trim()) throw new Error("Hay un plato sin nombre.");
   if (!Array.isArray(dish.recipe)) throw new Error(`La receta de ${dish.name} no es válida.`);
   const ids = new Set(ingredients.map(i => i.id));
