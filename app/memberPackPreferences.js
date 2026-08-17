@@ -20,34 +20,107 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
-function mealKey(value) {
-  const text = normalize(value);
-  if (/desay|breakfast/.test(text)) return "desayuno";
-  if (/meriend|snack/.test(text)) return "merienda";
-  if (/cen|dinner/.test(text)) return "cena";
-  if (/comida|almuerzo|lunch/.test(text)) return "comida";
-  return "";
+function mealTerms(meal) {
+  if (!meal) return [];
+  const base = [meal.id, meal.name].map(normalize).filter(Boolean);
+  const text = base.join(" ");
+  const aliases = [];
+  if (/desay|breakfast/.test(text)) aliases.push("desayuno", "breakfast");
+  if (/meriend|snack/.test(text)) aliases.push("merienda", "snack");
+  if (/cen|dinner/.test(text)) aliases.push("cena", "dinner");
+  if (/comida|almuerzo|lunch/.test(text)) aliases.push("comida", "almuerzo", "lunch");
+  return [...new Set([...base, ...aliases])].filter(term => term.length > 2);
 }
 
-function inferDishMealKeys(dish) {
-  const explicit = Array.isArray(dish.mealTypes) ? dish.mealTypes.map(mealKey).filter(Boolean) : [];
-  if (explicit.length) return [...new Set(explicit)];
+function dishMatchesMeal(dish, meal) {
+  if (!dish || !meal) return true;
+  const terms = mealTerms(meal);
+  if (!terms.length) return true;
+
+  const explicit = Array.isArray(dish.mealTypes) ? dish.mealTypes.map(normalize).filter(Boolean) : [];
+  if (explicit.length) {
+    return explicit.some(value => terms.some(term => value === term || value.includes(term) || term.includes(value)));
+  }
 
   const searchable = [dish.category, ...(dish.tags || []), dish.name].map(normalize).join(" ");
-  const keys = [];
-  if (/desay|breakfast/.test(searchable)) keys.push("desayuno");
-  if (/meriend|snack/.test(searchable)) keys.push("merienda");
-  if (/cen|dinner/.test(searchable)) keys.push("cena");
-  if (/comida|almuerzo|lunch/.test(searchable)) keys.push("comida");
-  return [...new Set(keys)];
+  return terms.some(term => searchable.includes(term));
 }
 
-function mealLabel(key) {
-  return ({ desayuno: "Desayuno", comida: "Comida", merienda: "Merienda", cena: "Cena" })[key] || key;
+function matchingMealsForDish(state, dish) {
+  return (state.mealTypes || []).filter(meal => dishMatchesMeal(dish, meal));
 }
 
-function preferredPackId(state, memberId) {
-  return state.settings?.memberPackPreferences?.[memberId] || "";
+function assignedPackIds(state, memberId, mealId) {
+  const configured = state.settings?.memberMealPackPreferences?.[memberId]?.[mealId];
+  if (Array.isArray(configured)) return configured.filter(Boolean);
+
+  // Backwards compatibility with the first single-pack version: use it for every meal
+  // until the user saves a meal-specific selection.
+  const legacy = state.settings?.memberPackPreferences?.[memberId];
+  return legacy ? [legacy] : [];
+}
+
+function packNameList(state, packIds) {
+  return packIds
+    .map(id => state.dishPacks.find(pack => pack.id === id)?.name)
+    .filter(Boolean);
+}
+
+function renderPackChecks(state, member, meal) {
+  const selected = new Set(assignedPackIds(state, member.id, meal.id));
+  if (!state.dishPacks?.length) {
+    return '<p class="small muted ux-no-packs">No hay colecciones instaladas todavía.</p>';
+  }
+
+  return `
+    <div class="ux-pack-choice-grid" role="group" aria-label="Packs para ${escapeHtml(member.name)} en ${escapeHtml(meal.name)}">
+      ${state.dishPacks.map(pack => `
+        <label class="ux-pack-choice ${selected.has(pack.id) ? "selected" : ""}">
+          <input
+            type="checkbox"
+            data-member-meal-pack
+            data-member-id="${escapeHtml(member.id)}"
+            data-meal-id="${escapeHtml(meal.id)}"
+            value="${escapeHtml(pack.id)}"
+            ${selected.has(pack.id) ? "checked" : ""}
+          >
+          <span>${escapeHtml(pack.name)}</span>
+        </label>
+      `).join("")}
+    </div>
+  `;
+}
+
+function renderMemberMealPreferences(state, member, index) {
+  const assignedCount = (state.mealTypes || []).reduce((total, meal) => total + assignedPackIds(state, member.id, meal.id).length, 0);
+  return `
+    <details class="ux-member-meal-preferences" ${index === 0 ? "open" : ""}>
+      <summary>
+        <span>
+          <strong>${escapeHtml(member.name)}</strong>
+          <small>${assignedCount ? `${assignedCount} selección(es) de packs` : "Sin packs limitados: se usarán todos"}</small>
+        </span>
+        <span class="ux-chevron" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="ux-member-meal-body">
+        ${(state.mealTypes || []).map(meal => {
+          const names = packNameList(state, assignedPackIds(state, member.id, meal.id));
+          return `
+            <section class="ux-meal-pack-row">
+              <div class="ux-meal-pack-title">
+                <div>
+                  <strong>${escapeHtml(meal.name)}</strong>
+                  <small>${names.length ? names.join(" · ") : "Todos los packs instalados"}</small>
+                </div>
+                ${names.length ? `<span class="badge">${names.length}</span>` : ""}
+              </div>
+              ${renderPackChecks(state, member, meal)}
+            </section>
+          `;
+        }).join("") || '<p class="muted">Añade primero comidas en Ajustes.</p>'}
+      </div>
+    </details>
+  `;
 }
 
 function enhanceSettings() {
@@ -64,22 +137,12 @@ function enhanceSettings() {
   section.innerHTML = `
     <div class="ux-member-pack-heading">
       <div>
-        <h4>Recetas preferidas por persona</h4>
-        <p class="muted">Asigna un pack para que el asistente priorice sus recetas al planificar para esa persona.</p>
+        <h4>Packs para autocompletar</h4>
+        <p class="muted">Elige, para cada persona y cada comida que has definido, qué colecciones de recetas puede usar el asistente. Puedes marcar varias.</p>
       </div>
     </div>
     <div class="ux-member-pack-grid">
-      ${state.familyMembers.map(member => {
-        const selected = preferredPackId(state, member.id);
-        return `
-          <label class="ux-member-pack-row">
-            <span><strong>${escapeHtml(member.name)}</strong><small>Pack para autocompletar</small></span>
-            <select data-member-pack-select data-member-id="${escapeHtml(member.id)}">
-              <option value="">Todos los packs</option>
-              ${(state.dishPacks || []).map(pack => `<option value="${escapeHtml(pack.id)}" ${selected === pack.id ? "selected" : ""}>${escapeHtml(pack.name)}</option>`).join("")}
-            </select>
-          </label>`;
-      }).join("")}
+      ${state.familyMembers.map((member, index) => renderMemberMealPreferences(state, member, index)).join("")}
     </div>
     ${state.dishPacks?.length ? "" : '<p class="small muted">Instala primero alguna colección de recetas para poder asignarla.</p>'}
   `;
@@ -101,27 +164,39 @@ function enhanceInstalledPacks() {
       const dishName = item.querySelector("strong")?.textContent?.trim();
       const dish = dishes.find(entry => entry.name === dishName);
       if (!dish) return;
-      const keys = inferDishMealKeys(dish);
-      if (!keys.length) return;
+      const meals = matchingMealsForDish(state, dish);
       const tags = document.createElement("span");
       tags.className = "ux-meal-tags";
-      tags.innerHTML = keys.map(key => `<span class="ux-meal-tag ux-meal-${key}">${mealLabel(key)}</span>`).join("");
+      tags.innerHTML = meals.length
+        ? meals.map(meal => `<span class="ux-meal-tag">${escapeHtml(meal.name)}</span>`).join("")
+        : '<span class="ux-meal-tag ux-meal-unassigned">Sin comida asignada</span>';
       item.append(tags);
     });
   });
 }
 
 function enhancePackPreview() {
+  const state = getState();
   document.querySelectorAll("#modalRoot .pack-dish-preview").forEach(card => {
     if (card.querySelector(".ux-meal-tags")) return;
-    const meta = card.querySelector(".check-row small")?.textContent || "";
-    const key = mealKey(meta);
-    if (!key) return;
+    const dishName = card.querySelector(".check-row strong")?.textContent?.replace(/^\d+\.\s*/, "").trim();
+    const dish = state.dishes.find(entry => entry.name === dishName);
+    if (!dish) return;
+    const meals = matchingMealsForDish(state, dish);
     const tags = document.createElement("span");
     tags.className = "ux-meal-tags";
-    tags.innerHTML = `<span class="ux-meal-tag ux-meal-${key}">${mealLabel(key)}</span>`;
+    tags.innerHTML = meals.length
+      ? meals.map(meal => `<span class="ux-meal-tag">${escapeHtml(meal.name)}</span>`).join("")
+      : '<span class="ux-meal-tag ux-meal-unassigned">Sin comida asignada</span>';
     card.querySelector(".check-row span")?.append(tags);
   });
+}
+
+function textFilterMatches(choice, form) {
+  const searchable = choice.dataset.plannerDishSearch || "";
+  const includeText = normalize(form.elements.includeText?.value);
+  const excludeText = normalize(form.elements.excludeText?.value);
+  return (!includeText || searchable.includes(includeText)) && (!excludeText || !searchable.includes(excludeText));
 }
 
 function enhancePlanner() {
@@ -132,24 +207,25 @@ function enhancePlanner() {
   const memberId = String(form.elements.memberId?.value || ALL_MEMBERS);
   const mealId = String(form.elements.mealId?.value || "");
   const meal = state.mealTypes.find(item => item.id === mealId);
-  const targetMealKey = mealKey(`${meal?.id || ""} ${meal?.name || ""}`);
-  const packId = memberId === ALL_MEMBERS ? "" : preferredPackId(state, memberId);
-  const pack = state.dishPacks.find(item => item.id === packId);
   const member = state.familyMembers.find(item => item.id === memberId);
+  const packIds = memberId === ALL_MEMBERS ? [] : assignedPackIds(state, memberId, mealId);
+  const packSet = new Set(packIds);
+  const packNames = packNameList(state, packIds);
 
   let visible = 0;
   form.querySelectorAll(".planner-dish-choice").forEach(choice => {
     const dishId = choice.querySelector('input[name="dishIds"]')?.value;
     const dish = state.dishes.find(item => item.id === dishId);
     if (!dish) return;
-    const keys = inferDishMealKeys(dish);
-    const mealMatches = !targetMealKey || !keys.length || keys.includes(targetMealKey);
-    const packMatches = !packId || dish.packId === packId;
-    const wasHiddenByPackFilter = choice.dataset.memberPackFiltered === "true";
-    const textFilterAllows = wasHiddenByPackFilter ? true : !choice.hidden;
-    const show = mealMatches && packMatches && textFilterAllows;
+    const mealMatches = !meal || dishMatchesMeal(dish, meal);
+    const packMatches = !packSet.size || packSet.has(dish.packId);
+    const show = mealMatches && packMatches && textFilterMatches(choice, form);
     choice.dataset.memberPackFiltered = show ? "false" : "true";
     choice.hidden = !show;
+    if (!show) {
+      const checkbox = choice.querySelector('input[type="checkbox"]');
+      if (checkbox) checkbox.checked = false;
+    }
     if (show) visible += 1;
   });
 
@@ -164,12 +240,16 @@ function enhancePlanner() {
     const searchSection = form.querySelector(".planner-dish-picker-section") || form.querySelector(".planner-section:nth-of-type(3)");
     searchSection?.prepend(note);
   }
+
   if (note) {
-    if (pack) {
-      note.innerHTML = `<strong>${escapeHtml(member?.name || "Esta persona")}</strong> · ${escapeHtml(pack.name)}${targetMealKey ? ` · ${mealLabel(targetMealKey)}` : ""}<span>Mostrando recetas del pack asignado que encajan con esta comida.</span>`;
+    if (member && meal && packNames.length) {
+      note.innerHTML = `<strong>${escapeHtml(member.name)} · ${escapeHtml(meal.name)}</strong><span>Packs permitidos: ${escapeHtml(packNames.join(" · "))}. Solo se muestran recetas compatibles con esta comida.</span>`;
       note.hidden = false;
-    } else if (targetMealKey) {
-      note.innerHTML = `<strong>${mealLabel(targetMealKey)}</strong><span>Mostrando recetas compatibles. Asigna un pack en Ajustes para personalizar por persona.</span>`;
+    } else if (member && meal) {
+      note.innerHTML = `<strong>${escapeHtml(member.name)} · ${escapeHtml(meal.name)}</strong><span>No has limitado packs para esta comida: se usan todas las colecciones con recetas compatibles.</span>`;
+      note.hidden = false;
+    } else if (meal) {
+      note.innerHTML = `<strong>${escapeHtml(meal.name)}</strong><span>Al planificar para todos se muestran recetas compatibles de todas las colecciones.</span>`;
       note.hidden = false;
     } else {
       note.hidden = true;
@@ -194,18 +274,25 @@ function schedule() {
 }
 
 document.addEventListener("change", event => {
-  const select = event.target.closest("[data-member-pack-select]");
-  if (select) {
-    const memberId = select.dataset.memberId;
-    const packId = select.value;
+  const checkbox = event.target.closest("[data-member-meal-pack]");
+  if (checkbox) {
+    const memberId = checkbox.dataset.memberId;
+    const mealId = checkbox.dataset.mealId;
+    const scope = checkbox.closest(".ux-pack-choice-grid");
+    const packIds = [...scope.querySelectorAll("[data-member-meal-pack]:checked")].map(input => input.value);
+
     updateState(draft => {
       draft.settings ||= {};
-      draft.settings.memberPackPreferences ||= {};
-      if (packId) draft.settings.memberPackPreferences[memberId] = packId;
-      else delete draft.settings.memberPackPreferences[memberId];
-    }, "member-pack-preference");
+      draft.settings.memberMealPackPreferences ||= {};
+      draft.settings.memberMealPackPreferences[memberId] ||= {};
+      if (packIds.length) draft.settings.memberMealPackPreferences[memberId][mealId] = packIds;
+      else delete draft.settings.memberMealPackPreferences[memberId][mealId];
+      if (!Object.keys(draft.settings.memberMealPackPreferences[memberId]).length) delete draft.settings.memberMealPackPreferences[memberId];
+      if (draft.settings.memberPackPreferences?.[memberId]) delete draft.settings.memberPackPreferences[memberId];
+    }, "member-meal-pack-preference");
     return;
   }
+
   if (event.target.closest('form[data-form="week-planner-assistant"]')) setTimeout(schedule, 0);
 });
 
