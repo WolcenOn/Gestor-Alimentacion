@@ -20,9 +20,7 @@ export async function listRemotePacks() {
 async function walk(url, files) {
   const response = await fetch(url, {
     cache: "no-store",
-    headers: {
-      "Accept": "application/vnd.github+json"
-    }
+    headers: { "Accept": "application/vnd.github+json" }
   });
   if (!response.ok) {
     const detail = response.status === 403
@@ -90,6 +88,15 @@ function normalizePackIngredient(ingredient) {
   };
 }
 
+function normalizeMealTypes(dish) {
+  const raw = Array.isArray(dish.mealTypes)
+    ? dish.mealTypes
+    : dish.mealType
+      ? [dish.mealType]
+      : [];
+  return [...new Set(raw.map(value => stripDangerousText(value || "").trim()).filter(Boolean))];
+}
+
 function normalizePackDish(dish) {
   const originalServings = Math.max(Number(dish.servings || dish.portions || 1), 1);
   const recipe = Array.isArray(dish.recipe) ? dish.recipe.map(line => ({
@@ -114,6 +121,7 @@ function normalizePackDish(dish) {
     servings: 1,
     unit: "ración",
     category: stripDangerousText(dish.category || ""),
+    mealTypes: normalizeMealTypes(dish),
     tags: Array.isArray(dish.tags) ? dish.tags.map(t => stripDangerousText(t)).filter(Boolean) : [],
     prepTime: stripDangerousText(dish.prepTime || ""),
     difficulty: stripDangerousText(dish.difficulty || ""),
@@ -145,7 +153,6 @@ function buildFallbackInstructions(dish, recipe) {
       "Mezcla todo en un bol y aliña al gusto antes de servir."
     ];
   }
-
   if (isCold) {
     return [
       "Prepara y pesa los ingredientes indicados para una ración.",
@@ -153,7 +160,6 @@ function buildFallbackInstructions(dish, recipe) {
       "Ajusta el aliño o condimento al gusto y sirve."
     ];
   }
-
   return [
     "Prepara y pesa los ingredientes indicados para una ración.",
     "Cocina o mezcla los ingredientes según el tipo de receta.",
@@ -189,14 +195,24 @@ export function mergePackIntoState(state, pack, options = {}) {
 
   const packId = normalizedPack.id || slugId(normalizedPack.name);
   for (const dish of selectedDishes) {
-    if (!existingDishIds.has(dish.id)) state.dishes.push({ ...dish, packId });
+    if (!existingDishIds.has(dish.id)) {
+      state.dishes.push({ ...dish, packId });
+      existingDishIds.add(dish.id);
+    }
   }
-  if (!state.dishPacks.some(p => p.id === packId)) {
+
+  const installedIds = state.dishes.filter(dish => dish.packId === packId).map(dish => dish.id);
+  const existingPack = state.dishPacks.find(p => p.id === packId);
+  if (existingPack) {
+    existingPack.installedDishIds = [...new Set(installedIds)];
+    existingPack.updatedAt = new Date().toISOString();
+  } else {
     state.dishPacks.push({
       id: packId,
       name: normalizedPack.name,
       description: normalizedPack.description || "",
       tags: normalizedPack.tags || [],
+      installedDishIds: [...new Set(installedIds)],
       schemaVersion: 2,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
@@ -206,13 +222,13 @@ export function mergePackIntoState(state, pack, options = {}) {
 
 export function buildPackPrompt(formData = {}) {
   const cuisine = stripDangerousText(formData.cuisine || "mediterránea familiar");
-  const meals = stripDangerousText(formData.meals || "cenas y comidas familiares");
+  const meals = stripDangerousText(formData.meals || "desayunos, comidas y cenas");
   const servings = stripDangerousText(formData.servings || "1 ración por plato");
   const restrictions = stripDangerousText(formData.restrictions || "sin restricciones indicadas");
   const preferences = stripDangerousText(formData.preferences || "recetas sencillas, económicas y saludables");
   const count = Math.max(1, Math.min(Number(formData.count) || 6, 30));
 
-  return `Genera un pack JSON válido para la aplicación Gestor de Menú Semanal.\n\nINSTRUCCIONES DEL USUARIO:\n- Tipo de cocina: ${cuisine}\n- Uso del pack: ${meals}\n- Número de recetas: ${count}\n- Raciones: ${servings}\n- Restricciones/alergias: ${restrictions}\n- Preferencias: ${preferences}\n\nREGLAS OBLIGATORIAS:\n1. Devuelve SOLO JSON válido, sin Markdown ni explicaciones.\n2. El objeto raíz debe tener: schemaVersion, type, id, name, description, tags, language, ingredients, dishes.\n3. Usa schemaVersion: 2 y type: "meal-pack".\n4. Todas las recetas deben estar normalizadas a 1 ración: en cada dish usa servings: 1 y recipe con cantidades para una persona/ración.\n5. Cada dish debe incluir instructions como array ordenado de pasos claros de elaboración.\n6. Cada ingredient usado en una receta debe existir en ingredients y tener id estable.\n7. Unidades permitidas: g, kg, ml, l, unidades.\n8. No incluyas HTML, scripts, comentarios, javascript:, claves privadas ni texto inseguro.\n9. Usa nombres de id simples: ingredient_lentejas, dish_lentejas_verduras, etc.\n10. No inventes códigos de barras. products debe ser [] salvo que el usuario los aporte.\n\nEJEMPLO DE ESTRUCTURA:\n{\n  "schemaVersion": 2,\n  "type": "meal-pack",\n  "id": "pack_ejemplo",\n  "name": "Pack ejemplo",\n  "description": "Descripción breve",\n  "tags": ["familia", "saludable"],\n  "language": "es",\n  "ingredients": [\n    {"id":"ingredient_arroz","name":"Arroz","familyId":"family_pantry","qty":0,"unit":"g","available":false,"storageType":"pantry","expiryDate":"","dateType":"none","approxPrice":0,"packagingType":"otro","products":[]}\n  ],\n  "dishes": [\n    {"id":"dish_arroz_sencillo","name":"Arroz sencillo","servings":1,"unit":"ración","category":"Comida","tags":["básico"],"prepTime":"25 min","difficulty":"fácil","notes":"","instructions":["Lava el arroz.","Cuece con agua hasta que esté tierno."],"recipe":[{"ingredientId":"ingredient_arroz","qty":80,"unit":"g"}]}\n  ]\n}\n\nGenera ahora el pack completo solicitado.`;
+  return `Genera un pack JSON válido para la aplicación Gestor de Menú Semanal.\n\nINSTRUCCIONES DEL USUARIO:\n- Tipo de cocina: ${cuisine}\n- Uso del pack: ${meals}\n- Número de recetas: ${count}\n- Raciones: ${servings}\n- Restricciones/alergias: ${restrictions}\n- Preferencias: ${preferences}\n\nREGLAS OBLIGATORIAS:\n1. Devuelve SOLO JSON válido, sin Markdown ni explicaciones.\n2. El objeto raíz debe tener: schemaVersion, type, id, name, description, tags, language, ingredients, dishes.\n3. Usa schemaVersion: 2 y type: "meal-pack".\n4. Todas las recetas deben estar normalizadas a 1 ración: en cada dish usa servings: 1 y recipe con cantidades para una persona/ración.\n5. Cada dish debe incluir mealTypes como array con una o varias comidas compatibles, por ejemplo ["Desayuno"], ["Comida","Cena"] o ["Merienda"]. El pack puede mezclar libremente recetas de distintos tipos.\n6. Cada dish debe incluir instructions como array ordenado de pasos claros de elaboración.\n7. Cada ingredient usado en una receta debe existir en ingredients y tener id estable.\n8. Unidades permitidas: g, kg, ml, l, unidades.\n9. No incluyas HTML, scripts, comentarios, javascript:, claves privadas ni texto inseguro.\n10. Usa nombres de id simples y no inventes códigos de barras.\n\nEJEMPLO DE RECETAS MIXTAS:\n{\n  "schemaVersion": 2,\n  "type": "meal-pack",\n  "id": "pack_ejemplo",\n  "name": "Pack ejemplo",\n  "description": "Desayunos, comidas y cenas",\n  "tags": ["familia", "saludable"],\n  "language": "es",\n  "ingredients": [],\n  "dishes": [\n    {"id":"dish_tostada","name":"Tostada con tomate","servings":1,"mealTypes":["Desayuno"],"category":"Tostadas","tags":[],"instructions":["Preparar y servir."],"recipe":[]},\n    {"id":"dish_arroz","name":"Arroz con verduras","servings":1,"mealTypes":["Comida","Cena"],"category":"Arroces","tags":[],"instructions":["Cocinar y servir."],"recipe":[]}\n  ]\n}\n\nGenera ahora el pack completo solicitado.`;
 }
 
 function slugId(text) {
