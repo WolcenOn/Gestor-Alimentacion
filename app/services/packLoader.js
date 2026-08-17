@@ -4,7 +4,7 @@ import { normalizeUnit, stripDangerousText } from "../utils.js";
 export const PACK_SOURCE = Object.freeze({
   owner: "WolcenOn",
   repo: "Gestor-Alimentacion",
-  branch: "ux-semana-accesible-fusion",
+  branch: "agent/ux-simplification",
   basePath: "packs"
 });
 
@@ -14,7 +14,7 @@ export async function listRemotePacks() {
   const root = `${GITHUB_API}/repos/${PACK_SOURCE.owner}/${PACK_SOURCE.repo}/contents/${PACK_SOURCE.basePath}?ref=${PACK_SOURCE.branch}`;
   const files = [];
   await walk(root, files);
-  return files.filter(f => String(f.path || "").endsWith(".json") && !String(f.path || "").includes(".."));
+  return files.filter(f => String(f.path || "").endsWith(".json") && !String(f.path || "").includes("..") && !String(f.path || "").endsWith("manifest.json"));
 }
 
 async function walk(url, files) {
@@ -49,16 +49,21 @@ export async function loadRemotePack(file) {
 
 export function normalizePack(inputPack) {
   if (!inputPack || typeof inputPack !== "object") throw new Error("Pack inválido.");
+  const packContext = {
+    name: stripDangerousText(inputPack.name || ""),
+    description: stripDangerousText(inputPack.description || ""),
+    tags: Array.isArray(inputPack.tags) ? inputPack.tags.map(t => stripDangerousText(t)).filter(Boolean) : []
+  };
   const pack = {
     schemaVersion: 2,
     type: "meal-pack",
     id: inputPack.id || slugId(inputPack.name || "pack"),
-    name: stripDangerousText(inputPack.name || "Pack sin nombre"),
-    description: stripDangerousText(inputPack.description || ""),
-    tags: Array.isArray(inputPack.tags) ? inputPack.tags.map(t => stripDangerousText(t)).filter(Boolean) : [],
+    name: packContext.name || "Pack sin nombre",
+    description: packContext.description,
+    tags: packContext.tags,
     language: stripDangerousText(inputPack.language || "es"),
     ingredients: Array.isArray(inputPack.ingredients) ? inputPack.ingredients.map(normalizePackIngredient) : [],
-    dishes: Array.isArray(inputPack.dishes) ? inputPack.dishes.map(normalizePackDish) : []
+    dishes: Array.isArray(inputPack.dishes) ? inputPack.dishes.map(dish => normalizePackDish(dish, packContext)) : []
   };
   const ingredientIds = new Set(pack.ingredients.map(i => i.id));
   pack.dishes = pack.dishes.map(dish => ({
@@ -88,16 +93,61 @@ function normalizePackIngredient(ingredient) {
   };
 }
 
-function normalizeMealTypes(dish) {
+function cleanMealType(value) {
+  const text = stripDangerousText(value || "").trim();
+  if (!text) return "";
+  const normalized = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  if (/desay|breakfast/.test(normalized)) return "Desayuno";
+  if (/meriend|snack|tentempie|media manana|media tarde|postre/.test(normalized)) return "Merienda";
+  if (/cen|dinner/.test(normalized)) return "Cena";
+  if (/comida|almuerzo|lunch|tupper/.test(normalized)) return "Comida";
+  return text;
+}
+
+function inferLegacyMealTypes(dish, packContext = {}) {
+  const category = String(dish.category || "");
+  const name = String(dish.name || "");
+  const tags = Array.isArray(dish.tags) ? dish.tags.join(" ") : "";
+  const packText = [packContext.name, packContext.description, ...(packContext.tags || [])].join(" ");
+  const dishText = [category, name, tags].join(" ")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const contextText = packText.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const meals = [];
+
+  if (/desay|breakfast/.test(dishText)) meals.push("Desayuno");
+  if (/meriend|snack|tentempie|media manana|media tarde/.test(dishText)) meals.push("Merienda");
+  if (/\bcena\b|cenas|dinner/.test(dishText)) meals.push("Cena");
+  if (/\bcomida\b|comidas|almuerzo|lunch|tupper/.test(dishText)) meals.push("Comida");
+
+  if (meals.length) return [...new Set(meals)];
+
+  if (/postre|dulce|helado|mousse|flan|pudin|pudding|yogur|fruta/.test(dishText) || /postre/.test(contextText)) {
+    return ["Merienda"];
+  }
+  if (/ensalada/.test(dishText) || /ensalada/.test(contextText)) {
+    return ["Comida", "Cena"];
+  }
+  if (/desay/.test(contextText)) return ["Desayuno"];
+  if (/cena/.test(contextText)) return ["Cena"];
+  if (/tupper/.test(contextText)) return ["Comida"];
+  if (/comidas y cenas|comida y cena|mediterrane|andaluc|vegano|temporada|verano|invierno|otono|primavera/.test(contextText)) {
+    return ["Comida", "Cena"];
+  }
+
+  return [];
+}
+
+function normalizeMealTypes(dish, packContext) {
   const raw = Array.isArray(dish.mealTypes)
     ? dish.mealTypes
     : dish.mealType
       ? [dish.mealType]
       : [];
-  return [...new Set(raw.map(value => stripDangerousText(value || "").trim()).filter(Boolean))];
+  const explicit = [...new Set(raw.map(cleanMealType).filter(Boolean))];
+  return explicit.length ? explicit : inferLegacyMealTypes(dish, packContext);
 }
 
-function normalizePackDish(dish) {
+function normalizePackDish(dish, packContext) {
   const originalServings = Math.max(Number(dish.servings || dish.portions || 1), 1);
   const recipe = Array.isArray(dish.recipe) ? dish.recipe.map(line => ({
     ingredientId: line.ingredientId,
@@ -121,7 +171,7 @@ function normalizePackDish(dish) {
     servings: 1,
     unit: "ración",
     category: stripDangerousText(dish.category || ""),
-    mealTypes: normalizeMealTypes(dish),
+    mealTypes: normalizeMealTypes(dish, packContext),
     tags: Array.isArray(dish.tags) ? dish.tags.map(t => stripDangerousText(t)).filter(Boolean) : [],
     prepTime: stripDangerousText(dish.prepTime || ""),
     difficulty: stripDangerousText(dish.difficulty || ""),
@@ -173,7 +223,8 @@ export function summarizePack(pack) {
     ...normalized,
     totalIngredients: normalized.ingredients.length,
     totalDishes: normalized.dishes.length,
-    dishesWithInstructions: normalized.dishes.filter(d => d.instructions?.length).length
+    dishesWithInstructions: normalized.dishes.filter(d => d.instructions?.length).length,
+    dishesWithMealTypes: normalized.dishes.filter(d => d.mealTypes?.length).length
   };
 }
 
