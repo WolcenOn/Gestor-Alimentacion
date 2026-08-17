@@ -145,7 +145,8 @@ function enhancePlanner() {
     const keys = inferDishMealKeys(dish);
     const mealMatches = !targetMealKey || !keys.length || keys.includes(targetMealKey);
     const packMatches = !packId || dish.packId === packId;
-    const textFilterAllows = choice.dataset.memberPackHidden !== "text" && !choice.hidden;
+    const wasHiddenByPackFilter = choice.dataset.memberPackFiltered === "true";
+    const textFilterAllows = wasHiddenByPackFilter ? true : !choice.hidden;
     const show = mealMatches && packMatches && textFilterAllows;
     choice.dataset.memberPackFiltered = show ? "false" : "true";
     choice.hidden = !show;
