@@ -1,0 +1,97 @@
+/* Member-specific pack preferences and meal-type labels. */
+.ux-member-pack-preferences {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ux-border, #e5e7eb);
+}
+
+.ux-member-pack-heading h4 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.ux-member-pack-heading .muted {
+  margin: 0;
+}
+
+.ux-member-pack-grid {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.ux-member-pack-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(190px, .9fr);
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--ux-border, #e5e7eb);
+  border-radius: 13px;
+  background: #fff;
+}
+
+.ux-member-pack-row > span {
+  display: grid;
+  gap: 2px;
+}
+
+.ux-member-pack-row small {
+  color: var(--ux-muted, #667085);
+  font-size: .78rem;
+}
+
+.ux-member-pack-row select {
+  width: 100%;
+}
+
+.ux-meal-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.ux-meal-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 8px;
+  border-radius: 7px;
+  font-size: .72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ux-meal-desayuno { background: #fff7db; color: #9a6700; }
+.ux-meal-comida { background: #e6fffb; color: #0b5f59; }
+.ux-meal-merienda { background: #fef3f2; color: #b42318; }
+.ux-meal-cena { background: #eef2ff; color: #4338ca; }
+
+.pack-installed-dish-list li {
+  align-items: flex-start;
+}
+
+.ux-planner-pack-note {
+  display: grid;
+  gap: 3px;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1px solid rgba(15, 118, 110, .18);
+  border-radius: 12px;
+  background: #f0fdfa;
+  color: #0b5f59;
+}
+
+.ux-planner-pack-note span {
+  color: #475467;
+  font-size: .82rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 700px) {
+  .ux-member-pack-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
