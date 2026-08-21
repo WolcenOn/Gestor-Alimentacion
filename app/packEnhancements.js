@@ -3,6 +3,8 @@ import { readFileAsText, safeJsonParse } from "./utils.js";
 import { showAlert, openModal, closeModal, formToObject, getSubmitterValue } from "./render/ui.js";
 import { renderPackPreview, renderPackDeleteConfirmation } from "./render/packs.js";
 import { listRemotePacks, loadRemotePack, mergePackIntoState, normalizePack, buildPackPrompt } from "./services/packLoader.js";
+import { collectCanonicalPackRequirements } from "./services/packPricing.js";
+import { getPricesPostalCode, isPricesApiConfigured, quoteCanonicalIngredient } from "./services/pricesApi.js";
 import { validatePack } from "./validation.js";
 
 let remotePackFiles = [];
@@ -146,6 +148,7 @@ async function previewRemotePack(index) {
   const pack = await loadRemotePack(file);
   pendingPackPreview = pack;
   openModal(renderPackPreview(pack, index));
+  void hydratePackPriceQuotes(pack);
   showAlert(`Pack cargado: ${pack.dishes.length} receta(s) disponibles.`);
 }
 
@@ -157,7 +160,90 @@ async function importLocalPackPreview(file) {
   remotePackFiles = [];
   pendingPackPreview = pack;
   openModal(renderPackPreview(pack, "local"));
+  void hydratePackPriceQuotes(pack);
   showAlert(`Pack local cargado: ${pack.dishes.length} receta(s) disponibles.`);
+}
+
+async function hydratePackPriceQuotes(pack) {
+  const form = document.querySelector(packInstallSelector());
+  if (!form) return;
+  const requirements = collectCanonicalPackRequirements(pack);
+  if (!requirements.length) return;
+
+  const card = document.createElement("section");
+  card.className = "item pack-price-preview";
+  const title = document.createElement("strong");
+  title.textContent = "Precio de compra automático";
+  const description = document.createElement("p");
+  description.className = "qty-line";
+  description.textContent = `Cotización del pack completo · CP ${getPricesPostalCode()}. No modifica tus precios guardados.`;
+  const list = document.createElement("div");
+  list.className = "list";
+  card.append(title, description, list);
+
+  const successCard = form.querySelector(".item.success");
+  if (successCard) successCard.insertAdjacentElement("afterend", card);
+  else form.prepend(card);
+
+  const rows = requirements.map(requirement => {
+    const row = document.createElement("div");
+    row.className = "item pack-price-row";
+    const label = document.createElement("strong");
+    label.textContent = `${requirement.canonicalIngredientName}: ${formatQuantity(requirement.amount)} ${requirement.unit}`;
+    const result = document.createElement("p");
+    result.className = "qty-line";
+    result.textContent = isPricesApiConfigured() ? "Consultando precio..." : "Prices API no configurada.";
+    row.append(label, result);
+    list.append(row);
+    return { requirement, result };
+  });
+
+  if (!isPricesApiConfigured()) {
+    const note = document.createElement("p");
+    note.className = "small muted";
+    note.textContent = "Configura PRICES_API_BASE_URL para activar la cotización automática.";
+    card.append(note);
+    return;
+  }
+
+  await Promise.all(rows.map(async ({ requirement, result }) => {
+    try {
+      const payload = await quoteCanonicalIngredient({
+        ingredientId: requirement.canonicalIngredientId,
+        amount: requirement.amount,
+        unit: requirement.unit
+      });
+      const quote = Array.isArray(payload?.items) ? payload.items[0] : null;
+      if (!quote) {
+        result.textContent = "Sin producto compatible con precio disponible.";
+        return;
+      }
+      result.textContent = formatPurchaseQuote(quote);
+    } catch (error) {
+      console.warn("No se pudo cotizar ingrediente canónico", requirement.canonicalIngredientId, error);
+      result.textContent = `No se pudo cargar el precio: ${error.message || "error de conexión"}`;
+    }
+  }));
+}
+
+function formatPurchaseQuote(quote) {
+  const product = quote?.product || {};
+  const supermarket = String(product.supermarketId || "supermercado").toUpperCase();
+  const productName = String(product.name || "Producto");
+  const totalCost = Number(quote?.totalCost);
+  const costLabel = Number.isFinite(totalCost)
+    ? totalCost.toLocaleString("es-ES", { style: "currency", currency: "EUR" })
+    : "precio no disponible";
+  const packageCount = Number(quote?.packageCount || 0);
+  const purchaseLabel = packageCount > 0
+    ? `${packageCount} paquete(s)`
+    : `${formatQuantity(quote?.purchasedAmount)} ${String(quote?.purchasedUnit || "")}`.trim();
+  return `${supermarket} · ${productName} · ${purchaseLabel} · ${costLabel}`;
+}
+
+function formatQuantity(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number.toLocaleString("es-ES", { maximumFractionDigits: 3 }) : String(value || "");
 }
 
 function installPreviewedPack(form, event) {
@@ -243,4 +329,4 @@ function escapeText(value) {
     .replace(/'/g, "&#039;");
 }
 
-window.__gestorPackDebug = { getState, listPacksIntoUi };
+window.__gestorPackDebug = { getState, listPacksIntoUi, hydratePackPriceQuotes };
