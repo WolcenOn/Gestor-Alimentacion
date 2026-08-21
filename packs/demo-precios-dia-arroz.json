@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "type": "meal-pack",
+  "id": "pack_demo_precios_dia_arroz",
+  "name": "Demo precios DIA · arroz redondo",
+  "description": "Pack mínimo para validar el flujo canonicalIngredientId → quote de supermercado.",
+  "tags": ["demo", "precios", "dia", "arroz"],
+  "language": "es",
+  "ingredients": [
+    {
+      "id": "ingredient_arroz_redondo_demo",
+      "name": "Arroz redondo",
+      "familyId": "family_pantry",
+      "qty": 0,
+      "unit": "g",
+      "available": false,
+      "storageType": "pantry",
+      "expiryDate": "",
+      "dateType": "none",
+      "approxPrice": 0,
+      "packagingType": "otro",
+      "products": [],
+      "canonicalIngredientId": "arroz_redondo",
+      "canonicalIngredientName": "Arroz redondo",
+      "canonicalMatchStatus": "confirmed"
+    }
+  ],
+  "dishes": [
+    {
+      "id": "dish_demo_arroz_200",
+      "name": "Arroz demo 200 g",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Demo",
+      "tags": ["demo"],
+      "prepTime": "20 min",
+      "difficulty": "fácil",
+      "notes": "",
+      "instructions": ["Cuece el arroz según las indicaciones del envase."],
+      "recipe": [
+        { "ingredientId": "ingredient_arroz_redondo_demo", "qty": 200, "unit": "g" }
+      ]
+    },
+    {
+      "id": "dish_demo_arroz_180",
+      "name": "Arroz demo 180 g",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Demo",
+      "tags": ["demo"],
+      "prepTime": "20 min",
+      "difficulty": "fácil",
+      "notes": "",
+      "instructions": ["Cuece el arroz según las indicaciones del envase."],
+      "recipe": [
+        { "ingredientId": "ingredient_arroz_redondo_demo", "qty": 180, "unit": "g" }
+      ]
+    },
+    {
+      "id": "dish_demo_arroz_220",
+      "name": "Arroz demo 220 g",
+      "servings": 1,
+      "unit": "ración",
+      "category": "Demo",
+      "tags": ["demo"],
+      "prepTime": "20 min",
+      "difficulty": "fácil",
+      "notes": "",
+      "instructions": ["Cuece el arroz según las indicaciones del envase."],
+      "recipe": [
+        { "ingredientId": "ingredient_arroz_redondo_demo", "qty": 220, "unit": "g" }
+      ]
+    }
+  ]
+}
