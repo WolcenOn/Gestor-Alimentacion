@@ -1,5 +1,6 @@
 import { assertSafePackPath, validatePack } from "../validation.js";
 import { normalizeUnit, stripDangerousText } from "../utils.js";
+import { findIngredientByCanonicalId, normalizeCanonicalMatchStatus } from "../state/canonicalIngredients.js";
 
 export const PACK_SOURCE = Object.freeze({
   owner: "WolcenOn",
@@ -71,6 +72,7 @@ export function normalizePack(inputPack) {
 }
 
 function normalizePackIngredient(ingredient) {
+  const canonicalIngredientId = String(ingredient.canonicalIngredientId || "").trim();
   return {
     id: ingredient.id || slugId(ingredient.name || "ingredient"),
     name: stripDangerousText(ingredient.name || "Ingrediente"),
@@ -84,6 +86,9 @@ function normalizePackIngredient(ingredient) {
     approxPrice: Number(ingredient.approxPrice) || 0,
     packagingType: ingredient.packagingType || "otro",
     products: Array.isArray(ingredient.products) ? ingredient.products : [],
+    canonicalIngredientId,
+    canonicalIngredientName: canonicalIngredientId ? stripDangerousText(ingredient.canonicalIngredientName || "") : "",
+    canonicalMatchStatus: canonicalIngredientId ? normalizeCanonicalMatchStatus(ingredient.canonicalMatchStatus) : "unlinked",
     createdAt: ingredient.createdAt || new Date().toISOString(),
     updatedAt: ingredient.updatedAt || new Date().toISOString(),
     schemaVersion: 1
@@ -179,17 +184,41 @@ export function mergePackIntoState(state, pack, options = {}) {
   const requiredIngredientIds = new Set(selectedDishes.flatMap(d => d.recipe.map(line => line.ingredientId)));
   const existingIngredientIds = new Set(state.ingredients.map(i => i.id));
   const existingDishIds = new Set(state.dishes.map(d => d.id));
+  const ingredientIdMap = new Map();
 
   for (const ingredient of normalizedPack.ingredients) {
-    if (requiredIngredientIds.has(ingredient.id) && !existingIngredientIds.has(ingredient.id)) {
-      state.ingredients.push(ingredient);
-      existingIngredientIds.add(ingredient.id);
+    if (!requiredIngredientIds.has(ingredient.id)) continue;
+
+    const canonicalMatch = ingredient.canonicalIngredientId
+      ? findIngredientByCanonicalId(state, ingredient.canonicalIngredientId)
+      : null;
+
+    if (canonicalMatch) {
+      ingredientIdMap.set(ingredient.id, canonicalMatch.id);
+      continue;
     }
+
+    if (existingIngredientIds.has(ingredient.id)) {
+      ingredientIdMap.set(ingredient.id, ingredient.id);
+      continue;
+    }
+
+    state.ingredients.push(ingredient);
+    existingIngredientIds.add(ingredient.id);
+    ingredientIdMap.set(ingredient.id, ingredient.id);
   }
 
   const packId = normalizedPack.id || slugId(normalizedPack.name);
   for (const dish of selectedDishes) {
-    if (!existingDishIds.has(dish.id)) state.dishes.push({ ...dish, packId });
+    if (existingDishIds.has(dish.id)) continue;
+    state.dishes.push({
+      ...dish,
+      packId,
+      recipe: dish.recipe.map(line => ({
+        ...line,
+        ingredientId: ingredientIdMap.get(line.ingredientId) || line.ingredientId
+      }))
+    });
   }
   if (!state.dishPacks.some(p => p.id === packId)) {
     state.dishPacks.push({
