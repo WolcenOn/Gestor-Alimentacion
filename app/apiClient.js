@@ -158,10 +158,10 @@ export async function fetchHouseholdSync(householdId) {
   return request(`/households/${encodeURIComponent(householdId)}/sync`);
 }
 
-export async function saveHouseholdSync(householdId, { version = 1, state }) {
+export async function saveHouseholdSync(householdId, { version = 1, state, expectedUpdatedAt = null }) {
   return request(`/households/${encodeURIComponent(householdId)}/sync`, {
     method: "PUT",
-    body: { version, state }
+    body: { version, state, expectedUpdatedAt }
   });
 }
 

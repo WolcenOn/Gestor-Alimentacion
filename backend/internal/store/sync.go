@@ -8,6 +8,9 @@ import (
 	"time"
 )
 
+// ErrConflict indicates that a conditional write is based on stale data.
+var ErrConflict = errors.New("conflict")
+
 // SyncSnapshot is the whole frontend state saved for one household.
 type SyncSnapshot struct {
 	HouseholdID string          `json:"householdId"`
@@ -46,7 +49,10 @@ func (s *Store) GetSyncSnapshot(ctx context.Context, userID, householdID string)
 }
 
 // SaveSyncSnapshot stores the whole frontend state for a household.
-func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string, version int, state json.RawMessage) (SyncSnapshot, error) {
+// When expectedUpdatedAt is provided, the write is conditional and fails with
+// ErrConflict if another client has changed the snapshot since it was read.
+// Omitting the precondition preserves the legacy last-write-wins behaviour.
+func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string, version int, state json.RawMessage, expectedUpdatedAt ...*time.Time) (SyncSnapshot, error) {
 	var snapshot SyncSnapshot
 	if !s.Available() {
 		return snapshot, ErrDatabaseRequired
@@ -62,6 +68,31 @@ func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string
 	}
 	if !json.Valid(state) {
 		return snapshot, ErrNotFound
+	}
+
+	var expected *time.Time
+	if len(expectedUpdatedAt) > 0 {
+		expected = expectedUpdatedAt[0]
+	}
+
+	if expected != nil {
+		row := s.db.QueryRowContext(ctx, `
+			UPDATE household_sync_snapshots
+			SET state = $1,
+				version = $2,
+				updated_by = $3,
+				updated_at = now()
+			WHERE household_id = $4
+			  AND updated_at = $5
+			RETURNING household_id, version, state, updated_at
+		`, state, version, userID, householdID, expected.UTC())
+		if err := row.Scan(&snapshot.HouseholdID, &snapshot.Version, &snapshot.State, &snapshot.UpdatedAt); err != nil {
+			if errors.Is(err, sql.ErrNoRows) {
+				return snapshot, ErrConflict
+			}
+			return snapshot, err
+		}
+		return snapshot, nil
 	}
 
 	row := s.db.QueryRowContext(ctx, `
