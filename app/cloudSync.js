@@ -228,7 +228,8 @@ export async function pushCloudState({ state = getState() } = {}) {
   try {
     const snapshot = await saveHouseholdSync(householdId, {
       version: CLOUD_SCHEMA_VERSION,
-      state: cloudStateEnvelope(state)
+      state: cloudStateEnvelope(state),
+      expectedUpdatedAt: status.updatedAt || null
     });
     clearPendingLocalChanges({
       mode: "synced",
