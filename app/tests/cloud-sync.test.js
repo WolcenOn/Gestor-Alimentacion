@@ -42,7 +42,16 @@ const session = {
   households: [{ id: "household_test", name: "Casa test", role: "owner" }]
 };
 
+const knownRemoteUpdatedAt = "2026-06-19T15:00:00.000Z";
 localStorage.setItem("gestorMenuSemanal.cloudSession.v1", JSON.stringify(session));
+localStorage.setItem("gestorMenuSemanal.cloudSyncStatus.v1", JSON.stringify({
+  mode: "synced",
+  householdId: "household_test",
+  householdName: "Casa test",
+  role: "owner",
+  updatedAt: knownRemoteUpdatedAt,
+  pendingLocalChanges: false
+}));
 
 const { updateState } = await import("../store.js");
 const { ApiError } = await import("../apiClient.js");
@@ -74,6 +83,8 @@ globalThis.fetch = async (url, options = {}) => {
   fetchCalls += 1;
   assert.match(String(url), /\/households\/household_test\/sync$/);
   assert.equal(options.method, "PUT");
+  const body = JSON.parse(options.body);
+  assert.equal(body.expectedUpdatedAt, knownRemoteUpdatedAt);
   return new Response(JSON.stringify({ sync: { updatedAt: "2026-06-19T16:00:00.000Z" } }), {
     status: 200,
     headers: { "Content-Type": "application/json" }
@@ -92,5 +103,37 @@ assert.equal(status.updatedAt, "2026-06-19T16:00:00.000Z");
 const noPending = await resolvePendingCloudChanges();
 assert.equal(noPending.skipped, true);
 assert.equal(fetchCalls, 1);
+
+updateState(state => {
+  state.settings.cloudSyncConflictTest = true;
+}, "unit-test-conflicting-change");
+
+globalThis.fetch = async (url, options = {}) => {
+  fetchCalls += 1;
+  assert.match(String(url), /\/households\/household_test\/sync$/);
+  assert.equal(options.method, "PUT");
+  const body = JSON.parse(options.body);
+  assert.equal(body.expectedUpdatedAt, "2026-06-19T16:00:00.000Z");
+  return new Response(JSON.stringify({
+    error: {
+      code: "sync_conflict",
+      message: "La nube cambió desde tu última sincronización."
+    }
+  }), {
+    status: 409,
+    headers: { "Content-Type": "application/json" }
+  });
+};
+
+await assert.rejects(
+  () => resolvePendingCloudChanges(),
+  error => error instanceof ApiError && error.status === 409 && error.code === "sync_conflict"
+);
+status = getCloudSyncStatus();
+assert.equal(status.pendingLocalChanges, true);
+assert.equal(status.mode, "pending");
+assert.equal(status.retryCount, 1);
+assert.match(status.lastError, /nube cambió/i);
+assert.equal(fetchCalls, 2);
 
 console.log("cloud-sync.test.js OK");
