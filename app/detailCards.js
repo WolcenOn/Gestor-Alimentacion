@@ -1,7 +1,8 @@
 import { getState } from "./store.js";
-import { escapeHtml } from "./utils.js";
+import { escapeHtml, formatMoney } from "./utils.js";
 import { openModal } from "./render/ui.js";
 import { computeDishNutrition, computeIngredientNutrition, formatNutritionValue, missingIngredientNames, NUTRIENTS } from "./state/nutritionCalculator.js";
+import { getCanonicalIngredientProducts, isPricesApiConfigured, pickBestIngredientProduct } from "./services/pricesApi.js";
 
 function formatNumber(value, digits = 2) {
   const n = Number(value || 0);
@@ -119,6 +120,85 @@ function renderIngredientProducts(ingredient) {
   `;
 }
 
+function supermarketPriceRootId(ingredientId) {
+  return `ingredient-supermarket-price-${String(ingredientId || "").replace(/[^a-zA-Z0-9_-]/g, "-")}`;
+}
+
+function renderSupermarketPriceSection(ingredient) {
+  if (!ingredient.canonicalIngredientId) return "";
+  return `
+    <section class="detail-section">
+      <div class="section-title-row">
+        <div>
+          <h3>Precio supermercado</h3>
+          <p class="small muted">Dato externo actual. No sustituye el precio base/manual del ingrediente.</p>
+        </div>
+        <button type="button" class="secondary" data-action="refresh-ingredient-supermarket-price" data-ingredient-id="${escapeHtml(ingredient.id)}">Actualizar</button>
+      </div>
+      <div id="${escapeHtml(supermarketPriceRootId(ingredient.id))}">
+        <p class="muted">Consultando precio actual...</p>
+      </div>
+    </section>`;
+}
+
+function formatObservedAt(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) return "";
+  return new Intl.DateTimeFormat("es-ES", { dateStyle: "medium", timeStyle: "short" }).format(date);
+}
+
+function renderExternalProductPrice(ingredient, item) {
+  const product = item?.product;
+  if (!product) return `<p class="muted">No hay un producto disponible con precio actual.</p>`;
+  const packageText = Number(product.packageAmount) > 0
+    ? `${formatNumber(product.packageAmount, 3)} ${escapeHtml(product.packageUnit || "")}`
+    : "formato no indicado";
+  const unitPrice = Number(product.pricePerUnit) > 0
+    ? `${formatMoney(product.pricePerUnit)} / ${escapeHtml(product.priceUnit || product.packageUnit || "unidad")}`
+    : "";
+  const observed = formatObservedAt(product.observedAt);
+  const supermarket = String(product.supermarketId || "supermercado").toUpperCase();
+
+  return `
+    <div class="item price-source-card">
+      <div class="item-title">
+        <div>
+          <strong>${escapeHtml(supermarket)} · ${escapeHtml(product.name || ingredient.name)}</strong>
+          <p class="qty-line">${formatMoney(product.price)} por ${packageText}${unitPrice ? ` · ${unitPrice}` : ""}</p>
+        </div>
+        <span class="badge success">${formatMoney(product.price)}</span>
+      </div>
+      <div class="mini-facts">
+        <span>Canónico: ${escapeHtml(ingredient.canonicalIngredientName || ingredient.canonicalIngredientId)}</span>
+        <span>CP: ${escapeHtml(product.postalCode || "general")}</span>
+        ${observed ? `<span>Actualizado: ${escapeHtml(observed)}</span>` : ""}
+      </div>
+      <p class="small muted">Fuente: Supermarket Prices API${item.matchStatus ? ` · match ${escapeHtml(item.matchStatus)}` : ""}.</p>
+    </div>`;
+}
+
+async function loadIngredientSupermarketPrice(ingredient) {
+  if (!ingredient?.canonicalIngredientId) return;
+  const root = document.getElementById(supermarketPriceRootId(ingredient.id));
+  if (!root) return;
+  if (!isPricesApiConfigured()) {
+    root.innerHTML = `<p class="alert">La API de precios no está configurada.</p>`;
+    return;
+  }
+
+  root.innerHTML = `<p class="muted">Consultando precio actual...</p>`;
+  try {
+    const payload = await getCanonicalIngredientProducts({ ingredientId: ingredient.canonicalIngredientId });
+    const best = pickBestIngredientProduct(payload?.items || []);
+    const currentRoot = document.getElementById(supermarketPriceRootId(ingredient.id));
+    if (currentRoot) currentRoot.innerHTML = renderExternalProductPrice(ingredient, best);
+  } catch (error) {
+    const currentRoot = document.getElementById(supermarketPriceRootId(ingredient.id));
+    if (currentRoot) currentRoot.innerHTML = `<p class="alert">${escapeHtml(error.message || "No se pudo consultar el precio del supermercado.")}</p>`;
+  }
+}
+
 export function openIngredientDetailCard(ingredientId) {
   const state = getState();
   const ingredient = state.ingredients.find(item => item.id === ingredientId);
@@ -154,6 +234,8 @@ export function openIngredientDetailCard(ingredientId) {
       ${lots.length ? `<p class="small muted">Últimos lotes: ${lots.map(lot => `${formatNumber(lot.qty)} ${lot.unit || ingredient.unit}`).join(" · ")}</p>` : `<p class="small muted">Sin lotes de compra detallados registrados.</p>`}
     </section>
 
+    ${renderSupermarketPriceSection(ingredient)}
+
     <section class="detail-section">
       <h3>Valores nutricionales</h3>
       ${profile ? `
@@ -169,6 +251,8 @@ export function openIngredientDetailCard(ingredientId) {
       ${renderIngredientProducts(ingredient)}
     </section>
   `);
+
+  void loadIngredientSupermarketPrice(ingredient);
 }
 
 window.GestorDetailCards = {
@@ -189,5 +273,13 @@ document.addEventListener("click", event => {
     event.preventDefault();
     event.stopPropagation();
     openIngredientDetailCard(ingredientButton.dataset.ingredientId);
+    return;
+  }
+  const refreshPriceButton = event.target.closest('[data-action="refresh-ingredient-supermarket-price"]');
+  if (refreshPriceButton) {
+    event.preventDefault();
+    event.stopPropagation();
+    const ingredient = getState().ingredients.find(item => item.id === refreshPriceButton.dataset.ingredientId);
+    if (ingredient) void loadIngredientSupermarketPrice(ingredient);
   }
 }, true);
