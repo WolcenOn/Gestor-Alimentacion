@@ -5,5 +5,5 @@ const RAILWAY_BACKEND_ORIGIN = "https://" + "reasonable-charisma-production-c66f
 
 window.APP_CONFIG = window.APP_CONFIG || {};
 window.APP_CONFIG.API_BASE_URL ||= `${RAILWAY_BACKEND_ORIGIN}/api/v1`;
-window.APP_CONFIG.PRICES_API_BASE_URL ||= "";
+window.APP_CONFIG.PRICES_API_BASE_URL ||= "https://prices-api-production.up.railway.app/api/v1";
 window.APP_CONFIG.PRICES_POSTAL_CODE ||= "28001";
