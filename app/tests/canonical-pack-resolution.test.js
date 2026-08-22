@@ -101,6 +101,80 @@ test("installing a canonical ingredient without local match keeps the pack ingre
   assert.equal(dish.recipe[0].ingredientId, "ingredient_pack_basmati");
 });
 
+test("reimporting a canonical pack backfills a missing canonical link on the same local id", () => {
+  const state = createDefaultState();
+  state.ingredients.push({
+    id: "ingredient_pack_rice",
+    name: "Arroz redondo",
+    familyId: "family_pantry",
+    qty: 325,
+    unit: "g",
+    available: true,
+    storageType: "pantry",
+    expiryDate: "",
+    dateType: "none",
+    approxPrice: 1.5,
+    packagingType: "otro",
+    products: [],
+    createdAt: "2026-01-01T00:00:00.000Z",
+    updatedAt: "2026-01-01T00:00:00.000Z",
+    schemaVersion: 1
+  });
+
+  mergePackIntoState(state, canonicalPack({
+    ingredients: [
+      {
+        id: "ingredient_pack_rice",
+        name: "Arroz redondo del pack",
+        unit: "g",
+        canonicalIngredientId: "arroz_redondo",
+        canonicalIngredientName: "Arroz redondo",
+        canonicalMatchStatus: "confirmed"
+      }
+    ],
+    recipe: [{ ingredientId: "ingredient_pack_rice", qty: 80, unit: "g" }]
+  }));
+
+  const installed = state.ingredients.find(item => item.id === "ingredient_pack_rice");
+  assert.equal(installed.canonicalIngredientId, "arroz_redondo");
+  assert.equal(installed.canonicalIngredientName, "Arroz redondo");
+  assert.equal(installed.canonicalMatchStatus, "confirmed");
+  assert.equal(installed.qty, 325);
+  assert.equal(installed.approxPrice, 1.5);
+  assert.equal(installed.name, "Arroz redondo");
+});
+
+test("reimporting never overwrites an existing canonical link with a different pack link", () => {
+  const state = createDefaultState();
+  state.ingredients.push({
+    id: "ingredient_pack_rice",
+    name: "Arroz local",
+    unit: "g",
+    products: [],
+    canonicalIngredientId: "arroz_integral",
+    canonicalIngredientName: "Arroz integral",
+    canonicalMatchStatus: "confirmed"
+  });
+
+  mergePackIntoState(state, canonicalPack({
+    ingredients: [
+      {
+        id: "ingredient_pack_rice",
+        name: "Arroz redondo",
+        unit: "g",
+        canonicalIngredientId: "arroz_redondo",
+        canonicalIngredientName: "Arroz redondo",
+        canonicalMatchStatus: "confirmed"
+      }
+    ],
+    recipe: [{ ingredientId: "ingredient_pack_rice", qty: 80, unit: "g" }]
+  }));
+
+  const installed = state.ingredients.find(item => item.id === "ingredient_pack_rice");
+  assert.equal(installed.canonicalIngredientId, "arroz_integral");
+  assert.equal(installed.canonicalIngredientName, "Arroz integral");
+});
+
 test("two pack ingredient ids with the same canonical id resolve to one local ingredient", () => {
   const state = createDefaultState();
   const ingredientCountBefore = state.ingredients.length;
