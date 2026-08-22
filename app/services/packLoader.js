@@ -176,6 +176,14 @@ export function summarizePack(pack) {
   };
 }
 
+function backfillCanonicalLink(existingIngredient, incomingIngredient) {
+  if (!incomingIngredient?.canonicalIngredientId || existingIngredient?.canonicalIngredientId) return;
+  existingIngredient.canonicalIngredientId = incomingIngredient.canonicalIngredientId;
+  existingIngredient.canonicalIngredientName = incomingIngredient.canonicalIngredientName || incomingIngredient.name || "";
+  existingIngredient.canonicalMatchStatus = incomingIngredient.canonicalMatchStatus || "confirmed";
+  existingIngredient.updatedAt = new Date().toISOString();
+}
+
 export function mergePackIntoState(state, pack, options = {}) {
   const normalizedPack = normalizePack(pack);
   validatePack(normalizedPack);
@@ -199,6 +207,8 @@ export function mergePackIntoState(state, pack, options = {}) {
     }
 
     if (existingIngredientIds.has(ingredient.id)) {
+      const existingIngredient = state.ingredients.find(item => item.id === ingredient.id);
+      if (existingIngredient) backfillCanonicalLink(existingIngredient, ingredient);
       ingredientIdMap.set(ingredient.id, ingredient.id);
       continue;
     }
