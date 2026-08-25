@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { pickBestShoppingQuote, summarizeShoppingQuote } from "../services/shoppingQuotes.js";
+import { canStartShoppingQuote, pickBestShoppingQuote, summarizeShoppingQuote } from "../services/shoppingQuotes.js";
 
 test("selects cheapest checkout total rather than lowest unit price", () => {
   const items = [
@@ -56,4 +56,13 @@ test("ignores unavailable or invalid quotes", () => {
   assert.equal(pickBestShoppingQuote([]), null);
   assert.equal(pickBestShoppingQuote([{ product: { available: false }, totalCost: 1 }]), null);
   assert.equal(summarizeShoppingQuote({ product: { price: 0.96 }, packageCount: 0, totalCost: 0 }), null);
+});
+
+test("does not restart hydration for terminal quote statuses", () => {
+  assert.equal(canStartShoppingQuote(""), true);
+  assert.equal(canStartShoppingQuote(undefined), true);
+  assert.equal(canStartShoppingQuote("loading"), false);
+  assert.equal(canStartShoppingQuote("loaded"), false);
+  assert.equal(canStartShoppingQuote("unconfigured"), false);
+  assert.equal(canStartShoppingQuote("error"), false);
 });
