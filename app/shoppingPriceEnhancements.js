@@ -1,43 +1,10 @@
 import { getState } from "./store.js";
 import { computeShoppingListWithProgress } from "./state/shoppingProgress.js";
 import { quoteCanonicalIngredient, isPricesApiConfigured } from "./services/pricesApi.js";
+import { pickBestShoppingQuote, summarizeShoppingQuote } from "./services/shoppingQuotes.js";
 import { escapeHtml, formatMoney } from "./utils.js";
 
 const quoteCache = new Map();
-
-export function pickBestShoppingQuote(items = []) {
-  const candidates = (Array.isArray(items) ? items : [])
-    .filter(item => item?.product && item.product.available !== false && Number(item.totalCost) > 0);
-  if (!candidates.length) return null;
-
-  return [...candidates].sort((a, b) => {
-    const costDiff = Number(a.totalCost) - Number(b.totalCost);
-    if (costDiff) return costDiff;
-    const packageDiff = Number(a.packageCount || 0) - Number(b.packageCount || 0);
-    if (packageDiff) return packageDiff;
-    return String(a.product.name || "").localeCompare(String(b.product.name || ""), "es");
-  })[0];
-}
-
-export function summarizeShoppingQuote(quote) {
-  const product = quote?.product;
-  if (!product) return null;
-  const packageCount = Number(quote.packageCount || 0);
-  const packagePrice = Number(product.price || 0);
-  const totalCost = Number(quote.totalCost || 0);
-  if (!(packageCount > 0) || !(packagePrice > 0) || !(totalCost > 0)) return null;
-
-  return {
-    productName: String(product.name || "Producto supermercado"),
-    supermarket: String(product.supermarketId || "supermercado").toUpperCase(),
-    packageCount,
-    packagePrice,
-    totalCost,
-    purchasedAmount: Number(quote.purchasedAmount || 0),
-    purchasedUnit: String(quote.purchasedUnit || ""),
-    wasteAmount: Number(quote.wasteAmount || 0)
-  };
-}
 
 function renderQuote(quote) {
   const summary = summarizeShoppingQuote(quote);
@@ -84,7 +51,7 @@ async function hydrateQuoteNode(node, ingredient, shoppingItem) {
   }
 
   node.dataset.quoteStatus = "loading";
-  node.innerHTML = `<p class="small muted">Calculando compra DIA...</p>`;
+  node.innerHTML = `<p class="small muted">Calculando compra supermercado...</p>`;
   try {
     const payload = await cachedQuote({
       ingredientId: ingredient.canonicalIngredientId,
@@ -98,7 +65,7 @@ async function hydrateQuoteNode(node, ingredient, shoppingItem) {
   } catch (error) {
     if (!node.isConnected) return;
     node.dataset.quoteStatus = "error";
-    node.innerHTML = `<p class="small muted">Precio DIA no disponible ahora.</p>`;
+    node.innerHTML = `<p class="small muted">Precio supermercado no disponible ahora.</p>`;
     console.warn("No se pudo cotizar la línea de compra", ingredient.id, error);
   }
 }
