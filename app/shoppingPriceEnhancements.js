@@ -1,7 +1,7 @@
 import { getState } from "./store.js";
 import { computeShoppingListWithProgress } from "./state/shoppingProgress.js";
 import { quoteCanonicalIngredient, isPricesApiConfigured } from "./services/pricesApi.js";
-import { pickBestShoppingQuote, summarizeShoppingQuote } from "./services/shoppingQuotes.js";
+import { canStartShoppingQuote, pickBestShoppingQuote, summarizeShoppingQuote } from "./services/shoppingQuotes.js";
 import { escapeHtml, formatMoney } from "./utils.js";
 
 const quoteCache = new Map();
@@ -41,7 +41,7 @@ function cachedQuote(params) {
 }
 
 async function hydrateQuoteNode(node, ingredient, shoppingItem) {
-  if (!node || node.dataset.quoteStatus === "loading" || node.dataset.quoteStatus === "loaded") return;
+  if (!node || !canStartShoppingQuote(node.dataset.quoteStatus)) return;
   if (!ingredient?.canonicalIngredientId || !(Number(shoppingItem?.remainingQty) > 0)) return;
 
   if (!isPricesApiConfigured()) {

@@ -1,3 +1,9 @@
+const BLOCKED_QUOTE_STATUSES = new Set(["loading", "loaded", "unconfigured", "error"]);
+
+export function canStartShoppingQuote(status) {
+  return !BLOCKED_QUOTE_STATUSES.has(String(status || "").trim().toLowerCase());
+}
+
 export function pickBestShoppingQuote(items = []) {
   const candidates = (Array.isArray(items) ? items : [])
     .filter(item => item?.product && item.product.available !== false && Number(item.totalCost) > 0);
