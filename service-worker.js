@@ -37,6 +37,7 @@ const APP_SHELL = [
   "./app/services/foodTranslation.js",
   "./app/services/usdaFoodData.js",
   "./app/services/packLoader.js",
+  "./app/services/shoppingQuotes.js",
   "./app/nutritionBatchEnhancements.js",
   "./app/mainActionsBootstrap.js",
   "./app/render/settings.js",
