@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { pickBestShoppingQuote, summarizeShoppingQuote } from "../shoppingPriceEnhancements.js";
+import { pickBestShoppingQuote, summarizeShoppingQuote } from "../services/shoppingQuotes.js";
 
 test("selects cheapest checkout total rather than lowest unit price", () => {
   const items = [
