@@ -1,7 +1,7 @@
 import { updateState } from "./store.js";
 import { showAlert, openModal, closeModal, getSubmitterValue } from "./render/ui.js";
 import { renderPackPreview } from "./render/packs.js";
-import { mergePackIntoState, normalizePack } from "./services/packLoader.js";
+import { adaptPackToKnownCanonicals, mergePackIntoState, normalizePack } from "./services/packLoader.js";
 import { validatePack } from "./validation.js";
 
 const MANIFEST_URL = "packs/manifest.json";
@@ -41,9 +41,10 @@ async function loadManifest() {
       path,
       description: entry.description || "",
       tags: Array.isArray(entry.tags) ? entry.tags : [],
+      canonicalReady: Boolean(entry.canonicalReady) || path.startsWith("packs/canonical/"),
       downloadUrl: `${path}?v=${Date.now()}`
     };
-  });
+  }).sort((a, b) => Number(b.canonicalReady) - Number(a.canonicalReady) || a.name.localeCompare(b.name, "es"));
 }
 
 async function listPacksFromManifest() {
@@ -54,18 +55,23 @@ async function listPacksFromManifest() {
   closeModal();
   container.innerHTML = `<p class="muted">Buscando packs...</p>`;
   manifestPackFiles = await loadManifest();
+  const canonicalCount = manifestPackFiles.filter(file => file.canonicalReady).length;
   container.innerHTML = manifestPackFiles.length
     ? manifestPackFiles.map((file, index) => {
-      const searchText = [file.name, file.path, file.description, file.tags.join(" ")].join(" ");
+      const searchText = [file.name, file.path, file.description, file.tags.join(" "), file.canonicalReady ? "canonical prices api" : ""].join(" ");
       return `
         <div class="item pack-file-item" data-search="${escapeText(searchText)}">
-          <strong>${escapeText(file.name)}</strong>
+          <div class="item-title">
+            <strong>${escapeText(file.name)}</strong>
+            ${file.canonicalReady ? `<span class="badge success">Canonical · Prices API</span>` : ""}
+          </div>
           <p class="qty-line">${escapeText(file.description || file.path)}</p>
+          ${file.canonicalReady ? `<p class="small muted">Versión preparada para enlazar ingredientes canónicos conocidos y calcular precios.</p>` : ""}
           <button data-action="preview-manifest-pack" data-index="${index}">Previsualizar</button>
         </div>`;
     }).join("")
     : `<p class="muted">No hay packs publicados todavía.</p>`;
-  showAlert(`${manifestPackFiles.length} pack(s) remoto(s) disponibles.`);
+  showAlert(`${manifestPackFiles.length} pack(s) disponibles · ${canonicalCount} canonical-ready.`);
 }
 
 async function previewManifestPack(index) {
@@ -78,11 +84,13 @@ async function previewManifestPack(index) {
   if (!response.ok) throw new Error(`No se pudo descargar el pack (${response.status}).`);
   const text = await response.text();
   if (/javascript:|<\s*script/gi.test(text)) throw new Error("Pack potencialmente inseguro.");
-  const pack = normalizePack(JSON.parse(text));
+  const parsed = JSON.parse(text);
+  const input = file.canonicalReady ? adaptPackToKnownCanonicals(parsed) : parsed;
+  const pack = normalizePack(input);
   validatePack(pack);
   manifestPackPreview = pack;
   openModal(renderPackPreview(pack, `manifest-${index}`));
-  showAlert(`Pack cargado: ${pack.dishes.length} receta(s) disponibles.`);
+  showAlert(`Pack cargado: ${pack.dishes.length} receta(s) disponibles${file.canonicalReady ? " · canonical-ready" : ""}.`);
 }
 
 function installManifestPack(form, event) {
