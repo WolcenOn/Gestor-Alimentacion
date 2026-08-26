@@ -98,19 +98,130 @@
     "tags": ["desayuno", "saludable", "españa", "mediterráneo", "familiar", "rápido"]
   },
   {
-  "name": "menu-gastroparesia-diabetes.json",
-  "path": "packs/basicos/pack-gastroparepsia.json",
-  "title": "Mediterráneo suave para gastroparesia y diabetes",
-  "description": "30 comidas y cenas mediterráneas, bajas en grasa y fibra contenida, adaptadas a gastroparesia y diabetes.",
-  "tags": [
-    "gastroparesia",
-    "diabetes",
-    "mediterránea",
-    "pescado",
-    "poca fibra",
-    "poca grasa",
-    "comidas",
-    "cenas"
-  ]
-}
+    "name": "menu-gastroparesia-diabetes.json",
+    "path": "packs/basicos/pack-gastroparepsia.json",
+    "title": "Mediterráneo suave para gastroparesia y diabetes",
+    "description": "30 comidas y cenas mediterráneas, bajas en grasa y fibra contenida, adaptadas a gastroparesia y diabetes.",
+    "tags": ["gastroparesia", "diabetes", "mediterránea", "pescado", "poca fibra", "poca grasa", "comidas", "cenas"]
+  },
+  {
+    "name": "ensaladas-light-canonical.json",
+    "path": "packs/canonical/ensaladas-light-canonical.json",
+    "title": "Pack ensaladas light · Canonical",
+    "description": "Ensaladas ligeras para menús saludables. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["ensalada", "light", "saludable", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "ensaladas_verano_frutos_secos_cebolla_crujiente-canonical.json",
+    "path": "packs/canonical/ensaladas_verano_frutos_secos_cebolla_crujiente-canonical.json",
+    "title": "Pack ensaladas de verano · Canonical",
+    "description": "Ensaladas de verano con frutos secos y cebolla crujiente. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["ensalada", "verano", "frutos secos", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "Postres-goma-xanthana-canonical.json",
+    "path": "packs/canonical/Postres-goma-xanthana-canonical.json",
+    "title": "Pack postres con goma xantana · Canonical",
+    "description": "Postres que usan goma xantana para mejorar textura. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["postres", "goma xantana", "textura", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "postres_sanos_sin_azucar_diabeticos-canonical.json",
+    "path": "packs/canonical/postres_sanos_sin_azucar_diabeticos-canonical.json",
+    "title": "Pack postres sanos sin azúcar · Canonical",
+    "description": "Postres sanos sin azúcar orientados a personas con diabetes. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["postres", "sin azúcar", "diabetes", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "tuppers_trabajo_faciles_sabrosos-canonical.json",
+    "path": "packs/canonical/tuppers_trabajo_faciles_sabrosos-canonical.json",
+    "title": "Pack tuppers de trabajo · Canonical",
+    "description": "Tuppers fáciles y sabrosos para llevar al trabajo. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["tupper", "trabajo", "fácil", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "andalucia-tradicional-provincias-canonical.json",
+    "path": "packs/canonical/andalucia-tradicional-provincias-canonical.json",
+    "title": "Pack Andalucía tradicional · Canonical",
+    "description": "Recetas tradicionales de Andalucía por provincias. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["andalucía", "tradicional", "provincias", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "cenas-rapidas-canonical.json",
+    "path": "packs/canonical/cenas-rapidas-canonical.json",
+    "title": "Pack cenas rápidas · Canonical",
+    "description": "Cenas rápidas y básicas para el día a día. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["cenas", "rápido", "básicos", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "invierno-huelva-canonical.json",
+    "path": "packs/canonical/invierno-huelva-canonical.json",
+    "title": "Pack invierno Huelva · Canonical",
+    "description": "Menú de temporada de invierno inspirado en Huelva. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["huelva", "invierno", "temporada", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "otono-huelva-canonical.json",
+    "path": "packs/canonical/otono-huelva-canonical.json",
+    "title": "Pack otoño Huelva · Canonical",
+    "description": "Menú de temporada de otoño inspirado en Huelva. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["huelva", "otoño", "temporada", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "primavera-huelva-canonical.json",
+    "path": "packs/canonical/primavera-huelva-canonical.json",
+    "title": "Pack primavera Huelva · Canonical",
+    "description": "Menú de temporada de primavera inspirado en Huelva. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["huelva", "primavera", "temporada", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "verano-huelva-canonical.json",
+    "path": "packs/canonical/verano-huelva-canonical.json",
+    "title": "Pack verano Huelva · Canonical",
+    "description": "Menú de temporada de verano inspirado en Huelva. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["huelva", "verano", "temporada", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "pack-vegano-rapido-temporada-canonical.json",
+    "path": "packs/canonical/pack-vegano-rapido-temporada-canonical.json",
+    "title": "Pack vegano rápido de temporada · Canonical",
+    "description": "Recetas veganas rápidas con productos de temporada. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["vegano", "rápido", "temporada", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "menu-verano-familiar-diabetes-colesterol-canonical.json",
+    "path": "packs/canonical/menu-verano-familiar-diabetes-colesterol-canonical.json",
+    "title": "Pack verano familiar diabetes y colesterol · Canonical",
+    "description": "Menú familiar de verano adaptado a diabetes y colesterol. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["verano", "familia", "diabetes", "colesterol", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "desayunos-sanos-espana-canonical.json",
+    "path": "packs/canonical/desayunos-sanos-espana-canonical.json",
+    "title": "Pack desayunos sanos estilo España · Canonical",
+    "description": "Desayunos habituales en España normalizados a 1 ración. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["desayuno", "saludable", "españa", "mediterráneo", "familiar", "rápido", "canonical", "prices-api"],
+    "canonicalReady": true
+  },
+  {
+    "name": "menu-gastroparesia-diabetes-canonical.json",
+    "path": "packs/canonical/menu-gastroparesia-diabetes-canonical.json",
+    "title": "Mediterráneo suave para gastroparesia y diabetes · Canonical",
+    "description": "30 comidas y cenas mediterráneas, bajas en grasa y fibra contenida, adaptadas a gastroparesia y diabetes. Versión preparada para enlazar de forma conservadora los ingredientes canónicos disponibles en Prices API.",
+    "tags": ["gastroparesia", "diabetes", "mediterránea", "pescado", "poca fibra", "poca grasa", "comidas", "cenas", "canonical", "prices-api"],
+    "canonicalReady": true
+  }
 ]
