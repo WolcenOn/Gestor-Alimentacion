@@ -2,11 +2,15 @@ import { updateState } from "./store.js";
 import { showAlert, openModal, closeModal, getSubmitterValue } from "./render/ui.js";
 import { renderPackPreview } from "./render/packs.js";
 import { mergePackIntoState, normalizePack } from "./services/packLoader.js";
+import { mergeCanonicalPackIntoState, normalizeCanonicalReadyPack } from "./services/canonicalPackBridge.js";
 import { validatePack } from "./validation.js";
 
-const MANIFEST_URL = "packs/manifest.json";
+const CATALOG_BRANCH = "main";
+const CATALOG_BASE_URL = `https://raw.githubusercontent.com/WolcenOn/Gestor-Alimentacion/${CATALOG_BRANCH}`;
+const MANIFEST_URL = `${CATALOG_BASE_URL}/packs/manifest.json`;
 let manifestPackFiles = [];
 let manifestPackPreview = null;
+let manifestPackPreviewCanonicalReady = false;
 
 function stop(event) {
   event.preventDefault();
@@ -28,9 +32,9 @@ async function loadManifest() {
     cache: "no-store",
     headers: { Accept: "application/json" }
   });
-  if (!response.ok) throw new Error(`No se pudo cargar el índice local de packs (${response.status}).`);
+  if (!response.ok) throw new Error(`No se pudo cargar el catálogo de packs (${response.status}).`);
   const manifest = await response.json();
-  if (!Array.isArray(manifest)) throw new Error("El índice local de packs no tiene el formato esperado.");
+  if (!Array.isArray(manifest)) throw new Error("El catálogo de packs no tiene el formato esperado.");
   return manifest.map(entry => {
     const path = String(entry.path || "").replace(/^\.\//, "");
     if (!path.startsWith("packs/") || !path.endsWith(".json") || path.includes("..")) {
@@ -41,31 +45,38 @@ async function loadManifest() {
       path,
       description: entry.description || "",
       tags: Array.isArray(entry.tags) ? entry.tags : [],
-      downloadUrl: `${path}?v=${Date.now()}`
+      canonicalReady: Boolean(entry.canonicalReady) || path.startsWith("packs/canonical/"),
+      downloadUrl: `${CATALOG_BASE_URL}/${path}?v=${Date.now()}`
     };
-  });
+  }).sort((a, b) => Number(b.canonicalReady) - Number(a.canonicalReady) || a.name.localeCompare(b.name, "es"));
 }
 
 async function listPacksFromManifest() {
   const container = document.getElementById("remotePackList");
   if (!container) return;
   manifestPackPreview = null;
+  manifestPackPreviewCanonicalReady = false;
   manifestPackFiles = [];
   closeModal();
   container.innerHTML = `<p class="muted">Buscando packs...</p>`;
   manifestPackFiles = await loadManifest();
+  const canonicalCount = manifestPackFiles.filter(file => file.canonicalReady).length;
   container.innerHTML = manifestPackFiles.length
     ? manifestPackFiles.map((file, index) => {
-      const searchText = [file.name, file.path, file.description, file.tags.join(" ")].join(" ");
+      const searchText = [file.name, file.path, file.description, file.tags.join(" "), file.canonicalReady ? "canonical prices api" : ""].join(" ");
       return `
         <div class="item pack-file-item" data-search="${escapeText(searchText)}">
-          <strong>${escapeText(file.name)}</strong>
+          <div class="item-title">
+            <strong>${escapeText(file.name)}</strong>
+            ${file.canonicalReady ? `<span class="badge success">Canonical · Prices API</span>` : ""}
+          </div>
           <p class="qty-line">${escapeText(file.description || file.path)}</p>
+          ${file.canonicalReady ? `<p class="small muted">Versión preparada para enlazar ingredientes canónicos y consultar Prices API.</p>` : ""}
           <button data-action="preview-manifest-pack" data-index="${index}">Previsualizar</button>
         </div>`;
     }).join("")
     : `<p class="muted">No hay packs publicados todavía.</p>`;
-  showAlert(`${manifestPackFiles.length} pack(s) remoto(s) disponibles.`);
+  showAlert(`${manifestPackFiles.length} pack(s) disponibles · ${canonicalCount} canonical-ready · catálogo ${CATALOG_BRANCH}.`);
 }
 
 async function previewManifestPack(index) {
@@ -78,11 +89,13 @@ async function previewManifestPack(index) {
   if (!response.ok) throw new Error(`No se pudo descargar el pack (${response.status}).`);
   const text = await response.text();
   if (/javascript:|<\s*script/gi.test(text)) throw new Error("Pack potencialmente inseguro.");
-  const pack = normalizePack(JSON.parse(text));
+  const parsed = JSON.parse(text);
+  const pack = file.canonicalReady ? normalizeCanonicalReadyPack(parsed) : normalizePack(parsed);
   validatePack(pack);
   manifestPackPreview = pack;
+  manifestPackPreviewCanonicalReady = file.canonicalReady;
   openModal(renderPackPreview(pack, `manifest-${index}`));
-  showAlert(`Pack cargado: ${pack.dishes.length} receta(s) disponibles.`);
+  showAlert(`Pack cargado: ${pack.dishes.length} receta(s) disponibles${file.canonicalReady ? " · canonical-ready" : ""}.`);
 }
 
 function installManifestPack(form, event) {
@@ -92,10 +105,17 @@ function installManifestPack(form, event) {
     ? manifestPackPreview.dishes.map(dish => dish.id)
     : Array.from(form.querySelectorAll('input[name="dishIds"]:checked')).map(input => input.value);
   if (!selectedDishIds.length) throw new Error("Selecciona al menos una receta para instalar.");
-  updateState(draft => mergePackIntoState(draft, manifestPackPreview, { selectedDishIds }), "pack-install-manifest");
+  updateState(draft => {
+    if (manifestPackPreviewCanonicalReady) {
+      mergeCanonicalPackIntoState(draft, manifestPackPreview, { selectedDishIds });
+    } else {
+      mergePackIntoState(draft, manifestPackPreview, { selectedDishIds });
+    }
+  }, "pack-install-manifest");
   const installedName = manifestPackPreview.name;
   const total = selectedDishIds.length;
   manifestPackPreview = null;
+  manifestPackPreviewCanonicalReady = false;
   closeModal();
   showAlert(`Pack ${installedName} instalado con ${total} receta(s).`);
   return true;
