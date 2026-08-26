@@ -8,6 +8,29 @@ const UNIT_BASE = Object.freeze({
   unidades: { unit: "unidades", factor: 1 }
 });
 
+export function collectCanonicalDishRequirements(dish, ingredientsById) {
+  const lookup = ingredientsById instanceof Map
+    ? ingredientsById
+    : new Map((ingredientsById || []).map(ingredient => [ingredient.id, ingredient]));
+  const requirements = [];
+
+  for (const line of dish?.recipe || []) {
+    const ingredient = lookup.get(line.ingredientId);
+    const canonicalIngredientId = String(ingredient?.canonicalIngredientId || "").trim();
+    if (!canonicalIngredientId) continue;
+    const normalized = normalizeRequirementQuantity(line.qty, line.unit);
+    if (!normalized) continue;
+    requirements.push({
+      canonicalIngredientId,
+      canonicalIngredientName: String(ingredient.canonicalIngredientName || ingredient.name || canonicalIngredientId).trim(),
+      amount: roundQuantity(normalized.amount),
+      unit: normalized.unit
+    });
+  }
+
+  return requirements;
+}
+
 export function collectCanonicalPackRequirements(pack, selectedDishIds = null) {
   const ingredientsById = new Map((pack?.ingredients || []).map(ingredient => [ingredient.id, ingredient]));
   const selected = selectedDishIds ? new Set(selectedDishIds) : null;
@@ -15,21 +38,10 @@ export function collectCanonicalPackRequirements(pack, selectedDishIds = null) {
 
   for (const dish of pack?.dishes || []) {
     if (selected && !selected.has(dish.id)) continue;
-    for (const line of dish.recipe || []) {
-      const ingredient = ingredientsById.get(line.ingredientId);
-      const canonicalIngredientId = String(ingredient?.canonicalIngredientId || "").trim();
-      if (!canonicalIngredientId) continue;
-
-      const normalized = normalizeRequirementQuantity(line.qty, line.unit);
-      if (!normalized) continue;
-      const key = `${canonicalIngredientId}|${normalized.unit}`;
-      const current = totals.get(key) || {
-        canonicalIngredientId,
-        canonicalIngredientName: String(ingredient.canonicalIngredientName || ingredient.name || canonicalIngredientId).trim(),
-        amount: 0,
-        unit: normalized.unit
-      };
-      current.amount += normalized.amount;
+    for (const requirement of collectCanonicalDishRequirements(dish, ingredientsById)) {
+      const key = `${requirement.canonicalIngredientId}|${requirement.unit}`;
+      const current = totals.get(key) || { ...requirement, amount: 0 };
+      current.amount += requirement.amount;
       totals.set(key, current);
     }
   }
