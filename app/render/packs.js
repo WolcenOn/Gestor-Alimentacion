@@ -1,5 +1,6 @@
 import { escapeHtml } from "../utils.js";
 import { PACK_SOURCE } from "../services/packLoader.js";
+import { collectCanonicalDishRequirements } from "../services/packPricing.js";
 
 export function renderPacks(state) {
   return `
@@ -84,7 +85,7 @@ function renderInstalledPack(state, pack) {
       </div>
       <details>
         <summary>Ver recetas instaladas del pack</summary>
-        ${dishes.length ? `<ul class="pack-installed-dish-list">${dishes.map(dish => `<li><strong>${escapeHtml(dish.name)}</strong><span>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</span></li>`).join("")}</ul>` : `<p class="muted">Este pack no tiene recetas instaladas o ya fueron eliminadas.</p>`}
+        ${dishes.length ? `<ul class="pack-installed-dish-list">${dishes.map(dish => `<li data-installed-pack-dish-price="${escapeHtml(dish.id)}"><strong>${escapeHtml(dish.name)}</strong><span>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</span><small class="muted">Calculando precio por ración...</small></li>`).join("")}</ul>` : `<p class="muted">Este pack no tiene recetas instaladas o ya fueron eliminadas.</p>`}
       </details>
     </article>
   `;
@@ -184,11 +185,12 @@ function renderPackDishPreview(dish, ingredientsById, index) {
   const ingredientNames = (dish.recipe || []).map(line => ingredientsById.get(line.ingredientId)?.name || line.ingredientId).join(" ");
   const steps = (dish.instructions || []).map((step, i) => `<li><strong>${i + 1}.</strong> ${escapeHtml(step)}</li>`).join("");
   const searchText = [dish.name, dish.category, dish.tags?.join(" "), dish.prepTime, dish.notes, ingredientNames, (dish.instructions || []).join(" ")].join(" ");
+  const requirements = collectCanonicalDishRequirements(dish, ingredientsById);
   return `
-    <article class="item pack-dish-preview" data-search="${escapeHtml(searchText)}">
+    <article class="item pack-dish-preview" data-search="${escapeHtml(searchText)}" data-pack-preview-price="true" data-price-requirements="${escapeHtml(JSON.stringify(requirements))}" data-recipe-lines="${(dish.recipe || []).length}">
       <label class="check-row">
         <input type="checkbox" name="dishIds" value="${escapeHtml(dish.id)}" checked>
-        <span><strong>${index + 1}. ${escapeHtml(dish.name)}</strong><small>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</small></span>
+        <span><strong>${index + 1}. ${escapeHtml(dish.name)}</strong><small>${escapeHtml(dish.category || "Sin categoría")} · ${escapeHtml(dish.prepTime || "")}</small><small data-pack-preview-price-label class="muted">Calculando precio por ración...</small></span>
       </label>
       <details>
         <summary>Ver ingredientes y elaboración</summary>
