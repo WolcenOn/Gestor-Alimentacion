@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "python3 -m http.server 5173",
-    "test": "node --test app/tests/*.test.js"
+    "test": "node --test app/tests/*.test.js",
+    "coverage:export": "node scripts/export-canonical-coverage-input.mjs"
   },
   "keywords": ["menu", "shopping", "stock", "meal-planner"],
   "author": "Virginia Esteban Muñoz",
