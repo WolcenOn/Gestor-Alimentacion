@@ -68,6 +68,30 @@ async function getJSON(url, timeoutMs) {
   }
 }
 
+export function buildCanonicalResolveBatchUrl({ baseUrl, queries }) {
+  const base = String(baseUrl || "").trim().replace(/\/+$/, "");
+  if (!base) throw new Error("Prices API no configurada.");
+  const normalized = (Array.isArray(queries) ? queries : [])
+    .map(query => String(query || "").trim())
+    .filter(Boolean);
+  if (!normalized.length) throw new Error("No hay ingredientes para resolver.");
+  if (normalized.length > 100) throw new Error("El lote admite como máximo 100 ingredientes.");
+  const params = new URLSearchParams();
+  for (const query of normalized) params.append("q", query);
+  return `${base}/ingredients/resolve?${params.toString()}`;
+}
+
+export async function resolveCanonicalIngredients({ queries, timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
+  const normalized = (Array.isArray(queries) ? queries : [])
+    .map(query => String(query || "").trim())
+    .filter(Boolean);
+  const url = buildCanonicalResolveBatchUrl({ baseUrl: getPricesApiBaseUrl(), queries: normalized });
+  const payload = await getJSON(url, timeoutMs);
+  if (normalized.length === 1) return [payload];
+  if (!Array.isArray(payload?.items)) throw new Error("Prices API devolvió un lote de resolución inválido.");
+  return payload.items;
+}
+
 export async function getCanonicalIngredientProducts({ ingredientId, postalCode = getPricesPostalCode(), timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
   const url = buildIngredientProductsUrl({
     baseUrl: getPricesApiBaseUrl(),
