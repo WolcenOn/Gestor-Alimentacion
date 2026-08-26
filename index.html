@@ -21,75 +21,18 @@
 </head>
 <body>
   <a class="skip-link" href="#mainContent">Saltar al contenido</a>
-
-  <header class="app-header app-screen simplified-header">
-    <div>
-      <p class="eyebrow">MVP familiar</p>
-      <h1>Gestor de Menú Semanal</h1>
-      <p class="muted">Planifica, compra, actualiza stock e imprime solo lo necesario.</p>
-    </div>
-    <div class="header-actions">
-      <button class="secondary menu-trigger" data-action="open-side-menu" aria-controls="sideMenu" aria-expanded="false" aria-label="Abrir menú lateral">☰</button>
-    </div>
-  </header>
-
+  <header class="app-header app-screen simplified-header"><div><p class="eyebrow">MVP familiar</p><h1>Gestor de Menú Semanal</h1><p class="muted">Planifica, compra, actualiza stock e imprime solo lo necesario.</p></div><div class="header-actions"><button class="secondary menu-trigger" data-action="open-side-menu" aria-controls="sideMenu" aria-expanded="false" aria-label="Abrir menú lateral">☰</button></div></header>
   <aside id="sideMenu" class="side-menu app-screen" aria-hidden="true">
     <button type="button" class="side-menu-backdrop" data-action="close-side-menu" aria-label="Cerrar menú"></button>
     <section class="side-menu-panel" role="dialog" aria-modal="true" aria-labelledby="sideMenuTitle">
-      <header class="side-menu-header">
-        <div>
-          <p class="eyebrow">Menú</p>
-          <h2 id="sideMenuTitle">Navegación</h2>
-          <p class="muted">Todas las secciones y herramientas de la app.</p>
-        </div>
-        <button type="button" class="secondary" data-action="close-side-menu" aria-label="Cerrar">×</button>
-      </header>
-      <div class="side-menu-section">
-        <p class="side-menu-section-title">Uso diario</p>
-        <div class="side-menu-list">
-          <button type="button" data-tab="dashboard" data-side-menu-item>Dashboard</button>
-          <button type="button" data-tab="ingredients" data-side-menu-item>Ingredientes</button>
-          <button type="button" data-tab="dishes" data-side-menu-item>Platos</button>
-          <button type="button" data-tab="calendar" data-side-menu-item>Semana</button>
-          <button type="button" data-tab="shopping" data-side-menu-item>Compra</button>
-          <button type="button" data-tab="nutrition" data-side-menu-item>Nutrición</button>
-        </div>
-      </div>
-      <div class="side-menu-section">
-        <p class="side-menu-section-title">Herramientas</p>
-        <div class="side-menu-list">
-          <button type="button" data-tab="settings" data-side-menu-item>Ajustes</button>
-          <button type="button" data-tab="packs" data-side-menu-item>Packs</button>
-          <button type="button" data-tab="metabolic" data-side-menu-item>Metabólico</button>
-          <button type="button" data-tab="help" data-side-menu-item>Ayuda</button>
-          <button type="button" data-action="create-snapshot" data-side-menu-item>Guardar snapshot</button>
-          <button type="button" data-action="export-data" data-side-menu-item>Exportar JSON</button>
-          <label class="button secondary side-menu-file" data-side-menu-item>
-            Importar JSON
-            <input id="importFile" type="file" accept="application/json,.json" hidden>
-          </label>
-        </div>
-      </div>
-      <div class="side-menu-section">
-        <p class="side-menu-section-title">Legal y estado</p>
-        <div class="side-menu-list">
-          <button type="button" data-action="open-legal-doc" data-legal-doc="privacy" data-side-menu-item>Privacidad</button>
-          <button type="button" data-action="open-legal-doc" data-legal-doc="terms" data-side-menu-item>Términos de servicio</button>
-          <button type="button" id="backendHealthBadge" data-side-menu-item>Comprobar backend</button>
-        </div>
-      </div>
+      <header class="side-menu-header"><div><p class="eyebrow">Menú</p><h2 id="sideMenuTitle">Navegación</h2><p class="muted">Todas las secciones y herramientas de la app.</p></div><button type="button" class="secondary" data-action="close-side-menu" aria-label="Cerrar">×</button></header>
+      <div class="side-menu-section"><p class="side-menu-section-title">Uso diario</p><div class="side-menu-list"><button type="button" data-tab="dashboard" data-side-menu-item>Dashboard</button><button type="button" data-tab="ingredients" data-side-menu-item>Ingredientes</button><button type="button" data-tab="dishes" data-side-menu-item>Platos</button><button type="button" data-tab="calendar" data-side-menu-item>Semana</button><button type="button" data-tab="shopping" data-side-menu-item>Compra</button><button type="button" data-tab="nutrition" data-side-menu-item>Nutrición</button></div></div>
+      <div class="side-menu-section"><p class="side-menu-section-title">Herramientas</p><div class="side-menu-list"><button type="button" data-tab="settings" data-side-menu-item>Ajustes</button><button type="button" data-tab="packs" data-side-menu-item>Packs</button><button type="button" data-tab="metabolic" data-side-menu-item>Metabólico</button><button type="button" data-tab="help" data-side-menu-item>Ayuda</button><button type="button" data-action="create-snapshot" data-side-menu-item>Guardar snapshot</button><button type="button" data-action="export-data" data-side-menu-item>Exportar JSON</button><label class="button secondary side-menu-file" data-side-menu-item>Importar JSON<input id="importFile" type="file" accept="application/json,.json" hidden></label></div></div>
+      <div class="side-menu-section"><p class="side-menu-section-title">Legal y estado</p><div class="side-menu-list"><button type="button" data-action="open-legal-doc" data-legal-doc="privacy" data-side-menu-item>Privacidad</button><button type="button" data-action="open-legal-doc" data-legal-doc="terms" data-side-menu-item>Términos de servicio</button><button type="button" id="backendHealthBadge" data-side-menu-item>Comprobar backend</button></div></div>
     </section>
   </aside>
-
-  <main id="mainContent" class="app-shell app-screen" tabindex="-1">
-    <section id="alerts" class="alerts" aria-live="polite"></section>
-    <section id="viewRoot"></section>
-  </main>
-
-  <div id="modalRoot" class="modal-root app-screen" aria-live="polite"></div>
-  <div id="printShoppingView" class="print-view"></div>
-  <div id="printWeekView" class="print-view"></div>
-
+  <main id="mainContent" class="app-shell app-screen" tabindex="-1"><section id="alerts" class="alerts" aria-live="polite"></section><section id="viewRoot"></section></main>
+  <div id="modalRoot" class="modal-root app-screen" aria-live="polite"></div><div id="printShoppingView" class="print-view"></div><div id="printWeekView" class="print-view"></div>
   <script src="app/config.js"></script>
   <script type="module" src="app/apiClient.js"></script>
   <script type="module" src="app/passwordRecoveryEnhancements.js"></script>
@@ -113,7 +56,8 @@
   <script type="module" src="app/sideMenu.js"></script>
   <script type="module" src="app/recipeIngredientBuilder.js"></script>
   <script type="module" src="app/detailCards.js?v=20260822-supermarket-price"></script>
-  <script type="module" src="app/shoppingPriceEnhancements.js?v=20260825-shopping-quotes-fix1"></script>
+  <script type="module" src="app/ingredientPriceEnhancements.js?v=20260826-unit-prices"></script>
+  <script type="module" src="app/shoppingPriceEnhancements.js?v=20260826-shopping-total"></script>
   <script type="module" src="app/dishPickerEnhancements.js"></script>
   <script type="module" src="app/foodTranslationEnhancements.js"></script>
   <script type="module" src="app/mainActionsBootstrap.js?v=20260701-compact-ui"></script>
