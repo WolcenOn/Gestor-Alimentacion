@@ -24,7 +24,9 @@ export function summarizeShoppingQuote(quote) {
   const packageCount = Number(quote.packageCount || 0);
   const packagePrice = Number(product.price || 0);
   const totalCost = Number(quote.totalCost || 0);
-  if (!(packageCount > 0) || !(packagePrice > 0) || !(totalCost > 0)) return null;
+  const approximate = quote.approximate === true || product.variableWeight === true;
+  if (!(totalCost > 0)) return null;
+  if (!approximate && (!(packageCount > 0) || !(packagePrice > 0))) return null;
 
   return {
     productName: String(product.name || "Producto supermercado"),
@@ -34,6 +36,9 @@ export function summarizeShoppingQuote(quote) {
     totalCost,
     purchasedAmount: Number(quote.purchasedAmount || 0),
     purchasedUnit: String(quote.purchasedUnit || ""),
-    wasteAmount: Number(quote.wasteAmount || 0)
+    wasteAmount: Number(quote.wasteAmount || 0),
+    approximate,
+    pricePerUnit: Number(product.pricePerUnit || 0),
+    priceUnit: String(product.priceUnit || "")
   };
 }
