@@ -1,4 +1,3 @@
-import { getState } from "./store.js";
 import { formatMoney } from "./utils.js";
 import { canonicalForPackIngredient } from "./services/canonicalPackBridge.js";
 import { getCanonicalIngredientProducts, isPricesApiConfigured, pickBestIngredientProduct } from "./services/pricesApi.js";
@@ -167,8 +166,9 @@ function decorateInstalledPacks(root, state) {
   });
 }
 
-export function hydratePackPricingUi(root = document) {
+export async function hydratePackPricingUi(root = document) {
   if (!root?.querySelectorAll) return;
+  const { getState } = await import("./store.js");
   const state = getState();
   decorateInstalledPacks(root, state);
   root.querySelectorAll(".pack-dish-preview").forEach(card => void hydratePreviewCard(card));
@@ -176,7 +176,7 @@ export function hydratePackPricingUi(root = document) {
 
 function schedule() {
   if (typeof window === "undefined") return;
-  window.setTimeout(() => hydratePackPricingUi(document), 0);
+  window.setTimeout(() => void hydratePackPricingUi(document), 0);
 }
 
 if (typeof document !== "undefined" && typeof MutationObserver !== "undefined") {
