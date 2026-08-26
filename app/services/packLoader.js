@@ -5,37 +5,95 @@ import { findIngredientByCanonicalId, normalizeCanonicalMatchStatus } from "../s
 export const PACK_SOURCE = Object.freeze({
   owner: "WolcenOn",
   repo: "Gestor-Alimentacion",
-  branch: "ux-semana-accesible-fusion",
-  basePath: "packs"
+  branch: "main",
+  basePath: "packs",
+  manifestPath: "packs/manifest.json"
 });
 
 const GITHUB_API = "https://api.github.com";
+const RAW_GITHUB = "https://raw.githubusercontent.com";
+
+const CANONICAL_PACK_INGREDIENTS = Object.freeze({
+  "ajo": ["ajo", "Ajo"],
+  "cebolla": ["cebolla", "Cebolla"],
+  "puerro": ["puerro", "Puerro"],
+  "tomate": ["tomate", "Tomate"],
+  "tomates": ["tomate", "Tomate"],
+  "tomate cherry": ["tomate", "Tomate"],
+  "tomates cherry": ["tomate", "Tomate"],
+  "pimiento": ["pimiento", "Pimiento"],
+  "pimiento rojo": ["pimiento", "Pimiento"],
+  "pimiento rojo crudo": ["pimiento", "Pimiento"],
+  "pimiento verde": ["pimiento", "Pimiento"],
+  "pepino": ["pepino", "Pepino"],
+  "brocoli": ["brocoli", "Brócoli"],
+  "coliflor": ["coliflor", "Coliflor"],
+  "judias verdes": ["judias_verdes", "Judías verdes"],
+  "lechuga": ["lechuga", "Lechuga"],
+  "espinaca": ["espinaca", "Espinaca"],
+  "espinacas": ["espinaca", "Espinaca"],
+  "brotes tiernos": ["brotes_tiernos", "Brotes tiernos"],
+  "calabacin": ["calabacin", "Calabacín"],
+  "calabaza": ["calabaza", "Calabaza"],
+  "berenjena": ["berenjena", "Berenjena"],
+  "patata": ["patata", "Patata"],
+  "patatas": ["patata", "Patata"],
+  "zanahoria": ["zanahoria", "Zanahoria"],
+  "zanahorias": ["zanahoria", "Zanahoria"],
+  "champinon": ["champinon", "Champiñón"],
+  "champinones": ["champinon", "Champiñón"],
+  "seta": ["seta", "Seta"],
+  "setas": ["seta", "Seta"],
+  "arroz redondo": ["arroz_redondo", "Arroz redondo"],
+  "arroz extra": ["arroz_extra", "Arroz extra"],
+  "arroz vaporizado": ["arroz_vaporizado", "Arroz vaporizado"],
+  "arroz basmati": ["arroz_basmati", "Arroz basmati"],
+  "arroz integral": ["arroz_integral", "Arroz integral"],
+  "leche entera": ["leche_entera", "Leche entera"],
+  "leche semidesnatada": ["leche_semidesnatada", "Leche semidesnatada"],
+  "leche desnatada": ["leche_desnatada", "Leche desnatada"],
+  "leche entera sin lactosa": ["leche_entera_sin_lactosa", "Leche entera sin lactosa"],
+  "leche semidesnatada sin lactosa": ["leche_semidesnatada_sin_lactosa", "Leche semidesnatada sin lactosa"],
+  "leche desnatada sin lactosa": ["leche_desnatada_sin_lactosa", "Leche desnatada sin lactosa"]
+});
 
 export async function listRemotePacks() {
-  const root = `${GITHUB_API}/repos/${PACK_SOURCE.owner}/${PACK_SOURCE.repo}/contents/${PACK_SOURCE.basePath}?ref=${PACK_SOURCE.branch}`;
-  const files = [];
-  await walk(root, files);
-  return files.filter(f => String(f.path || "").endsWith(".json") && !String(f.path || "").includes(".."));
-}
-
-async function walk(url, files) {
-  const response = await fetch(url, {
+  const manifestUrl = `${GITHUB_API}/repos/${PACK_SOURCE.owner}/${PACK_SOURCE.repo}/contents/${PACK_SOURCE.manifestPath}?ref=${PACK_SOURCE.branch}`;
+  const response = await fetch(manifestUrl, {
     cache: "no-store",
-    headers: {
-      "Accept": "application/vnd.github+json"
-    }
+    headers: { "Accept": "application/vnd.github+json" }
   });
   if (!response.ok) {
     const detail = response.status === 403
       ? "GitHub ha limitado temporalmente las peticiones. Vuelve a intentarlo en unos minutos."
-      : `Respuesta ${response.status} al listar packs remotos.`;
+      : `Respuesta ${response.status} al leer el manifest de packs.`;
     throw new Error(`No se pudieron listar los packs remotos. ${detail}`);
   }
-  const entries = await response.json();
-  for (const entry of entries) {
-    if (entry.type === "dir") await walk(entry.url, files);
-    if (entry.type === "file" && entry.path.endsWith(".json")) files.push({ name: entry.name, path: entry.path, downloadUrl: entry.download_url });
+  const payload = await response.json();
+  const encoded = String(payload?.content || "").replace(/\s+/g, "");
+  let entries = [];
+  try {
+    entries = JSON.parse(decodeURIComponent(escape(atob(encoded))));
+  } catch {
+    throw new Error("El manifest de packs no contiene JSON válido.");
   }
+  if (!Array.isArray(entries)) throw new Error("El manifest de packs no es una lista válida.");
+  return entries.map(entry => manifestEntryToRemoteFile(entry)).filter(Boolean);
+}
+
+function manifestEntryToRemoteFile(entry) {
+  const path = String(entry?.path || "").trim();
+  if (!path.startsWith(`${PACK_SOURCE.basePath}/`) || path.includes("..") || !path.endsWith(".json")) return null;
+  const name = String(entry?.name || path.split("/").pop() || "pack.json").trim();
+  return {
+    name,
+    path,
+    title: String(entry?.title || "").trim(),
+    description: String(entry?.description || "").trim(),
+    tags: Array.isArray(entry?.tags) ? entry.tags : [],
+    canonicalReady: Boolean(entry?.canonicalReady),
+    downloadUrl: `${RAW_GITHUB}/${PACK_SOURCE.owner}/${PACK_SOURCE.repo}/${PACK_SOURCE.branch}/${path}`
+  };
 }
 
 export async function loadRemotePack(file) {
@@ -45,9 +103,57 @@ export async function loadRemotePack(file) {
   if (!response.ok) throw new Error("No se pudo descargar el pack.");
   const text = await response.text();
   if (/javascript:|<\s*script/gi.test(text)) throw new Error("Pack potencialmente inseguro.");
-  const pack = normalizePack(JSON.parse(text));
+  const parsed = JSON.parse(text);
+  const input = file.canonicalReady || String(file.path || "").startsWith(`${PACK_SOURCE.basePath}/canonical/`)
+    ? adaptPackToKnownCanonicals(parsed)
+    : parsed;
+  const pack = normalizePack(input);
   validatePack(pack);
   return pack;
+}
+
+export function adaptPackToKnownCanonicals(inputPack) {
+  const pack = structuredCloneSafe(inputPack);
+  pack.id = `${String(pack.id || slugId(pack.name || "pack"))}_canonical`;
+  pack.name = `${String(pack.name || "Pack sin nombre")} · Canonical`;
+  pack.tags = [...new Set([...(Array.isArray(pack.tags) ? pack.tags : []), "canonical", "prices-api"] )];
+  pack.ingredients = (Array.isArray(pack.ingredients) ? pack.ingredients : []).map(ingredient => {
+    if (String(ingredient?.canonicalIngredientId || "").trim()) return ingredient;
+    const canonical = canonicalForPackIngredient(ingredient);
+    if (!canonical) return ingredient;
+    return {
+      ...ingredient,
+      canonicalIngredientId: canonical.id,
+      canonicalIngredientName: canonical.name,
+      canonicalMatchStatus: "confirmed"
+    };
+  });
+  pack.dishes = (Array.isArray(pack.dishes) ? pack.dishes : []).map(dish => ({
+    ...dish,
+    id: `${String(dish.id || slugId(dish.name || "dish"))}_canonical`,
+    packId: pack.id
+  }));
+  return pack;
+}
+
+export function canonicalForPackIngredient(ingredient) {
+  const normalized = normalizeCanonicalLookup(ingredient?.name || "");
+  const match = CANONICAL_PACK_INGREDIENTS[normalized];
+  return match ? { id: match[0], name: match[1] } : null;
+}
+
+function normalizeCanonicalLookup(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function structuredCloneSafe(value) {
+  if (typeof structuredClone === "function") return structuredClone(value);
+  return JSON.parse(JSON.stringify(value));
 }
 
 export function normalizePack(inputPack) {
