@@ -10,17 +10,21 @@ function renderQuote(quote) {
   const summary = summarizeShoppingQuote(quote);
   if (!summary) return `<p class="small muted">Sin cotización de supermercado disponible.</p>`;
   const purchaseText = summary.purchasedAmount > 0 && summary.purchasedUnit
-    ? `${summary.purchasedAmount.toLocaleString("es-ES", { maximumFractionDigits: 3 })} ${escapeHtml(summary.purchasedUnit)} comprados`
+    ? `${summary.approximate ? "≈ " : ""}${summary.purchasedAmount.toLocaleString("es-ES", { maximumFractionDigits: 3 })} ${escapeHtml(summary.purchasedUnit)} comprados`
     : "";
-  const wasteText = summary.wasteAmount > 0 && summary.purchasedUnit
+  const wasteText = !summary.approximate && summary.wasteAmount > 0 && summary.purchasedUnit
     ? ` · sobra ${summary.wasteAmount.toLocaleString("es-ES", { maximumFractionDigits: 3 })} ${escapeHtml(summary.purchasedUnit)}`
     : "";
+  const costText = `${summary.approximate ? "≈ " : ""}${formatMoney(summary.totalCost)}`;
+  const pricingText = summary.approximate
+    ? `${summary.pricePerUnit > 0 ? `${formatMoney(summary.pricePerUnit)} / ${escapeHtml(summary.priceUnit || "unidad")} · ` : ""}precio final según peso real`
+    : `${summary.packageCount} envase(s) × ${formatMoney(summary.packagePrice)}`;
 
   return `
     <div class="small price-source-card shopping-supermarket-quote">
       <strong>${escapeHtml(summary.supermarket)} · ${escapeHtml(summary.productName)}</strong>
-      <p class="qty-line">${summary.packageCount} envase(s) × ${formatMoney(summary.packagePrice)} = <strong>${formatMoney(summary.totalCost)}</strong></p>
-      ${purchaseText ? `<p class="small muted">${purchaseText}${wasteText}</p>` : ""}
+      <p class="qty-line">${pricingText} = <strong>${costText}</strong></p>
+      ${purchaseText ? `<p class="small muted">${purchaseText}${wasteText}${summary.approximate ? " · cantidad y precio aproximados" : ""}</p>` : ""}
     </div>`;
 }
 
@@ -40,6 +44,28 @@ function cachedQuote(params) {
   return quoteCache.get(key);
 }
 
+function updateWeeklyTotal(root = document) {
+  const totalNode = root.querySelector?.("[data-shopping-supermarket-total]");
+  if (!totalNode) return;
+  const quoteNodes = [...root.querySelectorAll("[data-shopping-supermarket-quote]")];
+  const loaded = quoteNodes.filter(node => node.dataset.quoteStatus === "loaded" && Number(node.dataset.quoteTotalCost) > 0);
+  const pending = quoteNodes.some(node => node.dataset.quoteStatus === "loading" || !node.dataset.quoteStatus);
+  const total = loaded.reduce((sum, node) => sum + Number(node.dataset.quoteTotalCost || 0), 0);
+  const approximate = loaded.some(node => node.dataset.quoteApproximate === "true");
+  if (!loaded.length && pending) {
+    totalNode.innerHTML = `<strong>Total semanal supermercado</strong><p class="qty-line">Calculando cotizaciones...</p>`;
+    return;
+  }
+  if (!loaded.length) {
+    totalNode.innerHTML = `<strong>Total semanal supermercado</strong><p class="qty-line">Sin líneas canónicas cotizables.</p>`;
+    return;
+  }
+  totalNode.innerHTML = `
+    <strong>Total semanal supermercado</strong>
+    <p class="qty-line">${approximate ? "≈ " : ""}<strong>${formatMoney(total)}</strong> · ${loaded.length} línea(s) cotizada(s)${pending ? " · quedan cotizaciones pendientes" : ""}</p>
+    ${approximate ? `<p class="small muted">Incluye productos por peso: el importe final puede variar ligeramente.</p>` : ""}`;
+}
+
 async function hydrateQuoteNode(node, ingredient, shoppingItem) {
   if (!node || !canStartShoppingQuote(node.dataset.quoteStatus)) return;
   if (!ingredient?.canonicalIngredientId || !(Number(shoppingItem?.remainingQty) > 0)) return;
@@ -47,11 +73,13 @@ async function hydrateQuoteNode(node, ingredient, shoppingItem) {
   if (!isPricesApiConfigured()) {
     node.dataset.quoteStatus = "unconfigured";
     node.innerHTML = `<p class="small muted">Precio supermercado no configurado.</p>`;
+    updateWeeklyTotal(document);
     return;
   }
 
   node.dataset.quoteStatus = "loading";
   node.innerHTML = `<p class="small muted">Calculando compra supermercado...</p>`;
+  updateWeeklyTotal(document);
   try {
     const payload = await cachedQuote({
       ingredientId: ingredient.canonicalIngredientId,
@@ -60,12 +88,18 @@ async function hydrateQuoteNode(node, ingredient, shoppingItem) {
     });
     const best = pickBestShoppingQuote(payload?.items || []);
     if (!node.isConnected) return;
+    const summary = summarizeShoppingQuote(best);
     node.dataset.quoteStatus = "loaded";
+    node.dataset.quoteTotalCost = summary ? String(summary.totalCost) : "0";
+    node.dataset.quoteApproximate = summary?.approximate ? "true" : "false";
     node.innerHTML = renderQuote(best);
+    updateWeeklyTotal(document);
   } catch (error) {
     if (!node.isConnected) return;
     node.dataset.quoteStatus = "error";
+    node.dataset.quoteTotalCost = "0";
     node.innerHTML = `<p class="small muted">Precio supermercado no disponible ahora.</p>`;
+    updateWeeklyTotal(document);
     console.warn("No se pudo cotizar la línea de compra", ingredient.id, error);
   }
 }
@@ -93,6 +127,7 @@ export function hydrateShoppingSupermarketQuotes(root = document) {
     }
     void hydrateQuoteNode(node, ingredient, shoppingItem);
   });
+  updateWeeklyTotal(root);
 }
 
 function scheduleHydration() {
