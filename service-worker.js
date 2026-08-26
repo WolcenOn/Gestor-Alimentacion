@@ -1,4 +1,4 @@
-const CACHE_VERSION = "gestor-menu-v1.0.28-ux17";
+const CACHE_VERSION = "gestor-menu-v1.0.29-ux-prices-canonical";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -29,6 +29,17 @@ const APP_SHELL = [
   "./app/sideMenu.js",
   "./app/recipeIngredientBuilder.js",
   "./app/detailCards.js",
+  "./app/ingredientPriceEnhancements.js",
+  "./app/shoppingPriceEnhancements.js",
+  "./app/consumedPriceEnhancements.js",
+  "./app/packManifestEnhancements.js",
+  "./app/services/canonicalPackBridge.js",
+  "./app/services/pricesApi.js",
+  "./app/services/shoppingQuotes.js",
+  "./app/services/supermarketPricing.js",
+  "./app/services/dishPricing.js",
+  "./app/services/packPricing.js",
+  "./app/state/canonicalIngredients.js",
   "./app/dishPickerEnhancements.js",
   "./app/foodTranslationEnhancements.js",
   "./app/smartFoodTranslationEnhancements.js",
@@ -39,7 +50,6 @@ const APP_SHELL = [
   "./app/purchaseScanPriceEnhancements.js",
   "./app/shoppingFilterStyles.js",
   "./app/compactUiEnhancements.js",
-  "./app/packManifestEnhancements.js",
   "./app/memberPackPreferences.js",
   "./app/services/foodTranslation.js",
   "./app/services/usdaFoodData.js",
