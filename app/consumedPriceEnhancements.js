@@ -1,3 +1,4 @@
+import "./packPricingUiEnhancements.js";
 import { getState } from "./store.js";
 import { formatMoney } from "./utils.js";
 import { getCanonicalIngredientProducts, isPricesApiConfigured, pickBestIngredientProduct } from "./services/pricesApi.js";
