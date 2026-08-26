@@ -16,10 +16,32 @@ export function isPricesApiConfigured() {
   return Boolean(getPricesApiBaseUrl());
 }
 
-export function buildIngredientProductsUrl({ baseUrl, ingredientId, postalCode }) {
+function requireBaseUrl(baseUrl) {
   const base = String(baseUrl || "").trim().replace(/\/+$/, "");
-  const id = String(ingredientId || "").trim();
   if (!base) throw new Error("Prices API no configurada.");
+  return base;
+}
+
+export function buildProductSearchUrl({ baseUrl, query, postalCode }) {
+  const base = requireBaseUrl(baseUrl);
+  const q = String(query || "").trim();
+  if (!q) throw new Error("Escribe un producto para buscar.");
+  const params = new URLSearchParams({ q });
+  const postal = String(postalCode || "").trim();
+  if (postal) params.set("postalCode", postal);
+  return `${base}/products/search?${params.toString()}`;
+}
+
+export function buildIngredientSearchUrl({ baseUrl, query }) {
+  const base = requireBaseUrl(baseUrl);
+  const q = String(query || "").trim();
+  if (!q) throw new Error("Escribe un ingrediente canonical para buscar.");
+  return `${base}/ingredients/search?${new URLSearchParams({ q }).toString()}`;
+}
+
+export function buildIngredientProductsUrl({ baseUrl, ingredientId, postalCode }) {
+  const base = requireBaseUrl(baseUrl);
+  const id = String(ingredientId || "").trim();
   if (!id) throw new Error("Falta canonicalIngredientId.");
 
   const params = new URLSearchParams();
@@ -68,6 +90,23 @@ async function getJSON(url, timeoutMs) {
   }
 }
 
+export async function searchProducts({ query, postalCode = getPricesPostalCode(), timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
+  const url = buildProductSearchUrl({
+    baseUrl: getPricesApiBaseUrl(),
+    query,
+    postalCode
+  });
+  return getJSON(url, timeoutMs);
+}
+
+export async function searchCanonicalIngredients({ query, timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
+  const url = buildIngredientSearchUrl({
+    baseUrl: getPricesApiBaseUrl(),
+    query
+  });
+  return getJSON(url, timeoutMs);
+}
+
 export async function getCanonicalIngredientProducts({ ingredientId, postalCode = getPricesPostalCode(), timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
   const url = buildIngredientProductsUrl({
     baseUrl: getPricesApiBaseUrl(),
@@ -78,11 +117,10 @@ export async function getCanonicalIngredientProducts({ ingredientId, postalCode 
 }
 
 export function buildIngredientQuoteUrl({ baseUrl, ingredientId, amount, unit, postalCode }) {
-  const base = String(baseUrl || "").trim().replace(/\/+$/, "");
+  const base = requireBaseUrl(baseUrl);
   const id = String(ingredientId || "").trim();
   const qty = Number(amount);
   const normalizedUnit = String(unit || "").trim();
-  if (!base) throw new Error("Prices API no configurada.");
   if (!id) throw new Error("Falta canonicalIngredientId.");
   if (!Number.isFinite(qty) || qty <= 0) throw new Error("Cantidad de cotización inválida.");
   if (!normalizedUnit) throw new Error("Unidad de cotización inválida.");
