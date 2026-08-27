@@ -41,20 +41,31 @@ function renderNutritionDetails(state, ingredient) {
   `;
 }
 
-function latestPackageInfo(state, ingredient) {
+export function packageDisplayInfo(state, ingredient) {
   const lots = (state.purchaseLots || [])
     .filter(lot => lot.ingredientId === ingredient.id && Number(lot.packageCount) > 0 && Number(lot.packageSizeQty) > 0)
     .sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
   const lot = lots[0];
-  if (lot) return `${formatNumber(lot.packageCount)} envase(s) × ${formatNumber(lot.packageSizeQty)} ${lot.packageSizeUnit || lot.unit} = ${formatNumber(lot.qty)} ${lot.unit}`;
+  if (lot) {
+    const packageUnit = lot.packageSizeUnit || lot.unit;
+    return {
+      label: "Última compra",
+      text: `${formatNumber(lot.packageCount)} envase(s) × ${formatNumber(lot.packageSizeQty)} ${packageUnit} = ${formatNumber(lot.qty)} ${lot.unit}`,
+      source: "purchase_lot"
+    };
+  }
 
   const product = primaryProduct(ingredient);
   const packageQty = getPackageQty(product);
-  if (!packageQty) return "";
-  const count = Number(product.packageCount || 1);
-  const total = Number(product.lastPurchasedQty || (packageQty * count));
+  if (!(Number(packageQty) > 0)) return null;
+  const count = Number(product.packageCount || 1) || 1;
   const packageUnit = getPackageUnit(product) || ingredient.unit;
-  return `${formatNumber(count)} envase(s) × ${formatNumber(packageQty)} ${packageUnit} = ${formatNumber(total)} ${product.lastPurchasedUnit || packageUnit || ingredient.unit}`;
+  const total = Number(packageQty) * count;
+  return {
+    label: "Envase configurado",
+    text: `${formatNumber(count)} envase(s) × ${formatNumber(packageQty)} ${packageUnit} = ${formatNumber(total)} ${packageUnit || ingredient.unit}`,
+    source: "product_configuration"
+  };
 }
 
 function latestPriceInfo(state, ingredient) {
@@ -123,16 +134,16 @@ function renderManageCard(state, ingredient) {
   const fastEnabled = isTrustedPurchaseEnabled(ingredient);
   const productText = (ingredient.products || []).map(p => [p.productName, p.brand, p.barcode, p.packagingType, p.packaging, p.packageQty, p.packageUnit].filter(Boolean).join(" ")).join(" ");
   const packaging = ingredient.packagingType || ingredient.products?.find(p => p.packagingType || p.packaging)?.packagingType || ingredient.products?.find(p => p.packaging)?.packaging || "sin envase";
-  const packageInfo = latestPackageInfo(state, ingredient);
+  const packageInfo = packageDisplayInfo(state, ingredient);
   const priceInfo = latestPriceInfo(state, ingredient);
-  const searchText = [ingredient.name, family, ingredient.qty, ingredient.unit, packageInfo, priceInfo?.source, priceInfo?.price, ingredient.expiryDate || "sin fecha", ingredient.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", fastEnabled ? "compra rápida confianza" : "compra normal", productText].join(" ");
+  const searchText = [ingredient.name, family, ingredient.qty, ingredient.unit, packageInfo?.label, packageInfo?.text, priceInfo?.source, priceInfo?.price, ingredient.expiryDate || "sin fecha", ingredient.storageType, packaging, nutrition ? "nutrición sí" : "nutrición pendiente", fastEnabled ? "compra rápida confianza" : "compra normal", productText].join(" ");
   return `
     <div class="item ingredient-item" data-ingredient-id="${escapeHtml(ingredient.id)}" data-search="${escapeHtml(searchText)}">
       <div class="item-title">
         <div>
           <strong>${escapeHtml(ingredient.name)}</strong>
           <p class="qty-line">Stock total: ${formatNumber(ingredient.qty)} ${escapeHtml(ingredient.unit)} · ${escapeHtml(family)}</p>
-          ${packageInfo ? `<p class="small muted">Última compra/envase: ${escapeHtml(packageInfo)}</p>` : ""}
+          ${packageInfo ? `<p class="small muted">${escapeHtml(packageInfo.label)}: ${escapeHtml(packageInfo.text)}</p>` : ""}
         </div>
         ${ingredient.expiryDate ? `<span class="badge warning">${escapeHtml(ingredient.expiryDate)}</span>` : `<span class="badge">sin fecha</span>`}
       </div>
