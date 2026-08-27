@@ -9,22 +9,34 @@ const quoteCache = new Map();
 function renderQuote(quote) {
   const summary = summarizeShoppingQuote(quote);
   if (!summary) return `<p class="small muted">Sin cotización de supermercado disponible.</p>`;
+
+  const approximatePrefix = summary.approximate ? "≈ " : "";
   const purchaseText = summary.purchasedAmount > 0 && summary.purchasedUnit
-    ? `${summary.approximate ? "≈ " : ""}${summary.purchasedAmount.toLocaleString("es-ES", { maximumFractionDigits: 3 })} ${escapeHtml(summary.purchasedUnit)} comprados`
+    ? `${approximatePrefix}${summary.purchasedAmount.toLocaleString("es-ES", { maximumFractionDigits: 3 })} ${escapeHtml(summary.purchasedUnit)} comprados`
     : "";
-  const wasteText = !summary.approximate && summary.wasteAmount > 0 && summary.purchasedUnit
-    ? ` · sobra ${summary.wasteAmount.toLocaleString("es-ES", { maximumFractionDigits: 3 })} ${escapeHtml(summary.purchasedUnit)}`
+  const wasteText = summary.wasteAmount > 0 && summary.purchasedUnit
+    ? ` · sobra ${summary.approximate ? "aprox. " : ""}${summary.wasteAmount.toLocaleString("es-ES", { maximumFractionDigits: 3 })} ${escapeHtml(summary.purchasedUnit)}`
     : "";
-  const costText = `${summary.approximate ? "≈ " : ""}${formatMoney(summary.totalCost)}`;
-  const pricingText = summary.approximate
-    ? `${summary.pricePerUnit > 0 ? `${formatMoney(summary.pricePerUnit)} / ${escapeHtml(summary.priceUnit || "unidad")} · ` : ""}precio final según peso real`
-    : `${summary.packageCount} envase(s) × ${formatMoney(summary.packagePrice)}`;
+  const costText = `${approximatePrefix}${formatMoney(summary.totalCost)}`;
+
+  let pricingText;
+  let detailSuffix = "";
+  if (summary.purchaseMode === "variable_weight") {
+    pricingText = `${summary.pricePerUnit > 0 ? `${formatMoney(summary.pricePerUnit)} / ${escapeHtml(summary.priceUnit || "unidad")} · ` : ""}precio final según peso real`;
+    detailSuffix = " · cantidad y precio aproximados";
+  } else if (summary.purchaseMode === "approximate_package") {
+    const packageLabel = summary.packageCount === 1 ? "pieza/envase aprox." : "piezas/envases aprox.";
+    pricingText = `${summary.packageCount} ${packageLabel} × ${approximatePrefix}${formatMoney(summary.packagePrice)}`;
+    detailSuffix = " · peso y precio final pueden variar";
+  } else {
+    pricingText = `${summary.packageCount} envase(s) × ${formatMoney(summary.packagePrice)}`;
+  }
 
   return `
     <div class="small price-source-card shopping-supermarket-quote">
       <strong>${escapeHtml(summary.supermarket)} · ${escapeHtml(summary.productName)}</strong>
       <p class="qty-line">${pricingText} = <strong>${costText}</strong></p>
-      ${purchaseText ? `<p class="small muted">${purchaseText}${wasteText}${summary.approximate ? " · cantidad y precio aproximados" : ""}</p>` : ""}
+      ${purchaseText ? `<p class="small muted">${purchaseText}${wasteText}${detailSuffix}</p>` : ""}
     </div>`;
 }
 
@@ -63,7 +75,7 @@ function updateWeeklyTotal(root = document) {
   totalNode.innerHTML = `
     <strong>Total semanal supermercado</strong>
     <p class="qty-line">${approximate ? "≈ " : ""}<strong>${formatMoney(total)}</strong> · ${loaded.length} línea(s) cotizada(s)${pending ? " · quedan cotizaciones pendientes" : ""}</p>
-    ${approximate ? `<p class="small muted">Incluye productos por peso: el importe final puede variar ligeramente.</p>` : ""}`;
+    ${approximate ? `<p class="small muted">Incluye productos a granel o piezas de peso aproximado: el importe final puede variar.</p>` : ""}`;
 }
 
 async function hydrateQuoteNode(node, ingredient, shoppingItem) {
