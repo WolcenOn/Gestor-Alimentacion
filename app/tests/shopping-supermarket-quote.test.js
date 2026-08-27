@@ -22,7 +22,8 @@ test("summarizes package and checkout cost without changing units", () => {
   });
   assert.deepEqual(summary, {
     productName: "Leche entera Dia Láctea 1 L", supermarket: "DIA", packageCount: 2, packagePrice: 0.96, totalCost: 1.92,
-    purchasedAmount: 2, purchasedUnit: "l", wasteAmount: 0.8, approximate: false, pricePerUnit: 0, priceUnit: ""
+    purchasedAmount: 2, purchasedUnit: "l", wasteAmount: 0.8, approximate: false,
+    variableWeight: false, purchaseMode: "fixed_package", pricePerUnit: 0, priceUnit: ""
   });
 });
 
