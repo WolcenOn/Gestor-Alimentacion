@@ -1,4 +1,4 @@
-const CACHE_VERSION = "gestor-menu-v1.0.31";
+const CACHE_VERSION = "gestor-menu-v1.0.32";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -24,6 +24,7 @@ const APP_SHELL = [
   "./app/recipeIngredientBuilder.js",
   "./app/detailCards.js",
   "./app/shoppingPriceEnhancements.js",
+  "./app/nonFoodShoppingEnhancements.js",
   "./app/dishPickerEnhancements.js",
   "./app/foodTranslationEnhancements.js",
   "./app/smartFoodTranslationEnhancements.js",
@@ -37,7 +38,9 @@ const APP_SHELL = [
   "./app/services/foodTranslation.js",
   "./app/services/usdaFoodData.js",
   "./app/services/packLoader.js",
+  "./app/services/pricesApi.js",
   "./app/services/shoppingQuotes.js",
+  "./app/state/directPurchases.js",
   "./app/nutritionBatchEnhancements.js",
   "./app/mainActionsBootstrap.js",
   "./app/render/settings.js",
