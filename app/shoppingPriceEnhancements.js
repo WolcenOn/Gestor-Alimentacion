@@ -1,5 +1,6 @@
 import { getState } from "./store.js";
 import { computeShoppingListWithProgress } from "./state/shoppingProgress.js";
+import { directPurchaseSubtotal, directPurchasesForWeek } from "./state/directPurchases.js";
 import { quoteCanonicalIngredient, isPricesApiConfigured } from "./services/pricesApi.js";
 import { canStartShoppingQuote, pickBestShoppingQuote, summarizeShoppingQuote } from "./services/shoppingQuotes.js";
 import { escapeHtml, formatMoney } from "./utils.js";
@@ -62,20 +63,27 @@ function updateWeeklyTotal(root = document) {
   const quoteNodes = [...root.querySelectorAll("[data-shopping-supermarket-quote]")];
   const loaded = quoteNodes.filter(node => node.dataset.quoteStatus === "loaded" && Number(node.dataset.quoteTotalCost) > 0);
   const pending = quoteNodes.some(node => node.dataset.quoteStatus === "loading" || !node.dataset.quoteStatus);
-  const total = loaded.reduce((sum, node) => sum + Number(node.dataset.quoteTotalCost || 0), 0);
+  const foodTotal = loaded.reduce((sum, node) => sum + Number(node.dataset.quoteTotalCost || 0), 0);
   const approximate = loaded.some(node => node.dataset.quoteApproximate === "true");
-  if (!loaded.length && pending) {
-    totalNode.innerHTML = `<strong>Total semanal supermercado</strong><p class="qty-line">Calculando cotizaciones...</p>`;
-    return;
-  }
-  if (!loaded.length) {
-    totalNode.innerHTML = `<strong>Total semanal supermercado</strong><p class="qty-line">Sin líneas canónicas cotizables.</p>`;
-    return;
-  }
+  const state = getState();
+  const directItems = directPurchasesForWeek(state);
+  const otherTotal = directPurchaseSubtotal(state);
+  const grandTotal = foodTotal + otherTotal;
+
+  const foodText = loaded.length
+    ? `${approximate ? "≈ " : ""}${formatMoney(foodTotal)} · ${loaded.length} línea(s) cotizada(s)${pending ? " · quedan cotizaciones pendientes" : ""}`
+    : pending
+      ? "Calculando cotizaciones..."
+      : "Sin líneas canónicas cotizables";
+  const otherText = `${formatMoney(otherTotal)} · ${directItems.length} producto(s)`;
+  const totalPrefix = approximate ? "≈ " : "";
+
   totalNode.innerHTML = `
-    <strong>Total semanal supermercado</strong>
-    <p class="qty-line">${approximate ? "≈ " : ""}<strong>${formatMoney(total)}</strong> · ${loaded.length} línea(s) cotizada(s)${pending ? " · quedan cotizaciones pendientes" : ""}</p>
-    ${approximate ? `<p class="small muted">Incluye productos a granel o piezas de peso aproximado: el importe final puede variar.</p>` : ""}`;
+    <strong>Resumen de presupuesto</strong>
+    <p class="qty-line">Alimentos: <strong>${foodText}</strong></p>
+    <p class="qty-line">Otros productos: <strong>${otherText}</strong></p>
+    <p class="qty-line">Total compra${pending ? " provisional" : ""}: <strong>${totalPrefix}${formatMoney(grandTotal)}</strong></p>
+    ${approximate ? `<p class="small muted">El subtotal de alimentos incluye productos a granel o piezas de peso aproximado: el importe final puede variar.</p>` : ""}`;
 }
 
 async function hydrateQuoteNode(node, ingredient, shoppingItem) {
