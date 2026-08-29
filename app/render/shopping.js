@@ -1,5 +1,6 @@
 import { computeShoppingListWithProgress } from "../state/shoppingProgress.js";
-import { escapeHtml } from "../utils.js";
+import { directPurchasesForWeek } from "../state/directPurchases.js";
+import { escapeHtml, formatMoney } from "../utils.js";
 import { isTrustedPurchaseEnabled } from "../fastPurchase.js";
 import { renderIngredientCard } from "./ingredientCard.js";
 
@@ -15,6 +16,7 @@ const FILTERS = [
 
 export function renderShopping(state) {
   const items = computeShoppingListWithProgress(state);
+  const directItems = directPurchasesForWeek(state);
   const activeFilter = getActiveShoppingFilter();
   const filteredItems = filterShoppingItems(items, activeFilter);
   const openItems = items.filter(i => ["pending", "partial"].includes(i.status) && i.remainingQty > 0);
@@ -33,24 +35,69 @@ export function renderShopping(state) {
 
     <section class="card supermarket-card compact-supermarket-card" data-shopping-filter-root data-active-shopping-filter="${escapeHtml(activeFilter)}">
       <div class="section-title-row compact-section-title-row">
-        <div><h3>${escapeHtml(activeFilterLabel)}</h3></div>
-        <span class="badge">${filteredItems.length}/${items.length}</span>
+        <div><h3>Resumen de presupuesto</h3></div>
       </div>
       <div class="item price-source-card" data-shopping-supermarket-total>
-        <strong>Total semanal supermercado</strong>
-        <p class="qty-line">Calculando cotizaciones...</p>
+        <strong>Total de compra</strong>
+        <p class="qty-line">Calculando presupuesto...</p>
       </div>
-      <div class="shopping-filter-bar no-print" role="group" aria-label="Filtrar lista de compra por estado">
+
+      <div class="section-title-row compact-section-title-row">
+        <div><h3>Alimentos · ${escapeHtml(activeFilterLabel)}</h3></div>
+        <span class="badge">${filteredItems.length}/${items.length}</span>
+      </div>
+      <div class="shopping-filter-bar no-print" role="group" aria-label="Filtrar lista de alimentos por estado">
         ${FILTERS.map(filter => renderFilterButton(filter, activeFilter, items)).join("")}
       </div>
-      <label class="quick-search-label compact-search-label">Buscar
+      <label class="quick-search-label compact-search-label">Buscar alimentos
         <input type="search" class="quick-search" placeholder="Tomate, lácteos, comprado..." data-search-target=".supermarket-list .supermarket-item" data-empty-target="shoppingSearchEmpty">
       </label>
-      <div id="shoppingSearchEmpty" class="search-empty muted" hidden>No hay líneas de compra que coincidan.</div>
+      <div id="shoppingSearchEmpty" class="search-empty muted" hidden>No hay líneas de alimentos que coincidan.</div>
       ${filteredItems.length ? Object.values(groups).map(group => renderShoppingGroup(state, group)).join("") : renderEmptyFilterState(activeFilter, items.length)}
+
+      <div class="section-title-row compact-section-title-row">
+        <div>
+          <h3>Otros productos</h3>
+          <p class="small muted">Añade directamente un producto concreto del supermercado. No afecta a recetas, ingredientes ni nutrición.</p>
+        </div>
+        <span class="badge">${directItems.length}</span>
+      </div>
+      <form class="search-panel no-print" data-form="non-food-product-search">
+        <label>Buscar en supermercado
+          <input name="query" type="search" required autocomplete="off" placeholder="Champú, detergente, papel higiénico...">
+        </label>
+        <div class="actions"><button type="submit">Buscar otros productos</button></div>
+      </form>
+      <div id="nonFoodSearchResults" class="list results-list no-print"><p class="small muted">Busca un producto para añadirlo por unidades.</p></div>
+      <div class="list direct-purchase-list" data-direct-purchase-list>
+        ${directItems.length ? directItems.map(renderDirectPurchaseItem).join("") : `<p class="muted">No hay otros productos añadidos a esta semana.</p>`}
+      </div>
     </section>
-    ${openItems.length ? "" : `<p class="alert">No queda nada pendiente de compra para esta semana.</p>`}
+    ${openItems.length || directItems.length ? "" : `<p class="alert">No queda nada pendiente de compra para esta semana.</p>`}
   `;
+}
+
+function renderDirectPurchaseItem(item) {
+  const quantity = Math.max(1, Number(item.quantity) || 1);
+  const price = Math.max(0, Number(item.price) || 0);
+  const packageText = Number(item.packageAmount) > 0 && item.packageUnit
+    ? ` · ${Number(item.packageAmount).toLocaleString("es-ES", { maximumFractionDigits: 3 })} ${escapeHtml(item.packageUnit)}`
+    : "";
+  const availability = item.available === false ? ` · <span class="muted">no disponible</span>` : "";
+  return `
+    <article class="item supermarket-item direct-purchase-item" data-direct-purchase-id="${escapeHtml(item.id)}">
+      <div>
+        <strong>${escapeHtml(item.name)}</strong>
+        <p class="qty-line">${escapeHtml(String(item.supermarketId || "supermercado").toUpperCase())}${packageText}${availability}</p>
+        <p class="small muted">${formatMoney(price)} × ${quantity} = <strong>${formatMoney(price * quantity)}</strong></p>
+      </div>
+      <div class="row-actions compact-shopping-actions">
+        <label class="small">Unidades
+          <input type="number" min="1" step="1" value="${quantity}" data-direct-purchase-quantity data-direct-purchase-id="${escapeHtml(item.id)}" aria-label="Unidades de ${escapeHtml(item.name)}">
+        </label>
+        <button type="button" class="secondary" data-action="remove-direct-purchase" data-direct-purchase-id="${escapeHtml(item.id)}">Quitar</button>
+      </div>
+    </article>`;
 }
 
 function getActiveShoppingFilter() {
@@ -66,9 +113,9 @@ function renderFilterButton(filter, activeFilter, items) {
   return `<button type="button" class="${active ? "" : "secondary"}" data-action="set-shopping-filter" data-shopping-filter="${escapeHtml(filter.id)}" aria-pressed="${active ? "true" : "false"}">${escapeHtml(filter.label)} <span class="mini-badge">${count}</span></button>`;
 }
 function renderEmptyFilterState(filterId, totalItems) {
-  if (!totalItems) return `<p class="muted">Añade platos a la semana para generar la lista de compra.</p>`;
+  if (!totalItems) return `<p class="muted">Añade platos a la semana para generar la lista de alimentos.</p>`;
   const label = FILTERS.find(filter => filter.id === filterId)?.label || "este filtro";
-  return `<p class="muted">No hay productos en “${escapeHtml(label)}”. Cambia de filtro para ver otras líneas de compra.</p>`;
+  return `<p class="muted">No hay alimentos en “${escapeHtml(label)}”. Cambia de filtro para ver otras líneas de compra.</p>`;
 }
 function groupShoppingItems(state, items) {
   const familyMap = new Map(state.ingredientFamilies.map(family => [family.id, family.name]));
