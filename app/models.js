@@ -1,7 +1,7 @@
 import { uid, nowIso, todayIsoDate } from "./utils.js";
 import { getWeekRange } from "./state/calendarPeriods.js";
 
-export const SCHEMA_VERSION = 3;
+export const SCHEMA_VERSION = 4;
 
 export function withMeta(entity, prefix) {
   const stamp = nowIso();
@@ -77,6 +77,7 @@ export function createDefaultState() {
     favoriteIds: [],
     purchaseLots: [],
     purchaseEntries: [],
+    directPurchaseItems: [],
     wasteEntries: [],
     recyclingEntries: [],
     shoppingProgress: {},

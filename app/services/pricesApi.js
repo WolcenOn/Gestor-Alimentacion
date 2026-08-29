@@ -16,6 +16,20 @@ export function isPricesApiConfigured() {
   return Boolean(getPricesApiBaseUrl());
 }
 
+export function buildProductSearchUrl({ baseUrl, query, postalCode, scope = "non_food" }) {
+  const base = String(baseUrl || "").trim().replace(/\/+$/, "");
+  const q = String(query || "").trim();
+  const normalizedScope = String(scope || "non_food").trim().toLowerCase();
+  if (!base) throw new Error("Prices API no configurada.");
+  if (!q) throw new Error("Escribe un producto para buscar.");
+  if (!["all", "food", "non_food"].includes(normalizedScope)) throw new Error("Ámbito de búsqueda de productos inválido.");
+
+  const params = new URLSearchParams({ q, scope: normalizedScope });
+  const postal = String(postalCode || "").trim();
+  if (postal) params.set("postalCode", postal);
+  return `${base}/products/search?${params.toString()}`;
+}
+
 export function buildIngredientProductsUrl({ baseUrl, ingredientId, postalCode }) {
   const base = String(baseUrl || "").trim().replace(/\/+$/, "");
   const id = String(ingredientId || "").trim();
@@ -66,6 +80,16 @@ async function getJSON(url, timeoutMs) {
   } finally {
     window.clearTimeout(timeout);
   }
+}
+
+export async function searchSupermarketProducts({ query, postalCode = getPricesPostalCode(), scope = "non_food", timeoutMs = DEFAULT_TIMEOUT_MS } = {}) {
+  const url = buildProductSearchUrl({
+    baseUrl: getPricesApiBaseUrl(),
+    query,
+    postalCode,
+    scope
+  });
+  return getJSON(url, timeoutMs);
 }
 
 export function buildCanonicalResolveBatchUrl({ baseUrl, queries }) {

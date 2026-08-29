@@ -32,6 +32,7 @@ function ensureBaseCollections(data) {
   data.mealTypes ||= [];
   data.purchaseLots ||= [];
   data.purchaseEntries ||= [];
+  data.directPurchaseItems ||= [];
   data.shoppingProgress ||= {};
   data.wasteEntries ||= [];
   data.recyclingEntries ||= [];
@@ -117,6 +118,12 @@ export function migrateData(data) {
   if (data.meta.schemaVersion < 3) {
     migrateWeekDates(data);
     data.meta.schemaVersion = 3;
+    data.meta.lastMigrationAt = new Date().toISOString();
+  }
+
+  if (data.meta.schemaVersion < 4) {
+    data.directPurchaseItems ||= [];
+    data.meta.schemaVersion = 4;
     data.meta.lastMigrationAt = new Date().toISOString();
   }
 

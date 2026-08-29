@@ -8,7 +8,7 @@ export function validateNoDangerousText(value, label = "texto") {
 
 export function validateState(data) {
   if (!data || typeof data !== "object") throw new Error("El archivo no contiene un objeto válido.");
-  const requiredArrays = ["ingredientFamilies", "ingredients", "dishes", "weeks", "familyMembers", "mealTypes", "purchaseLots", "purchaseEntries", "wasteEntries", "recyclingEntries", "nutritionProfiles", "historySnapshots"];
+  const requiredArrays = ["ingredientFamilies", "ingredients", "dishes", "weeks", "familyMembers", "mealTypes", "purchaseLots", "purchaseEntries", "directPurchaseItems", "wasteEntries", "recyclingEntries", "nutritionProfiles", "historySnapshots"];
   for (const key of requiredArrays) {
     if (!Array.isArray(data[key])) throw new Error(`Falta la colección ${key}.`);
   }
@@ -17,6 +17,7 @@ export function validateState(data) {
   data.ingredients.forEach(validateIngredient);
   data.dishes.forEach(d => validateDish(d, data.ingredients));
   data.weeks.forEach(w => validateWeek(w, data.dishes));
+  data.directPurchaseItems.forEach(validateDirectPurchaseItem);
   return true;
 }
 
@@ -48,6 +49,16 @@ export function validateProduct(product) {
   validateNoDangerousText(product.brand || "", "Marca");
   validateNoDangerousText(product.packagingType || product.packaging || "", "Envase de producto");
   if (product.barcode && !/^\d{6,18}$/.test(String(product.barcode))) throw new Error("Código de barras no válido.");
+}
+
+export function validateDirectPurchaseItem(item) {
+  if (!item?.id || !item.weekId || !item.productId) throw new Error("Hay un producto directo sin identificadores completos.");
+  validateNoDangerousText(item.name || "", "Nombre de producto directo");
+  validateNoDangerousText(item.brand || "", "Marca de producto directo");
+  validateNoDangerousText(item.supermarketId || "", "Supermercado de producto directo");
+  if (!String(item.name || "").trim()) throw new Error("Hay un producto directo sin nombre.");
+  if (!Number.isInteger(Number(item.quantity)) || Number(item.quantity) <= 0) throw new Error(`Cantidad inválida en ${item.name}.`);
+  if (!Number.isFinite(Number(item.price)) || Number(item.price) < 0) throw new Error(`Precio inválido en ${item.name}.`);
 }
 
 export function validateDish(dish, ingredients = []) {
