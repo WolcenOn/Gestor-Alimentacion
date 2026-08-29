@@ -1,6 +1,7 @@
 import { getState, updateState } from "./store.js";
+import { computeShoppingListWithProgress } from "./state/shoppingProgress.js";
 import { searchSupermarketProducts, isPricesApiConfigured } from "./services/pricesApi.js";
-import { addDirectPurchase, removeDirectPurchase, setDirectPurchaseQuantity } from "./state/directPurchases.js";
+import { addDirectPurchase, directPurchasesForWeek, removeDirectPurchase, setDirectPurchaseQuantity } from "./state/directPurchases.js";
 import { escapeHtml, formatMoney } from "./utils.js";
 import { showAlert } from "./render/ui.js";
 
@@ -45,6 +46,49 @@ async function searchNonFoodProducts(form) {
     ? searchResults.map(renderSearchResult).join("")
     : `<p class="small muted">No se han encontrado otros productos para “${escapeHtml(query)}”.</p>`;
 }
+
+function combinedShoppingText(state) {
+  const week = state.weeks.find(w => w.id === state.activeWeekId);
+  const foods = computeShoppingListWithProgress(state)
+    .filter(item => item.remainingQty > 0)
+    .map(item => `- ${item.name}: ${item.display.remaining}`);
+  const others = directPurchasesForWeek(state)
+    .map(item => `- ${item.name}: ${Number(item.quantity) || 0} ud. (${formatMoney((Number(item.price) || 0) * (Number(item.quantity) || 0))})`);
+  return [
+    `Lista de la compra · ${week?.name || "Semana"}`,
+    "",
+    "Alimentos",
+    ...(foods.length ? foods : ["- Sin alimentos pendientes"]),
+    "",
+    "Otros productos",
+    ...others
+  ].join("\n");
+}
+
+async function shareCombinedShopping(state) {
+  const text = combinedShoppingText(state);
+  if (navigator.share) {
+    await navigator.share({ text });
+    return;
+  }
+  await navigator.clipboard?.writeText(text);
+  showAlert("Lista copiada al portapapeles.");
+}
+
+// The existing main handler shares food-only lists. Intercept in capture phase
+// only when direct products exist so the combined list is shared once.
+document.addEventListener("click", event => {
+  const button = event.target.closest?.('[data-action="share-shopping"]');
+  if (!button) return;
+  const state = getState();
+  if (!directPurchasesForWeek(state).length) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  void shareCombinedShopping(state).catch(error => {
+    console.error(error);
+    showAlert(error.message || "No se pudo compartir la lista.", "error");
+  });
+}, true);
 
 document.addEventListener("submit", async event => {
   const form = event.target.closest?.('form[data-form="non-food-product-search"]');
