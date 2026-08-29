@@ -109,7 +109,8 @@ assert.equal(withoutProfile.trustedPurchase, true);
 assert.equal(withoutProfile.products[0].nutritionSnapshot, null);
 assert.equal(withoutProfile.products[0].activeNutrition, false);
 
+assert.deepEqual(first.directPurchaseItems, []);
 assert.deepEqual(second, first);
-assert.equal(first.meta.schemaVersion, 3);
+assert.equal(first.meta.schemaVersion, 4);
 
 console.log("migration-v2.test.js OK");
