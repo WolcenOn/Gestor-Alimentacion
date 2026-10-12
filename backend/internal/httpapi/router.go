@@ -119,7 +119,7 @@ type memberRoleRequest struct {
 type syncRequest struct {
 	Version           int             `json:"version"`
 	State             json.RawMessage `json:"state"`
-	ExpectedUpdatedAt string          `json:"expectedUpdatedAt"`
+	ExpectedUpdatedAt json.RawMessage `json:"expectedUpdatedAt"`
 }
 
 func registerHandler(cfg config.Config, appStore *store.Store) http.HandlerFunc {
@@ -450,14 +450,24 @@ func decodeJSON(w http.ResponseWriter, r *http.Request, target any) bool {
 	return true
 }
 
-func parseExpectedUpdatedAt(w http.ResponseWriter, value string) (*time.Time, bool) {
-	value = strings.TrimSpace(value)
-	if value == "" {
+// The precondition is mandatory: JSON null means create-only, while a
+// timestamp means update only if the client saw that exact snapshot.
+func parseExpectedUpdatedAt(w http.ResponseWriter, raw json.RawMessage) (*time.Time, bool) {
+	if len(raw) == 0 {
+		writeError(w, http.StatusPreconditionRequired, "sync_precondition_required", "Consulta primero la nube para obtener su versión antes de guardar.")
+		return nil, false
+	}
+	if string(raw) == "null" {
 		return nil, true
 	}
+	var value string
+	if err := json.Unmarshal(raw, &value); err != nil || strings.TrimSpace(value) == "" {
+		writeError(w, http.StatusBadRequest, "invalid_expected_updated_at", "expectedUpdatedAt debe ser null o una fecha ISO válida.")
+		return nil, false
+	}
 	parsed, err := time.Parse(time.RFC3339Nano, value)
-	if err != nil {
-		writeError(w, http.StatusBadRequest, "invalid_expected_updated_at", "expectedUpdatedAt debe ser una fecha ISO válida.")
+	if err != nil || parsed.IsZero() {
+		writeError(w, http.StatusBadRequest, "invalid_expected_updated_at", "expectedUpdatedAt debe ser null o una fecha ISO válida.")
 		return nil, false
 	}
 	parsed = parsed.UTC()
