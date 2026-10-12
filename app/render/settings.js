@@ -26,6 +26,8 @@ function renderCloudSettings() {
   const loadMembers = "window.GestorCloudMembers.list().then(({members})=>{document.getElementById('cloudMembersOutput').textContent=members.map(m=>`${m.email} · ${m.role} · ${m.userId}`).join('\\n')||'Sin miembros';}).catch(error=>alert(error.message));";
   const updateRole = "const id=document.getElementById('cloudMemberUserId').value.trim();const role=document.getElementById('cloudMemberRole').value;if(!id){alert('Pega el userId del miembro.');return;}window.GestorCloudMembers.updateRole(id,role).then(()=>{alert('Rol actualizado.');}).catch(error=>alert(error.message));";
   const removeMember = "const id=document.getElementById('cloudMemberUserId').value.trim();if(!id){alert('Pega el userId del miembro.');return;}if(!confirm('¿Quitar esta cuenta del hogar?'))return;window.GestorCloudMembers.remove(id).then(()=>{alert('Miembro eliminado.');}).catch(error=>alert(error.message));";
+  const compareCloud = "window.GestorCloudSync.preview().then(report=>{const output=document.getElementById('cloudSyncReviewOutput');if(output)output.textContent=report.summary;}).catch(error=>alert(error.message));";
+  const adoptCloud = "window.GestorCloudSync.adoptRemoteWithBackup().then(result=>{if(result.applied){alert('Se han cargado los datos de la nube. La copia local se ha descargado en JSON.');location.reload();}}).catch(error=>alert(error.message));";
 
   return `
     <article class="card cloud-sync-card">
@@ -59,6 +61,16 @@ function renderCloudSettings() {
           <button type="button" class="secondary" onclick="window.GestorCloudAPI.clearCloudSession();alert('Sesión cloud cerrada.');location.reload();">Cerrar sesión cloud</button>
         </div>
 
+        <div class="help-note">
+          <h4>Comparar y resolver cambios entre dispositivos</h4>
+          <p>Si la nube devuelve un conflicto 409, tus datos locales se conservan. Compara las colecciones sin sustituir nada. Se muestran cantidades y diferencias, nunca nombres ni datos de salud.</p>
+          <div class="actions wrap">
+            <button type="button" class="secondary" onclick="${escapeHtml(compareCloud)}">Comparar local y nube sin modificar</button>
+            <button type="button" class="secondary" onclick="${escapeHtml(adoptCloud)}">Guardar copia local y adoptar datos de la nube</button>
+          </div>
+          <pre id="cloudSyncReviewOutput" role="status" aria-live="polite" style="white-space:pre-wrap;max-height:16rem;overflow:auto;">Pulsa Comparar para ver qué partes son distintas.</pre>
+          <p class="muted">La copia JSON puede contener datos de salud y no está cifrada: guárdala en un lugar seguro. Adoptar la nube descarta la edición local activa después de solicitar su descarga y de tu confirmación. No se combinan datos automáticamente.</p>
+        </div>
         <div class="grid cols-2 settings-grid">
           <form class="stack-form" onsubmit="${escapeHtml(inviteSubmit)}">
             <h4>Invitar a otra cuenta</h4>
