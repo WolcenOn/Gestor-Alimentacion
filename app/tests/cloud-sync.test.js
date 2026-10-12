@@ -60,7 +60,9 @@ const {
   getCloudSyncStatus,
   pullCloudState,
   resolvePendingCloudChanges,
-  pushCloudState
+  pushCloudState,
+  previewCloudDifferences,
+  adoptRemoteWithBackup
 } = await import("../cloudSync.js");
 
 enableCloudAutoSync();
@@ -184,5 +186,48 @@ await resolvePendingCloudChanges();
 status = getCloudSyncStatus();
 assert.equal(status.pendingLocalChanges, false);
 assert.equal(status.updatedAt, "2026-06-19T16:00:00.000002Z");
+
+// Preview must never adopt a remote version token; doing so would make a
+// pending local upload seem to have read edits from a second device.
+updateState(state => {
+  state.settings.previewPendingChange = true;
+}, "unit-test-preview-pending");
+const beforePreview = getCloudSyncStatus();
+globalThis.fetch = async (_url, options = {}) => {
+  assert.equal(options.method, "GET");
+  return new Response(JSON.stringify({
+    sync:{
+      updatedAt:"2026-06-19T19:00:00.000000Z",
+      state:{
+        app:"gestor-alimentacion",
+        state:{ ingredients:[], familyMembers:[], nutritionProfiles:[], settings:{} }
+      }
+    }
+  }), { status:200, headers:{ "Content-Type":"application/json" } });
+};
+const comparison = await previewCloudDifferences();
+assert.equal(comparison.remoteUpdatedAt, "2026-06-19T19:00:00.000000Z");
+assert.equal(comparison.knownUpdatedAt, beforePreview.updatedAt);
+assert.equal(comparison.pendingLocalChanges, true);
+assert.equal(getCloudSyncStatus().updatedAt, beforePreview.updatedAt);
+assert.equal(getCloudSyncStatus().pendingLocalChanges, true);
+assert.match(comparison.summary, /no se ha sustituido ningún dato/i);
+
+// The destructive recovery workflow always creates a local JSON copy
+// and asks for confirmation; cancellation keeps unsynced changes.
+let downloadWasRequested = false;
+globalThis.URL.createObjectURL = () => "blob:local-backup";
+globalThis.URL.revokeObjectURL = () => {};
+globalThis.document = {
+  createElement: tag => {
+    assert.equal(tag, "a");
+    return { click:() => { downloadWasRequested = true; } };
+  }
+};
+globalThis.confirm = () => false;
+const cancelled = await adoptRemoteWithBackup();
+assert.equal(cancelled.applied, false);
+assert.equal(downloadWasRequested, true);
+assert.equal(getCloudSyncStatus().pendingLocalChanges, true);
 
 console.log("cloud-sync.test.js OK");
