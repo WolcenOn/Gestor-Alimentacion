@@ -19,8 +19,10 @@ const apiVersion = "0.5.0"
 const accessTokenTTL = 12 * time.Hour
 const inviteTTL = 7 * 24 * time.Hour
 
+// DBHealthChecker checks database availability for health responses.
 type DBHealthChecker func(context.Context) string
 
+// NewRouter builds the HTTP router for the API.
 func NewRouter(cfg config.Config, dbHealth DBHealthChecker, appStore *store.Store) http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /health", healthHandler(cfg, dbHealth))
@@ -114,9 +116,8 @@ type memberRoleRequest struct {
 }
 
 type syncRequest struct {
-	Version           int             `json:"version"`
-	State             json.RawMessage `json:"state"`
-	ExpectedUpdatedAt string          `json:"expectedUpdatedAt"`
+	Version int             `json:"version"`
+	State   json.RawMessage `json:"state"`
 }
 
 func registerHandler(cfg config.Config, appStore *store.Store) http.HandlerFunc {
@@ -335,11 +336,7 @@ func householdByIDHandler(cfg config.Config, appStore *store.Store) http.Handler
 			if !decodeJSON(w, r, &req) {
 				return
 			}
-			expectedUpdatedAt, ok := parseExpectedUpdatedAt(w, req.ExpectedUpdatedAt)
-			if !ok {
-				return
-			}
-			snapshot, err := appStore.SaveSyncSnapshot(r.Context(), claims.Subject, householdID, req.Version, req.State, expectedUpdatedAt)
+			snapshot, err := appStore.SaveSyncSnapshot(r.Context(), claims.Subject, householdID, req.Version, req.State)
 			if err != nil {
 				writeStoreError(w, err)
 				return
@@ -447,20 +444,6 @@ func decodeJSON(w http.ResponseWriter, r *http.Request, target any) bool {
 	return true
 }
 
-func parseExpectedUpdatedAt(w http.ResponseWriter, value string) (*time.Time, bool) {
-	value = strings.TrimSpace(value)
-	if value == "" {
-		return nil, true
-	}
-	parsed, err := time.Parse(time.RFC3339Nano, value)
-	if err != nil {
-		writeError(w, http.StatusBadRequest, "invalid_expected_updated_at", "expectedUpdatedAt debe ser una fecha ISO válida.")
-		return nil, false
-	}
-	parsed = parsed.UTC()
-	return &parsed, true
-}
-
 func parseHouseholdPath(path string) (householdID string, action string, ok bool) {
 	prefix := "/api/v1/households/"
 	if !strings.HasPrefix(path, prefix) {
@@ -517,8 +500,6 @@ func writeStoreError(w http.ResponseWriter, err error) {
 		writeError(w, http.StatusBadRequest, "invalid_invite", "La invitación no es válida o ha caducado.")
 	case errors.Is(err, store.ErrLastOwner):
 		writeError(w, http.StatusConflict, "last_owner", "El hogar necesita al menos una cuenta propietaria.")
-	case errors.Is(err, store.ErrConflict):
-		writeError(w, http.StatusConflict, "sync_conflict", "La nube cambió desde tu última sincronización. Descarga o revisa los datos antes de volver a subir.")
 	case errors.Is(err, store.ErrDatabaseRequired):
 		writeError(w, http.StatusServiceUnavailable, "database_required", "La base de datos no está configurada.")
 	default:

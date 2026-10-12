@@ -64,7 +64,6 @@ var (
 	ErrNotFound           = errors.New("not found")
 	ErrInvalidInvite      = errors.New("invalid invite")
 	ErrLastOwner          = errors.New("last owner")
-	ErrConflict           = errors.New("conflict")
 )
 
 func New(db *sql.DB) *Store {
@@ -577,7 +576,7 @@ func randomToken(byteLen int) (string, error) {
 	if _, err := rand.Read(b); err != nil {
 		return "", err
 	}
-	return base64.RawURLEncoding.EncodeToString(b)
+	return base64.RawURLEncoding.EncodeToString(b), nil
 }
 
 func hashToken(token string) string {
