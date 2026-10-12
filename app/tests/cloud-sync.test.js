@@ -59,7 +59,8 @@ const {
   enableCloudAutoSync,
   getCloudSyncStatus,
   pullCloudState,
-  resolvePendingCloudChanges
+  resolvePendingCloudChanges,
+  pushCloudState
 } = await import("../cloudSync.js");
 
 enableCloudAutoSync();
@@ -135,5 +136,53 @@ assert.equal(status.mode, "pending");
 assert.equal(status.retryCount, 1);
 assert.match(status.lastError, /nube cambió/i);
 assert.equal(fetchCalls, 2);
+
+// Manual uploads must not silently clear work when a conflict occurs.
+await assert.rejects(
+  () => pushCloudState(),
+  error => error instanceof ApiError && error.code === "sync_conflict"
+);
+status = getCloudSyncStatus();
+assert.equal(status.pendingLocalChanges, true);
+assert.equal(status.mode, "pending");
+
+// A local edit made while a successful upload is in flight also stays pending.
+let releaseUpload;
+let notifyStarted;
+const requestStarted = new Promise(resolve => { notifyStarted = resolve; });
+globalThis.fetch = async (_url, options = {}) => {
+  const body = JSON.parse(options.body);
+  assert.equal(body.expectedUpdatedAt, "2026-06-19T16:00:00.000Z");
+  notifyStarted();
+  return new Promise(resolve => {
+    releaseUpload = () => resolve(new Response(JSON.stringify({
+      sync: { updatedAt: "2026-06-19T16:00:00.000001Z" }
+    }), { status: 200, headers: { "Content-Type": "application/json" } }));
+  });
+};
+
+const inFlightUpload = pushCloudState();
+await requestStarted;
+updateState(state => {
+  state.settings.changedDuringCloudSave = true;
+}, "unit-test-in-flight-change");
+releaseUpload();
+await inFlightUpload;
+status = getCloudSyncStatus();
+assert.equal(status.pendingLocalChanges, true);
+assert.equal(status.mode, "pending");
+assert.equal(status.updatedAt, "2026-06-19T16:00:00.000001Z");
+
+globalThis.fetch = async (_url, options = {}) => {
+  const body = JSON.parse(options.body);
+  assert.equal(body.expectedUpdatedAt, "2026-06-19T16:00:00.000001Z");
+  return new Response(JSON.stringify({
+    sync: { updatedAt: "2026-06-19T16:00:00.000002Z" }
+  }), { status: 200, headers: { "Content-Type": "application/json" } });
+};
+await resolvePendingCloudChanges();
+status = getCloudSyncStatus();
+assert.equal(status.pendingLocalChanges, false);
+assert.equal(status.updatedAt, "2026-06-19T16:00:00.000002Z");
 
 console.log("cloud-sync.test.js OK");
