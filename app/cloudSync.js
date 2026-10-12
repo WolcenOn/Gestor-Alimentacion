@@ -1,4 +1,6 @@
 import { getState, setState, subscribe } from "./store.js";
+import { compareCloudStates, cloudConflictReviewText } from "./cloudConflictReview.js";
+import { downloadTextFile } from "./utils.js";
 import {
   ApiError,
   fetchHouseholdSync,
@@ -176,6 +178,54 @@ export function canUseCloudSync() {
 
 export function canWriteCloudSync() {
   return canUseCloudSync() && canEditCloud();
+}
+
+// A preview never changes the stored remote version token. Otherwise a pending
+// local edit could be uploaded against the version just fetched, bypassing CAS.
+export async function previewCloudDifferences() {
+  if (!canUseCloudSync()) throw new ApiError("Inicia sesión y selecciona un hogar antes de comparar.", { code:"cloud_not_ready" });
+  const householdId = currentHouseholdId();
+  const snapshot = await fetchHouseholdSync(householdId);
+  const remoteState = extractAppState(snapshot) || {};
+  const comparison = compareCloudStates(getState(), remoteState);
+  const result = {
+    ...comparison,
+    remoteUpdatedAt:remoteUpdatedAt(snapshot),
+    knownUpdatedAt:status.householdId === householdId ? status.updatedAt : null,
+    pendingLocalChanges:dirtyLocalChanges
+  };
+  return { ...result, summary:cloudConflictReviewText(result) };
+}
+
+// Explicit destructive resolution: make a personal JSON backup FIRST, then
+// ask the user whether to replace their local work with the remote snapshot.
+// Keep the existing "pending" state intact if cancelled or if reading fails.
+export async function adoptRemoteWithBackup() {
+  if (!canUseCloudSync()) throw new ApiError("Necesitas una sesión cloud para consultar el hogar.", { code:"cloud_not_ready" });
+  if (syncing) throw new ApiError("Hay otra sincronización en curso.", { code:"sync_in_progress" });
+  const householdId = currentHouseholdId();
+  const snapshot = await fetchHouseholdSync(householdId);
+  const appState = extractAppState(snapshot);
+  if (!appState) throw new ApiError("La nube todavía no contiene datos que recuperar.", { code:"cloud_empty" });
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  downloadTextFile(`gestor-alimentacion-copia-local-${stamp}.json`, JSON.stringify(getState(), null, 2));
+  const accepted = window.confirm("Se ha preparado una copia JSON de tus datos locales. Comprueba que el navegador la haya descargado antes de continuar. Si aceptas, los datos locales se sustituirán por los de la nube. ¿Continuar?");
+  if (!accepted) return { applied:false };
+  suppressNextSave = true;
+  try {
+    setState(appState, "cloud-pull");
+  } catch (error) {
+    suppressNextSave = false;
+    throw error;
+  }
+  clearPendingLocalChanges({
+    mode:"synced",
+    lastSyncAt:new Date().toISOString(),
+    lastError:null,
+    ...statusContext(),
+    updatedAt:remoteUpdatedAt(snapshot)
+  });
+  return { applied:true };
 }
 
 export async function pullCloudState({ apply = true, onlyIfNewer = false, force = false } = {}) {
@@ -367,6 +417,8 @@ window.GestorCloudSync = {
   canWrite: canWriteCloudSync,
   pull: pullCloudState,
   push: pushCloudState,
+  preview: previewCloudDifferences,
+  adoptRemoteWithBackup,
   resolvePending: resolvePendingCloudChanges,
   enableAutoSync: enableCloudAutoSync,
   startAutoSync: startCloudAutoSync,
