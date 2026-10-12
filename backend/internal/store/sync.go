@@ -16,7 +16,7 @@ type SyncSnapshot struct {
 	HouseholdID string          `json:"householdId"`
 	Version     int             `json:"version"`
 	State       json.RawMessage `json:"state"`
-	UpdatedAt   time.Time       `json:"updatedAt"`
+	UpdatedAt   *time.Time      `json:"updatedAt"`
 }
 
 // GetSyncSnapshot returns the latest whole-state snapshot for a household.
@@ -34,25 +34,27 @@ func (s *Store) GetSyncSnapshot(ctx context.Context, userID, householdID string)
 		FROM household_sync_snapshots
 		WHERE household_id = $1
 	`, householdID)
-	if err := row.Scan(&snapshot.HouseholdID, &snapshot.Version, &snapshot.State, &snapshot.UpdatedAt); err != nil {
+	var updatedAt time.Time
+	if err := row.Scan(&snapshot.HouseholdID, &snapshot.Version, &snapshot.State, &updatedAt); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return SyncSnapshot{
 				HouseholdID: householdID,
 				Version:     1,
 				State:       json.RawMessage(`{}`),
-				UpdatedAt:   time.Time{},
+				UpdatedAt:   nil,
 			}, nil
 		}
 		return snapshot, err
 	}
+	snapshot.UpdatedAt = &updatedAt
 	return snapshot, nil
 }
 
-// SaveSyncSnapshot stores the whole frontend state for a household.
-// When expectedUpdatedAt is provided, the write is conditional and fails with
-// ErrConflict if another client has changed the snapshot since it was read.
-// Omitting the precondition preserves the legacy last-write-wins behaviour.
-func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string, version int, state json.RawMessage, expectedUpdatedAt ...*time.Time) (SyncSnapshot, error) {
+// SaveSyncSnapshot uses atomic compare-and-swap so an outdated device never
+// silently replaces a newer household state. A nil precondition may only
+// create a snapshot; an existing snapshot requires its exact updatedAt value.
+// This also protects the race between two devices creating the first snapshot.
+func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string, version int, state json.RawMessage, expectedUpdatedAt *time.Time) (SyncSnapshot, error) {
 	var snapshot SyncSnapshot
 	if !s.Available() {
 		return snapshot, ErrDatabaseRequired
@@ -70,43 +72,33 @@ func (s *Store) SaveSyncSnapshot(ctx context.Context, userID, householdID string
 		return snapshot, ErrNotFound
 	}
 
-	var expected *time.Time
-	if len(expectedUpdatedAt) > 0 {
-		expected = expectedUpdatedAt[0]
-	}
-
-	if expected != nil {
-		row := s.db.QueryRowContext(ctx, `
+	var row *sql.Row
+	if expectedUpdatedAt == nil {
+		row = s.db.QueryRowContext(ctx, `
+			INSERT INTO household_sync_snapshots (household_id, state, version, updated_by, updated_at)
+			VALUES ($1, $2, $3, $4, clock_timestamp())
+			ON CONFLICT (household_id) DO NOTHING
+			RETURNING household_id, version, state, updated_at
+		`, householdID, state, version, userID)
+	} else {
+		row = s.db.QueryRowContext(ctx, `
 			UPDATE household_sync_snapshots
 			SET state = $1,
 				version = $2,
 				updated_by = $3,
-				updated_at = now()
+				updated_at = GREATEST(clock_timestamp(), updated_at + interval '1 microsecond')
 			WHERE household_id = $4
 			  AND updated_at = $5
 			RETURNING household_id, version, state, updated_at
-		`, state, version, userID, householdID, expected.UTC())
-		if err := row.Scan(&snapshot.HouseholdID, &snapshot.Version, &snapshot.State, &snapshot.UpdatedAt); err != nil {
-			if errors.Is(err, sql.ErrNoRows) {
-				return snapshot, ErrConflict
-			}
-			return snapshot, err
-		}
-		return snapshot, nil
+		`, state, version, userID, householdID, expectedUpdatedAt.UTC())
 	}
-
-	row := s.db.QueryRowContext(ctx, `
-		INSERT INTO household_sync_snapshots (household_id, state, version, updated_by, updated_at)
-		VALUES ($1, $2, $3, $4, now())
-		ON CONFLICT (household_id) DO UPDATE SET
-			state = EXCLUDED.state,
-			version = EXCLUDED.version,
-			updated_by = EXCLUDED.updated_by,
-			updated_at = now()
-		RETURNING household_id, version, state, updated_at
-	`, householdID, state, version, userID)
-	if err := row.Scan(&snapshot.HouseholdID, &snapshot.Version, &snapshot.State, &snapshot.UpdatedAt); err != nil {
+	var updatedAt time.Time
+	if err := row.Scan(&snapshot.HouseholdID, &snapshot.Version, &snapshot.State, &updatedAt); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return snapshot, ErrConflict
+		}
 		return snapshot, err
 	}
+	snapshot.UpdatedAt = &updatedAt
 	return snapshot, nil
 }
