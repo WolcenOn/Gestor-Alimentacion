@@ -12,7 +12,7 @@ import (
 
 func TestParseExpectedUpdatedAt(t *testing.T) {
 	recorder := httptest.NewRecorder()
-	parsed, ok := parseExpectedUpdatedAt(recorder, "2026-08-21T15:00:00.123456Z")
+	parsed, ok := parseExpectedUpdatedAt(recorder, json.RawMessage(`"2026-08-21T15:00:00.123456Z"`))
 	if !ok || parsed == nil {
 		t.Fatal("expected valid timestamp")
 	}
@@ -25,18 +25,28 @@ func TestParseExpectedUpdatedAt(t *testing.T) {
 	}
 
 	recorder = httptest.NewRecorder()
-	parsed, ok = parseExpectedUpdatedAt(recorder, "")
+	parsed, ok = parseExpectedUpdatedAt(recorder, json.RawMessage("null"))
 	if !ok || parsed != nil {
-		t.Fatalf("empty precondition should be accepted as nil, got parsed=%v ok=%v", parsed, ok)
+		t.Fatalf("null means create-only, got parsed=%v ok=%v", parsed, ok)
 	}
 
 	recorder = httptest.NewRecorder()
-	parsed, ok = parseExpectedUpdatedAt(recorder, "not-a-date")
-	if ok || parsed != nil {
-		t.Fatal("invalid timestamp should fail")
+	parsed, ok = parseExpectedUpdatedAt(recorder, nil)
+	if ok || parsed != nil || recorder.Code != http.StatusPreconditionRequired {
+		t.Fatalf("missing precondition must return 428, got parsed=%v ok=%v status=%d", parsed, ok, recorder.Code)
 	}
-	if recorder.Code != http.StatusBadRequest {
-		t.Fatalf("status = %d, want %d", recorder.Code, http.StatusBadRequest)
+
+	for _, raw := range []json.RawMessage{
+		json.RawMessage(`""`),
+		json.RawMessage(`"not-a-date"`),
+		json.RawMessage("123"),
+		json.RawMessage(`"0001-01-01T00:00:00Z"`),
+	} {
+		recorder = httptest.NewRecorder()
+		parsed, ok = parseExpectedUpdatedAt(recorder, raw)
+		if ok || parsed != nil || recorder.Code != http.StatusBadRequest {
+			t.Errorf("invalid precondition %s: parsed=%v ok=%v status=%d", raw, parsed, ok, recorder.Code)
+		}
 	}
 }
 
