@@ -19,6 +19,7 @@ let pollTimer = null;
 let autoSyncEnabled = false;
 let suppressNextSave = false;
 let dirtyLocalChanges = Boolean(status.pendingLocalChanges);
+let localEditRevision = 0;
 let syncing = false;
 let unsubscribeStore = null;
 
@@ -103,7 +104,10 @@ function remoteUpdatedAt(snapshot) {
 function isRemoteNewer(remoteAt) {
   if (!remoteAt) return false;
   if (!status.updatedAt) return true;
-  return new Date(remoteAt).getTime() > new Date(status.updatedAt).getTime();
+  const remoteMs = new Date(remoteAt).getTime();
+  const localMs = new Date(status.updatedAt).getTime();
+  // PostgreSQL timestamps are microsecond-precise; Date loses that precision.
+  return remoteMs > localMs || (remoteMs === localMs && remoteAt !== status.updatedAt);
 }
 
 function statusContext() {
@@ -115,6 +119,7 @@ function statusContext() {
 }
 
 function markLocalChangesPending() {
+  localEditRevision += 1;
   dirtyLocalChanges = true;
   setStatus({
     mode: "pending",
@@ -222,16 +227,22 @@ export async function pushCloudState({ state = getState() } = {}) {
   if (!isLoggedIn()) throw new ApiError("No hay sesión cloud.", { code: "not_logged_in" });
   if (!householdId) throw new ApiError("No hay hogar activo.", { code: "missing_household" });
   if (!canEditCloud(role)) throw new ApiError("Tu rol permite consultar, pero no modificar la nube.", { code: "read_only_role" });
+  if (syncing) throw new ApiError("Ya hay una sincronización en curso.", { code: "sync_in_progress" });
 
+  // A manual push must also remain pending if the server returns 409.
+  // Do not reuse another household's last-known token after changing accounts.
+  const expectedUpdatedAt = status.householdId === householdId ? status.updatedAt || null : null;
+  markLocalChangesPending();
+  const revisionAtUpload = localEditRevision;
   markSyncAttempt();
   syncing = true;
   try {
     const snapshot = await saveHouseholdSync(householdId, {
       version: CLOUD_SCHEMA_VERSION,
       state: cloudStateEnvelope(state),
-      expectedUpdatedAt: status.updatedAt || null
+      expectedUpdatedAt
     });
-    clearPendingLocalChanges({
+    const nextStatus = {
       mode: "synced",
       lastSyncAt: new Date().toISOString(),
       lastError: null,
@@ -239,7 +250,13 @@ export async function pushCloudState({ state = getState() } = {}) {
       householdName,
       role,
       updatedAt: remoteUpdatedAt(snapshot) || null
-    });
+    };
+    if (revisionAtUpload === localEditRevision) {
+      clearPendingLocalChanges(nextStatus);
+    } else {
+      // Edits performed during the network request are not included in its body.
+      setStatus({ ...nextStatus, mode: "pending", pendingLocalChanges: true });
+    }
     return snapshot;
   } catch (error) {
     markSyncError(error);
