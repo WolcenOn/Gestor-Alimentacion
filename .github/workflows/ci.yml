@@ -25,6 +25,22 @@ jobs:
   backend:
     name: Backend tests
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: gestor_alimentacion_test
+          POSTGRES_USER: gestor_test
+          POSTGRES_PASSWORD: gestor_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U gestor_test -d gestor_alimentacion_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgres://gestor_test:gestor_test@localhost:5432/gestor_alimentacion_test?sslmode=disable
     defaults:
       run:
         working-directory: backend
